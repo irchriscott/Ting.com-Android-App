@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/progress_overlay"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:fitsSystemWindows="true"
+             android:animateLayoutChanges="true"
+             android:background="@android:color/transparent"
+             android:clickable="true"
+             android:focusable="true">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorTransparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+                android:id="@+id/successOverlayImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_check_circle_primary_64dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:background="@color/colorTransparent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:id="@+id/successOverlayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@color/colorTransparent"
+                android:textColor="@color/colorWhite"
+                android:textSize="22dp"
+                tools:ignore="SpUsage"/>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
