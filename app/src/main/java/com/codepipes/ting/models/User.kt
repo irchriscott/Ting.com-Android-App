@@ -1,5 +1,7 @@
 package com.codepipes.ting.models
 
+import com.codepipes.ting.utils.Routes
+
 class User (
     val id: Int,
     val token: String,
@@ -19,7 +21,9 @@ class User (
     val urls: UserUrls,
     val createdAt: String,
     val updatedAt: String
-){}
+){
+    public fun imageURL(): String = "${Routes().UPLOAD_END_POINT}${this.image}"
+}
 
 class Address (
     val id: Int,

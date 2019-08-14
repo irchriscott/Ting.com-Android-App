@@ -16,13 +16,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.SuccessOverlay
+import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.models.ServerResponse
 import okhttp3.*
 import com.codepipes.ting.utils.Routes
@@ -114,8 +112,7 @@ class SignUpIdentityFragment : Fragment() {
                 }
             }.addOnFailureListener {
                 activity!!.runOnUiThread {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                    mProgressOverlay.dismiss()
+                    TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
         }
@@ -159,7 +156,7 @@ class SignUpIdentityFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -184,7 +181,7 @@ class SignUpIdentityFragment : Fragment() {
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        ErrorMessage(activity, "An Error Has Occurred").show()
+                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

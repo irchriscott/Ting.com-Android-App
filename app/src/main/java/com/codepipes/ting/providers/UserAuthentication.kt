@@ -3,6 +3,7 @@ package com.codepipes.ting.providers
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Log
 import com.codepipes.ting.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,7 +23,7 @@ class UserAuthentication(
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun get(key: String) : User?{
+    public fun get() : User?{
         return if(this.isLoggedIn()){
             val userString = this.sharedPreferences.getString(SESSION_SHARED_PREFERENCES_KEY, null)
             val gson = Gson()

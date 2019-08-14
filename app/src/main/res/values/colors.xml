@@ -11,4 +11,9 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorGoogleRedOne">#D63F30</color>
     <color name="colorGoogleRedTwo">#B41606</color>
+    <color name="colorToastDefault">#9DDEFF</color>
+    <color name="colorToastSuccess">#A6EFB8</color>
+    <color name="colorToastWarning">#FFCFA5</color>
+    <color name="colorToastError">#FFaFB4</color>
+    <color name="colorPrimaryDarkTransparent">#33908CED</color>
 </resources>

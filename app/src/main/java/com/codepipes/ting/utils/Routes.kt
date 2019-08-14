@@ -3,6 +3,7 @@ package com.codepipes.ting.utils
 class Routes {
 
     private val END_POINT: String = "http://10.0.2.2:8000/api/v1/"
+    public val UPLOAD_END_POINT: String = "http://10.0.2.2:8000/tinguploads/"
 
     //SIGN UP & AUTH ROUTES
     val checkEmailUsername: String = "${END_POINT}usr/check/email-username/"

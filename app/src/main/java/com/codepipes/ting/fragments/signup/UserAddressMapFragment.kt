@@ -21,6 +21,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.codepipes.ting.R
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -108,7 +110,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -161,7 +163,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     this.getLocation(it)
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -180,7 +182,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     this.getLocation(it)
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             } else {
@@ -221,7 +223,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         val f = fragmentManager!!.findFragmentById(R.id.map)
-        fragmentManager!!.beginTransaction().remove(f).commit()
+        fragmentManager!!.beginTransaction().remove(f!!).commit()
     }
 
     fun dismissListener(closeListener: MapAddressChangedListener) {

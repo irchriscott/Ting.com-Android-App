@@ -24,9 +24,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
 import com.codepipes.ting.dialogs.ErrorMessage
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.UtilsFunctions
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,6 +51,8 @@ class SignUpAboutFragment : Fragment() {
     private lateinit var signUpUserData: MutableMap<String, String>
     private lateinit var gson: Gson
 
+    private lateinit var mUtilFunctions: UtilsFunctions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -59,6 +64,7 @@ class SignUpAboutFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_sign_up_about, container, false)
 
         mViewPager = activity!!.findViewById(R.id.pager) as LockableViewPager
+        mUtilFunctions = UtilsFunctions(activity!!)
 
         mAppNameText = view.findViewById<TextView>(R.id.appNameText) as TextView
         mNextSignUpBtn = view.findViewById<Button>(R.id.nextSignUpBtn) as Button
@@ -122,14 +128,16 @@ class SignUpAboutFragment : Fragment() {
         mSignUpDobInput.setOnKeyListener(null)
 
         mNextSignUpBtn.setOnClickListener {
-            if(mSignUpGenderInput.text.toString() != "" && mSignUpDobInput.text.toString() != ""){
-                signUpUserData["gender"] = mSignUpGenderInput.text.toString()
-                signUpUserData["dob"] = mSignUpDobInput.text.toString()
-                settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
-                mViewPager.currentItem = mViewPager.currentItem + 1
-            } else {
-                ErrorMessage(activity, "Fill All The Fields").show()
-            }
+            if(mUtilFunctions.isConnectedToInternet() && mUtilFunctions.isConnected()) {
+                if (mSignUpGenderInput.text.toString() != "" && mSignUpDobInput.text.toString() != "") {
+                    signUpUserData["gender"] = mSignUpGenderInput.text.toString()
+                    signUpUserData["dob"] = mSignUpDobInput.text.toString()
+                    settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    mViewPager.currentItem = mViewPager.currentItem + 1
+                } else {
+                    ErrorMessage(activity, "Fill All The Fields").show()
+                }
+            } else { TingToast(context!!, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
         }
 
         return view

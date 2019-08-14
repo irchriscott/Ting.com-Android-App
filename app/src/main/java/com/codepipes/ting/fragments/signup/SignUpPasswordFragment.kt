@@ -16,16 +16,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.codepipes.ting.TingDotCom
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.SuccessOverlay
+import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
+import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
@@ -132,7 +131,7 @@ class SignUpPasswordFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                    TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -153,8 +152,8 @@ class SignUpPasswordFragment : Fragment() {
 
                             val onDialogClosed = object : SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
-                                    if(serverResponse.msgs?.size!! > 0){
-                                        userAuthentication.set(serverResponse.msgs[0].toString())
+                                    if(serverResponse.user != null){
+                                        userAuthentication.set(gson.toJson(serverResponse.user))
                                         settings.removeSettingFromSharedPreferences("signup_data")
                                         startActivity(Intent(activity, TingDotCom::class.java))
                                     } else { ErrorMessage(activity, "Unable To Fetch User Data").show() }
@@ -167,7 +166,7 @@ class SignUpPasswordFragment : Fragment() {
                 } catch(e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        ErrorMessage(activity!!, "An Error Has Occurred").show()
+                        TingToast(context!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

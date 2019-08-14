@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+
+        <item
+                android:id="@+id/user_profile_profile"
+                android:title="@string/user_profile_profile"
+                android:icon="@drawable/ic_user_profile"
+        />
+
+        <item
+                android:id="@+id/user_profile_moments"
+                android:title="@string/user_profile_moments"
+                android:icon="@drawable/ic_moments"
+        />
+
+        <item
+                android:id="@+id/user_profile_restaurants"
+                android:title="@string/user_profile_restaurants"
+                android:icon="@drawable/ic_restaurants"
+        />
+
+        <item
+                android:id="@+id/user_profile_orders"
+                android:title="@string/user_profile_orders"
+                android:icon="@drawable/ic_orders"
+        />
+
+        <item
+                android:id="@+id/user_profile_booking"
+                android:title="@string/user_profile_booking"
+                android:icon="@drawable/ic_bookings"
+        />
+
+    </group>
+
+    <item android:title="@string/user_profile_others">
+        <menu>
+            <item
+                    android:id="@+id/user_profile_settings"
+                    android:title="@string/user_profile_settings"
+                    android:icon="@drawable/ic_settings_grey_24dp"
+            />
+
+            <item
+                    android:id="@+id/user_profile_logout"
+                    android:title="@string/user_profile_logout"
+                    android:icon="@drawable/ic_logout"
+            />
+        </menu>
+    </item>
+
+</menu>

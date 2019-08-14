@@ -6,9 +6,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
-        <!--<item name="android:fontFamily">@font/poppins_regular</item>-->
-        <!--<item name="fontFamily">@font/poppins_regular</item>-->
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.ItemList</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+    </style>
+
+    <style name="AppTheme.White" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="TextAppearance.AppCompat.ItemList">
@@ -24,10 +30,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.DefaultActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="AppTheme.WhiteActionBar" parent="AppTheme">
         <item name="android:background">@color/colorWhite</item>
         <item name="android:windowFullscreen">true</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.WhiteActionBarDefault" parent="AppTheme">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+    </style>
+
+    <style name="AppTheme.CustomActionBar" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.ImagePicker" parent="AppTheme">
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="progress_dialog">
@@ -52,12 +81,20 @@
     </style>
 
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <!--<item name="android:windowIsFloating">false</item>-->
         <item name="bottomSheetStyle">@style/BottomSheet</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <style name="BottomSheetElse" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/address_map_background</item>
+    </style>
+
+    <style name="BaseBottomSheetDialogElse" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetElse</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
     <style name="TransparentDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -71,5 +108,28 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="NavigationViewStyle">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@color/colorGray</item>
+    </style>
+
+    <style name="AppTheme.ActionBarStyle" parent="Base.Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="AppTheme.ActionBarStyleDefault" parent="Base.Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyleDefault" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
 
 </resources>

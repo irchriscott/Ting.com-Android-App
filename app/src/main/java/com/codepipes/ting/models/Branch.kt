@@ -15,7 +15,7 @@ class Branch (
     val phone: String,
     val isAvailable: Boolean,
     val tables: BranchTables,
-    val specials: List<Int>,
+    val specials: List<BranchSpecial>,
     val menus: BranchMenus,
     val promotions: BranchPromotions?,
     val reviews: BranchReviews?,
@@ -28,6 +28,12 @@ class Branch (
         this.dist = 0.00
     }
 }
+
+class BranchSpecial(
+    val id: Int,
+    val name: String,
+    val icon: String
+){}
 
 class BranchTables (
     val count: Int,

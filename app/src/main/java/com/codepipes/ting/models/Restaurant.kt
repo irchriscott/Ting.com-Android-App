@@ -30,7 +30,7 @@ class RestaurantConfig (
     val currency: String,
     val tax: Double,
     val email: String,
-    val cancelLateBooking: Boolean,
+    val cancelLateBooking: Int,
     val bookWithAdvance: Boolean,
     val phone: String,
     val bookingCancelationRefund: Boolean,

@@ -26,6 +26,8 @@ import android.widget.TextView
 import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.ErrorMessage
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -156,12 +158,10 @@ class SignUpAddressFragment : Fragment() {
                         signUpUserData["country"] = addresses[0].countryName
                         signUpUserData["town"] = addresses[0].locality
                         settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
-                        mProgressOverlay.dismiss()
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                        mProgressOverlay.dismiss()
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -183,14 +183,16 @@ class SignUpAddressFragment : Fragment() {
         }
 
         mNextSignUpBtn.setOnClickListener {
-            if(!mSignUpAddressInput.text.isNullOrEmpty() && !mSignUpAddressTypeInput.text.isNullOrEmpty()){
-                signUpUserData["address_type"] = this.selectedAddressType
-                signUpUserData["address_type_other"] = this.inputOtherAddressType
-                settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
-                mViewPager.currentItem = mViewPager.currentItem + 1
-            } else {
-                ErrorMessage(activity, "Fill All The Fields").show()
-            }
+            if (mUtilFunctions.isConnectedToInternet()) {
+                if (!mSignUpAddressInput.text.isNullOrEmpty() && !mSignUpAddressTypeInput.text.isNullOrEmpty()) {
+                    signUpUserData["address_type"] = this.selectedAddressType
+                    signUpUserData["address_type_other"] = this.inputOtherAddressType
+                    settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    mViewPager.currentItem = mViewPager.currentItem + 1
+                } else {
+                    ErrorMessage(activity, "Fill All The Fields").show()
+                }
+            } else { TingToast(context!!, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
         }
 
         return view
