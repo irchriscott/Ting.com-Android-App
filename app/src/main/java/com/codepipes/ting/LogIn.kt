@@ -173,7 +173,6 @@ class LogIn : AppCompatActivity() {
                 } catch (e: Exception){
                     runOnUiThread {
                         mProgressOverlay.dismiss()
-                        Log.i("SERVER ERROR", e.message)
                         TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }

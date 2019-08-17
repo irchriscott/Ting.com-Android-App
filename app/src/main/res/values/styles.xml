@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.ItemList</item>
         <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
     </style>
 
     <style name="AppTheme.White" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
     </style>
 
     <style name="TextAppearance.AppCompat.ItemList">
@@ -28,6 +30,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
     </style>
 
     <style name="AppTheme.DefaultActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -35,20 +38,26 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
     </style>
 
     <style name="AppTheme.WhiteActionBar" parent="AppTheme">
         <item name="android:background">@color/colorWhite</item>
         <item name="android:windowFullscreen">true</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.WhiteActionBarDefault" parent="AppTheme">
-        <item name="android:background">@color/colorWhite</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="android:actionMenuTextAppearance">@style/AppTheme.ActionBar.Menu.TextStyle</item>
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="itemTextAppearance">@font/poppins_semi_bold</item>
     </style>
 
     <style name="AppTheme.CustomActionBar" parent="AppTheme">
@@ -72,7 +81,11 @@
     <style name="DatePickerAppTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:headerBackground">@color/colorPrimary</item>
+        <item name="android:colorAccent" tools:ignore="NewApi">@color/colorPrimary</item>
+
     </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
@@ -126,10 +139,26 @@
     <style name="AppTheme.ActionBar.TitleTextStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize" tools:ignore="SpUsage">18dp</item>
     </style>
 
     <style name="AppTheme.ActionBar.TitleTextStyleDefault" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Menu.TextStyle" parent="Theme.AppCompat">
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <style name="AppTheme.DialogStyle" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">97%</item>
+        <item name="android:windowMinWidthMinor">97%</item>
     </style>
 
 </resources>

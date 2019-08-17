@@ -15,6 +15,7 @@ import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import android.content.DialogInterface
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class SuccessOverlay : DialogFragment(){
 
     private lateinit var mCheckOverlayImage: ImageView

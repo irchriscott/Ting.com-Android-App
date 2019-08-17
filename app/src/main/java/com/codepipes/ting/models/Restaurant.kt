@@ -10,6 +10,7 @@ class Restaurant (
     val categories: RestaurantCategories,
     val logo: String,
     val pin: String,
+    val pinImg: String,
     val country: String,
     val town: String,
     val opening: String,

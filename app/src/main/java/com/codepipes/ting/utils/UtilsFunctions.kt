@@ -8,10 +8,26 @@ import android.graphics.Bitmap
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import com.google.android.gms.common.util.IOUtils.toByteArray
 import android.util.Base64
+import android.graphics.drawable.Drawable
+import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URL
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.support.v4.content.res.ResourcesCompat
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
+import com.caverock.androidsvg.SVG
+import com.google.android.gms.maps.model.BitmapDescriptor
+
+
+
 
 class UtilsFunctions(
     private val context: Context
@@ -60,5 +76,22 @@ class UtilsFunctions(
 
     public fun isConnected(): Boolean {
         return this.isConnectedToInternet()
+    }
+
+    private fun getDrawableFromUrl(url: URL): Drawable? {
+        try {
+            val input = url.openStream()
+            return Drawable.createFromStream(input, "src")
+        } catch (e: MalformedURLException) {
+        } catch (e: IOException) { }
+        return null
+    }
+
+    public fun vectorToBitmap(vectorDrawable: SVG): BitmapDescriptor {
+        val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        vectorDrawable.renderToCanvas(canvas)
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }

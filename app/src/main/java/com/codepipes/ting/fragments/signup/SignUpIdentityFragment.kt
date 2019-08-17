@@ -99,21 +99,25 @@ class SignUpIdentityFragment : Fragment() {
         mAppNameText.text = spanText
 
         if(mUtilFunctions.checkLocationPermissions()){
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                val geocoder = Geocoder(activity, Locale.getDefault())
-                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                activity!!.runOnUiThread {
-                    signUpUserData["address"] = addresses[0].getAddressLine(0)
-                    signUpUserData["latitude"] = it.latitude.toString()
-                    signUpUserData["longitude"] = it.longitude.toString()
-                    signUpUserData["country"] = addresses[0].countryName
-                    signUpUserData["town"] = addresses[0].locality
-                    settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    val geocoder = Geocoder(activity, Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    activity!!.runOnUiThread {
+                        signUpUserData["address"] = addresses[0].getAddressLine(0)
+                        signUpUserData["latitude"] = it.latitude.toString()
+                        signUpUserData["longitude"] = it.longitude.toString()
+                        signUpUserData["country"] = addresses[0].countryName
+                        signUpUserData["town"] = addresses[0].locality
+                        settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    }
+                }.addOnFailureListener {
+                    activity!!.runOnUiThread {
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    }
                 }
-            }.addOnFailureListener {
-                activity!!.runOnUiThread {
-                    TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                }
+            } catch (e: Exception){
+                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
             }
         }
 
