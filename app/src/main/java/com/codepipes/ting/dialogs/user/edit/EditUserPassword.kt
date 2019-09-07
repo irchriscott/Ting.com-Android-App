@@ -95,7 +95,7 @@ class EditUserPassword : DialogFragment() {
             .build()
 
         val request = Request.Builder()
-            .header("Authorization", user.token)
+            .header("Authorization", user.token!!)
             .url(url)
             .post(requestBody)
             .build()

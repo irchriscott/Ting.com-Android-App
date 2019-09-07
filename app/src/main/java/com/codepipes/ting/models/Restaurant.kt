@@ -1,5 +1,7 @@
 package com.codepipes.ting.models
 
+import com.codepipes.ting.utils.Routes
+
 class Restaurant (
     val id: Int,
     val token: String,
@@ -8,7 +10,7 @@ class Restaurant (
     val purposeId: Int,
     val purpose: String,
     val categories: RestaurantCategories,
-    val logo: String,
+    private val logo: String,
     val pin: String,
     val pinImg: String,
     val country: String,
@@ -24,7 +26,9 @@ class Restaurant (
     val config: RestaurantConfig,
     val createdAt: String,
     val updatedAt: String
-){}
+){
+    public fun logoURL(): String = "${Routes().HOST}${this.logo}"
+}
 
 class RestaurantConfig (
     val id: Int,

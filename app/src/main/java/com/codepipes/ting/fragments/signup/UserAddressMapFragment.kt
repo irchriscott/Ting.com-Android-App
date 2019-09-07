@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
+import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
 import java.lang.Exception

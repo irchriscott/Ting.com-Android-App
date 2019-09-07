@@ -35,6 +35,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
 import okhttp3.*
@@ -227,7 +228,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
             .build()
 
         val request = Request.Builder()
-            .header("Authorization", user.token)
+            .header("Authorization", user.token!!)
             .url(url)
             .post(form)
             .build()

@@ -21,4 +21,7 @@ class Routes {
     val addUserAddress: String              = "${END_POINT}usr/profile/address/add/"
     val deleteUserAddress: String           = "${END_POINT}usr/profile/address/delete/"
     val updateUserAddress: String           = "${END_POINT}usr/profile/address/update/"
+
+    //RESTAURANTS
+    val restaurantsGlobal: String              = "${END_POINT}usr/g/restaurants/all/"
 }

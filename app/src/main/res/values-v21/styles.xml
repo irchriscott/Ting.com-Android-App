@@ -12,4 +12,8 @@
         <item name="android:headerBackground">@color/colorPrimary</item>
         <item name="android:colorAccent">@color/colorPrimary</item>
     </style>
+    <style name="AppTheme.SmallRating" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="android:colorControlNormal">@color/colorLightGray</item>
+        <item name="android:colorControlActivated">@color/colorYellowRate</item>
+    </style>
 </resources>

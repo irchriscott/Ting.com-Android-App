@@ -119,11 +119,7 @@ class LogIn : AppCompatActivity() {
     private fun authenticateUser(){
         val url = this.routes.authLoginUser
 
-        val client = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build()
+        val client = OkHttpClient()
 
         val form = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("email", mEmailLogInInput.text.toString())
@@ -202,11 +198,7 @@ class LogIn : AppCompatActivity() {
                     val idToken = mUtilFunctions.getToken(512)
                     val url = this.routes.submitGoogleSignUp
 
-                    val client = OkHttpClient.Builder()
-                        .connectTimeout(60, TimeUnit.SECONDS)
-                        .readTimeout(60, TimeUnit.SECONDS)
-                        .writeTimeout(60, TimeUnit.SECONDS)
-                        .build()
+                    val client = OkHttpClient()
 
                     val form = MultipartBody.Builder().setType(MultipartBody.FORM)
                         .addFormDataPart("name", account?.displayName!!)

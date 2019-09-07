@@ -4,13 +4,13 @@ import com.codepipes.ting.utils.Routes
 
 class User (
     val id: Int,
-    val token: String,
+    val token: String?,
     val name: String,
     val username: String,
     val email: String,
     private val image: String,
     private val pin: String,
-    val pinImg: String,
+    val pinImg: String?,
     val phone: String,
     val dob: String?,
     val gender: String?,

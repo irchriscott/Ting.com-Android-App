@@ -38,7 +38,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleDependency
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
@@ -48,6 +49,7 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.pnikosis:materialish-progress:1.7'
@@ -57,10 +59,18 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     //noinspection GradleDependency
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    //noinspection GradleDependency
+    annotationProcessor 'com.google.auto.value:auto-value:1.4'
+    compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.4'
+    annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.github.WrathChaos:MediaPickerLib:0.1.5'
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    implementation 'com.github.mkhoiron:Actionsheet-android:0.1'
     implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

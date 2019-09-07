@@ -17,6 +17,8 @@
     <color name="colorToastWarning">#FFCFA5</color>
     <color name="colorToastError">#FFaFB4</color>
     <color name="colorPrimaryDarkTransparent">#33908CED</color>
+    <color name="colorPrimaryDarkTransparentDark">#99908CED</color>
+    <color name="colorYellowRate">#FFE623</color>
 
     <color name="titleTextColor">@color/colorWhite</color>
     <color name="titleTabColor">@color/colorVeryLightGray</color>

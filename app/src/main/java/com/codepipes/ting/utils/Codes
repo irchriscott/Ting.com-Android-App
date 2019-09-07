@@ -1,0 +1,31 @@
+private fun addFragment(v: View) {
+        val randomColor =
+            Color.argb(255, (Math.random() * 255).toInt(), (Math.random() * 255).toInt(), (Math.random() * 255).toInt())
+        val fragment = CircularRevealingFragment.newInstance(20, 20, randomColor)
+        fragmentManager!!.beginTransaction().add(com.codepipes.ting.R.id.fragment_container, fragment).commit()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onFragmentTouched(fragment: Fragment, x: Float, y: Float) {
+        if (fragment is CircularRevealingFragment) {
+            val theFragment = fragment
+
+            val unreveal = theFragment.prepareUnrevealAnimator(x, y)
+
+            unreveal.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+
+                override fun onAnimationEnd(animation: Animator) {
+                    // remove the fragment only when the animation finishes
+                    fragmentManager!!.beginTransaction().remove(theFragment).commit()
+                    //to prevent flashing the fragment before removing it, execute pending transactions inmediately
+                    fragmentManager!!.executePendingTransactions()
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+            unreveal.start()
+        }
+    }
