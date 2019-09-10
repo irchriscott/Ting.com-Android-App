@@ -8,6 +8,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -17,15 +18,21 @@ import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentContainer
+import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
+import com.codepipes.ting.customclasses.RestaurantInfoWindowMap
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.interfaces.RetrofitGoogleMapsRoute
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
+import com.codepipes.ting.models.PolylineMapRoute
+import com.codepipes.ting.models.User
+import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,17 +40,22 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_restaurants_map.view.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import kotlin.math.hypot
 
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
+class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private lateinit var mCloseRestaurantMapButton: ImageButton
     private lateinit var mMapViewContainer: ConstraintLayout
@@ -64,7 +76,12 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
     private lateinit var branch: Branch
     private lateinit var timer: Timer
 
+    private lateinit var polyline: Polyline
+    private lateinit var session: User
+    private lateinit var userAuthentication: UserAuthentication
+
     private var handler: Handler? = null
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val runnable: Runnable = Runnable {
         mProgressWheel.visibility = View.GONE
@@ -88,6 +105,9 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
         gson = Gson()
         timer = Timer()
 
+        userAuthentication = UserAuthentication(context!!)
+        session = userAuthentication.get()!!
+
         val mArgs = arguments
         cx = mArgs!!.getInt("cx")
         cy = mArgs.getInt("cy")
@@ -102,7 +122,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         mUtilFunctions = UtilsFunctions(activity!!)
 
-        mCloseRestaurantMapButton = view.findViewById<ImageButton>(R.id.close_restaurant_map) as ImageButton
+        mCloseRestaurantMapButton = view.findViewById(R.id.close_restaurant_map) as ImageButton
         mCloseRestaurantMapButton.setOnClickListener { this.hideRestaurantMap(view, cx, cy, dialog) }
 
         dialog.setOnKeyListener { _, keyCode, _ ->
@@ -152,6 +172,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
 
         } else { view.restaurant_view.visibility = View.GONE }
 
+
         return view
     }
 
@@ -168,10 +189,44 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
         val restaurant = mArgs?.getString("resto")
 
         if(!restaurant.isNullOrBlank() && !restaurant.isNullOrEmpty()){
+
             val sharp = SVG.getFromString(branch.restaurant?.pinImg)
             val mapPin = mUtilFunctions.vectorToBitmap(sharp)
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(branch.latitude, branch.longitude), GOOGLE_MAPS_ZOOM))
-            mMap.addMarker(MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branch.address).icon(mapPin))
+
+            val branchString = gson.toJson(branch)
+            val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(mapPin)
+            val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
+            mMap.setInfoWindowAdapter(infoWindowAdapter)
+            mMap.addMarker(marker)
+
+            if(mUtilFunctions.checkLocationPermissions()){
+                try {
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        if(it != null){
+                            val origin = LatLng(it.latitude, it.longitude)
+                            val destination = LatLng(branch.latitude, branch.longitude)
+                            view?.restaurant_direction_driving?.setOnClickListener {
+                                view?.restaurant_direction_driving?.background = view?.context?.getDrawable(R.drawable.background_label_button_active)
+                                view?.restaurant_direction_walking?.background = view?.context?.getDrawable(R.drawable.background_labeled_button)
+                                this.getPolyline(origin, destination, "driving")
+                            }
+                            view?.restaurant_direction_walking?.setOnClickListener {
+                                view?.restaurant_direction_walking?.background = view?.context?.getDrawable(R.drawable.background_label_button_active)
+                                view?.restaurant_direction_driving?.background = view?.context?.getDrawable(R.drawable.background_labeled_button)
+                                this.getPolyline(origin, destination, "walking")
+                            }
+                        } else { view?.restaurant_directions_menu?.visibility = View.GONE }
+                    }.addOnFailureListener {
+                        activity!!.runOnUiThread {
+                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
+                    }
+                } catch (e: java.lang.Exception){
+                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+                        Toast.LENGTH_LONG)
+                }
+            }
         } else {
             if(mUtilFunctions.checkLocationPermissions()){
                 try {
@@ -225,7 +280,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
         val w = view.width
         val h = view.height
 
-        val endRadius = Math.hypot(w.toDouble(), h.toDouble()).toInt()
+        val endRadius = hypot(w.toDouble(), h.toDouble()).toInt()
 
         val revealAnimator = ViewAnimationUtils.createCircularReveal(view, cx, cy.toInt(), 0f, endRadius.toFloat())
 
@@ -239,7 +294,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
         val w = view.width
         val h = view.height
 
-        val endRadius = Math.hypot(w.toDouble(), h.toDouble()).toInt()
+        val endRadius = hypot(w.toDouble(), h.toDouble()).toInt()
 
         val anim = ViewAnimationUtils.createCircularReveal(view, cx, cy.toInt(), endRadius.toFloat(), 0f)
 
@@ -276,5 +331,78 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback {
     override fun onStart() {
         super.onStart()
         dialog.window.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT)
+    }
+
+    override fun onInfoWindowClick(marker: Marker?) {
+
+    }
+
+    private fun getPolyline(origin: LatLng, destination: LatLng, type: String){
+
+        val url = "https://maps.googleapis.com/maps/"
+
+        val retrofit = Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+        val service = retrofit.create(RetrofitGoogleMapsRoute::class.java)
+        val call = service.getDistanceDuration("metric",  "${origin.latitude},${origin.longitude}", "${destination.latitude},${destination.longitude}", type)
+
+        call.enqueue(object : Callback<PolylineMapRoute> {
+
+            override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
+                activity!!.runOnUiThread {
+                    TingToast(context!!, t.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            @SuppressLint("SetTextI18n")
+            override fun onResponse(call: Call<PolylineMapRoute>, response: Response<PolylineMapRoute>) {
+                try {
+                    activity!!.runOnUiThread {
+                        mMap.clear()
+
+                        val svgRestaurant = SVG.getFromString(branch.restaurant?.pinImg)
+                        val mapPinRestaurant = mUtilFunctions.vectorToBitmap(svgRestaurant)
+                        val branchString = gson.toJson(branch)
+                        val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(mapPinRestaurant)
+                        val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
+                        mMap.setInfoWindowAdapter(infoWindowAdapter)
+                        mMap.addMarker(marker)
+
+                        val svgUser = SVG.getFromString(session.pinImg)
+                        val mapPinUser = mUtilFunctions.vectorToBitmap(svgUser)
+                        mMap.addMarker(MarkerOptions().position(LatLng(origin.latitude, origin.longitude)).icon(mapPinUser))
+
+                        response.body()?.routes!!.forEach {
+                            val i = response.body()?.routes!!.indexOf(it)
+                            val  distance = it.legs[i].distance.text
+                            val time = it.legs[i].duration.text
+                            view?.restaurant_direction_text!!.visibility = View.VISIBLE
+                            view?.restaurant_direction_text!!.text = "$time ($distance)"
+
+                            val encodedString = response.body()?.routes!![0].overview_polyline.points
+                            val linesList = mUtilFunctions.decodePoly(encodedString)
+                            polyline = mMap.addPolyline(
+                                PolylineOptions()
+                                    .addAll(linesList)
+                                    .width(20.0f)
+                                    .color(Color.parseColor("#BBB56FE8"))
+                                    .geodesic(true))
+                        }
+
+                        mMap.setMinZoomPreference(1.0f)
+                        mMap.setMaxZoomPreference(14.0f)
+
+                        try{ mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds(origin, destination), 0)) } catch (e: Exception){}
+                    }
+                } catch (e: java.lang.Exception) {
+                    activity!!.runOnUiThread {
+                        TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    }
+                }
+            }
+        })
     }
 }

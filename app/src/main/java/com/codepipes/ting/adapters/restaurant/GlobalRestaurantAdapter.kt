@@ -47,23 +47,25 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
         holder.view.restaurant_address.text = branch.address
         holder.view.restaurant_distance.text = "${branch.dist} km"
 
+        val status = utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant.closing)
+        holder.view.restaurant_time.text = status?.get("msg")
+
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        when(status?.get("clr")){
+            "green" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_green) }
+            "orange" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_orange) }
+            "red" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_red) }
+        }
+
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 activity.runOnUiThread {
-                    val status = utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant.closing)
-                    holder.view.restaurant_time.text = status?.get("msg")
 
                     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                     when(status?.get("clr")){
-                        "green" -> {
-                            holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_green)
-                        }
-                        "orange" -> {
-                            holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_orange)
-                        }
-                        "red" -> {
-                            holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_red)
-                        }
+                        "green" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_green) }
+                        "orange" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_orange) }
+                        "red" -> { holder.view.restaurant_work_status.background = holder.view.context.getDrawable(R.drawable.background_time_red) }
                     }
                 }
             }

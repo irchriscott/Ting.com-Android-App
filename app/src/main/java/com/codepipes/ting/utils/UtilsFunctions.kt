@@ -14,6 +14,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.util.Base64
 import android.graphics.drawable.Drawable
+import android.util.Log
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
@@ -110,12 +111,12 @@ class UtilsFunctions(
 
         val response = mutableMapOf<String, String>()
 
-        if(openTime>= now){
+        if(openTime >= now){
             if(((openTime - now) / (1000 * 60)) < 120){
-                val r = if ((openTime - now) / (1000 * 60) > 60 ){
-                    "${round(((openTime - now) / (1000 * 60 * 60)).toDouble()).toInt()} hr"
+                val r = if ((openTime - now) / (1000 * 60) >= 60 ){
+                    "${round(((openTime - now).toDouble() / (1000 * 60 * 60))).toInt()} hr"
                 } else {
-                    "${round(((openTime - now) / (1000 * 60)).toDouble()).toInt()} min"
+                    "${round(((openTime - now).toDouble() / (1000 * 60))).toInt()} min"
                 }
 
                 response["clr"] = "orange"
@@ -136,10 +137,10 @@ class UtilsFunctions(
                 return response
             } else {
                 if(((closeTime - now) / (1000 * 60)) < 120){
-                    val r = if ((closeTime - now) / (1000 * 60) > 60 ){
-                        "${round(((closeTime - now) / (1000 * 60 * 60)).toDouble()).toInt()} hr"
+                    val r = if ((closeTime - now) / (1000 * 60) >= 60 ){
+                        "${round(((closeTime - now).toDouble() / (1000 * 60 * 60))).toInt()} hr"
                     } else {
-                        "${round(((closeTime - now) / (1000 * 60)).toDouble()).toInt()} min"
+                        "${round(((closeTime - now).toDouble() / (1000 * 60))).toInt()} min"
                     }
 
                     response["clr"] = "orange"
@@ -155,5 +156,44 @@ class UtilsFunctions(
             }
         }
         return null
+    }
+
+
+    public fun decodePoly(encoded: String): List<LatLng> {
+
+        val poly = ArrayList<LatLng>()
+        var index = 0
+        val len = encoded.length
+        var lat = 0
+        var lng = 0
+
+        while (index < len) {
+            var b: Int
+            var shift = 0
+            var result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlat = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lat += dlat
+
+            shift = 0
+            result = 0
+            do {
+                b = encoded[index++].toInt() - 63
+                result = result or (b and 0x1f shl shift)
+                shift += 5
+            } while (b >= 0x20)
+            val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
+            lng += dlng
+
+            val p = LatLng(lat.toDouble() / 1E5,
+                lng.toDouble() / 1E5)
+            poly.add(p)
+        }
+
+        return poly
     }
 }

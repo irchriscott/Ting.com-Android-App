@@ -28,11 +28,15 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
+import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
+import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.APILoadGlobalRestaurants
+import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -65,11 +69,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mUtilFunctions: UtilsFunctions
 
+    private lateinit var session: User
+    private lateinit var userAuthentication: UserAuthentication
+
+    private lateinit var restaurants: MutableList<Branch>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    @SuppressLint("SetTextI18n", "NewApi")
+    @SuppressLint("SetTextI18n", "NewApi", "MissingPermission")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +89,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         activity = context!! as Activity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         mUtilFunctions = UtilsFunctions(context!!)
+
+        userAuthentication = UserAuthentication(context!!)
+        session = userAuthentication.get()!!
 
         mOpenRestaurantMapButton = view.findViewById(R.id.open_restaurant_map) as FloatingActionButton
         mOpenRestaurantMapButton.setOnClickListener {
@@ -94,6 +106,65 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             mapFragment.arguments = args
             mapFragment.show(fragmentManager!!, mapFragment.tag)
+        }
+
+        val menuList = mutableListOf<String>()
+        menuList.add("Current Location")
+        session.addresses?.addresses!!.forEach {
+            menuList.add("${it.type} - ${it.address}")
+        }
+
+        mOpenRestaurantMapButton.setOnLongClickListener {
+            val actionSheet = ActionSheet(context!!, menuList)
+                .setTitle("Restaurant Near Location")
+                .setColorData(activity.resources.getColor(R.color.colorGray))
+                .setColorTitleCancel(activity.resources.getColor(R.color.colorGoogleRedTwo))
+                .setColorSelected(activity.resources.getColor(R.color.colorPrimary))
+                .setCancelTitle("Cancel")
+
+            actionSheet.create(object : ActionSheetCallBack {
+
+                override fun data(data: String, position: Int) {
+                    if(!restaurants.isNullOrEmpty()){
+                        if(position == 0){
+                            if(mUtilFunctions.checkLocationPermissions()){
+                                try {
+                                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                                        if(it != null){
+                                            val from = LatLng(it.latitude, it.longitude)
+                                            restaurants.forEach { b ->
+                                                val to = LatLng(b.latitude, b.longitude)
+                                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                                b.dist = dist
+                                            }
+                                        }
+                                        restaurants.sortBy { b -> b.dist }
+                                        mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
+                                        mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                                    }.addOnFailureListener {
+                                        mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
+                                        mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
+                                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    }
+                                } catch (e: Exception){ TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            }
+                        } else {
+                            val address = session.addresses?.addresses!![position - 1]
+                            val from = LatLng(address.latitude, address.longitude)
+                            restaurants.forEach { b ->
+                                val to = LatLng(b.latitude, b.longitude)
+                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                b.dist = dist
+                            }
+                            restaurants.sortBy { b -> b.dist }
+                            mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
+                            mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                        }
+                    }
+                }
+            })
+
+            return@setOnLongClickListener true
         }
 
         mRestaurantsRecyclerView = view.findViewById<RecyclerView>(R.id.restaurants_recycler_view) as RecyclerView
@@ -123,7 +194,6 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
             }
         }
-
         this.getRestaurants()
 
         return view
@@ -137,6 +207,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val request = Request.Builder().url(url).get().build()
 
         client.newCall(request).enqueue(object : Callback {
+
             override fun onFailure(call: Call, e: IOException) {
                 activity.runOnUiThread {
                     mRestaurantsRecyclerView.visibility = View.GONE
@@ -150,7 +221,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                val restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+                restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
 
                 activity.runOnUiThread{
                     mRefreshRestaurant.isRefreshing = false

@@ -1,12 +1,10 @@
 package com.codepipes.ting.adapters.user
 
-import android.actionsheet.demo.com.khoiron.actionsheetiosforandroid.ActionSheet
-import android.actionsheet.demo.com.khoiron.actionsheetiosforandroid.Interface.ActionSheetCallBack
+import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.interfaces.ActionSheetCallBack
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -27,13 +25,9 @@ import com.codepipes.ting.models.UserAddresses
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_ting_dot_com.*
 import kotlinx.android.synthetic.main.row_user_address.view.*
 import okhttp3.*
 import java.io.IOException
-import java.text.FieldPosition
-import java.util.concurrent.TimeUnit
 
 class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Adapter<UserAddressViewHolder>() {
 

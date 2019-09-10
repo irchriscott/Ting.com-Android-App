@@ -40,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/address_map_background"
                 android:padding="15dp"
-                android:visibility="gone"
                 wheel:layout_constraintBottom_toBottomOf="parent"
                 wheel:layout_constraintStart_toStartOf="parent"
                 wheel:layout_constraintEnd_toEndOf="parent">
@@ -54,6 +53,7 @@
                         wheel:layout_constraintTop_toTopOf="parent"/>
 
                 <android.support.constraint.ConstraintLayout
+                        android:id="@+id/restaurant_about"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
@@ -112,6 +112,7 @@
                             tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
 
                     <LinearLayout
+                            android:id="@+id/restaurant_distance_view"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -179,6 +180,111 @@
                     </LinearLayout>
 
                 </android.support.constraint.ConstraintLayout>
+
+            <View
+                    android:id="@+id/separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorVeryLightGray"
+                    wheel:layout_constraintStart_toStartOf="parent"
+                    wheel:layout_constraintEnd_toEndOf="parent"
+                    wheel:layout_constraintTop_toBottomOf="@id/restaurant_about"/>
+
+
+            <TextView
+                    android:id="@+id/restaurant_distance_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Directions"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/colorGray"
+                    wheel:layout_constraintStart_toStartOf="parent"
+                    wheel:layout_constraintTop_toBottomOf="@id/separator"
+                    tools:ignore="HardcodedText"/>
+
+            <LinearLayout
+                    android:id="@+id/restaurant_directions_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_distance_text">
+
+                <LinearLayout
+                        android:id="@+id/restaurant_direction_driving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="2dp"
+                        android:background="@drawable/background_labeled_button">
+
+                    <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_directions_car_gray_24dp"
+                            android:alpha="0.6"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Driving Mode"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorGray"
+                            tools:ignore="HardcodedText,SpUsage"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:id="@+id/restaurant_direction_walking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="2dp"
+                        android:background="@drawable/background_labeled_button">
+
+                    <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_directions_walk_gray_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Walking Mode"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorGray"
+                            tools:ignore="HardcodedText,SpUsage"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/restaurant_direction_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="45min (25km)"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:visibility="gone"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorPrimaryDark"
+                    wheel:layout_constraintStart_toStartOf="parent"
+                    wheel:layout_constraintTop_toBottomOf="@+id/restaurant_directions_menu"
+                    tools:ignore="HardcodedText,SpUsage"/>
 
         </android.support.constraint.ConstraintLayout>
 
