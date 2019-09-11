@@ -1,5 +1,7 @@
 package com.codepipes.ting.models
 
+import com.google.android.gms.maps.model.LatLng
+
 class Branch (
     val id: Int,
     val restaurant: Restaurant?,
@@ -22,7 +24,8 @@ class Branch (
     val likes: BranchLikes?,
     val urls: BranchUrls,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    var fromLocation: LatLng
 ){
     init {
         this.dist = 0.00

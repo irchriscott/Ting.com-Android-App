@@ -21,9 +21,15 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".EditUserProfile"
-                android:theme="@style/AppTheme.WhiteActionBarDefault"
-                android:parentActivityName=".UserProfile">
+        <activity
+                android:name=".RestaurantProfile"
+                android:parentActivityName=".TingDotCom"
+                android:theme="@style/AppTheme.DefaultActionBar">
+        </activity>
+        <activity
+                android:name=".EditUserProfile"
+                android:parentActivityName=".UserProfile"
+                android:theme="@style/AppTheme.WhiteActionBarDefault">
         </activity>
         <activity
                 android:name=".UserProfile"

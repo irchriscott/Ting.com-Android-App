@@ -50,6 +50,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.time.Duration
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -86,6 +87,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_restaurants, container, false)
 
+        restaurants = ArrayList()
+
         activity = context!! as Activity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         mUtilFunctions = UtilsFunctions(context!!)
@@ -104,9 +107,15 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             args.putInt("cx", cx)
             args.putInt("cy", cy)
 
+            if(!restaurants.isNullOrEmpty()){
+                args.putString("restos", gson.toJson(restaurants))
+            }
+
             mapFragment.arguments = args
             mapFragment.show(fragmentManager!!, mapFragment.tag)
         }
+
+        mOpenRestaurantMapButton.isClickable = false
 
         val menuList = mutableListOf<String>()
         menuList.add("Current Location")
@@ -136,6 +145,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                                 val to = LatLng(b.latitude, b.longitude)
                                                 val dist = mUtilFunctions.calculateDistance(from, to)
                                                 b.dist = dist
+                                                b.fromLocation = from
                                             }
                                         }
                                         restaurants.sortBy { b -> b.dist }
@@ -146,7 +156,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
                                         TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                     }
-                                } catch (e: Exception){ TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                } catch (e: Exception){ TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                             }
                         } else {
                             val address = session.addresses?.addresses!![position - 1]
@@ -155,6 +165,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                 val to = LatLng(b.latitude, b.longitude)
                                 val dist = mUtilFunctions.calculateDistance(from, to)
                                 b.dist = dist
+                                b.fromLocation = from
                             }
                             restaurants.sortBy { b -> b.dist }
                             mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -180,12 +191,14 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val restaurants = asyncTask.get()
 
             if(!restaurants.isNullOrEmpty()){
+                mOpenRestaurantMapButton.isClickable = false
                 mRestaurantsRecyclerView.visibility = View.VISIBLE
                 mProgressLoader.visibility = View.GONE
                 mEmptyDataView.visibility = View.GONE
                 mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                 mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
             } else {
+                mOpenRestaurantMapButton.isClickable = false
                 mRestaurantsRecyclerView.visibility = View.GONE
                 mProgressLoader.visibility = View.GONE
                 mEmptyDataView.visibility = View.VISIBLE
@@ -215,7 +228,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     mEmptyDataView.visibility = View.VISIBLE
                     mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                     mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                    TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -235,23 +248,26 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                             val to = LatLng(b.latitude, b.longitude)
                                             val dist = mUtilFunctions.calculateDistance(from, to)
                                             b.dist = dist
+                                            b.fromLocation = from
                                         }
                                     }
                                     restaurants.sortBy { b -> b.dist }
+                                    mOpenRestaurantMapButton.isClickable = false
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
                                 }.addOnFailureListener {
+                                    mOpenRestaurantMapButton.isClickable = false
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
-                                    TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                 }
-                            } catch (e: Exception){ TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            } catch (e: Exception){ TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                         }
                     } else {
                         mRestaurantsRecyclerView.visibility = View.GONE
@@ -270,5 +286,4 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mRefreshRestaurant.isRefreshing = true
         this.getRestaurants()
     }
-
 }

@@ -25,7 +25,7 @@ class RestaurantInfoWindowMap (val context: Context) : GoogleMap.InfoWindowAdapt
 
         Picasso.get().load(branch.restaurant?.logoURL()).into(view.info_image)
         view.info_name.text = branch.restaurant?.name
-        view.info_branch.text = branch.name
+        view.info_branch.text = branch.name + " Branch"
         view.info_mail.text = branch.email
         view.info_phone.text = branch.phone
         view.info_time.text = "${branch.restaurant?.opening} - ${branch.restaurant?.closing}"
