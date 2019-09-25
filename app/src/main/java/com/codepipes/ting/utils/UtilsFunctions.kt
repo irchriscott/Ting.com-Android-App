@@ -105,18 +105,18 @@ class UtilsFunctions(
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val td = sdf.format(today)
 
-        val now = SimpleDateFormat("yyyy-MM-dd hh:mm").parse("$td ${today.hours}:${today.minutes}").time
+        val now = today.time
         val openTime = SimpleDateFormat("yyyy-MM-dd hh:mm").parse("$td $open").time
         val closeTime = SimpleDateFormat("yyyy-MM-dd hh:mm").parse("$td $close").time
 
         val response = mutableMapOf<String, String>()
 
         if(openTime >= now){
-            if(((openTime - now) / (1000 * 60)) < 120){
+            if(((openTime - now) / (1000 * 60)) < 119){
                 val r = if ((openTime - now) / (1000 * 60) >= 60 ){
                     "${round(((openTime - now).toDouble() / (1000 * 60 * 60))).toInt()} hr"
                 } else {
-                    "${round(((openTime - now).toDouble() / (1000 * 60))).toInt()} min"
+                    "${round(((openTime - now).toDouble() / (1000 * 60))).toInt() + 1} min"
                 }
 
                 response["clr"] = "orange"
@@ -136,11 +136,11 @@ class UtilsFunctions(
                 response["st"] = "closed"
                 return response
             } else {
-                if(((closeTime - now) / (1000 * 60)) < 120){
+                if(((closeTime - now) / (1000 * 60)) < 119){
                     val r = if ((closeTime - now) / (1000 * 60) >= 60 ){
                         "${round(((closeTime - now).toDouble() / (1000 * 60 * 60))).toInt()} hr"
                     } else {
-                        "${round(((closeTime - now).toDouble() / (1000 * 60))).toInt()} min"
+                        "${round(((closeTime - now).toDouble() / (1000 * 60))).toInt() + 1} min"
                     }
 
                     response["clr"] = "orange"

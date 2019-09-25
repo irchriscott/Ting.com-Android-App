@@ -84,6 +84,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
     private var handler: Handler? = null
 
+    private var mapCenter: LatLng = LatLng(0.00, 0.00)
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val runnable: Runnable = Runnable {
         mProgressWheel.visibility = View.GONE
@@ -113,6 +115,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         val mArgs = arguments
         cx = mArgs!!.getInt("cx")
         cy = mArgs.getInt("cy")
+
+        mapCenter = LatLng(mArgs.getDouble("lat"), mArgs.getDouble("lng"))
 
         mMapViewContainer = view.findViewById<ConstraintLayout>(R.id.view_map_container) as ConstraintLayout
         mProgressWheel = view.findViewById<ProgressWheel>(R.id.progress_wheel) as ProgressWheel
@@ -150,24 +154,45 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             view.restaurant_address.text = branch.address
             view.restaurant_distance.text = "${branch.dist} km"
 
-            timer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() {
-                    activity!!.runOnUiThread {
-                        val status = mUtilFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant?.closing!!)
-                        view.restaurant_time.text = status?.get("msg")
+            if(branch.isAvailable) {
 
-                        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-                        when(status?.get("clr")){
-                            "green" -> { view.restaurant_work_status.background = view.context.getDrawable(R.drawable.background_time_green) }
-                            "orange" -> { view.restaurant_work_status.background = view.context.getDrawable(R.drawable.background_time_orange) }
-                            "red" -> { view.restaurant_work_status.background = view.context.getDrawable(R.drawable.background_time_red) }
+                timer.scheduleAtFixedRate(object : TimerTask() {
+                    override fun run() {
+                        activity!!.runOnUiThread {
+                            val status = mUtilFunctions.statusWorkTime(
+                                branch.restaurant?.opening!!,
+                                branch.restaurant?.closing!!
+                            )
+                            view.restaurant_time.text = status?.get("msg")
+
+                            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                            when (status?.get("clr")) {
+                                "green" -> {
+                                    view.restaurant_work_status.background =
+                                        view.context.getDrawable(R.drawable.background_time_green)
+                                }
+                                "orange" -> {
+                                    view.restaurant_work_status.background =
+                                        view.context.getDrawable(R.drawable.background_time_orange)
+                                }
+                                "red" -> {
+                                    view.restaurant_work_status.background =
+                                        view.context.getDrawable(R.drawable.background_time_red)
+                                }
+                            }
                         }
                     }
+                }, 0, 10000)
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.restaurant_work_status.background =
+                        view.context.getDrawable(R.drawable.background_time_red)
+                    view.restaurant_work_status_icon.setImageDrawable(view.context.getDrawable(R.drawable.ic_close_white_24dp))
                 }
-            }, 0, 10000)
+                view.restaurant_time.text = "Not Available"
+            }
 
         } else { view.restaurant_view.visibility = View.GONE }
-
 
         return view
     }
@@ -273,7 +298,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     private fun getLocation(location: Location){
         try {
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM))
+            if (mapCenter.latitude != 0.0 && mapCenter.longitude != 0.0) { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, GOOGLE_MAPS_ZOOM)) }
+            else { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM)) }
         } catch (e: Exception){
             TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
                 Toast.LENGTH_LONG)

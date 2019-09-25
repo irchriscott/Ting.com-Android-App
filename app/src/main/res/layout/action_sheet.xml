@@ -55,6 +55,7 @@
                 android:textSize="16dp"
                 android:gravity="center"
                 android:textColor="#5EA1D6"
+                android:textAllCaps="true"
                 android:fontFamily="@font/poppins_medium"
                 tools:ignore="HardcodedText,SpUsage" />
     </LinearLayout>

@@ -13,7 +13,7 @@ import android.widget.ImageView
 
 class RoundedCornerImageView : ImageView {
 
-    private val radius = 15.0f
+    var radius = 15.0f
     private var path: Path? = null
     private var rect: RectF? = null
 

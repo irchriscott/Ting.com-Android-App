@@ -60,6 +60,8 @@ class MenuPromotions (
 
 class MenuReviews (
     val count: Int,
+    val average: Int,
+    val percents: List<Int>,
     val reviews: List<MenuReview>?
 ){}
 

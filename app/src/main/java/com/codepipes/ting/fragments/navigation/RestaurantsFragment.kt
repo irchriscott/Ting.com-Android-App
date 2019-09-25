@@ -75,6 +75,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var restaurants: MutableList<Branch>
 
+    private var selectedLatitude: Double = 0.0
+    private var selectedLongitude: Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -106,6 +109,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             args.putInt("cx", cx)
             args.putInt("cy", cy)
+            args.putDouble("lat", selectedLatitude)
+            args.putDouble("lng", selectedLongitude)
 
             if(!restaurants.isNullOrEmpty()){
                 args.putString("restos", gson.toJson(restaurants))
@@ -141,6 +146,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     fusedLocationClient.lastLocation.addOnSuccessListener {
                                         if(it != null){
                                             val from = LatLng(it.latitude, it.longitude)
+                                            selectedLatitude = it.latitude
+                                            selectedLongitude = it.longitude
+                                            restaurants.forEach { b ->
+                                                val to = LatLng(b.latitude, b.longitude)
+                                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                                b.dist = dist
+                                                b.fromLocation = from
+                                            }
+                                        } else {
+                                            val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                            selectedLatitude = session.addresses!!.addresses[0].latitude
+                                            selectedLongitude = session.addresses!!.addresses[0].longitude
                                             restaurants.forEach { b ->
                                                 val to = LatLng(b.latitude, b.longitude)
                                                 val dist = mUtilFunctions.calculateDistance(from, to)
@@ -152,6 +169,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                         mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
                                     }.addOnFailureListener {
+                                        val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                        selectedLatitude = session.addresses!!.addresses[0].latitude
+                                        selectedLongitude = session.addresses!!.addresses[0].longitude
+                                        restaurants.forEach { b ->
+                                            val to = LatLng(b.latitude, b.longitude)
+                                            val dist = mUtilFunctions.calculateDistance(from, to)
+                                            b.dist = dist
+                                            b.fromLocation = from
+                                        }
+                                        restaurants.sortBy { b -> b.dist }
                                         mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                         mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
                                         TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
@@ -161,6 +188,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         } else {
                             val address = session.addresses?.addresses!![position - 1]
                             val from = LatLng(address.latitude, address.longitude)
+                            selectedLatitude = address.latitude
+                            selectedLongitude = address.longitude
                             restaurants.forEach { b ->
                                 val to = LatLng(b.latitude, b.longitude)
                                 val dist = mUtilFunctions.calculateDistance(from, to)
@@ -244,6 +273,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                 fusedLocationClient.lastLocation.addOnSuccessListener {
                                     if(it != null){
                                         val from = LatLng(it.latitude, it.longitude)
+                                        selectedLatitude = it.latitude
+                                        selectedLongitude = it.longitude
+                                        restaurants.forEach { b ->
+                                            val to = LatLng(b.latitude, b.longitude)
+                                            val dist = mUtilFunctions.calculateDistance(from, to)
+                                            b.dist = dist
+                                            b.fromLocation = from
+                                        }
+                                    } else {
+                                        val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                        selectedLatitude = session.addresses!!.addresses[0].latitude
+                                        selectedLongitude = session.addresses!!.addresses[0].longitude
                                         restaurants.forEach { b ->
                                             val to = LatLng(b.latitude, b.longitude)
                                             val dist = mUtilFunctions.calculateDistance(from, to)
@@ -259,6 +300,15 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
                                 }.addOnFailureListener {
+                                    val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                    selectedLatitude = session.addresses!!.addresses[0].latitude
+                                    selectedLongitude = session.addresses!!.addresses[0].longitude
+                                    restaurants.forEach { b ->
+                                        val to = LatLng(b.latitude, b.longitude)
+                                        val dist = mUtilFunctions.calculateDistance(from, to)
+                                        b.dist = dist
+                                        b.fromLocation = from
+                                    }
                                     mOpenRestaurantMapButton.isClickable = false
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE

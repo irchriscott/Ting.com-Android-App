@@ -1,15 +1,18 @@
 package com.codepipes.ting
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -114,10 +117,21 @@ class EditUserProfile : AppCompatActivity() {
 
         mEditProfileImageButton.setOnClickListener {
             val intent = Intent(this, Gallery::class.java)
-            intent.putExtra("title", resources.getString(R.string.edit_user_profile_select_image))
-            intent.putExtra("mode", 2)
-            intent.putExtra("maxSelection", 1)
-            startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
+            if (ContextCompat.checkSelfPermission(
+                    this@EditUserProfile,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                intent.putExtra("title", resources.getString(R.string.edit_user_profile_select_image))
+                intent.putExtra("mode", 2)
+                intent.putExtra("maxSelection", 1)
+                startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
+            } else {
+                ActivityCompat.requestPermissions(this@EditUserProfile,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    REQUEST_CODE_IMAGE_PICKER
+                )
+            }
         }
 
         mEditProfileEmailButton.setOnClickListener {
