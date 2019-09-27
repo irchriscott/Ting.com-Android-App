@@ -165,30 +165,26 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                             )
                             view.restaurant_time.text = status?.get("msg")
 
-                            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                             when (status?.get("clr")) {
                                 "green" -> {
                                     view.restaurant_work_status.background =
-                                        view.context.getDrawable(R.drawable.background_time_green)
+                                        view.context.resources.getDrawable(R.drawable.background_time_green)
                                 }
                                 "orange" -> {
                                     view.restaurant_work_status.background =
-                                        view.context.getDrawable(R.drawable.background_time_orange)
+                                        view.context.resources.getDrawable(R.drawable.background_time_orange)
                                 }
                                 "red" -> {
                                     view.restaurant_work_status.background =
-                                        view.context.getDrawable(R.drawable.background_time_red)
+                                        view.context.resources.getDrawable(R.drawable.background_time_red)
                                 }
                             }
                         }
                     }
                 }, 0, 10000)
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    view.restaurant_work_status.background =
-                        view.context.getDrawable(R.drawable.background_time_red)
-                    view.restaurant_work_status_icon.setImageDrawable(view.context.getDrawable(R.drawable.ic_close_white_24dp))
-                }
+                view.restaurant_work_status.background = view.context.resources.getDrawable(R.drawable.background_time_red)
+                view.restaurant_work_status_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
                 view.restaurant_time.text = "Not Available"
             }
 
@@ -197,8 +193,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         return view
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
 
@@ -223,13 +218,13 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
             val destination = LatLng(branch.latitude, branch.longitude)
             view?.restaurant_direction_driving?.setOnClickListener {
-                view?.restaurant_direction_driving?.background = view?.context?.getDrawable(R.drawable.background_label_button_active)
-                view?.restaurant_direction_walking?.background = view?.context?.getDrawable(R.drawable.background_labeled_button)
+                view?.restaurant_direction_driving?.background = view?.context?.resources?.getDrawable(R.drawable.background_label_button_active)
+                view?.restaurant_direction_walking?.background = view?.context?.resources?.getDrawable(R.drawable.background_labeled_button)
                 this.getPolyline(branch.fromLocation, destination, "driving")
             }
             view?.restaurant_direction_walking?.setOnClickListener {
-                view?.restaurant_direction_walking?.background = view?.context?.getDrawable(R.drawable.background_label_button_active)
-                view?.restaurant_direction_driving?.background = view?.context?.getDrawable(R.drawable.background_labeled_button)
+                view?.restaurant_direction_walking?.background = view?.context?.resources?.getDrawable(R.drawable.background_label_button_active)
+                view?.restaurant_direction_driving?.background = view?.context?.resources?.getDrawable(R.drawable.background_labeled_button)
                 this.getPolyline(branch.fromLocation, destination, "walking")
             }
         } else {

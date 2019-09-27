@@ -67,19 +67,18 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
             val status = utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant.closing)
             holder.view.restaurant_time.text = status?.get("msg")
 
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             when (status?.get("clr")) {
                 "green" -> {
                     holder.view.restaurant_work_status.background =
-                        holder.view.context.getDrawable(R.drawable.background_time_green)
+                        holder.view.context.resources.getDrawable(R.drawable.background_time_green)
                 }
                 "orange" -> {
                     holder.view.restaurant_work_status.background =
-                        holder.view.context.getDrawable(R.drawable.background_time_orange)
+                        holder.view.context.resources.getDrawable(R.drawable.background_time_orange)
                 }
                 "red" -> {
                     holder.view.restaurant_work_status.background =
-                        holder.view.context.getDrawable(R.drawable.background_time_red)
+                        holder.view.context.resources.getDrawable(R.drawable.background_time_red)
                 }
             }
 
@@ -90,36 +89,32 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
                         val statusTimer = utilsFunctions.statusWorkTime(branch.restaurant.opening, branch.restaurant.closing)
                         holder.view.restaurant_time.text = statusTimer?.get("msg")
 
-                        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
                         when (statusTimer?.get("clr")) {
                             "green" -> {
                                 holder.view.restaurant_work_status.background =
-                                    holder.view.context.getDrawable(R.drawable.background_time_green)
+                                    holder.view.context.resources.getDrawable(R.drawable.background_time_green)
                             }
                             "orange" -> {
                                 holder.view.restaurant_work_status.background =
-                                    holder.view.context.getDrawable(R.drawable.background_time_orange)
+                                    holder.view.context.resources.getDrawable(R.drawable.background_time_orange)
                             }
                             "red" -> {
                                 holder.view.restaurant_work_status.background =
-                                    holder.view.context.getDrawable(R.drawable.background_time_red)
+                                    holder.view.context.resources.getDrawable(R.drawable.background_time_red)
                             }
                         }
                     }
                 }
             }, 0, 10000)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.view.restaurant_work_status.background =
-                    holder.view.context.getDrawable(R.drawable.background_time_red)
-                holder.view.restaurant_work_status_icon.setImageDrawable(holder.view.context.getDrawable(R.drawable.ic_close_white_24dp))
-            }
+            holder.view.restaurant_work_status.background = holder.view.context.resources.getDrawable(R.drawable.background_time_red)
+            holder.view.restaurant_work_status_icon.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
             holder.view.restaurant_time.text = "Not Available"
         }
 
         holder.view.restaurant_address.setOnClickListener {
             val cx = (it.x + it.width / 2).toInt()
-            val cy = (it.y + it.height + 56).toInt()
+            val cy = (it.y + it.height).toInt()
 
             val mapFragment =  RestaurantsMapFragment()
             val args: Bundle = Bundle()
@@ -134,7 +129,7 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
 
         holder.view.restaurant_distance_view.setOnClickListener {
             val cx = (it.x + it.width / 2).toInt()
-            val cy = (it.y + it.height + 56).toInt()
+            val cy = (it.y + it.height).toInt()
 
             val mapFragment =  RestaurantsMapFragment()
             val args: Bundle = Bundle()

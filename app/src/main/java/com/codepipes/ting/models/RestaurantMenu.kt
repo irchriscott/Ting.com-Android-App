@@ -17,7 +17,9 @@ class MenuUrls (
     val url: String,
     val like: String,
     val loadReviews: String,
-    val addReview: String
+    val addReview: String,
+    val apiGet: String,
+    val apiLike: String
 ){}
 
 class Menu (
@@ -72,7 +74,16 @@ class MenuLikes (
 
 class MenuFoods (
     val count: Int,
-    val foods: List<Menu>?
+    val foods: List<DishFood>?
+){}
+
+class DishFood(
+   val id: Int,
+   val food: Menu,
+   val isCountable: Boolean,
+   val quantity: Int,
+   val createdAt: String,
+   val updatedAt: String
 ){}
 
 class MenuImage (

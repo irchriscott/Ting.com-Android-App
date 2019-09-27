@@ -252,6 +252,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity.runOnUiThread {
+                    mRefreshRestaurant.isRefreshing = false
                     mRestaurantsRecyclerView.visibility = View.GONE
                     mProgressLoader.visibility = View.GONE
                     mEmptyDataView.visibility = View.VISIBLE

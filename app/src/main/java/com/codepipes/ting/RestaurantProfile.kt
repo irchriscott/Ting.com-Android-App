@@ -72,7 +72,6 @@ class RestaurantProfile : AppCompatActivity() {
 
         val adapter = UserProfile.UserProfileViewPagerAdapter(supportFragmentManager)
 
-
         mUserViewPager.adapter = adapter
         mUserTabLayout.setupWithViewPager(mUserViewPager)
 

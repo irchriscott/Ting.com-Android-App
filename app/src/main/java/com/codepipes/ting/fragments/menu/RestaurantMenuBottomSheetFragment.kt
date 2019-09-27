@@ -1,6 +1,8 @@
 package com.codepipes.ting.fragments.menu
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
@@ -54,23 +56,23 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
             view.menu_old_price.paintFlags = view.menu_old_price.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else { view.menu_old_price.visibility = View.GONE }
 
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
         when(menu.type.id){
             1 -> {
-                view.menu_type_image.setImageDrawable(view.context.getDrawable(R.drawable.ic_spoon_gray))
+                view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_spoon_gray))
                 view.menu_category_name.text = menu.menu.foodType
                 if(menu.menu.isCountable){ view.menu_quantity.text = "${menu.menu.quantity} pieces / packs" }
                 else { view.menu_quantity.visibility = View.GONE }
             }
             2 -> {
-                view.menu_type_image.setImageDrawable(view.context.getDrawable(R.drawable.ic_glass_gray))
+                view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_glass_gray))
                 view.menu_category_name.text = menu.menu.drinkType
                 if(menu.menu.isCountable){ view.menu_quantity.text = "${menu.menu.quantity} cups / bottles" }
                 else { view.menu_quantity.visibility = View.GONE }
             }
             3 -> {
-                view.menu_type_image.setImageDrawable(view.context.getDrawable(R.drawable.ic_fork_knife_gray))
-                view.menu_category_image.setImageDrawable(view.context.getDrawable(R.drawable.ic_clock_gray_24dp))
+                view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_fork_knife_gray))
+                view.menu_category_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_clock_gray_24dp))
                 view.menu_category_name.text = menu.menu.dishTime
                 if(menu.menu.isCountable){ view.menu_quantity.text = "${menu.menu.quantity} plates / packs" }
                 else { view.menu_quantity.visibility = View.GONE }
@@ -80,15 +82,21 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
         view.menu_likes.text = NumberFormat.getNumberInstance().format(menu.menu.likes?.count)
         view.menu_reviews.text = NumberFormat.getNumberInstance().format(menu.menu.reviews.count)
 
-        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
         if(menu.menu.isAvailable){
             view.menu_availability_text.text = "Available"
-            view.menu_availability_view.background = view.context.getDrawable(R.drawable.background_time_green)
-            view.menu_availability_icon.setImageDrawable(view.context.getDrawable(R.drawable.ic_check_white_48dp))
+            view.menu_availability_view.background = view.context.resources.getDrawable(R.drawable.background_time_green)
+            view.menu_availability_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_check_white_48dp))
         } else {
             view.menu_availability_text.text = "Not Available"
-            view.menu_availability_view.background = view.context.getDrawable(R.drawable.background_time_red)
-            view.menu_availability_icon.setImageDrawable(view.context.getDrawable(R.drawable.ic_close_white_24dp))
+            view.menu_availability_view.background = view.context.resources.getDrawable(R.drawable.background_time_red)
+            view.menu_availability_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
+        }
+
+        view.menu_image.setOnClickListener {
+            val intent = Intent(activity!!, com.codepipes.ting.RestaurantMenu::class.java)
+            intent.putExtra("menu", Gson().toJson(menu))
+            activity!!.startActivity(intent)
         }
 
         return view

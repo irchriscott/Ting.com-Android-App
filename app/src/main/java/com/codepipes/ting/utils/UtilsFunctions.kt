@@ -20,6 +20,8 @@ import java.net.MalformedURLException
 import java.net.URL
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.caverock.androidsvg.SVG
+import com.codepipes.ting.models.MenuLike
+import com.codepipes.ting.models.User
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -195,5 +197,12 @@ class UtilsFunctions(
         }
 
         return poly
+    }
+
+    public fun likesMenu(likes: List<MenuLike>, session: User) : Boolean {
+        if(likes.isNotEmpty()){
+            likes.forEach { if (it.user.id == session.id){ return true } }
+            return false
+        } else { return false }
     }
 }
