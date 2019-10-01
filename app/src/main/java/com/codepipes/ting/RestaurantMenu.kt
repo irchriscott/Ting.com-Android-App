@@ -2,32 +2,47 @@ package com.codepipes.ting
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.adapters.menu.MenuFoodsAdapter
+import com.codepipes.ting.adapters.menu.MenuReviewsAdapter
 import com.codepipes.ting.adapters.promotion.PromotionRestaurantMenuAdapter
 import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.customclasses.XAxisValueFormatter
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.fragments.menu.MenuReviewsBottomSheetFragment
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.models.*
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.ratings.BarLabels
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
+import com.github.mikephil.charting.charts.HorizontalBarChart
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_restaurant_menu.*
+import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import okhttp3.Route
 import java.io.IOException
@@ -105,21 +120,38 @@ class RestaurantMenu : AppCompatActivity() {
             actionSheet.create(object : ActionSheetCallBack {
 
                 override fun data(data: String, position: Int) {
-                    if(position == 0){
-                        if(utilsFunctions.checkLocationPermissions()){
-                            try {
-                                fusedLocationClient.lastLocation.addOnSuccessListener {
-                                    if(it != null){
-                                        val from = LatLng(it.latitude, it.longitude)
-                                        selectedLatitude = it.latitude
-                                        selectedLongitude = it.longitude
-                                        val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
-                                        val dist = utilsFunctions.calculateDistance(from, to)
-                                        menu.menu.branch?.dist = dist
-                                        menu.menu.branch?.fromLocation = from
-                                        runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
-                                    } else {
-                                        val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                    if (menu.menu.branch != null) {
+                        if (position == 0) {
+                            if (utilsFunctions.checkLocationPermissions()) {
+                                try {
+                                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                                        if (it != null) {
+                                            val from = LatLng(it.latitude, it.longitude)
+                                            selectedLatitude = it.latitude
+                                            selectedLongitude = it.longitude
+                                            val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
+                                            val dist = utilsFunctions.calculateDistance(from, to)
+                                            menu.menu.branch?.dist = dist
+                                            menu.menu.branch?.fromLocation = from
+                                            runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
+                                        } else {
+                                            val from = LatLng(
+                                                session.addresses!!.addresses[0].latitude,
+                                                session.addresses!!.addresses[0].longitude
+                                            )
+                                            selectedLatitude = session.addresses!!.addresses[0].latitude
+                                            selectedLongitude = session.addresses!!.addresses[0].longitude
+                                            val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
+                                            val dist = utilsFunctions.calculateDistance(from, to)
+                                            menu.menu.branch?.dist = dist
+                                            menu.menu.branch?.fromLocation = from
+                                            runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
+                                        }
+                                    }.addOnFailureListener {
+                                        val from = LatLng(
+                                            session.addresses!!.addresses[0].latitude,
+                                            session.addresses!!.addresses[0].longitude
+                                        )
                                         selectedLatitude = session.addresses!!.addresses[0].latitude
                                         selectedLongitude = session.addresses!!.addresses[0].longitude
                                         val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
@@ -127,30 +159,29 @@ class RestaurantMenu : AppCompatActivity() {
                                         menu.menu.branch?.dist = dist
                                         menu.menu.branch?.fromLocation = from
                                         runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
+                                        TingToast(this@RestaurantMenu, it.message!!, TingToastType.ERROR).showToast(
+                                            Toast.LENGTH_LONG
+                                        )
                                     }
-                                }.addOnFailureListener {
-                                    val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
-                                    selectedLatitude = session.addresses!!.addresses[0].latitude
-                                    selectedLongitude = session.addresses!!.addresses[0].longitude
-                                    val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
-                                    val dist = utilsFunctions.calculateDistance(from, to)
-                                    menu.menu.branch?.dist = dist
-                                    menu.menu.branch?.fromLocation = from
-                                    runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
-                                    TingToast(this@RestaurantMenu, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                } catch (e: java.lang.Exception) {
+                                    TingToast(
+                                        this@RestaurantMenu,
+                                        e.message!!.capitalize(),
+                                        TingToastType.ERROR
+                                    ).showToast(Toast.LENGTH_LONG)
                                 }
-                            } catch (e: java.lang.Exception){ TingToast(this@RestaurantMenu, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            }
+                        } else {
+                            val address = session.addresses?.addresses!![position - 1]
+                            val from = LatLng(address.latitude, address.longitude)
+                            selectedLatitude = address.latitude
+                            selectedLongitude = address.longitude
+                            val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
+                            val dist = utilsFunctions.calculateDistance(from, to)
+                            menu.menu.branch?.dist = dist
+                            menu.menu.branch?.fromLocation = from
+                            runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
                         }
-                    } else {
-                        val address = session.addresses?.addresses!![position - 1]
-                        val from = LatLng(address.latitude, address.longitude)
-                        selectedLatitude = address.latitude
-                        selectedLongitude = address.longitude
-                        val to = LatLng(menu.menu.branch?.latitude!!, menu.menu.branch?.longitude!!)
-                        val dist = utilsFunctions.calculateDistance(from, to)
-                        menu.menu.branch?.dist = dist
-                        menu.menu.branch?.fromLocation = from
-                        runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
                     }
                 }
             })
@@ -445,6 +476,95 @@ class RestaurantMenu : AppCompatActivity() {
             }
 
             menu_like_button.setOnClickListener { this.likeMenuToggle("${Routes().HOST_END_POINT}${menu.urls.apiLike}", session.token!!, menu.id) }
+
+            menu_reviews_average.text = menu.menu.reviews.average.toString()
+
+            val ratingChart = findViewById<HorizontalBarChart>(R.id.menu_rating_percents)
+            ratingChart.setDrawBarShadow(false)
+            val description = Description()
+            description.text = ""
+            ratingChart.description = description
+            ratingChart.legend.isEnabled = false
+            ratingChart.setPinchZoom(false)
+            ratingChart.setDrawValueAboveBar(false)
+            ratingChart.axisLeft.textColor = resources.getColor(R.color.colorGray)
+            ratingChart.xAxis.textColor = resources.getColor(R.color.colorGray)
+
+            val xAxis = ratingChart.xAxis
+            xAxis.setDrawGridLines(false)
+            xAxis.position = XAxis.XAxisPosition.BOTTOM
+            xAxis.isEnabled = true
+            xAxis.setDrawAxisLine(false)
+
+
+            val yLeft = ratingChart.axisLeft
+
+            yLeft.axisMaximum = 100f
+            yLeft.axisMinimum = 0f
+            yLeft.isEnabled = false
+
+            xAxis.labelCount = menu.menu.reviews.percents.size
+
+            val values = arrayOf("1 ★", "2 ★", "3 ★", "4 ★", "5 ★")
+            xAxis.valueFormatter = XAxisValueFormatter(values)
+
+            val yRight = ratingChart.axisRight
+            yRight.setDrawAxisLine(true)
+            yRight.setDrawGridLines(false)
+            yRight.isEnabled = false
+
+            val entries = ArrayList<BarEntry>()
+            entries.add(BarEntry(0f, menu.menu.reviews.percents[0].toFloat()))
+            entries.add(BarEntry(1f, menu.menu.reviews.percents[1].toFloat()))
+            entries.add(BarEntry(2f, menu.menu.reviews.percents[2].toFloat()))
+            entries.add(BarEntry(3f, menu.menu.reviews.percents[3].toFloat()))
+            entries.add(BarEntry(4f, menu.menu.reviews.percents[4].toFloat()))
+
+            val barDataSet = BarDataSet(entries, "Bar Data Set")
+            barDataSet.setColors(
+                ContextCompat.getColor(ratingChart.context, R.color.colorGray),
+                ContextCompat.getColor(ratingChart.context, R.color.colorGray),
+                ContextCompat.getColor(ratingChart.context, R.color.colorGray),
+                ContextCompat.getColor(ratingChart.context, R.color.colorGray),
+                ContextCompat.getColor(ratingChart.context, R.color.colorGray)
+            )
+
+            ratingChart.animateY(1000)
+            ratingChart.setDrawBarShadow(true)
+            barDataSet.barShadowColor = Color.argb(40, 150, 150, 150)
+
+            val data = BarData(barDataSet)
+            data.barWidth = 0.9f
+            ratingChart.data = data
+            ratingChart.invalidate()
+
+            if(menu.menu.reviews.count > 0){
+                empty_data.visibility = View.GONE
+                menu_reviews_recycler_view.visibility = View.VISIBLE
+
+                val max = if(menu.menu.reviews.count > 6){ 5 } else { menu.menu.reviews.count }
+
+                val reviews = menu.menu.reviews.reviews!!.subList(0, max)
+                menu_reviews_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantMenu)
+                menu_reviews_recycler_view.adapter = MenuReviewsAdapter(reviews as MutableList<MenuReview>)
+
+                if (menu.menu.reviews.count > 6){
+                    menu_reviews_show_more.visibility = View.VISIBLE
+                    menu_reviews_show_more.setOnClickListener {
+                        val reviewsFragment = MenuReviewsBottomSheetFragment()
+                        val bundle = Bundle()
+                        bundle.putString("menu", gson.toJson(menu))
+                        reviewsFragment.arguments = bundle
+                        reviewsFragment.show(supportFragmentManager, reviewsFragment.tag)
+                    }
+                } else { menu_reviews_show_more.visibility = View.GONE }
+            } else {
+                empty_data.visibility = View.VISIBLE
+                empty_data.empty_text.text = "No Reviews For This Menu"
+                empty_data.empty_image.setImageDrawable(resources.getDrawable(R.drawable.ic_comments_gray))
+                menu_reviews_recycler_view.visibility = View.GONE
+                menu_reviews_show_more.visibility = View.GONE
+            }
         }
     }
 

@@ -19,7 +19,8 @@ class MenuUrls (
     val loadReviews: String,
     val addReview: String,
     val apiGet: String,
-    val apiLike: String
+    val apiLike: String,
+    val apiReviews: String
 ){}
 
 class Menu (
@@ -62,7 +63,7 @@ class MenuPromotions (
 
 class MenuReviews (
     val count: Int,
-    val average: Int,
+    val average: Float,
     val percents: List<Int>,
     val reviews: List<MenuReview>?
 ){}

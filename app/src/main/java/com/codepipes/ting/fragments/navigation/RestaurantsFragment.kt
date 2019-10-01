@@ -50,6 +50,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
@@ -244,7 +245,10 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     @SuppressLint("SetTextI18n", "MissingPermission", "NewApi")
     private fun getRestaurants(){
         val url = routes.restaurantsGlobal
-        val client = OkHttpClient.Builder().callTimeout(Duration.ofMinutes(5)).build()
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .callTimeout(Duration.ofMinutes(5)).build()
 
         val request = Request.Builder().url(url).get().build()
 

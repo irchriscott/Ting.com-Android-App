@@ -29,3 +29,26 @@ private fun addFragment(v: View) {
             unreveal.start()
         }
     }
+
+
+
+<com.codepipes.ting.ratings.RatingReviews
+                                            xmlns:bar="http://schemas.android.com/apk/res-auto"
+                                            android:id="@+id/menu_rating_percents"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="6dp"
+                                            app:layout_constraintStart_toEndOf="@id/menu_reviews_average"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            bar:max_value="100"
+                                            bar:animation="true"
+                                            bar:show_label="true"
+                                            bar:show_raters="false"
+                                            bar:spaces="4dp"
+                                            bar:text_color="@color/colorLightGray"
+                                            bar:text_size="6dp"
+                                            bar:rounded="true"
+                                            bar:width="8dp"/>
+
+                                            //menu_rating_percents.createRatingBars(100, BarLabels.STYPE5, resources.getColor(R.color.colorLightGray), menu.menu.reviews.percents.reversed().toIntArray())

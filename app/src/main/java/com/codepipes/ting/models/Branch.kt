@@ -83,7 +83,7 @@ class BranchPromotions (
 
 class BranchReviews (
     val count: Int,
-    val average: Int,
+    val average: Float,
     val percents: List<Int>,
     val reviews: List<RestaurantReview>?
 ){}

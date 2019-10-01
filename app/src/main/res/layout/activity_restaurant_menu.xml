@@ -606,6 +606,122 @@
 
                             </android.support.constraint.ConstraintLayout>
 
+
+                            <android.support.constraint.ConstraintLayout
+                                    android:id="@+id/menu_reviews_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    app:layout_constraintTop_toBottomOf="@id/menu_promotions_view"
+                                    app:layout_constraintStart_toStartOf="parent">
+
+                                <View
+                                        android:id="@+id/menu_separator_sixth"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0.5dp"
+                                        android:background="@color/colorVeryLightGray"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"/>
+
+                                <TextView
+                                        android:id="@+id/menu_reviews_title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Ratings &amp; Reviews"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textAllCaps="true"
+                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_sixth"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        tools:ignore="HardcodedText"/>
+
+                                <android.support.constraint.ConstraintLayout
+                                        android:id="@+id/menu_rating_view"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:layout_constraintTop_toBottomOf="@id/menu_reviews_title"
+                                        app:layout_constraintStart_toStartOf="parent">
+
+                                    <TextView
+                                            android:id="@+id/menu_reviews_average"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/poppins_medium"
+                                            android:paddingRight="12dp"
+                                            android:paddingLeft="12dp"
+                                            android:text="4.9"
+                                            android:textColor="@color/colorGray"
+                                            android:includeFontPadding="false"
+                                            android:textSize="36sp"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            tools:ignore="HardcodedText"/>
+
+                                    <TextView
+                                            android:id="@+id/menu_reviews_average_max"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="5dp"
+                                            android:includeFontPadding="false"
+                                            android:text="Out of 5"
+                                            tools:ignore="HardcodedText"
+                                            app:layout_constraintStart_toStartOf="@id/menu_reviews_average"
+                                            app:layout_constraintTop_toBottomOf="@id/menu_reviews_average"
+                                            app:layout_constraintEnd_toEndOf="@id/menu_reviews_average"/>
+
+                                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                                            android:id="@+id/menu_rating_percents"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="85dp"
+                                            android:layout_marginLeft="75dp"
+                                            app:layout_constraintStart_toEndOf="@id/menu_reviews_average"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            tools:ignore="RtlHardcoded"/>
+
+                                </android.support.constraint.ConstraintLayout>
+
+                                <View
+                                        android:id="@+id/menu_separator_seventh"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0.5dp"
+                                        android:layout_marginTop="8dp"
+                                        android:background="@color/colorVeryLightGray"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/menu_rating_view"/>
+
+                                <include
+                                        android:id="@+id/empty_data"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:visibility="gone"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
+                                        layout="@layout/include_empty_data" />
+
+                                <android.support.v7.widget.RecyclerView
+                                        android:id="@+id/menu_reviews_recycler_view"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
+                                        app:layout_constraintStart_toStartOf="parent"/>
+
+                                <Button
+                                        android:id="@+id/menu_reviews_show_more"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/global_show_more"
+                                        android:textAllCaps="true"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:background="@drawable/button_clear"
+                                        android:textColor="@color/colorGray"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintStart_toEndOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/menu_reviews_recycler_view"/>
+
+                            </android.support.constraint.ConstraintLayout>
+
                         </android.support.constraint.ConstraintLayout>
 
                     </android.support.constraint.ConstraintLayout>
