@@ -20,7 +20,8 @@ class MenuUrls (
     val addReview: String,
     val apiGet: String,
     val apiLike: String,
-    val apiReviews: String
+    val apiReviews: String,
+    val apiAddReview: String
 ){}
 
 class Menu (

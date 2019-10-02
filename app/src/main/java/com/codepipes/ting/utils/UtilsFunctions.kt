@@ -14,6 +14,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.util.Base64
 import android.graphics.drawable.Drawable
+import android.text.format.DateUtils
 import android.util.Log
 import java.io.IOException
 import java.net.MalformedURLException
@@ -21,6 +22,7 @@ import java.net.URL
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.models.MenuLike
+import com.codepipes.ting.models.MenuReview
 import com.codepipes.ting.models.User
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
@@ -204,5 +206,20 @@ class UtilsFunctions(
             likes.forEach { if (it.user.id == session.id){ return true } }
             return false
         } else { return false }
+    }
+
+    public fun userMenuReview(reviews: List<MenuReview>, session: User) : MenuReview? {
+        return if(reviews.isNotEmpty()){
+            reviews.findLast { it.user.id == session.id }
+        } else { null }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public fun timeAgo(date: String) : String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        sdf.timeZone = TimeZone.getTimeZone("GMT")
+        val time = sdf.parse(date).time
+        val now = System.currentTimeMillis() - Date().timezoneOffset
+        return DateUtils.getRelativeTimeSpanString(time , now, DateUtils.MINUTE_IN_MILLIS).toString()
     }
 }

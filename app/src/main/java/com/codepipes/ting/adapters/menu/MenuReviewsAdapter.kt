@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.models.MenuReview
+import com.codepipes.ting.utils.UtilsFunctions
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_review.view.*
 
@@ -21,10 +22,13 @@ class MenuReviewsAdapter (private val reviews: MutableList<MenuReview>) : Recycl
     override fun onBindViewHolder(holder: MenuReviewsViewHolder, position: Int) {
         val review = reviews[position]
         Picasso.get().load(review.user.imageURL()).into(holder.view.review_image)
+
+        val utilsFunctions = UtilsFunctions(holder.view.context)
+
         holder.view.review_user_name.text = review.user.name
         holder.view.review_rating.rating = review.review.toFloat()
         holder.view.review_comment.text = review.comment
-        holder.view.review_date.text = review.createdAt
+        holder.view.review_date.text = utilsFunctions.timeAgo(review.createdAt)
     }
 }
 

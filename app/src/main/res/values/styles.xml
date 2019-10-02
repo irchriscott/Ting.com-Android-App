@@ -183,4 +183,21 @@
         <item name="android:windowExitAnimation">@anim/slide_out_top</item>
     </style>
 
+    <style name="RateAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorPrimaryDarkTransparent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/RateAlertDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/RateAlertDialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/RateAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="RateAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="RateDialogFadeAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>

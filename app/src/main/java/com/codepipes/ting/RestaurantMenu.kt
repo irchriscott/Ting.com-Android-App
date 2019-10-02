@@ -10,6 +10,9 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.adapters.menu.MenuFoodsAdapter
@@ -41,6 +44,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import com.stepstone.apprating.AppRatingDialog
+import com.stepstone.apprating.listener.RatingDialogListener
 import kotlinx.android.synthetic.main.activity_restaurant_menu.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
@@ -50,7 +55,7 @@ import java.text.NumberFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RestaurantMenu : AppCompatActivity() {
+class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
     private lateinit var menu: RestaurantMenu
     private lateinit var gson: Gson
@@ -203,6 +208,7 @@ class RestaurantMenu : AppCompatActivity() {
     }
 
     private fun getRestaurantMenu(url: String){
+
         val stringURL = "${Routes().HOST_END_POINT}$url"
 
         val client = OkHttpClient.Builder()
@@ -569,6 +575,7 @@ class RestaurantMenu : AppCompatActivity() {
     }
 
     private fun likeMenuToggle(url: String, token: String, menu: Int){
+
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -622,5 +629,101 @@ class RestaurantMenu : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.restaurant_menu_review, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.menu_rate -> {
+
+                val menuReview = utilsFunctions.userMenuReview(menu.menu.reviews?.reviews!!, session)
+
+                val ratingDialog = AppRatingDialog.Builder()
+                    .setPositiveButtonText("Submit")
+                    .setNegativeButtonText("Cancel")
+                    .setNeutralButtonText("Later")
+                    .setNoteDescriptions(listOf("Very Bad", "Not good", "Quite Ok", "Very Good", "Excellent !!!"))
+                    .setDefaultRating(menuReview?.review ?: 1)
+                    .setTitle("Rate this Menu")
+                    .setDescription("Please select a rate and write a review")
+                    .setCommentInputEnabled(true)
+                    .setDefaultComment(menuReview?.comment ?: "")
+                    .setStarColor(R.color.colorYellowRate)
+                    .setNoteDescriptionTextColor(R.color.colorGray)
+                    .setTitleTextColor(R.color.colorGray)
+                    .setDescriptionTextColor(R.color.colorLightGray)
+                    .setHint("Please write your review here ...")
+                    .setHintTextColor(R.color.colorVeryLightGray)
+                    .setCommentTextColor(R.color.colorGray)
+                    .setCommentBackgroundColor(R.color.colorPrimaryDarkTransparentDark)
+                    .setWindowAnimation(R.style.RateDialogFadeAnimation)
+                    .setCancelable(false)
+                    .setCanceledOnTouchOutside(false)
+                    .create(this)
+                    .show()
+
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onPositiveButtonClicked(rate: Int, comment: String) {
+
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("review", rate.toString())
+            .addFormDataPart("comment", comment)
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", session.token!!)
+            .url("${Routes().HOST_END_POINT}${menu.urls.apiAddReview}")
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    TingToast(this@RestaurantMenu, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body()!!.string()
+                try{
+                    val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                    runOnUiThread {
+                        getRestaurantMenu(menu.urls.apiGet)
+                        if (serverResponse.status == 200){
+                            TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    }
+                } catch (e: Exception){
+                    runOnUiThread { TingToast(this@RestaurantMenu, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                }
+            }
+        })
+    }
+
+    override fun onNegativeButtonClicked() {
+        TingToast(this@RestaurantMenu, "Operation Canceled", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+    }
+
+    override fun onNeutralButtonClicked() {
+        TingToast(this@RestaurantMenu, "We will remind you later", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
     }
 }
