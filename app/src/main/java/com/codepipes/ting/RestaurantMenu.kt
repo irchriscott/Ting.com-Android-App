@@ -24,6 +24,7 @@ import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.fragments.menu.MenuReviewsBottomSheetFragment
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
+import com.codepipes.ting.imageviewer.StfalconImageViewer
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.models.*
 import com.codepipes.ting.models.RestaurantMenu
@@ -258,6 +259,13 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             val image = menu.menu.images.images[index]
             Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(menu_image)
 
+            menu_image.setOnClickListener {
+
+                StfalconImageViewer.Builder<MenuImage>(this@RestaurantMenu, menu.menu.images.images) { view, image ->
+                    Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view)
+                }.show(true)
+            }
+
             menu_name.text = menu.menu.name
             menu_rating.rating = menu.menu.reviews?.average!!.toFloat()
             menu_description.text = menu.menu.description
@@ -471,14 +479,15 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             if(menu.menu.likes?.count!! > 0){
                 if(utilsFunctions.likesMenu(menu.menu.likes.likes!!, session)){
                     menu_like_button.tag = 1
-                    menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_filled_gray))
+                    menu_like_button.playAnimation()
+                    menu_like_button.isChecked = true
                 } else {
                     menu_like_button.tag = 0
-                    menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_outlined_gray))
+                    menu_like_button.isChecked = false
                 }
             } else {
                 menu_like_button.tag = 0
-                menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_outlined_gray))
+                menu_like_button.isChecked = false
             }
 
             menu_like_button.setOnClickListener { this.likeMenuToggle("${Routes().HOST_END_POINT}${menu.urls.apiLike}", session.token!!, menu.id) }
@@ -607,10 +616,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                         if (serverResponse.status == 200){
                             if(serverResponse.message.contains("Disliked") || menu_like_button.tag == 1){
                                 menu_like_button.tag = 0
-                                menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_outlined_gray))
+                                menu_like_button.isChecked = false
                             } else {
                                 menu_like_button.tag = 1
-                                menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_filled_gray))
+                                menu_like_button.playAnimation()
+                                menu_like_button.isChecked = true
                             }
                             TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
                         } else { TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
@@ -655,7 +665,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     .setTitle("Rate this Menu")
                     .setDescription("Please select a rate and write a review")
                     .setCommentInputEnabled(true)
-                    .setDefaultComment(menuReview?.comment ?: "")
+                    .setDefaultComment(menuReview?.comment ?: "Some review")
                     .setStarColor(R.color.colorYellowRate)
                     .setNoteDescriptionTextColor(R.color.colorGray)
                     .setTitleTextColor(R.color.colorGray)

@@ -51,4 +51,20 @@ private fun addFragment(v: View) {
                                             bar:rounded="true"
                                             bar:width="8dp"/>
 
-                                            //menu_rating_percents.createRatingBars(100, BarLabels.STYPE5, resources.getColor(R.color.colorLightGray), menu.menu.reviews.percents.reversed().toIntArray())
+
+                                           //menu_rating_percents.createRatingBars(100, BarLabels.STYPE5, resources.getColor(R.color.colorLightGray), menu.menu.reviews.percents.reversed().toIntArray())
+
+
+<ImageButton
+                                            android:id="@+id/menu_like_button"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            android:src="@drawable/ic_like_outlined_gray"
+                                            android:background="@drawable/background_like_button"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            tools:ignore="ContentDescription"/>
+
+                                            //menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_outlined_gray))
+                                            //menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_filled_gray))

@@ -295,441 +295,445 @@
                                             app:layout_constraintBottom_toBottomOf="@id/menu_new_price"
                                             tools:ignore="HardcodedText"/>
 
-                                    <ImageButton
+                                    <com.varunest.sparkbutton.SparkButton
                                             android:id="@+id/menu_like_button"
-                                            android:layout_width="45dp"
-                                            android:layout_height="45dp"
-                                            android:src="@drawable/ic_like_outlined_gray"
+                                            android:layout_width="50dp"
+                                            android:layout_height="50dp"
                                             android:background="@drawable/background_like_button"
+                                            app:sparkbutton_activeImage="@drawable/ic_heart_filled_primary"
+                                            app:sparkbutton_inActiveImage="@drawable/ic_heart_outlined_gray"
+                                            app:sparkbutton_iconSize="35dp"
+                                            app:sparkbutton_primaryColor="@color/colorPrimary"
+                                            app:sparkbutton_secondaryColor="@color/colorPrimaryDark"
+                                            app:sparkbutton_animationSpeed="1.5"
                                             app:layout_constraintEnd_toEndOf="parent"
                                             app:layout_constraintTop_toTopOf="parent"
-                                            app:layout_constraintBottom_toBottomOf="parent"
-                                            tools:ignore="ContentDescription"/>
-
-                                </android.support.constraint.ConstraintLayout>
-
-                            </RelativeLayout>
-
-                            <View
-                                    android:id="@+id/menu_separator_second"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.5dp"
-                                    android:layout_marginTop="4dp"
-                                    android:background="@color/colorVeryLightGray"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_price_view"/>
-
-                            <LinearLayout
-                                    android:id="@+id/menu_data_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    android:layout_marginBottom="12dp"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_separator_second"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="2dp"
-                                        android:background="@drawable/background_labeled_button">
-
-                                    <ImageView
-                                            android:layout_width="16dp"
-                                            android:layout_height="16dp"
-                                            android:src="@drawable/ic_heart_outlined_gray"
-                                            android:alpha="0.6"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_likes"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:text="12,789"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="8dp"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="2dp"
-                                        android:background="@drawable/background_labeled_button"
-                                        tools:ignore="RtlHardcoded">
-
-                                    <ImageView
-                                            android:layout_width="16dp"
-                                            android:layout_height="16dp"
-                                            android:src="@drawable/ic_star_outlined_gray"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_reviews"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:text="99,876"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            tools:ignore="HardcodedText,SpUsage"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                        android:id="@+id/menu_availability_view"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="8dp"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="2dp"
-                                        android:background="@drawable/background_time_green"
-                                        tools:ignore="RtlHardcoded">
-
-                                    <ImageView
-                                            android:id="@+id/menu_availability_icon"
-                                            android:layout_width="16dp"
-                                            android:layout_height="16dp"
-                                            android:src="@drawable/ic_check_white_48dp"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_availability_text"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:text="Available"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            android:textColor="@color/colorWhite"
-                                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <View
-                                    android:id="@+id/menu_separator_third"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.5dp"
-                                    android:layout_marginTop="12dp"
-                                    android:background="@color/colorVeryLightGray"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_data_view"/>
-
-                            <LinearLayout
-                                    android:id="@+id/menu_restaurant"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_separator_third"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                <LinearLayout
-                                        android:id="@+id/menu_restaurant_view"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginEnd="8dp"
-                                        android:paddingRight="8dp"
-                                        android:background="@drawable/background_labeled_button"
-                                        tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
-
-                                    <ImageView
-                                            android:id="@+id/menu_restaurant_image"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="24dp"
-                                            android:adjustViewBounds="true"
-                                            android:scaleType="fitCenter"
-                                            android:src="@drawable/default_restaurant"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_restaurant_name"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="2dp"
-                                            android:layout_marginStart="5dp"
-                                            android:text="Cafe Java, Kampala Road"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            android:textColor="@color/colorGray"
-                                            tools:ignore="HardcodedText,SpUsage"/>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                        android:id="@+id/menu_restaurant_distance_view"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="2dp"
-                                        android:background="@drawable/background_labeled_button">
-
-                                    <ImageView
-                                            android:layout_width="16dp"
-                                            android:layout_height="16dp"
-                                            android:src="@drawable/ic_place_gray_24dp"
-                                            android:alpha="0.6"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_restaurant_distance"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:text="12 km"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                        android:id="@+id/menu_restaurant_work_status"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="8dp"
-                                        android:paddingLeft="8dp"
-                                        android:paddingRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="2dp"
-                                        android:background="@drawable/background_time_orange"
-                                        tools:ignore="RtlHardcoded">
-
-                                    <ImageView
-                                            android:id="@+id/menu_restaurant_work_status_icon"
-                                            android:layout_width="16dp"
-                                            android:layout_height="16dp"
-                                            android:src="@drawable/ic_clock_white_24dp"
-                                            tools:ignore="ContentDescription"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_restaurant_time"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="5dp"
-                                            android:text="Opening in 18 min"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            android:textColor="@color/colorWhite"
-                                            tools:ignore="HardcodedText,SpUsage"/>
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <android.support.constraint.ConstraintLayout
-                                    android:id="@+id/menu_dish_foods_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_restaurant"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                <View
-                                        android:id="@+id/menu_separator_fourth"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0.5dp"
-                                        android:background="@color/colorVeryLightGray"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"/>
-
-                                <TextView
-                                        android:id="@+id/menu_dish_foods_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginTop="8dp"
-                                        android:text="Dish Foods"
-                                        android:fontFamily="@font/poppins_medium"
-                                        android:textAllCaps="true"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_fourth"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        tools:ignore="HardcodedText"/>
-
-                                <android.support.v7.widget.RecyclerView
-                                        android:id="@+id/menu_dish_foods_recycler_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_dish_foods_title"
-                                        app:layout_constraintStart_toStartOf="parent"/>
-
-                            </android.support.constraint.ConstraintLayout>
-
-                            <android.support.constraint.ConstraintLayout
-                                    android:id="@+id/menu_promotions_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_dish_foods_view"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                <View
-                                        android:id="@+id/menu_separator_firth"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0.5dp"
-                                        android:background="@color/colorVeryLightGray"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"/>
-
-                                <TextView
-                                        android:id="@+id/menu_promotions_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginTop="8dp"
-                                        android:text="Promotions"
-                                        android:fontFamily="@font/poppins_medium"
-                                        android:textAllCaps="true"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_firth"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        tools:ignore="HardcodedText"/>
-
-                                <android.support.v7.widget.RecyclerView
-                                        android:id="@+id/menu_promotions_recycler_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_promotions_title"
-                                        app:layout_constraintStart_toStartOf="parent"/>
-
-                            </android.support.constraint.ConstraintLayout>
-
-
-                            <android.support.constraint.ConstraintLayout
-                                    android:id="@+id/menu_reviews_view"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    app:layout_constraintTop_toBottomOf="@id/menu_promotions_view"
-                                    app:layout_constraintStart_toStartOf="parent">
-
-                                <View
-                                        android:id="@+id/menu_separator_sixth"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0.5dp"
-                                        android:background="@color/colorVeryLightGray"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"/>
-
-                                <TextView
-                                        android:id="@+id/menu_reviews_title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:layout_marginTop="8dp"
-                                        android:text="Ratings &amp; Reviews"
-                                        android:fontFamily="@font/poppins_medium"
-                                        android:textAllCaps="true"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_sixth"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        tools:ignore="HardcodedText"/>
-
-                                <android.support.constraint.ConstraintLayout
-                                        android:id="@+id/menu_rating_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_reviews_title"
-                                        app:layout_constraintStart_toStartOf="parent">
-
-                                    <TextView
-                                            android:id="@+id/menu_reviews_average"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:fontFamily="@font/poppins_medium"
-                                            android:paddingRight="12dp"
-                                            android:paddingLeft="12dp"
-                                            android:text="4.9"
-                                            android:textColor="@color/colorGray"
-                                            android:includeFontPadding="false"
-                                            android:textSize="36sp"
-                                            app:layout_constraintTop_toTopOf="parent"
-                                            app:layout_constraintStart_toStartOf="parent"
-                                            tools:ignore="HardcodedText"/>
-
-                                    <TextView
-                                            android:id="@+id/menu_reviews_average_max"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginBottom="5dp"
-                                            android:includeFontPadding="false"
-                                            android:text="Out of 5"
-                                            tools:ignore="HardcodedText"
-                                            app:layout_constraintStart_toStartOf="@id/menu_reviews_average"
-                                            app:layout_constraintTop_toBottomOf="@id/menu_reviews_average"
-                                            app:layout_constraintEnd_toEndOf="@id/menu_reviews_average"/>
-
-                                    <com.github.mikephil.charting.charts.HorizontalBarChart
-                                            android:id="@+id/menu_rating_percents"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="85dp"
-                                            android:layout_marginLeft="75dp"
-                                            app:layout_constraintStart_toEndOf="@id/menu_reviews_average"
-                                            app:layout_constraintTop_toTopOf="parent"
-                                            tools:ignore="RtlHardcoded"/>
-
-                                </android.support.constraint.ConstraintLayout>
-
-                                <View
-                                        android:id="@+id/menu_separator_seventh"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0.5dp"
-                                        android:layout_marginTop="8dp"
-                                        android:background="@color/colorVeryLightGray"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/menu_rating_view"/>
-
-                                <include
-                                        android:id="@+id/empty_data"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="match_parent"
-                                        android:visibility="gone"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
-                                        layout="@layout/include_empty_data" />
-
-                                <android.support.v7.widget.RecyclerView
-                                        android:id="@+id/menu_reviews_recycler_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
-                                        app:layout_constraintStart_toStartOf="parent"/>
-
-                                <Button
-                                        android:id="@+id/menu_reviews_show_more"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/global_show_more"
-                                        android:textAllCaps="true"
-                                        android:fontFamily="@font/poppins_medium"
-                                        android:background="@drawable/button_clear"
-                                        android:textColor="@color/colorGray"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintStart_toEndOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/menu_reviews_recycler_view"/>
-
-                            </android.support.constraint.ConstraintLayout>
+                                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                         </android.support.constraint.ConstraintLayout>
 
+                    </RelativeLayout>
+
+                    <View
+                            android:id="@+id/menu_separator_second"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@color/colorVeryLightGray"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/menu_price_view"/>
+
+                    <LinearLayout
+                            android:id="@+id/menu_data_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/menu_separator_second"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="2dp"
+                                android:background="@drawable/background_labeled_button">
+
+                            <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_heart_outlined_gray"
+                                    android:alpha="0.6"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_likes"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="12,789"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="2dp"
+                                android:background="@drawable/background_labeled_button"
+                                tools:ignore="RtlHardcoded">
+
+                            <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_star_outlined_gray"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_reviews"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="99,876"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText,SpUsage"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/menu_availability_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="2dp"
+                                android:background="@drawable/background_time_green"
+                                tools:ignore="RtlHardcoded">
+
+                            <ImageView
+                                    android:id="@+id/menu_availability_icon"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_check_white_48dp"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_availability_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="Available"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    android:textColor="@color/colorWhite"
+                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                            android:id="@+id/menu_separator_third"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@color/colorVeryLightGray"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/menu_data_view"/>
+
+                    <LinearLayout
+                            android:id="@+id/menu_restaurant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/menu_separator_third"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                        <LinearLayout
+                                android:id="@+id/menu_restaurant_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:paddingRight="8dp"
+                                android:background="@drawable/background_labeled_button"
+                                tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
+
+                            <ImageView
+                                    android:id="@+id/menu_restaurant_image"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="24dp"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/default_restaurant"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_restaurant_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:layout_marginStart="5dp"
+                                    android:text="Cafe Java, Kampala Road"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    android:textColor="@color/colorGray"
+                                    tools:ignore="HardcodedText,SpUsage"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/menu_restaurant_distance_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="2dp"
+                                android:background="@drawable/background_labeled_button">
+
+                            <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_place_gray_24dp"
+                                    android:alpha="0.6"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_restaurant_distance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="12 km"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/menu_restaurant_work_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="3dp"
+                                android:paddingBottom="2dp"
+                                android:background="@drawable/background_time_orange"
+                                tools:ignore="RtlHardcoded">
+
+                            <ImageView
+                                    android:id="@+id/menu_restaurant_work_status_icon"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_clock_white_24dp"
+                                    tools:ignore="ContentDescription"/>
+
+                            <TextView
+                                    android:id="@+id/menu_restaurant_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="Opening in 18 min"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:textSize="12dp"
+                                    android:textColor="@color/colorWhite"
+                                    tools:ignore="HardcodedText,SpUsage"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                            android:id="@+id/menu_dish_foods_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/menu_restaurant"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                        <View
+                                android:id="@+id/menu_separator_fourth"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:background="@color/colorVeryLightGray"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                                android:id="@+id/menu_dish_foods_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="8dp"
+                                android:text="Dish Foods"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textAllCaps="true"
+                                app:layout_constraintTop_toBottomOf="@id/menu_separator_fourth"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:ignore="HardcodedText"/>
+
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/menu_dish_foods_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toBottomOf="@id/menu_dish_foods_title"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
                     </android.support.constraint.ConstraintLayout>
 
-                </RelativeLayout>
+                    <android.support.constraint.ConstraintLayout
+                            android:id="@+id/menu_promotions_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/menu_dish_foods_view"
+                            app:layout_constraintStart_toStartOf="parent">
 
-            </ScrollView>
+                        <View
+                                android:id="@+id/menu_separator_firth"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:background="@color/colorVeryLightGray"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+                        <TextView
+                                android:id="@+id/menu_promotions_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="8dp"
+                                android:text="Promotions"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textAllCaps="true"
+                                app:layout_constraintTop_toBottomOf="@id/menu_separator_firth"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:ignore="HardcodedText"/>
+
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/menu_promotions_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toBottomOf="@id/menu_promotions_title"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                    </android.support.constraint.ConstraintLayout>
+
+
+                    <android.support.constraint.ConstraintLayout
+                            android:id="@+id/menu_reviews_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            app:layout_constraintTop_toBottomOf="@id/menu_promotions_view"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                        <View
+                                android:id="@+id/menu_separator_sixth"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:background="@color/colorVeryLightGray"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                                android:id="@+id/menu_reviews_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="8dp"
+                                android:text="Ratings &amp; Reviews"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textAllCaps="true"
+                                app:layout_constraintTop_toBottomOf="@id/menu_separator_sixth"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:ignore="HardcodedText"/>
+
+                        <android.support.constraint.ConstraintLayout
+                                android:id="@+id/menu_rating_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toBottomOf="@id/menu_reviews_title"
+                                app:layout_constraintStart_toStartOf="parent">
+
+                            <TextView
+                                    android:id="@+id/menu_reviews_average"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_medium"
+                                    android:paddingRight="12dp"
+                                    android:paddingLeft="12dp"
+                                    android:text="4.9"
+                                    android:textColor="@color/colorGray"
+                                    android:includeFontPadding="false"
+                                    android:textSize="36sp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    tools:ignore="HardcodedText"/>
+
+                            <TextView
+                                    android:id="@+id/menu_reviews_average_max"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:includeFontPadding="false"
+                                    android:text="Out of 5"
+                                    tools:ignore="HardcodedText"
+                                    app:layout_constraintStart_toStartOf="@id/menu_reviews_average"
+                                    app:layout_constraintTop_toBottomOf="@id/menu_reviews_average"
+                                    app:layout_constraintEnd_toEndOf="@id/menu_reviews_average"/>
+
+                            <com.github.mikephil.charting.charts.HorizontalBarChart
+                                    android:id="@+id/menu_rating_percents"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="85dp"
+                                    android:layout_marginLeft="75dp"
+                                    app:layout_constraintStart_toEndOf="@id/menu_reviews_average"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:ignore="RtlHardcoded"/>
+
+                        </android.support.constraint.ConstraintLayout>
+
+                        <View
+                                android:id="@+id/menu_separator_seventh"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@color/colorVeryLightGray"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/menu_rating_view"/>
+
+                        <include
+                                android:id="@+id/empty_data"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:visibility="gone"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
+                                layout="@layout/include_empty_data" />
+
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/menu_reviews_recycler_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
+                                app:layout_constraintStart_toStartOf="parent"/>
+
+                        <Button
+                                android:id="@+id/menu_reviews_show_more"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/global_show_more"
+                                android:textAllCaps="true"
+                                android:fontFamily="@font/poppins_medium"
+                                android:background="@drawable/button_clear"
+                                android:textColor="@color/colorGray"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/menu_reviews_recycler_view"/>
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>
