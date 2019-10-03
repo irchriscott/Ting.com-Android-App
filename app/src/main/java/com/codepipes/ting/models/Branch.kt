@@ -98,6 +98,11 @@ class BranchUrls (
     val loadReviews: String,
     val addReview: String,
     val likeBranch: String,
-    val loadLikes: String
+    val loadLikes: String,
+    val apiFoods: String,
+    val apiDrinks: String,
+    val apiDishes: String,
+    val apiReviews: String,
+    val apiLikes: String
 ){}
 

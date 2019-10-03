@@ -2,6 +2,7 @@ package com.codepipes.ting.adapters.restaurant
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
+import com.codepipes.ting.RestaurantProfile
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantMenu
@@ -52,6 +54,20 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
         holder.view.restaurant_likes.text = NumberFormat.getNumberInstance().format(branch.likes?.count)
         holder.view.restaurant_reviews.text = NumberFormat.getNumberInstance().format(branch.reviews.count)
         holder.view.restaurant_specials.text = branch.specials.size.toString()
+
+        holder.view.restaurant_name.setOnClickListener {
+            val intent = Intent(holder.view.context, RestaurantProfile::class.java)
+            intent.putExtra("resto", Gson().toJson(branch))
+            intent.putExtra("tab", 0)
+            activity.startActivity(intent)
+        }
+
+        holder.view.restaurant_image.setOnClickListener {
+            val intent = Intent(holder.view.context, RestaurantProfile::class.java)
+            intent.putExtra("resto", Gson().toJson(branch))
+            intent.putExtra("tab", 0)
+            activity.startActivity(intent)
+        }
 
         if(branch.menus.count > 0) {
             val layoutManager = LinearLayoutManager(holder.view.context)

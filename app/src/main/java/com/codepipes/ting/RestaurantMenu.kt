@@ -89,7 +89,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         supportActionBar!!.setHomeAsUpIndicator(upArrow)
 
         menu = gson.fromJson(intent.getStringExtra("menu"), com.codepipes.ting.models.RestaurantMenu::class.java)
-        this.showRestaurantMenu(menu)
+        this.showRestaurantMenu(menu, false)
         this.getRestaurantMenu(menu.urls.apiGet)
 
         val menuList = mutableListOf<String>()
@@ -240,7 +240,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                         progress_loader.visibility = View.GONE
                         menu_view.visibility = View.VISIBLE
                         refresh_menu.isRefreshing = false
-                        showRestaurantMenu(restaurantMenu)
+                        showRestaurantMenu(restaurantMenu, true)
                     }
                 } catch (e: Exception){
                     runOnUiThread {
@@ -252,7 +252,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     }
 
     @SuppressLint("SetTextI18n", "MissingPermission")
-    private fun showRestaurantMenu(menu: com.codepipes.ting.models.RestaurantMenu){
+    private fun showRestaurantMenu(menu: com.codepipes.ting.models.RestaurantMenu, clickable: Boolean){
 
         runOnUiThread {
             val index = (0 until menu.menu.images.count - 1).random()
@@ -344,6 +344,17 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
                 Picasso.get().load(menu.menu.restaurant.logoURL()).into(menu_restaurant_image)
                 menu_restaurant_name.text = "${menu.menu.restaurant.name}, ${menu.menu.branch.name}"
+                
+                menu_restaurant_name.isClickable = true
+                menu_restaurant_name.setOnClickListener {
+                    if(clickable){
+                        val intent = Intent(this@RestaurantMenu, RestaurantProfile::class.java)
+                        val branchString = Gson().toJson(menu.menu.branch)
+                        intent.putExtra("resto", branchString)
+                        intent.putExtra("tab", 0)
+                        startActivity(intent)
+                    }
+                }
 
                 if (menu.menu.branch.isAvailable) {
 
@@ -451,6 +462,8 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     }
                 }
             } else {
+                menu_restaurant_name.isClickable = false
+                menu_restaurant_name.setOnClickListener(null)
                 menu_restaurant_name.text = "Loading..."
                 menu_restaurant_distance.text = "0.0 Km"
                 menu_restaurant_time.text = "Loading..."

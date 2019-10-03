@@ -10,6 +10,7 @@
         <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.White" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -17,6 +18,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccentMain</item>
         <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="TextAppearance.AppCompat.ItemList">
@@ -31,6 +33,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.DefaultActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -40,6 +43,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccentMain</item>
         <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.WhiteActionBar" parent="AppTheme">
@@ -129,11 +133,13 @@
     <style name="AppTheme.ActionBarStyle" parent="Base.Widget.AppCompat.ActionBar">
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
         <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.ActionBarStyleDefault" parent="Base.Widget.AppCompat.ActionBar">
         <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
         <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.ActionBar.TitleTextStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
@@ -154,6 +160,10 @@
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:fontFamily">@font/poppins_semi_bold</item>
         <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <style name="DotsDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+        <item name="android:tint">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.DialogStyle" parent="Base.Theme.AppCompat.Dialog">

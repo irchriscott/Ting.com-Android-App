@@ -42,6 +42,9 @@
     <string name="global_restaurants">Restaurants</string>
     <string name="global_restaurant_sub">Discover Restaurants around and near your location</string>
     <string name="global_show_more">Show More</string>
+    <string name="global_reviews">REVIEWS</string>
+    <string name="global_likes">LIKES</string>
+    <string name="global_about">ABOUT</string>
 
     <!-- GOOGLE APIS KEYS -->
     <string name="server_client_id">1033794072902-sumfcak8j137q01u255h912slil7v32v.apps.googleusercontent.com</string>
@@ -82,5 +85,8 @@
 
     <!-- GLOBAL ERRORS -->
     <string name="error_internet">No Internet Connection</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
