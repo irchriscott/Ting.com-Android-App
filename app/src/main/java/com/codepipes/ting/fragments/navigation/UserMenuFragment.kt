@@ -99,6 +99,6 @@ class UserMenuFragment : BottomSheetDialogFragment() {
         intent.putExtra("user", user)
         intent.putExtra("tab", tab)
 
-        activity!!.startActivity(intent)
+        activity?.startActivity(intent)
     }
 }

@@ -13,7 +13,8 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/userCoordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
             android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -27,7 +28,7 @@
             <android.support.design.widget.CollapsingToolbarLayout
                     android:id="@+id/userCollapsingToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="420dp"
+                    android:layout_height="410dp"
                     android:fitsSystemWindows="true"
                     app:contentScrim="?attr/colorPrimary"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -75,6 +76,7 @@
                                 android:layout_below="@id/userProfileImage"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="10dp"
+                                android:includeFontPadding="false"
                                 android:textSize="24dp"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 tools:ignore="HardcodedText,SpUsage"/>
@@ -87,6 +89,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/userProfileName"
                                 android:layout_centerHorizontal="true"
+                                android:includeFontPadding="false"
                                 android:textSize="15dp"
                                 android:fontFamily="@font/poppins_regular"
                                 tools:ignore="HardcodedText,SpUsage"/>

@@ -19,5 +19,13 @@ class RestaurantDishesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_restaurant_dishes, container, false)
     }
 
+    companion object {
 
+        fun newInstance(resto: String) =
+            RestaurantDishesFragment().apply {
+                arguments = Bundle().apply {
+                    putString("resto", resto)
+                }
+            }
+    }
 }

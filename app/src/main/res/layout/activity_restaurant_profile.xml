@@ -12,7 +12,8 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/userCoordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
             android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -26,7 +27,7 @@
             <android.support.design.widget.CollapsingToolbarLayout
                     android:id="@+id/userCollapsingToolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="420dp"
+                    android:layout_height="485dp"
                     android:fitsSystemWindows="true"
                     app:contentScrim="?attr/colorPrimary"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -76,6 +77,7 @@
                                 android:layout_marginTop="10dp"
                                 android:textSize="24dp"
                                 android:fontFamily="@font/poppins_semi_bold"
+                                android:includeFontPadding="false"
                                 tools:ignore="HardcodedText,SpUsage"/>
 
 
@@ -87,8 +89,91 @@
                                 android:layout_below="@id/userProfileName"
                                 android:layout_centerHorizontal="true"
                                 android:textSize="15dp"
+                                android:includeFontPadding="false"
                                 android:fontFamily="@font/poppins_regular"
                                 tools:ignore="HardcodedText,SpUsage"/>
+
+                        <RatingBar
+                                android:id="@+id/restaurant_rating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/userProfileAddress"
+                                android:layout_centerHorizontal="true"
+                                android:paddingTop="8dp"
+                                android:numStars="5"
+                                style="@style/AppTheme.IndicatorRating"
+                                android:theme="@style/AppTheme.IndicatorRating"/>
+
+                        <LinearLayout
+                                android:id="@+id/restaurant_time_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_below="@id/restaurant_rating"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/restaurant_menus">
+
+                            <LinearLayout
+                                    android:id="@+id/restaurant_distance_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="2dp"
+                                    android:background="@drawable/background_labeled_button">
+
+                                <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_road_gray"
+                                        android:alpha="0.6"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:id="@+id/restaurant_distance"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="12 km"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12dp"
+                                        tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:id="@+id/restaurant_work_status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="2dp"
+                                    android:background="@drawable/background_time_orange" tools:ignore="RtlHardcoded">
+
+                                <ImageView
+                                        android:id="@+id/restaurant_work_status_icon"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_clock_white_24dp"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:id="@+id/restaurant_time"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="Opening in 18 min"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12dp"
+                                        android:textColor="@color/colorWhite"
+                                        tools:ignore="HardcodedText,SpUsage"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                     </RelativeLayout>
 

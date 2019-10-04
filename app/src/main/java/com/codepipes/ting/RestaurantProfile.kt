@@ -15,10 +15,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import com.codepipes.ting.fragments.restaurants.RestaurantDishesFragment
-import com.codepipes.ting.fragments.restaurants.RestaurantDrinksFragment
-import com.codepipes.ting.fragments.restaurants.RestaurantFoodsFragment
-import com.codepipes.ting.fragments.restaurants.RestaurantPromotionsFragment
 import com.codepipes.ting.fragments.user.UserAbout
 import com.codepipes.ting.fragments.user.UserMoments
 import com.codepipes.ting.fragments.user.UserRestaurants
@@ -34,6 +30,19 @@ import android.support.v4.app.SupportActivity.ExtraData
 import android.support.v4.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.support.v7.view.menu.MenuBuilder
+import android.widget.Toast
+import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.fragments.restaurants.*
+import com.codepipes.ting.interfaces.ActionSheetCallBack
+import com.codepipes.ting.utils.UtilsFunctions
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
+import kotlinx.android.synthetic.main.activity_restaurant_profile.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RestaurantProfile : AppCompatActivity() {
@@ -51,7 +60,13 @@ class RestaurantProfile : AppCompatActivity() {
     private lateinit var session: User
     private lateinit var branch: Branch
 
-    @SuppressLint("SetTextI18n", "PrivateResource")
+    private lateinit var utilsFunctions: UtilsFunctions
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private var selectedLatitude: Double = 0.0
+    private var selectedLongitude: Double = 0.0
+
+    @SuppressLint("SetTextI18n", "PrivateResource", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant_profile)
@@ -60,6 +75,9 @@ class RestaurantProfile : AppCompatActivity() {
 
         session = userAuthentication.get()!!
         branch = Gson().fromJson(intent.getStringExtra("resto"), Branch::class.java)
+
+        utilsFunctions = UtilsFunctions(this@RestaurantProfile)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@RestaurantProfile)
 
         mUserToolbar = findViewById<Toolbar>(R.id.userToolbar) as Toolbar
         setSupportActionBar(mUserToolbar)
@@ -82,20 +100,230 @@ class RestaurantProfile : AppCompatActivity() {
         mUserProfileName.text = "${branch.restaurant?.name}, ${branch.name}"
         mUserProfileAddress.text = "${branch.town}, ${branch.country}"
         Picasso.get().load(branch.restaurant?.logoURL()).into(mUserProfileImage)
+        restaurant_rating.rating = branch.reviews?.average!!
+
 
         mUserTabLayout = findViewById<TabLayout>(R.id.userTabLayout) as TabLayout
         mUserViewPager = findViewById<ViewPager>(R.id.userViewPager) as ViewPager
 
         val adapter = RestaurantProfileViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(RestaurantPromotionsFragment(), "PROMOS")
-        adapter.addFragment(RestaurantFoodsFragment(), "FOODS")
-        adapter.addFragment(RestaurantDrinksFragment(), "DRINKS")
-        adapter.addFragment(RestaurantDishesFragment(), "DISHES")
+        adapter.addFragment(RestaurantPromotionsFragment.newInstance(Gson().toJson(branch)), "PROMOS")
+        adapter.addFragment(RestaurantFoodsFragment.newInstance(Gson().toJson(branch)), "FOODS")
+        adapter.addFragment(RestaurantDrinksFragment.newInstance(Gson().toJson(branch)), "DRINKS")
+        adapter.addFragment(RestaurantDishesFragment.newInstance(Gson().toJson(branch)), "DISHES")
 
         mUserViewPager.adapter = adapter
         mUserTabLayout.setupWithViewPager(mUserViewPager)
 
         mUserViewPager.currentItem = intent.getIntExtra("tab", 0)
+
+        val menuList = mutableListOf<String>()
+        menuList.add("Current Location")
+        session.addresses?.addresses!!.forEach {
+            menuList.add("${it.type} - ${it.address}")
+        }
+
+        restaurant_distance_view.setOnClickListener {
+            val cx = (it.x + it.width / 2).toInt()
+            val cy = (it.y + it.height).toInt()
+
+            val mapFragment =  RestaurantsMapFragment()
+            val args: Bundle = Bundle()
+
+            args.putInt("cx", cx)
+            args.putInt("cy", cy)
+            args.putDouble("lat", selectedLatitude)
+            args.putDouble("lng", selectedLongitude)
+            args.putString("resto", Gson().toJson(branch))
+
+            mapFragment.arguments = args
+            mapFragment.show(supportFragmentManager, mapFragment.tag)
+        }
+
+        restaurant_distance_view.setOnLongClickListener {
+            val actionSheet = ActionSheet(this@RestaurantProfile, menuList)
+                .setTitle("Restaurant Near Location")
+                .setColorData(resources.getColor(R.color.colorGray))
+                .setColorTitleCancel(resources.getColor(R.color.colorGoogleRedTwo))
+                .setColorSelected(resources.getColor(R.color.colorPrimary))
+                .setCancelTitle("Cancel")
+
+            actionSheet.create(object : ActionSheetCallBack {
+
+                override fun data(data: String, position: Int) {
+                    if (position == 0) {
+                        if (utilsFunctions.checkLocationPermissions()) {
+                            try {
+                                fusedLocationClient.lastLocation.addOnSuccessListener {
+                                    if (it != null) {
+                                        val from = LatLng(it.latitude, it.longitude)
+                                        selectedLatitude = it.latitude
+                                        selectedLongitude = it.longitude
+                                        val to = LatLng(branch.latitude, branch.longitude)
+                                        val dist = utilsFunctions.calculateDistance(from, to)
+                                        branch.dist = dist
+                                        branch.fromLocation = from
+                                        runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                                    } else {
+                                        val from = LatLng(
+                                            session.addresses!!.addresses[0].latitude,
+                                            session.addresses!!.addresses[0].longitude
+                                        )
+                                        selectedLatitude = session.addresses!!.addresses[0].latitude
+                                        selectedLongitude = session.addresses!!.addresses[0].longitude
+                                        val to = LatLng(branch.latitude, branch.longitude)
+                                        val dist = utilsFunctions.calculateDistance(from, to)
+                                        branch.dist = dist
+                                        branch.fromLocation = from
+                                        runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                                    }
+                                }.addOnFailureListener {
+                                    val from = LatLng(
+                                        session.addresses!!.addresses[0].latitude,
+                                        session.addresses!!.addresses[0].longitude
+                                    )
+                                    selectedLatitude = session.addresses!!.addresses[0].latitude
+                                    selectedLongitude = session.addresses!!.addresses[0].longitude
+                                    val to = LatLng(branch.latitude, branch.longitude)
+                                    val dist = utilsFunctions.calculateDistance(from, to)
+                                    branch.dist = dist
+                                    branch.fromLocation = from
+                                    runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                                    TingToast(this@RestaurantProfile, it.message!!, TingToastType.ERROR).showToast(
+                                        Toast.LENGTH_LONG
+                                    )
+                                }
+                            } catch (e: java.lang.Exception) {
+                                TingToast(
+                                    this@RestaurantProfile,
+                                    e.message!!.capitalize(),
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
+                            }
+                        }
+                    } else {
+                        val address = session.addresses?.addresses!![position - 1]
+                        val from = LatLng(address.latitude, address.longitude)
+                        selectedLatitude = address.latitude
+                        selectedLongitude = address.longitude
+                        val to = LatLng(branch.latitude, branch.longitude)
+                        val dist = utilsFunctions.calculateDistance(from, to)
+                        branch.dist = dist
+                        branch.fromLocation = from
+                        runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                    }
+                }
+            })
+
+            return@setOnLongClickListener true
+        }
+
+        if (branch.isAvailable) {
+
+            val status =
+                utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant?.closing!!)
+            restaurant_time.text = status?.get("msg")
+
+            when (status?.get("clr")) {
+                "green" -> {
+                    restaurant_work_status.background =
+                        resources.getDrawable(R.drawable.background_time_green)
+                }
+                "orange" -> {
+                    restaurant_work_status.background =
+                        resources.getDrawable(R.drawable.background_time_orange)
+                }
+                "red" -> {
+                    restaurant_work_status.background =
+                        resources.getDrawable(R.drawable.background_time_red)
+                }
+            }
+
+            Timer().scheduleAtFixedRate(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+
+                        val statusTimer = utilsFunctions.statusWorkTime(
+                            branch.restaurant?.opening!!,
+                            branch.restaurant?.closing!!
+                        )
+                        restaurant_time.text = statusTimer?.get("msg")
+
+                        when (statusTimer?.get("clr")) {
+                            "green" -> {
+                                restaurant_work_status.background =
+                                    resources.getDrawable(R.drawable.background_time_green)
+                            }
+                            "orange" -> {
+                                restaurant_work_status.background =
+                                    resources.getDrawable(R.drawable.background_time_orange)
+                            }
+                            "red" -> {
+                                restaurant_work_status.background =
+                                    resources.getDrawable(R.drawable.background_time_red)
+                            }
+                        }
+                    }
+                }
+            }, 0, 10000)
+        } else {
+            restaurant_work_status.background = resources.getDrawable(R.drawable.background_time_red)
+            restaurant_work_status_icon.setImageDrawable(resources.getDrawable(R.drawable.ic_close_white_24dp))
+            restaurant_time.text = "Not Available"
+        }
+
+        if (utilsFunctions.checkLocationPermissions()) {
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    if (it != null) {
+                        val from = LatLng(it.latitude, it.longitude)
+                        selectedLatitude = it.latitude
+                        selectedLongitude = it.longitude
+                        val to = LatLng(branch.latitude, branch.longitude)
+                        val dist = utilsFunctions.calculateDistance(from, to)
+                        branch.dist = dist
+                        branch.fromLocation = from
+                        runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                    } else {
+                        val from = LatLng(
+                            session.addresses!!.addresses[0].latitude,
+                            session.addresses!!.addresses[0].longitude
+                        )
+                        selectedLatitude = session.addresses!!.addresses[0].latitude
+                        selectedLongitude = session.addresses!!.addresses[0].longitude
+                        val to = LatLng(branch.latitude, branch.longitude)
+                        val dist = utilsFunctions.calculateDistance(from, to)
+                        branch.dist = dist
+                        branch.fromLocation = from
+                        runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                    }
+                }.addOnFailureListener {
+                    val from = LatLng(
+                        session.addresses!!.addresses[0].latitude,
+                        session.addresses!!.addresses[0].longitude
+                    )
+                    selectedLatitude = session.addresses!!.addresses[0].latitude
+                    selectedLongitude = session.addresses!!.addresses[0].longitude
+                    val to = LatLng(branch.latitude, branch.longitude)
+                    val dist = utilsFunctions.calculateDistance(from, to)
+                    branch.dist = dist
+                    branch.fromLocation = from
+                    runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
+                    TingToast(
+                        this@RestaurantProfile,
+                        it.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
+                }
+            } catch (e: java.lang.Exception) {
+                TingToast(
+                    this@RestaurantProfile,
+                    e.message!!.capitalize(),
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
+            }
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
