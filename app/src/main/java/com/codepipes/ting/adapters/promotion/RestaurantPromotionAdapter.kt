@@ -2,6 +2,8 @@ package com.codepipes.ting.adapters.promotion
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,11 +13,13 @@ import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.menu.MenuImageListAdapter
 import com.codepipes.ting.adapters.restaurant.RestaurantListMenuAdapter
+import com.codepipes.ting.fragments.menu.RestaurantMenuBottomSheetFragment
 import com.codepipes.ting.models.MenuImage
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_restaurant_promotion.view.*
 import java.text.NumberFormat
@@ -121,6 +125,14 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 val layoutManager = LinearLayoutManager(holder.view.context)
                 layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
+                holder.view.promotion_data_recycler_view.setOnClickListener {
+                    val restaurantMenuFragment = RestaurantMenuBottomSheetFragment()
+                    val bundle =  Bundle()
+                    bundle.putString("menu", Gson().toJson(promotion.promotionItem.menu))
+                    restaurantMenuFragment.arguments = bundle
+                    restaurantMenuFragment.show(fragmentManager, restaurantMenuFragment.tag)
+                }
+
                 holder.view.promotion_data_recycler_view.layoutManager = layoutManager
                 holder.view.promotion_data_recycler_view.adapter = MenuImageListAdapter(promotion.promotionItem.menu.menu.images.images.shuffled() as MutableList<MenuImage>)
             }
@@ -163,6 +175,13 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
 
         holder.view.promotion_created_at.text = utilsFunctions.timeAgo(promotion.createdAt)
         holder.view.promotion_interests.text = NumberFormat.getNumberInstance().format(promotion.interests.count)
+
+        holder.view.setOnClickListener {
+            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            intent.putExtra("promo", promotion.id)
+            intent.putExtra("url", promotion.urls.apiGet)
+            activity.startActivity(intent)
+        }
     }
 }
 

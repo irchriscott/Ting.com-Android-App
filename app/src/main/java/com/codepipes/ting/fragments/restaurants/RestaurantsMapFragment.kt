@@ -158,7 +158,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
                 timer.scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
-                        activity!!.runOnUiThread {
+                        activity?.runOnUiThread {
                             val status = mUtilFunctions.statusWorkTime(
                                 branch.restaurant?.opening!!,
                                 branch.restaurant?.closing!!
@@ -236,7 +236,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                     fusedLocationClient.lastLocation.addOnSuccessListener {
                         this.getLocation(it)
                     }.addOnFailureListener {
-                        activity!!.runOnUiThread {
+                        activity?.runOnUiThread {
                             TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     }
@@ -277,7 +277,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                     fusedLocationClient.lastLocation.addOnSuccessListener {
                         this.getLocation(it)
                     }.addOnFailureListener {
-                        activity!!.runOnUiThread {
+                        activity?.runOnUiThread {
                             TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     }
@@ -364,10 +364,10 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
         val data = marker?.title
         val intent = Intent(activity!!, RestaurantProfile::class.java)
-        intent.putExtra("resto", data)
+        val branch = gson.fromJson(data, Branch::class.java)
+        intent.putExtra("resto", branch.id)
         intent.putExtra("tab", 0)
-
-        activity!!.startActivity(intent)
+        activity?.startActivity(intent)
     }
 
     private fun getPolyline(origin: LatLng, destination: LatLng, type: String){
@@ -385,7 +385,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         call.enqueue(object : Callback<PolylineMapRoute> {
 
             override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
-                activity!!.runOnUiThread {
+                activity?.runOnUiThread {
                     TingToast(context!!, t.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
@@ -393,7 +393,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             @SuppressLint("SetTextI18n")
             override fun onResponse(call: Call<PolylineMapRoute>, response: Response<PolylineMapRoute>) {
                 try {
-                    activity!!.runOnUiThread {
+                    activity?.runOnUiThread {
 
                         mMap.clear()
 
@@ -439,7 +439,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
                     }
                 } catch (e: java.lang.Exception) {
-                    activity!!.runOnUiThread {
+                    activity?.runOnUiThread {
                         TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }

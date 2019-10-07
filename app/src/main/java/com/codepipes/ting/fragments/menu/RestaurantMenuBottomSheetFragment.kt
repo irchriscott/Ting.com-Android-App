@@ -95,8 +95,9 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
 
         view.menu_image.setOnClickListener {
             val intent = Intent(activity!!, com.codepipes.ting.RestaurantMenu::class.java)
-            intent.putExtra("menu", Gson().toJson(menu))
-            activity!!.startActivity(intent)
+            intent.putExtra("menu", menu.id)
+            intent.putExtra("url", menu.urls.apiGet)
+            activity?.startActivity(intent)
         }
 
         return view

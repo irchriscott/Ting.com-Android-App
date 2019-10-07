@@ -46,11 +46,156 @@
                         android:layout_height="wrap_content"
                         app:layout_collapseParallaxMultiplier="0.75">
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmerLoader"
+                            android:background="@color/colorTransparent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:shimmer_auto_start="true"
+                            app:shimmer_highlight_color="@color/colorVeryLightGray"
+                            app:shimmer_base_alpha="0.6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                                android:id="@+id/userProfileDataShimmer"
+                                android:layout_marginTop="40dp"
+                                android:paddingBottom="20dp"
+                                android:background="@color/colorTransparent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/userProfileImageShimmer"
+                                    android:src="@drawable/default_restaurant"
+                                    android:background="@color/colorTransparent"
+                                    android:layout_width="180dp"
+                                    android:layout_height="180dp"
+                                    android:layout_centerHorizontal="true"
+                                    app:civ_border_color="@color/colorWhite"
+                                    app:civ_border_width="4dp"/>
+
+                            <TextView
+                                    android:id="@+id/userProfileNameShimmer"
+                                    android:layout_width="190dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/userProfileImageShimmer"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@color/colorVeryLightGray"
+                                    android:textSize="24dp"
+                                    android:fontFamily="@font/poppins_semi_bold"
+                                    android:includeFontPadding="false"
+                                    tools:ignore="HardcodedText,SpUsage"/>
+
+
+                            <TextView
+                                    android:id="@+id/userProfileAddressShimmer"
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_below="@id/userProfileNameShimmer"
+                                    android:layout_centerHorizontal="true"
+                                    android:textSize="15dp"
+                                    android:includeFontPadding="false"
+                                    android:fontFamily="@font/poppins_regular"
+                                    android:background="@color/colorVeryLightGray"
+                                    tools:ignore="HardcodedText,SpUsage"/>
+
+                            <RatingBar
+                                    android:id="@+id/restaurant_ratingShimmer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/userProfileAddressShimmer"
+                                    android:layout_centerHorizontal="true"
+                                    android:paddingTop="8dp"
+                                    android:numStars="5"
+                                    style="@style/AppTheme.IndicatorRating"
+                                    android:theme="@style/AppTheme.IndicatorRating"/>
+
+                            <LinearLayout
+                                    android:id="@+id/restaurant_time_statusShimmer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_below="@id/restaurant_ratingShimmer"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/restaurant_menus">
+
+                                <LinearLayout
+                                        android:id="@+id/restaurant_distance_viewShimmer"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingLeft="8dp"
+                                        android:paddingRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="2dp"
+                                        android:background="@drawable/background_labeled_button">
+
+                                    <ImageView
+                                            android:layout_width="16dp"
+                                            android:layout_height="16dp"
+                                            android:src="@drawable/ic_road_gray"
+                                            android:alpha="0.6"
+                                            tools:ignore="ContentDescription,TooDeepLayout"/>
+
+                                    <TextView
+                                            android:id="@+id/restaurant_distanceShimmer"
+                                            android:layout_width="30dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:fontFamily="@font/poppins_medium"
+                                            android:textSize="12dp"
+                                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                        android:id="@+id/restaurant_work_statusShimmer"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="8dp"
+                                        android:paddingLeft="8dp"
+                                        android:paddingRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="2dp"
+                                        android:background="@drawable/background_time_orange" tools:ignore="RtlHardcoded">
+
+                                    <ImageView
+                                            android:id="@+id/restaurant_work_status_iconShimmer"
+                                            android:layout_width="16dp"
+                                            android:layout_height="16dp"
+                                            android:src="@drawable/ic_clock_white_24dp"
+                                            tools:ignore="ContentDescription"/>
+
+                                    <TextView
+                                            android:id="@+id/restaurant_timeShimmer"
+                                            android:layout_width="100dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:fontFamily="@font/poppins_medium"
+                                            android:textSize="12dp"
+                                            android:textColor="@color/colorWhite"
+                                            tools:ignore="HardcodedText,SpUsage"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
                     <RelativeLayout
                             android:id="@+id/userProfileData"
                             android:layout_marginTop="40dp"
                             android:paddingBottom="20dp"
                             android:background="@color/colorTransparent"
+                            android:visibility="gone"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

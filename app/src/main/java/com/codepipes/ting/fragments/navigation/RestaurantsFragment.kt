@@ -36,6 +36,7 @@ import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.APILoadGlobalRestaurants
+import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
@@ -70,6 +71,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var isAsync: Boolean = false
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mUtilFunctions: UtilsFunctions
+    private lateinit var mLocalData: LocalData
 
     private lateinit var session: User
     private lateinit var userAuthentication: UserAuthentication
@@ -96,6 +98,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         activity = context!! as Activity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         mUtilFunctions = UtilsFunctions(context!!)
+        mLocalData = LocalData(context!!)
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
@@ -272,6 +275,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 activity.runOnUiThread{
                     mRefreshRestaurant.isRefreshing = false
+                    mLocalData.saveRestaurants(dataString)
                     if(!restaurants.isNullOrEmpty()){
                         if(mUtilFunctions.checkLocationPermissions()){
                             try {

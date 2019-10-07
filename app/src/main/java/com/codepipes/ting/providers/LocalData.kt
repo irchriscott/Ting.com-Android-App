@@ -32,11 +32,12 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getRestaurant(id: Int) : Branch? {
+    public fun getRestaurants() : MutableList<Branch>{
         val restaurantsString = this.sharedPreferences.getString(RESTAURANTS_SHARED_PREFERENCES_KEY, null)
-        val restaurants = gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
-        return restaurants.find { it.id == id }
+        return gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
     }
+
+    public fun getRestaurant(id: Int) : Branch? = this.getRestaurants().find { it.id == id }
 
     @SuppressLint("NewApi")
     public fun updateRestaurant(branch: Branch){
@@ -57,6 +58,14 @@ class LocalData (
         val promotionsString = this.sharedPreferences.getString("${PROMOTIONS_SHARED_PREFERENCES_KEY}$branch", "[]")
         return  gson.fromJson<MutableList<MenuPromotion>>(promotionsString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
     }
+
+    public fun getAllPromotions() : MutableList<MenuPromotion> {
+        val promotions = mutableListOf<MenuPromotion>()
+        this.getRestaurants().forEach { it.promotions?.promotions?.let { p -> promotions.addAll(p) } }
+        return promotions
+    }
+
+    public fun getPromotion(id: Int) : MenuPromotion? = this.getAllPromotions().find { it.id == id }
 
     public fun getPromotion(branch: Int, id: Int) : MenuPromotion? = this.getPromotions(branch).find { it.id == id }
 
@@ -108,4 +117,12 @@ class LocalData (
     }
 
     public fun getMenuRestaurant(branch: Int, id: Int) : RestaurantMenu? = this.getRestaurantMenus(branch).find { it.id == id }
+
+    public fun getAllMenus() : MutableList<RestaurantMenu>{
+        val menus = mutableListOf<RestaurantMenu>()
+        this.getRestaurants().forEach { it.menus.menus?.let { m -> menus.addAll(m) } }
+        return menus
+    }
+
+    public fun getMenu(id: Int) : RestaurantMenu? = this.getAllMenus().find { it.id == id }
 }

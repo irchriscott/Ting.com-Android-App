@@ -49,10 +49,12 @@ class RestaurantPromotionsFragment : Fragment() {
 
         if(savedInstanceState != null){
             promotions = gson.fromJson<MutableList<MenuPromotion>>(savedInstanceState.getString("resto", "[]"), object : TypeToken<MutableList<MenuPromotion>>(){}.type)
-            showPromotions(promotions, view)
+            promotions.sortBy { it.isOnToday && it.isOn }
+            showPromotions(promotions.reversed().toMutableList(), view)
         } else {
             promotions = branch.promotions?.promotions!! as MutableList<MenuPromotion>
-            showPromotions(promotions, view)
+            promotions.sortBy { it.isOnToday && it.isOn }
+            showPromotions(promotions.reversed().toMutableList(), view)
         }
 
         this.loadRestaurantPromotions(view)
@@ -68,7 +70,7 @@ class RestaurantPromotionsFragment : Fragment() {
             view.empty_data.visibility = View.GONE
             promotions.sortBy { it.isOnToday && it.isOn }
             view.promotions_recycler_view.layoutManager = LinearLayoutManager(context)
-            view.promotions_recycler_view.adapter = RestaurantPromotionAdapter(promotions, fragmentManager!!)
+            view.promotions_recycler_view.adapter = RestaurantPromotionAdapter(promotions.reversed().toMutableList(), fragmentManager!!)
         } else {
             view.promotions_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE

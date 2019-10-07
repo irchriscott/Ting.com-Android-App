@@ -60,5 +60,6 @@ class PromotionInterests (
 
 class PromotionUrls (
     val relative: String,
-    val interest: String
+    val interest: String,
+    val apiGet: String
 ){}

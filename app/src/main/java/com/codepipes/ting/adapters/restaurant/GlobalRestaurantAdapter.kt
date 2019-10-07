@@ -57,14 +57,14 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
 
         holder.view.restaurant_name.setOnClickListener {
             val intent = Intent(holder.view.context, RestaurantProfile::class.java)
-            intent.putExtra("resto", Gson().toJson(branch))
+            intent.putExtra("resto",branch.id)
             intent.putExtra("tab", 0)
             activity.startActivity(intent)
         }
 
         holder.view.restaurant_image.setOnClickListener {
             val intent = Intent(holder.view.context, RestaurantProfile::class.java)
-            intent.putExtra("resto", Gson().toJson(branch))
+            intent.putExtra("resto", branch.id)
             intent.putExtra("tab", 0)
             activity.startActivity(intent)
         }

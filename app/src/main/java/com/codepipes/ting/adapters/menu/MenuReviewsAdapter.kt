@@ -28,7 +28,7 @@ class MenuReviewsAdapter (private val reviews: MutableList<MenuReview>) : Recycl
         holder.view.review_user_name.text = review.user.name
         holder.view.review_rating.rating = review.review.toFloat()
         holder.view.review_comment.text = review.comment
-        holder.view.review_date.text = utilsFunctions.timeAgo(review.createdAt)
+        holder.view.review_date.text = utilsFunctions.timeAgo(review.updatedAt)
     }
 }
 

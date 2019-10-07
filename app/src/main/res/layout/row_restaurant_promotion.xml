@@ -151,7 +151,6 @@
                             tools:ignore="HardcodedText,SpUsage"/>
                 </LinearLayout>
 
-
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView

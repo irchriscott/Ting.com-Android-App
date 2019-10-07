@@ -99,6 +99,7 @@ class BranchUrls (
     val addReview: String,
     val likeBranch: String,
     val loadLikes: String,
+    val apiGet: String,
     val apiPromotions: String,
     val apiFoods: String,
     val apiDrinks: String,

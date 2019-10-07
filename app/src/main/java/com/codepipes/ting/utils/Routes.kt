@@ -23,5 +23,6 @@ class Routes {
     val updateUserAddress: String           = "${END_POINT}usr/profile/address/update/"
 
     //RESTAURANTS
-    val restaurantsGlobal: String              = "${END_POINT}usr/g/restaurants/all/"
+    val restaurantsGlobal: String           = "${END_POINT}usr/g/restaurants/all/"
+    val restaurantGet: String               = "${END_POINT}usr/g/restaurants/get/"
 }

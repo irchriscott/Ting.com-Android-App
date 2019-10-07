@@ -30,18 +30,25 @@ import android.support.v4.app.SupportActivity.ExtraData
 import android.support.v4.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.support.v7.view.menu.MenuBuilder
+import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.fragments.restaurants.*
 import com.codepipes.ting.interfaces.ActionSheetCallBack
+import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_restaurant_profile.*
+import okhttp3.*
+import java.io.IOException
+import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
@@ -62,6 +69,7 @@ class RestaurantProfile : AppCompatActivity() {
 
     private lateinit var utilsFunctions: UtilsFunctions
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var localData: LocalData
 
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
@@ -72,12 +80,11 @@ class RestaurantProfile : AppCompatActivity() {
         setContentView(R.layout.activity_restaurant_profile)
 
         userAuthentication = UserAuthentication(this@RestaurantProfile)
-
         session = userAuthentication.get()!!
-        branch = Gson().fromJson(intent.getStringExtra("resto"), Branch::class.java)
 
         utilsFunctions = UtilsFunctions(this@RestaurantProfile)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@RestaurantProfile)
+        localData = LocalData(this@RestaurantProfile)
 
         mUserToolbar = findViewById<Toolbar>(R.id.userToolbar) as Toolbar
         setSupportActionBar(mUserToolbar)
@@ -92,6 +99,57 @@ class RestaurantProfile : AppCompatActivity() {
         val upArrow = ContextCompat.getDrawable(this@RestaurantProfile, R.drawable.abc_ic_ab_back_material)
         upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
         supportActionBar!!.setHomeAsUpIndicator(upArrow)
+
+        val restoId = intent.getIntExtra("resto", 0)
+        val localBranch  = localData.getRestaurant(restoId)
+
+        if(localBranch != null) {
+            branch = localBranch
+            this.showBranch()
+            this.loadRestaurant(restoId, false)
+        } else {
+            shimmerLoader.startShimmer()
+            userProfileData.visibility = View.GONE
+            shimmerLoader.visibility = View.VISIBLE
+            this.loadRestaurant(restoId, true)
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private fun loadRestaurant(id: Int, load: Boolean){
+        val url = "${Routes().restaurantGet}$id/"
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .callTimeout(Duration.ofMinutes(5)).build()
+
+        val request = Request.Builder().url(url).get().build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    TingToast(this@RestaurantProfile, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val dataString = response.body()!!.string()
+                branch = Gson().fromJson(dataString, Branch::class.java)
+                runOnUiThread {
+                    localData.updateRestaurant(branch)
+                    if(load){ showBranch() }
+                }
+            }
+        })
+    }
+
+    @SuppressLint("SetTextI18n", "MissingPermission")
+    private fun showBranch(){
+
+        userProfileData.visibility = View.VISIBLE
+        shimmerLoader.stopShimmer()
+        shimmerLoader.visibility = View.GONE
 
         mUserProfileName = findViewById<TextView>(R.id.userProfileName) as TextView
         mUserProfileAddress = findViewById<TextView>(R.id.userProfileAddress) as TextView
@@ -323,7 +381,6 @@ class RestaurantProfile : AppCompatActivity() {
                 ).showToast(Toast.LENGTH_LONG)
             }
         }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
