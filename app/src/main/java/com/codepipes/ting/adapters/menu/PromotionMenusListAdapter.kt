@@ -24,7 +24,7 @@ class PromotionMenusListAdapter (private val menus: MutableList<RestaurantMenu>,
         return PromotionMenusListViewHolder(row)
     }
 
-    override fun getItemCount(): Int = menus.size
+    override fun getItemCount(): Int = if(menus.size >= 10){ 10 } else { menus.size }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PromotionMenusListViewHolder, position: Int) {
@@ -40,18 +40,22 @@ class PromotionMenusListAdapter (private val menus: MutableList<RestaurantMenu>,
 
         holder.view.menu_quantity.visibility = View.GONE
 
-        if(menu.menu.foodType != null){
-            holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_spoon_gray))
-            holder.view.menu_type_name.text = "Food"
-            holder.view.menu_category_name.text = menu.menu.foodType
-        } else if(menu.menu.drinkType != null) {
-            holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_glass_gray))
-            holder.view.menu_type_name.text = "Drink"
-            holder.view.menu_category_name.text = menu.menu.drinkType
-        } else if (menu.menu.dishTime != null){
-            holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_restaurants))
-            holder.view.menu_type_name.text = "Dish"
-            holder.view.menu_category_name.text = menu.menu.dishTime
+        when {
+            menu.menu.foodType != null -> {
+                holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_spoon_gray))
+                holder.view.menu_type_name.text = "Food"
+                holder.view.menu_category_name.text = menu.menu.foodType
+            }
+            menu.menu.drinkType != null -> {
+                holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_glass_gray))
+                holder.view.menu_type_name.text = "Drink"
+                holder.view.menu_category_name.text = menu.menu.drinkType
+            }
+            menu.menu.dishTime != null -> {
+                holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_restaurants))
+                holder.view.menu_type_name.text = "Dish"
+                holder.view.menu_category_name.text = menu.menu.dishTime
+            }
         }
 
         if(menu.menu.isAvailable){

@@ -81,7 +81,7 @@ class RestaurantPromotionsFragment : Fragment() {
         }
     }
 
-    @SuppressLint("NewApi", "SetTextI18n")
+    @SuppressLint("NewApi", "SetTextI18n", "DefaultLocale")
     private fun loadRestaurantPromotions(view: View){
         val url = "${Routes().HOST_END_POINT}${branch.urls.apiPromotions}"
         val client = OkHttpClient.Builder()

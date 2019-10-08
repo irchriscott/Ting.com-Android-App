@@ -30,6 +30,8 @@ class MenuFoodsAdapter (private val menus: MutableList<DishFood>, private val fr
     override fun onBindViewHolder(holder: MenuFoodsViewHolder, position: Int) {
         val menu = menus[position]
 
+        holder.menu = menu
+
         val index = (0 until menu.food.images.count - 1).random()
         val image = menu.food.images.images[index]
         Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.menu_image)
@@ -73,4 +75,4 @@ class MenuFoodsAdapter (private val menus: MutableList<DishFood>, private val fr
 }
 
 
-class MenuFoodsViewHolder(val view: View, val menu: DishFood? = null) : RecyclerView.ViewHolder(view){}
+class MenuFoodsViewHolder(val view: View, var menu: DishFood? = null) : RecyclerView.ViewHolder(view){}

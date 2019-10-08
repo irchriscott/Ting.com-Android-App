@@ -74,7 +74,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
-    @SuppressLint("PrivateResource", "MissingPermission", "SetTextI18n")
+    @SuppressLint("PrivateResource", "MissingPermission", "SetTextI18n", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant_menu)
@@ -166,7 +166,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         })
     }
 
-    @SuppressLint("SetTextI18n", "MissingPermission")
+    @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
     private fun showRestaurantMenu(menu: com.codepipes.ting.models.RestaurantMenu, clickable: Boolean){
 
         val menuList = mutableListOf<String>()
@@ -325,18 +325,14 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                 menu_category_name.text = menu.menu.foodType
                 if (menu.menu.isCountable) {
                     menu_quantity.text = "${menu.menu.quantity} pieces / packs"
-                } else {
-                    menu_quantity.visibility = View.GONE
-                }
+                } else { menu_quantity.visibility = View.GONE }
             }
             2 -> {
                 menu_type_image.setImageDrawable(resources.getDrawable(R.drawable.ic_glass_gray))
                 menu_category_name.text = menu.menu.drinkType
                 if (menu.menu.isCountable) {
                     menu_quantity.text = "${menu.menu.quantity} cups / bottles"
-                } else {
-                    menu_quantity.visibility = View.GONE
-                }
+                } else { menu_quantity.visibility = View.GONE }
             }
             3 -> {
                 menu_type_image.setImageDrawable(resources.getDrawable(R.drawable.ic_fork_knife_gray))
@@ -344,9 +340,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                 menu_category_name.text = menu.menu.dishTime
                 if (menu.menu.isCountable) {
                     menu_quantity.text = "${menu.menu.quantity} plates / packs"
-                } else {
-                    menu_quantity.visibility = View.GONE
-                }
+                } else { menu_quantity.visibility = View.GONE }
             }
         }
 
