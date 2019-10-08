@@ -29,6 +29,8 @@ import android.support.v4.app.SupportActivity
 import android.support.v4.app.SupportActivity.ExtraData
 import android.support.v4.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.os.Build
+import android.os.PersistableBundle
 import android.support.v7.view.menu.MenuBuilder
 import android.view.View
 import android.widget.Toast
@@ -43,6 +45,7 @@ import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.activity_restaurant_profile.*
 import okhttp3.*
 import java.io.IOException
@@ -78,6 +81,9 @@ class RestaurantProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant_profile)
+
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
 
         userAuthentication = UserAuthentication(this@RestaurantProfile)
         session = userAuthentication.get()!!
@@ -115,7 +121,7 @@ class RestaurantProfile : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "DefaultLocale")
     private fun loadRestaurant(id: Int, load: Boolean){
         val url = "${Routes().restaurantGet}$id/"
         val client = OkHttpClient.Builder()
@@ -144,7 +150,7 @@ class RestaurantProfile : AppCompatActivity() {
         })
     }
 
-    @SuppressLint("SetTextI18n", "MissingPermission")
+    @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
     private fun showBranch(){
 
         userProfileData.visibility = View.VISIBLE
@@ -437,5 +443,23 @@ class RestaurantProfile : AppCompatActivity() {
             this.fragments.add(fragment)
             this.fragmentsTitle.add(title)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

@@ -35,6 +35,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
+import com.livefront.bridge.Bridge
 import java.util.*
 
 
@@ -65,6 +66,8 @@ class SignUpAddressFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -200,6 +203,17 @@ class SignUpAddressFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onAttach(context: Context) {

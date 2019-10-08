@@ -19,6 +19,7 @@ import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.fragment_restaurant_dishes.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
@@ -29,9 +30,15 @@ import java.util.concurrent.TimeUnit
 class RestaurantDishesFragment : Fragment() {
 
     private lateinit var branch: Branch
-    private lateinit var menus: MutableList<RestaurantMenu>
+    private lateinit var dishes: MutableList<RestaurantMenu>
 
     private lateinit var gson: Gson
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,13 +49,13 @@ class RestaurantDishesFragment : Fragment() {
         branch = gson.fromJson(arguments?.getString("resto"), Branch::class.java)
 
         if(savedInstanceState != null){
-            menus = gson.fromJson<MutableList<RestaurantMenu>>(savedInstanceState.getString("resto", "[]"), object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
-            menus.filter { it.type.id == 3 }.sortedByDescending { it.menu.reviews?.average }
-            showMenuDishes(menus.toMutableList(), view)
+            dishes = gson.fromJson<MutableList<RestaurantMenu>>(savedInstanceState.getString("resto", "[]"), object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
+            dishes.filter { it.type.id == 3 }.sortedByDescending { it.menu.reviews?.average }
+            showMenuDishes(dishes.toMutableList(), view)
         } else {
-            menus = branch.menus.menus!! as MutableList<RestaurantMenu>
-            menus.filter { it.type.id == 3 }.sortedByDescending { it.menu.reviews?.average }
-            showMenuDishes(menus.toMutableList(), view)
+            dishes = branch.menus.menus!! as MutableList<RestaurantMenu>
+            dishes.filter { it.type.id == 3 }.sortedByDescending { it.menu.reviews?.average }
+            showMenuDishes(dishes.toMutableList(), view)
         }
 
         this.loadRestaurantMenuDishes(view)
@@ -57,14 +64,14 @@ class RestaurantDishesFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showMenuDishes(menus: MutableList<RestaurantMenu>, view: View){
-        if(!menus.isNullOrEmpty()){
+    private fun showMenuDishes(_dishes: MutableList<RestaurantMenu>, view: View){
+        if(!_dishes.isNullOrEmpty()){
             view.dishes_recycler_view.visibility = View.VISIBLE
             view.progress_loader.visibility = View.GONE
             view.empty_data.visibility = View.GONE
-            menus.filter { it.type.id == 1 }.sortedByDescending { it.menu.reviews?.average }
+            _dishes.filter { it.type.id == 1 }.sortedByDescending { it.menu.reviews?.average }
             view.dishes_recycler_view.layoutManager = LinearLayoutManager(context)
-            view.dishes_recycler_view.adapter = RestaurantMenuAdapter(menus.toMutableList(), fragmentManager!!)
+            view.dishes_recycler_view.adapter = RestaurantMenuAdapter(_dishes.toMutableList(), fragmentManager!!)
         } else {
             view.dishes_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE
@@ -101,12 +108,23 @@ class RestaurantDishesFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                menus = gson.fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
+                dishes = gson.fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
                 activity?.runOnUiThread{
-                    showMenuDishes(menus, view)
+                    showMenuDishes(dishes, view)
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
 

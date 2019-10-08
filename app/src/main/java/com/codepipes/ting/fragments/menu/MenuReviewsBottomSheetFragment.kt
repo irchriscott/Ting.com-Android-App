@@ -17,6 +17,7 @@ import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.fragment_menu_reviews_bottom_sheet.view.*
 import okhttp3.*
 import java.io.IOException
@@ -30,6 +31,8 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("SetTextI18n")
@@ -84,5 +87,16 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
         })
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

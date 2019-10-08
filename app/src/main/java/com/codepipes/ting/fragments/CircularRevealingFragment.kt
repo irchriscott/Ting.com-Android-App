@@ -11,11 +11,13 @@ import android.os.Build
 import android.view.animation.DecelerateInterpolator
 import android.view.View.OnLayoutChangeListener
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.view.*
 import com.codepipes.ting.R
 import com.codepipes.ting.interfaces.OnFragmentTouched
+import com.livefront.bridge.Bridge
 import java.util.*
 import kotlin.math.hypot
 
@@ -23,6 +25,12 @@ import kotlin.math.hypot
 class CircularRevealingFragment : Fragment() {
 
     internal var listener: OnFragmentTouched? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -93,6 +101,17 @@ class CircularRevealingFragment : Fragment() {
         val distances = arrayOf(distanceTopLeft, distanceTopRight, distanceBottomLeft, distanceBottomRight)
 
         return Collections.max(distances.toMutableList())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     companion object {

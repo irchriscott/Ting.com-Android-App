@@ -44,6 +44,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.livefront.bridge.Bridge
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_restaurants_map.view.*
@@ -96,6 +97,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("SetTextI18n")
@@ -445,5 +448,16 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

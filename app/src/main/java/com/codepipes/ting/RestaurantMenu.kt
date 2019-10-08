@@ -5,8 +5,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -41,7 +43,6 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -53,7 +54,6 @@ import com.stepstone.apprating.listener.RatingDialogListener
 import kotlinx.android.synthetic.main.activity_restaurant_menu.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
-import okhttp3.Route
 import java.io.IOException
 import java.text.NumberFormat
 import java.util.*
@@ -78,6 +78,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant_menu)
+
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
 
         gson = Gson()
         utilsFunctions = UtilsFunctions(this@RestaurantMenu)
@@ -146,7 +149,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                 val responseBody = response.body()!!.string()
                 val gson = Gson()
                 try{
-                    val restaurantMenu = gson.fromJson(responseBody, RestaurantMenu::class.java)
+                    val restaurantMenu = gson.fromJson(responseBody, com.codepipes.ting.models.RestaurantMenu::class.java)
                     runOnUiThread {
                         menu = restaurantMenu
                         progress_loader.visibility = View.GONE
@@ -764,5 +767,23 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
     override fun onNeutralButtonClicked() {
         TingToast(this@RestaurantMenu, "We will remind you later !!!", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

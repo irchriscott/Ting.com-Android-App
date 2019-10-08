@@ -28,6 +28,7 @@ import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.livefront.bridge.Bridge
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
@@ -55,6 +56,8 @@ class SignUpIdentityFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -190,5 +193,16 @@ class SignUpIdentityFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

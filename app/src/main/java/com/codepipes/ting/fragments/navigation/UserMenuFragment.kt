@@ -14,6 +14,7 @@ import com.codepipes.ting.UserProfile
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
 import com.google.gson.Gson
+import com.livefront.bridge.Bridge
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -63,6 +64,8 @@ class UserMenuFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     override fun onCreateView(
@@ -100,5 +103,16 @@ class UserMenuFragment : BottomSheetDialogFragment() {
         intent.putExtra("tab", tab)
 
         activity?.startActivity(intent)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

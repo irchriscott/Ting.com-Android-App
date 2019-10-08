@@ -1,7 +1,9 @@
 package com.codepipes.ting
 
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
@@ -13,6 +15,8 @@ import com.codepipes.ting.fragments.navigation.DiscoveryFragment
 import com.codepipes.ting.fragments.navigation.MomentsFragment
 import com.codepipes.ting.fragments.navigation.RestaurantsFragment
 import com.codepipes.ting.fragments.navigation.UserMenuFragment
+import com.livefront.bridge.Bridge
+import kotlin.system.exitProcess
 
 
 class TingDotCom : AppCompatActivity() {
@@ -49,6 +53,9 @@ class TingDotCom : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ting_dot_com)
 
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         mAppNameText = findViewById<TextView>(R.id.appNameText) as TextView
         mToolbar = findViewById<Toolbar>(R.id.toolbar) as Toolbar
         mNavigation = findViewById<BottomNavigationView>(R.id.navigation) as BottomNavigationView
@@ -71,9 +78,23 @@ class TingDotCom : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        Bridge.clear(this)
         finishAffinity()
-        System.exit(0)
+        exitProcess(0)
     }
 }

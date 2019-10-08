@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.fragment_user_address_map.*
 import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
+import com.livefront.bridge.Bridge
 import java.lang.Exception
 import java.util.*
 
@@ -63,6 +64,8 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -248,6 +251,17 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     fun dismissListener(closeListener: MapAddressChangedListener) {
         this.mMapChangedListener = closeListener
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

@@ -21,6 +21,7 @@ import com.codepipes.ting.utils.Routes
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.fragment_restaurant_promotions.*
 import kotlinx.android.synthetic.main.fragment_restaurant_promotions.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
@@ -37,6 +38,12 @@ class RestaurantPromotionsFragment : Fragment() {
     private lateinit var promotions: MutableList<MenuPromotion>
 
     private lateinit var gson: Gson
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,6 +120,17 @@ class RestaurantPromotionsFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     companion object {

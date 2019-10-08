@@ -25,6 +25,9 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import android.content.Intent
+import android.os.Build
+import android.os.PersistableBundle
+import com.livefront.bridge.Bridge
 
 
 class UserProfile : AppCompatActivity() {
@@ -46,6 +49,9 @@ class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
+
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
 
         userAuthentication = UserAuthentication(this@UserProfile)
 
@@ -131,5 +137,23 @@ class UserProfile : AppCompatActivity() {
             this.fragments.add(fragment)
             this.fragmentsTitle.add(title)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

@@ -30,6 +30,7 @@ import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilData
 import com.codepipes.ting.utils.UtilsFunctions
+import com.livefront.bridge.Bridge
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,6 +56,8 @@ class SignUpAboutFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     override fun onCreateView(
@@ -141,6 +144,17 @@ class SignUpAboutFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onAttach(context: Context) {

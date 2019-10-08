@@ -28,6 +28,7 @@ import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
+import com.livefront.bridge.Bridge
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
@@ -53,6 +54,8 @@ class SignUpPasswordFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     override fun onCreateView(
@@ -172,6 +175,17 @@ class SignUpPasswordFragment : Fragment() {
             }
 
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onAttach(context: Context) {

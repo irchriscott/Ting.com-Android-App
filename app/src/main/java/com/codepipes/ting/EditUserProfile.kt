@@ -10,8 +10,10 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -38,6 +40,7 @@ import com.codepipes.ting.utils.UtilData
 import com.codepipes.ting.utils.UtilsFunctions
 import com.coursion.freakycoder.mediapicker.galleries.Gallery
 import com.google.gson.Gson
+import com.livefront.bridge.Bridge
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
@@ -79,10 +82,13 @@ class EditUserProfile : AppCompatActivity() {
 
     private lateinit var utilsFunctions: UtilsFunctions
 
-    @SuppressLint("PrivateResource", "SetTextI18n")
+    @SuppressLint("PrivateResource", "SetTextI18n", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user_profile)
+
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
 
         userAuthentication = UserAuthentication(this@EditUserProfile)
         user = userAuthentication.get()!!
@@ -359,5 +365,23 @@ class EditUserProfile : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }
