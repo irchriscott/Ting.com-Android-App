@@ -105,6 +105,7 @@ class BranchUrls (
     val apiDrinks: String,
     val apiDishes: String,
     val apiReviews: String,
+    val apiAddReview: String,
     val apiLikes: String
 ){}
 

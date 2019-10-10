@@ -25,6 +25,7 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import android.R.menu
+import android.content.Intent
 import android.support.v4.app.SupportActivity
 import android.support.v4.app.SupportActivity.ExtraData
 import android.support.v4.content.ContextCompat.getSystemService
@@ -415,12 +416,26 @@ class RestaurantProfile : AppCompatActivity() {
                 return true
             }
             R.id.restaurant_profile_reviews -> {
+                val intent = Intent(this@RestaurantProfile, RestaurantReviews::class.java)
+                intent.putExtra("resto", branch.id)
+                intent.putExtra("apiGet", branch.urls.apiGet)
+                intent.putExtra("url", branch.urls.apiReviews)
+                startActivity(intent)
                 return true
             }
             R.id.restaurant_profile_likes -> {
+                val intent = Intent(this@RestaurantProfile, RestaurantLikes::class.java)
+                intent.putExtra("resto", branch.id)
+                intent.putExtra("apiGet", branch.urls.apiGet)
+                intent.putExtra("url", branch.urls.apiLikes)
+                startActivity(intent)
                 return true
             }
             R.id.restaurant_profile_about -> {
+                val intent = Intent(this@RestaurantProfile, RestaurantAbout::class.java)
+                intent.putExtra("resto", branch.id)
+                intent.putExtra("apiGet", branch.urls.apiGet)
+                startActivity(intent)
                 return true
             }
         }

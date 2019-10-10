@@ -248,7 +248,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         return view
     }
 
-    @SuppressLint("SetTextI18n", "MissingPermission", "NewApi")
+    @SuppressLint("SetTextI18n", "MissingPermission", "NewApi", "DefaultLocale")
     private fun getRestaurants(){
         val url = routes.restaurantsGlobal
         val client = OkHttpClient.Builder()

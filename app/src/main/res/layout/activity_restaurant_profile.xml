@@ -8,8 +8,6 @@
         tools:context=".RestaurantProfile">
 
     <android.support.design.widget.CoordinatorLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/userCoordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -125,7 +123,7 @@
                                     android:layout_centerHorizontal="true"
                                     android:layout_below="@id/restaurant_ratingShimmer"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/restaurant_menus">
+                                    app:layout_constraintTop_toBottomOf="@id/restaurant_ratingShimmer">
 
                                 <LinearLayout
                                         android:id="@+id/restaurant_distance_viewShimmer"
@@ -163,7 +161,8 @@
                                         android:paddingRight="8dp"
                                         android:paddingTop="3dp"
                                         android:paddingBottom="2dp"
-                                        android:background="@drawable/background_time_orange" tools:ignore="RtlHardcoded">
+                                        android:background="@drawable/background_time_orange"
+                                        tools:ignore="RtlHardcoded">
 
                                     <ImageView
                                             android:id="@+id/restaurant_work_status_iconShimmer"
@@ -257,7 +256,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_below="@id/restaurant_rating"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/restaurant_menus">
+                                app:layout_constraintTop_toBottomOf="@id/restaurant_rating">
 
                             <LinearLayout
                                     android:id="@+id/restaurant_distance_view"

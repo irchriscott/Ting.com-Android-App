@@ -21,10 +21,9 @@ import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.fragments.menu.RestaurantMenuBottomSheetFragment
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
-import com.codepipes.ting.models.MenuImage
+import com.codepipes.ting.models.*
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
-import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
@@ -153,7 +152,7 @@ class MenuPromotion : AppCompatActivity() {
         })
     }
 
-    @SuppressLint("MissingPermission", "SetTextI18n")
+    @SuppressLint("MissingPermission", "SetTextI18n", "DefaultLocale")
     private fun showMenuPromotion(promotion: com.codepipes.ting.models.MenuPromotion, clickable: Boolean){
 
         val menuList = mutableListOf<String>()
@@ -503,6 +502,72 @@ class MenuPromotion : AppCompatActivity() {
             promotion_restaurant_distance.text = "0.0 Km"
             promotion_restaurant_time.text = "Loading..."
         }
+
+        if(promotion.interests.count > 0){
+            if(utilsFunctions.userPromotionInterest(promotion.interests.interests, session)){
+                promotion_interest_button.tag = 1
+                promotion_interest_button.playAnimation()
+                promotion_interest_button.isChecked = true
+            } else {
+                promotion_interest_button.tag = 0
+                promotion_interest_button.isChecked = false
+            }
+        } else {
+            promotion_interest_button.tag = 0
+            promotion_interest_button.isChecked = false
+        }
+
+        promotion_interest_button.setOnClickListener {
+            this.interestPromotion("${Routes().HOST_END_POINT}${promotion.urls.apiInterest}", session.token!!, promotion.id)
+        }
+    }
+
+    private fun interestPromotion(url: String, token: String, promotion: Int){
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+            .addFormDataPart("promo", promotion.toString())
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", token)
+            .url(url)
+            .post(requestBody)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    TingToast(this@MenuPromotion, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body()!!.string()
+                try{
+                    val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                    runOnUiThread {
+                        if (serverResponse.status == 200){
+                            if(serverResponse.message.contains("Not") || promotion_interest_button.tag == 1){
+                                promotion_interest_button.tag = 0
+                                promotion_interest_button.isChecked = false
+                            } else {
+                                promotion_interest_button.tag = 1
+                                promotion_interest_button.playAnimation()
+                                promotion_interest_button.isChecked = true
+                            }
+                            TingToast(this@MenuPromotion, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(this@MenuPromotion, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    }
+                } catch (e: Exception){
+                    runOnUiThread { TingToast(this@MenuPromotion, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                }
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {

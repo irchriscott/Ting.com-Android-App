@@ -21,9 +21,7 @@ import java.net.MalformedURLException
 import java.net.URL
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.caverock.androidsvg.SVG
-import com.codepipes.ting.models.MenuLike
-import com.codepipes.ting.models.MenuReview
-import com.codepipes.ting.models.User
+import com.codepipes.ting.models.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -212,6 +210,19 @@ class UtilsFunctions(
         return if(reviews.isNotEmpty()){
             reviews.findLast { it.user.id == session.id }
         } else { null }
+    }
+
+    public fun userRestaurantReview(reviews: List<RestaurantReview>, session: User) : RestaurantReview? {
+        return if(reviews.isNotEmpty()){
+            reviews.findLast { it.user?.id == session.id }
+        } else { null }
+    }
+
+    public  fun userPromotionInterest(interests: List<PromotionInterest>, session: User) : Boolean {
+        if(interests.isNotEmpty()){
+            interests.forEach { if(it.user.id == session.id) { return true } }
+            return false
+        } else { return false }
     }
 
     @SuppressLint("SimpleDateFormat")

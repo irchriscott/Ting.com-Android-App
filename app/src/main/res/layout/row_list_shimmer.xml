@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp">
+
+    <android.support.constraint.ConstraintLayout
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.codepipes.ting.customclasses.RoundedCornerImageView
+                android:id="@+id/review_image"
+                android:background="@color/colorVeryLightGray"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.constraint.ConstraintLayout
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/review_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                tools:ignore="RtlHardcoded">
+
+            <TextView
+                    android:id="@+id/review_user_name"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textSize="16dp"
+                    android:paddingRight="64dp"
+                    android:background="@color/colorVeryLightGray"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+
+            <RatingBar
+                    android:id="@+id/review_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:numStars="5"
+                    app:layout_constraintTop_toBottomOf="@id/review_user_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/review_user_name"
+                    style="@style/AppTheme.SmallRating"
+                    android:theme="@style/AppTheme.SmallRating"/>
+
+            <TextView
+                    android:id="@+id/review_comment"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="13dp"
+                    android:paddingEnd="54dp"
+                    android:paddingRight="54dp"
+                    android:textColor="@color/colorGray"
+                    android:background="@color/colorVeryLightGray"
+                    app:layout_constraintTop_toBottomOf="@id/review_rating"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+
+            <LinearLayout
+                    android:id="@+id/review_date_view"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/review_comment">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="2dp"
+                        android:background="@drawable/background_labeled_button"
+                        tools:ignore="UselessParent">
+
+                    <ImageView
+                            android:id="@+id/review_clock"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:id="@+id/review_date"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="12dp"
+                            android:textColor="@color/colorGray"
+                            tools:ignore="HardcodedText,SpUsage"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>
