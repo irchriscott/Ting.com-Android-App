@@ -18,6 +18,7 @@ import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.gson.Gson
 import com.livefront.bridge.Bridge
+import kotlinx.android.synthetic.main.activity_restaurant_about.*
 import okhttp3.*
 import java.io.IOException
 import java.time.Duration
@@ -60,6 +61,42 @@ class RestaurantAbout : AppCompatActivity() {
         branchId = intent.getIntExtra("resto", 0)
         val apiGet = intent.getStringExtra("apiGet")
         this.loadRestaurant(branchId)
+
+        if(localData.getRestaurant(branchId) != null){
+            branch = localData.getRestaurant(branchId)!!
+            this.showRestaurantProfile(branch)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showRestaurantProfile(_branch: Branch){
+        restaurant_name.text = ": ${_branch.restaurant?.name}"
+        restaurant_branch.text = ": ${_branch.name}"
+        restaurant_address.text = ": ${_branch.town}, ${_branch.country}"
+        restaurant_open_close.text = ": ${_branch.restaurant?.opening} - ${_branch.restaurant?.closing}"
+        restaurant_motto.text = ": ${_branch.restaurant?.motto}"
+
+        restaurant_email.text = ": ${_branch.email}"
+        restaurant_phone.text = ": ${_branch.phone}"
+        restaurant_full_address.text = ": ${_branch.address}"
+
+        restaurant_foods.text = ": ${_branch.menus.type.foods.count} Foods"
+        restaurant_drinks.text = ": ${_branch.menus.type.drinks} Drinks"
+        restaurant_dishes.text = ": ${_branch.menus.type.dishes} Dishes"
+        restaurant_likes.text = ": ${_branch.likes?.count} Likes"
+        restaurant_reviews.text = ": ${_branch.reviews?.count} Reviews"
+        review_rating.rating = _branch.reviews?.average!!
+
+        restaurant_currency.text = ": ${_branch.restaurant?.config?.currency}"
+        restaurant_vat.text = ": ${_branch.restaurant?.config?.tax} %"
+        restaurant_late_reservation.text = ": ${_branch.restaurant?.config?.cancelLateBooking} minutes"
+        restaurant_reservation_with_advance.text = if(_branch.restaurant?.config?.bookWithAdvance!!){ ": YES"} else { ": NO" }
+        restaurant_reservation_advance.text = if(_branch.restaurant.config.bookWithAdvance){ ": ${_branch.restaurant.config.bookingAdvance} ${_branch.restaurant.config.currency}"} else { ": -" }
+        restaurant_refund_after_cancelation.text = if(_branch.restaurant.config.bookingCancelationRefund) { ": YES" } else { ": NO" }
+        restaurant_booking_payment_mode.text = ": ${_branch.restaurant.config.bookingPaymentMode}"
+        restaurant_days_before_booking.text = ": ${_branch.restaurant.config.daysBeforeReservation} Days"
+        restaurant_can_take_away.text = if(_branch.restaurant.config.canTakeAway) { ": YES" } else { ": NO" }
+        restaurant_pay_before.text = if(_branch.restaurant.config.userShouldPayBefore) { ": YES" } else { ": NO" }
     }
 
     @SuppressLint("NewApi", "DefaultLocale")
@@ -86,6 +123,7 @@ class RestaurantAbout : AppCompatActivity() {
                 branch = Gson().fromJson(dataString, Branch::class.java)
                 runOnUiThread {
                     localData.updateRestaurant(branch)
+                    showRestaurantProfile(branch)
                 }
             }
         })
