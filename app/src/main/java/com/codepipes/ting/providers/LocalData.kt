@@ -7,6 +7,7 @@ import android.preference.PreferenceManager
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -26,6 +27,8 @@ class LocalData (
     private val DRINKS_SHARED_PREFERENCES_KEY = "drinks_"
     private val DISHES_SHARED_PREFERENCES_KEY = "dishes_"
 
+    private val USERS_SHARED_PREFERENCES_KEY = "users"
+
     public fun saveRestaurants(data: String){
         this.sharedPreferencesEditor.putString(RESTAURANTS_SHARED_PREFERENCES_KEY, data)
         this.sharedPreferencesEditor.apply()
@@ -33,7 +36,7 @@ class LocalData (
     }
 
     public fun getRestaurants() : MutableList<Branch>{
-        val restaurantsString = this.sharedPreferences.getString(RESTAURANTS_SHARED_PREFERENCES_KEY, null)
+        val restaurantsString = this.sharedPreferences.getString(RESTAURANTS_SHARED_PREFERENCES_KEY, "[]")
         return gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
     }
 
@@ -125,4 +128,26 @@ class LocalData (
     }
 
     public fun getMenu(id: Int) : RestaurantMenu? = this.getAllMenus().find { it.id == id }
+
+    public fun saveUsers(data: String){
+        this.sharedPreferencesEditor.putString(USERS_SHARED_PREFERENCES_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun getUsers() : MutableList<User>{
+        val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, null)
+        return gson.fromJson<MutableList<User>>(usersString, object : TypeToken<MutableList<User>>(){}.type)
+    }
+
+    public fun getUser(id: Int) : User? = this.getUsers().find { it.id == id }
+
+    @SuppressLint("NewApi")
+    public fun updateUser(user: User){
+        val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, "[]")
+        val users = gson.fromJson<MutableList<User>>(usersString, object : TypeToken<MutableList<User>>(){}.type)
+        users.removeIf { it.id == user.id }
+        users.add(user)
+        this.saveUsers(gson.toJson(users))
+    }
 }

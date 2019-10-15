@@ -37,4 +37,14 @@ class UserMoments : Fragment() {
         super.onDestroy()
         Bridge.clear(this)
     }
+
+    companion object {
+
+        fun newInstance(user: String) =
+            UserMoments().apply {
+                arguments = Bundle().apply {
+                    putString("user", user)
+                }
+            }
+    }
 }

@@ -35,7 +35,7 @@ class UtilsFunctions(
     private val context: Context
 ){
 
-    private val REQUEST_FINE_LOCATION = 1
+    public val REQUEST_FINE_LOCATION = 2
 
     public fun getToken(length: Int): String{
         val chars: String = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -33,15 +33,15 @@ class UserMenuFragment : BottomSheetDialogFragment() {
     private val mOnNavigationViewItemClickListener = NavigationView.OnNavigationItemSelectedListener {
         when(it.itemId){
             R.id.user_profile_moments -> {
-                this.navigateToUserProfile(0, Gson().toJson(session))
+                this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.user_profile_restaurants -> {
-                this.navigateToUserProfile(1, Gson().toJson(session))
+                this.navigateToUserProfile(1, session.id, session.urls.apiGet, session.urls.apiGetAuth)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.user_profile_profile -> {
-                this.navigateToUserProfile(2, Gson().toJson(session))
+                this.navigateToUserProfile(2, session.id, session.urls.apiGet, session.urls.apiGetAuth)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.user_profile_orders -> {
@@ -87,19 +87,21 @@ class UserMenuFragment : BottomSheetDialogFragment() {
         mUserProfileEmail.text = session.email
         Picasso.get().load(session.imageURL()).into(mUserProfileImage)
 
-        mUserProfileImage.setOnClickListener { this.navigateToUserProfile(0, Gson().toJson(session)) }
-        mUserProfileName.setOnClickListener { this.navigateToUserProfile(0, Gson().toJson(session)) }
-        mUserProfileEmail.setOnClickListener { this.navigateToUserProfile(0, Gson().toJson(session)) }
+        mUserProfileImage.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
+        mUserProfileName.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
+        mUserProfileEmail.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
 
         mUserProfileMenu.setNavigationItemSelectedListener(mOnNavigationViewItemClickListener)
 
         return view
     }
 
-    private fun navigateToUserProfile(tab: Int, user: String){
+    private fun navigateToUserProfile(tab: Int, id: Int, url: String, authUrl: String){
 
         val intent = Intent(activity!!, UserProfile::class.java)
-        intent.putExtra("user", user)
+        intent.putExtra("user", id)
+        intent.putExtra("url", url)
+        intent.putExtra("authUrl", authUrl)
         intent.putExtra("tab", tab)
 
         activity?.startActivity(intent)

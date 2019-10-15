@@ -3,6 +3,7 @@ package com.codepipes.ting
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
+import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
@@ -36,10 +38,10 @@ import java.util.concurrent.TimeUnit
 
 class LogIn : AppCompatActivity() {
 
-    lateinit var mAppNameText: TextView
-    lateinit var mNavigateSignUpBtn: Button
-    lateinit var mSignInWithGoogleButton: Button
-    lateinit var mNavigateResetPasswordBtn: Button
+    private lateinit var mAppNameText: TextView
+    private lateinit var mNavigateSignUpBtn: Button
+    private lateinit var mSignInWithGoogleButton: Button
+    private lateinit var mNavigateResetPasswordBtn: Button
 
     private lateinit var mEmailLogInInput: EditText
     private lateinit var mPasswordLogInInput: EditText
@@ -58,6 +60,8 @@ class LogIn : AppCompatActivity() {
     private lateinit var userAuthentication: UserAuthentication
     private lateinit var mUtilFunctions: UtilsFunctions
 
+    private lateinit var localData: LocalData
+    private lateinit var googleSignInTask: Task<GoogleSignInAccount>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +91,8 @@ class LogIn : AppCompatActivity() {
 
         userAuthentication = UserAuthentication(this@LogIn)
         mUtilFunctions = UtilsFunctions(this@LogIn)
+
+        localData = LocalData(this@LogIn)
 
         val spanText = SpannableString("Ting.com")
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimaryDark)), 0, 4, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
@@ -158,6 +164,7 @@ class LogIn : AppCompatActivity() {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
                                     if(serverResponse.user != null){
                                         userAuthentication.set(gson.toJson(serverResponse.user))
+                                        localData.updateUser(serverResponse.user)
                                         startActivity(Intent(this@LogIn, TingDotCom::class.java))
                                     } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
                                 }
@@ -181,7 +188,19 @@ class LogIn : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            this.googleSignInTask = task
             handleSignInResult(task)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            mUtilFunctions.REQUEST_FINE_LOCATION -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    handleSignInResult(this.googleSignInTask)
+                }
+            }
         }
     }
 
@@ -244,6 +263,7 @@ class LogIn : AppCompatActivity() {
                                             override fun handleDialogClose(dialog: DialogInterface?) {
                                                 if(serverResponse.user != null){
                                                     userAuthentication.set(gson.toJson(serverResponse.user))
+                                                    localData.updateUser(serverResponse.user)
                                                     startActivity(Intent(this@LogIn, TingDotCom::class.java))
                                                 } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
                                             }

@@ -47,6 +47,7 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
 
     override fun getItemCount(): Int = addressesList.size
 
+    @SuppressLint("DefaultLocale")
     override fun onBindViewHolder(holder: UserAddressViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val address = addressesList[position]
         val activity = holder.view.context as Activity

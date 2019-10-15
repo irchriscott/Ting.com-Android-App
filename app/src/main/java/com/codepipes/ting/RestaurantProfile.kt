@@ -142,11 +142,13 @@ class RestaurantProfile : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                branch = Gson().fromJson(dataString, Branch::class.java)
-                runOnUiThread {
-                    localData.updateRestaurant(branch)
-                    if(load){ showBranch() }
-                }
+                try{
+                    branch = Gson().fromJson(dataString, Branch::class.java)
+                    runOnUiThread {
+                        localData.updateRestaurant(branch)
+                        if(load){ showBranch() }
+                    }
+                } catch(e: Exception){}
             }
         })
     }

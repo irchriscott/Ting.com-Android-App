@@ -39,4 +39,14 @@ class UserAbout : Fragment() {
         super.onDestroy()
         Bridge.clear(this)
     }
+
+    companion object {
+
+        fun newInstance(user: String) =
+            UserAbout().apply {
+                arguments = Bundle().apply {
+                    putString("user", user)
+                }
+            }
+    }
 }

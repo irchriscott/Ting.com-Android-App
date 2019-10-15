@@ -49,7 +49,13 @@ class UserAddresses (
 
 class UserUrls (
     val loadRestaurants: String,
-    val loadReservations: String
+    val loadReservations: String,
+    val apiGet: String,
+    val apiGetAuth: String,
+    val apiRestaurants: String,
+    val apiReservations: String,
+    val apiMoments: String,
+    val apiOrders: String
 ){}
 
 class UserRestaurantReviews (

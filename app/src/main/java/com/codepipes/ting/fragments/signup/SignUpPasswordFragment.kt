@@ -25,6 +25,7 @@ import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
+import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
@@ -51,6 +52,7 @@ class SignUpPasswordFragment : Fragment() {
     private lateinit var gson: Gson
 
     private lateinit var userAuthentication: UserAuthentication
+    private lateinit var localData: LocalData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +74,7 @@ class SignUpPasswordFragment : Fragment() {
         mSignUpConfirmPasswordInput = view.findViewById<EditText>(R.id.signUpConfirmPasswordInput) as EditText
 
         userAuthentication = UserAuthentication(activity!!)
+        localData = LocalData(activity!!)
 
         settings = Settings(activity!!)
         gson = Gson()
@@ -158,6 +161,7 @@ class SignUpPasswordFragment : Fragment() {
                                     if(serverResponse.user != null){
                                         userAuthentication.set(gson.toJson(serverResponse.user))
                                         settings.removeSettingFromSharedPreferences("signup_data")
+                                        localData.updateUser(serverResponse.user)
                                         startActivity(Intent(activity, TingDotCom::class.java))
                                     } else { ErrorMessage(activity, "Unable To Fetch User Data").show() }
                                 }

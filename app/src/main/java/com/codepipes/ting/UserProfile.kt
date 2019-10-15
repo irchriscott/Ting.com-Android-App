@@ -27,7 +27,18 @@ import de.hdodenhof.circleimageview.CircleImageView
 import android.content.Intent
 import android.os.Build
 import android.os.PersistableBundle
+import android.view.View
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.utils.Routes
 import com.livefront.bridge.Bridge
+import kotlinx.android.synthetic.main.activity_user_profile.*
+import okhttp3.*
+import java.io.IOException
+import java.lang.Exception
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 
 class UserProfile : AppCompatActivity() {
@@ -37,6 +48,7 @@ class UserProfile : AppCompatActivity() {
     private lateinit var mUserProfileImage: CircleImageView
 
     private lateinit var userAuthentication: UserAuthentication
+    private lateinit var localData: LocalData
 
     private lateinit var mUserTabLayout: TabLayout
     private lateinit var mUserViewPager: ViewPager
@@ -44,6 +56,8 @@ class UserProfile : AppCompatActivity() {
 
     private lateinit var session: User
     private lateinit var user: User
+
+    private var userId: Int = 0
 
     @SuppressLint("PrivateResource", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +68,9 @@ class UserProfile : AppCompatActivity() {
         savedInstanceState?.clear()
 
         userAuthentication = UserAuthentication(this@UserProfile)
-
         session = userAuthentication.get()!!
-        user = Gson().fromJson(intent.getStringExtra("user"), User::class.java)
+
+        localData = LocalData(this@UserProfile)
 
         mUserToolbar = findViewById<Toolbar>(R.id.userToolbar) as Toolbar
         setSupportActionBar(mUserToolbar)
@@ -76,6 +90,37 @@ class UserProfile : AppCompatActivity() {
         mUserProfileAddress = findViewById<TextView>(R.id.userProfileAddress) as TextView
         mUserProfileImage = findViewById<CircleImageView>(R.id.userProfileImage) as CircleImageView
 
+        userId = intent.getIntExtra("user", 0)
+        val url = intent.getStringExtra("url")
+        val authUrl = intent.getStringExtra("authUrl")
+
+        if(localData.getUser(userId) != null){
+            user = localData.getUser(userId)!!
+            this.setupUser(user)
+
+            if(userId == session.id){
+                this.loadUser("${Routes().HOST_END_POINT}${authUrl}", false, session.token!!)
+            } else { this.loadUser("${Routes().HOST_END_POINT}${url}", false, session.token!!) }
+
+        } else {
+            shimmerLoader.startShimmer()
+            shimmerLoader.visibility = View.VISIBLE
+            userProfileData.visibility = View.GONE
+
+            if(userId == session.id){
+                this.loadUser("${Routes().HOST_END_POINT}${authUrl}", true, session.token!!)
+            } else { this.loadUser("${Routes().HOST_END_POINT}${url}", true, session.token!!) }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setupUser(user: User){
+
+        shimmerLoader.stopShimmer()
+        shimmerLoader.visibility = View.GONE
+
+        userProfileData.visibility = View.VISIBLE
+
         mUserProfileName.text = user.name
         mUserProfileAddress.text = "${user.town}, ${user.country}"
         Picasso.get().load(user.imageURL()).into(mUserProfileImage)
@@ -84,9 +129,9 @@ class UserProfile : AppCompatActivity() {
         mUserViewPager = findViewById<ViewPager>(R.id.userViewPager) as ViewPager
 
         val adapter = UserProfileViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(UserMoments(), resources.getString(R.string.user_profile_moments))
-        adapter.addFragment(UserRestaurants(), resources.getString(R.string.user_profile_restaurants))
-        adapter.addFragment(UserAbout(), resources.getString(R.string.user_profile_profile))
+        adapter.addFragment(UserMoments.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_moments))
+        adapter.addFragment(UserRestaurants.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_restaurants))
+        adapter.addFragment(UserAbout.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_profile))
 
         mUserViewPager.adapter = adapter
         mUserTabLayout.setupWithViewPager(mUserViewPager)
@@ -94,8 +139,42 @@ class UserProfile : AppCompatActivity() {
         mUserViewPager.currentItem = intent.getIntExtra("tab", 0)
     }
 
+    @SuppressLint("NewApi", "DefaultLocale")
+    private fun loadUser(url: String, load: Boolean, token: String){
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .callTimeout(Duration.ofMinutes(5)).build()
+
+        val request = Request.Builder()
+            .header("Authorization", token)
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    TingToast(this@UserProfile, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val dataString = response.body()!!.string()
+                try{
+                    user = Gson().fromJson(dataString, User::class.java)
+                    runOnUiThread {
+                        localData.updateUser(user)
+                        if(load){ setupUser(user) }
+                    }
+                } catch (e: Exception){}
+            }
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        if(user.id == session.id){ menuInflater.inflate(R.menu.user_profile_menu_edit, menu) }
+        if(userId == session.id){ menuInflater.inflate(R.menu.user_profile_menu_edit, menu) }
         return super.onCreateOptionsMenu(menu)
     }
 
