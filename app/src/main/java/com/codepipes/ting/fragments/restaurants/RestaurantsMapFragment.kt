@@ -373,6 +373,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         activity?.startActivity(intent)
     }
 
+    @SuppressLint("DefaultLocale")
     private fun getPolyline(origin: LatLng, destination: LatLng, type: String){
 
         val url = "https://maps.googleapis.com/maps/"
@@ -386,6 +387,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         val call = service.getDistanceDuration("metric",  "${origin.latitude},${origin.longitude}", "${destination.latitude},${destination.longitude}", type)
 
         call.enqueue(object : Callback<PolylineMapRoute> {
+
 
             override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
                 activity?.runOnUiThread {

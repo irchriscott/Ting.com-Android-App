@@ -139,12 +139,12 @@ class UserProfile : AppCompatActivity() {
         mUserViewPager.currentItem = intent.getIntExtra("tab", 0)
     }
 
-    @SuppressLint("NewApi", "DefaultLocale")
+    @SuppressLint("DefaultLocale")
     private fun loadUser(url: String, load: Boolean, token: String){
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder()
             .header("Authorization", token)

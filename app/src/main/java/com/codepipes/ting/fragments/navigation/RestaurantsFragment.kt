@@ -248,13 +248,13 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         return view
     }
 
-    @SuppressLint("SetTextI18n", "MissingPermission", "NewApi", "DefaultLocale")
+    @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
     private fun getRestaurants(){
         val url = routes.restaurantsGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder().url(url).get().build()
 

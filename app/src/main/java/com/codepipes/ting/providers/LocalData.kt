@@ -40,13 +40,12 @@ class LocalData (
         return gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
     }
 
-    public fun getRestaurant(id: Int) : Branch? = this.getRestaurants().find { it.id == id }
+    public fun getRestaurant(id: Int) : Branch? = this.getRestaurants().findLast { it.id == id }
 
-    @SuppressLint("NewApi")
     public fun updateRestaurant(branch: Branch){
         val restaurantsString = this.sharedPreferences.getString(RESTAURANTS_SHARED_PREFERENCES_KEY, "[]")
         val restaurants = gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
-        restaurants.removeIf { it.id == branch.id }
+        try{ restaurants.forEach { if(it.id == branch.id) restaurants.remove(it) } } catch (e: Exception){}
         restaurants.add(branch)
         this.saveRestaurants(gson.toJson(restaurants))
     }
@@ -136,17 +135,16 @@ class LocalData (
     }
 
     public fun getUsers() : MutableList<User>{
-        val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, null)
+        val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, "[]")
         return gson.fromJson<MutableList<User>>(usersString, object : TypeToken<MutableList<User>>(){}.type)
     }
 
     public fun getUser(id: Int) : User? = this.getUsers().find { it.id == id }
 
-    @SuppressLint("NewApi")
     public fun updateUser(user: User){
         val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, "[]")
         val users = gson.fromJson<MutableList<User>>(usersString, object : TypeToken<MutableList<User>>(){}.type)
-        users.removeIf { it.id == user.id }
+        users.forEach { if(it.id == user.id) users.remove(it) }
         users.add(user)
         this.saveUsers(gson.toJson(users))
     }

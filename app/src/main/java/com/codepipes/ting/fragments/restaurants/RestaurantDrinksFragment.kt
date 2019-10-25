@@ -90,7 +90,7 @@ class RestaurantDrinksFragment : Fragment() {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder().url(url).get().build()
 

@@ -163,6 +163,8 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             ContextCompat.getColor(ratingChart.context, R.color.colorGray)
         )
 
+        barDataSet.setDrawValues(false)
+
         ratingChart.animateY(1000)
         ratingChart.setDrawBarShadow(true)
         barDataSet.barShadowColor = Color.argb(40, 150, 150, 150)
@@ -191,7 +193,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder().url(url).get().build()
 
@@ -215,12 +217,12 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         })
     }
 
-    @SuppressLint("NewApi", "DefaultLocale", "SetTextI18n")
+    @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun loadRestaurantReviews(url: String){
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder().url(url).get().build()
 

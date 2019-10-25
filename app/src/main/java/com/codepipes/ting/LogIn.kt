@@ -210,77 +210,84 @@ class LogIn : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)
             if (mUtilFunctions.checkLocationPermissions()) {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val geocoder = Geocoder(this@LogIn, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    if(it != null){
+                        val geocoder = Geocoder(this@LogIn, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
-                    mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
-                    val idToken = mUtilFunctions.getToken(512)
-                    val url = this.routes.submitGoogleSignUp
+                        mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                        val idToken = mUtilFunctions.getToken(512)
+                        val url = this.routes.submitGoogleSignUp
 
-                    val client = OkHttpClient()
+                        val client = OkHttpClient()
 
-                    val form = MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("name", account?.displayName!!)
-                        .addFormDataPart("email", account.email!!)
-                        .addFormDataPart("country", addresses[0].countryName)
-                        .addFormDataPart("town", addresses[0].locality)
-                        .addFormDataPart("token", "${account.id}-$idToken")
-                        .addFormDataPart("address", addresses[0].getAddressLine(0))
-                        .addFormDataPart("longitude", it.longitude.toString())
-                        .addFormDataPart("latitude", it.latitude.toString())
-                        .addFormDataPart("type", UtilData().addressType[0])
-                        .build()
+                        val form = MultipartBody.Builder().setType(MultipartBody.FORM)
+                            .addFormDataPart("name", account?.displayName!!)
+                            .addFormDataPart("email", account.email!!)
+                            .addFormDataPart("country", addresses[0].countryName)
+                            .addFormDataPart("town", addresses[0].locality)
+                            .addFormDataPart("token", "${account.id}-$idToken")
+                            .addFormDataPart("address", addresses[0].getAddressLine(0))
+                            .addFormDataPart("longitude", it.longitude.toString())
+                            .addFormDataPart("latitude", it.latitude.toString())
+                            .addFormDataPart("type", UtilData().addressType[0])
+                            .build()
 
-                    val request = Request.Builder()
-                        .url(url)
-                        .post(form)
-                        .build()
+                        val request = Request.Builder()
+                            .url(url)
+                            .post(form)
+                            .build()
 
-                    client.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call, e: IOException) {
-                            runOnUiThread {
-                                mProgressOverlay.dismiss()
-                                TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                            }
-                        }
-
-                        override fun onResponse(call: Call, response: Response) {
-                            val responseBody = response.body()!!.string()
-                            val gson = Gson()
-                            try{
-                                val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                        client.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
                                 runOnUiThread {
                                     mProgressOverlay.dismiss()
-                                    if (serverResponse.status == 200){
-                                        val successDialog = SuccessOverlay()
-                                        val args: Bundle = Bundle()
-                                        args.putString("message", serverResponse.message)
-                                        args.putString("type", serverResponse.type)
-                                        successDialog.arguments = args
-                                        successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+                                    TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                }
+                            }
 
-                                        val onDialogClosed = object : SuccessDialogCloseListener {
-                                            override fun handleDialogClose(dialog: DialogInterface?) {
-                                                if(serverResponse.user != null){
-                                                    userAuthentication.set(gson.toJson(serverResponse.user))
-                                                    localData.updateUser(serverResponse.user)
-                                                    startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                                } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                            override fun onResponse(call: Call, response: Response) {
+                                val responseBody = response.body()!!.string()
+                                val gson = Gson()
+                                try{
+                                    val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                                    runOnUiThread {
+                                        mProgressOverlay.dismiss()
+                                        if (serverResponse.status == 200){
+                                            val successDialog = SuccessOverlay()
+                                            val args: Bundle = Bundle()
+                                            args.putString("message", serverResponse.message)
+                                            args.putString("type", serverResponse.type)
+                                            successDialog.arguments = args
+                                            successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+
+                                            val onDialogClosed = object : SuccessDialogCloseListener {
+                                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                                    if(serverResponse.user != null){
+                                                        userAuthentication.set(gson.toJson(serverResponse.user))
+                                                        localData.updateUser(serverResponse.user)
+                                                        startActivity(Intent(this@LogIn, TingDotCom::class.java))
+                                                    } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                                                }
                                             }
-                                        }
-                                        successDialog.dismissListener(onDialogClosed)
+                                            successDialog.dismissListener(onDialogClosed)
 
-                                    } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
-                                }
-                            } catch (e: Exception){
-                                runOnUiThread {
-                                    mProgressOverlay.dismiss()
-                                    TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
+                                    }
+                                } catch (e: Exception){
+                                    runOnUiThread {
+                                        mProgressOverlay.dismiss()
+                                        TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    }
                                 }
                             }
-                        }
 
-                    })
+                        })
+                    } else {
+                        runOnUiThread {
+                            mProgressOverlay.dismiss()
+                            TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
+                    }
 
                 }.addOnFailureListener {
                     runOnUiThread {

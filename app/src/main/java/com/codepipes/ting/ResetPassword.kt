@@ -75,7 +75,7 @@ class ResetPassword : AppCompatActivity() {
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60 * 5, TimeUnit.SECONDS)
             .build()
 
         val form = MultipartBody.Builder().setType(MultipartBody.FORM)

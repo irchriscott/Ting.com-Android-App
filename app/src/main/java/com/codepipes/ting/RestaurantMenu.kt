@@ -576,6 +576,8 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             ContextCompat.getColor(ratingChart.context, R.color.colorGray)
         )
 
+        barDataSet.setDrawValues(false)
+
         ratingChart.animateY(1000)
         ratingChart.setDrawBarShadow(true)
         barDataSet.barShadowColor = Color.argb(40, 150, 150, 150)

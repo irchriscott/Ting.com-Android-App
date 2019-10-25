@@ -122,13 +122,13 @@ class RestaurantProfile : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NewApi", "DefaultLocale")
+    @SuppressLint("DefaultLocale")
     private fun loadRestaurant(id: Int, load: Boolean){
         val url = "${Routes().restaurantGet}$id/"
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(Duration.ofMinutes(5)).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
         val request = Request.Builder().url(url).get().build()
 
