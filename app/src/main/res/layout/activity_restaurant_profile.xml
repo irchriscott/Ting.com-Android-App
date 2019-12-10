@@ -85,10 +85,10 @@
                                     android:layout_centerHorizontal="true"
                                     android:layout_marginTop="10dp"
                                     android:background="@color/colorVeryLightGray"
-                                    android:textSize="24dp"
+                                    android:textSize="24sp"
                                     android:fontFamily="@font/poppins_semi_bold"
                                     android:includeFontPadding="false"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
 
                             <TextView
@@ -98,11 +98,11 @@
                                     android:layout_marginTop="8dp"
                                     android:layout_below="@id/userProfileNameShimmer"
                                     android:layout_centerHorizontal="true"
-                                    android:textSize="15dp"
+                                    android:textSize="15sp"
                                     android:includeFontPadding="false"
                                     android:fontFamily="@font/poppins_regular"
                                     android:background="@color/colorVeryLightGray"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
                             <RatingBar
                                     android:id="@+id/restaurant_ratingShimmer"
@@ -148,8 +148,8 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="5dp"
                                             android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
-                                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                            android:textSize="12sp"
+                                            tools:ignore="HardcodedText,RtlHardcoded"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -177,9 +177,9 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="5dp"
                                             android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
+                                            android:textSize="12sp"
                                             android:textColor="@color/colorWhite"
-                                            tools:ignore="HardcodedText,SpUsage"/>
+                                            tools:ignore="HardcodedText"/>
 
                                 </LinearLayout>
 
@@ -219,10 +219,10 @@
                                 android:layout_below="@id/userProfileImage"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="10dp"
-                                android:textSize="24dp"
+                                android:textSize="24sp"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:includeFontPadding="false"
-                                tools:ignore="HardcodedText,SpUsage"/>
+                                tools:ignore="HardcodedText"/>
 
 
                         <TextView
@@ -232,10 +232,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@id/userProfileName"
                                 android:layout_centerHorizontal="true"
-                                android:textSize="15dp"
+                                android:textSize="15sp"
                                 android:includeFontPadding="false"
                                 android:fontFamily="@font/poppins_regular"
-                                tools:ignore="HardcodedText,SpUsage"/>
+                                tools:ignore="HardcodedText"/>
 
                         <RatingBar
                                 android:id="@+id/restaurant_rating"
@@ -282,8 +282,8 @@
                                         android:layout_marginLeft="5dp"
                                         android:text="12 km"
                                         android:fontFamily="@font/poppins_medium"
-                                        android:textSize="12dp"
-                                        tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                        android:textSize="12sp"
+                                        tools:ignore="HardcodedText,RtlHardcoded"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -311,9 +311,9 @@
                                         android:layout_marginLeft="5dp"
                                         android:text="Opening in 18 min"
                                         android:fontFamily="@font/poppins_medium"
-                                        android:textSize="12dp"
+                                        android:textSize="12sp"
                                         android:textColor="@color/colorWhite"
-                                        tools:ignore="HardcodedText,SpUsage"/>
+                                        tools:ignore="HardcodedText"/>
 
                             </LinearLayout>
 

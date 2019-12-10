@@ -31,9 +31,7 @@ import kotlin.math.floor
 import kotlin.math.round
 
 
-class UtilsFunctions(
-    private val context: Context
-){
+class UtilsFunctions( private val context: Context ) {
 
     public val REQUEST_FINE_LOCATION = 2
 
@@ -46,15 +44,9 @@ class UtilsFunctions(
 
     public fun checkLocationPermissions(): Boolean {
         return if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                context, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            true
-        } else {
-            requestLocationPermissions()
-            false
-        }
+        ) { true } else { requestLocationPermissions(); false }
     }
 
     private fun requestLocationPermissions() {
@@ -90,7 +82,7 @@ class UtilsFunctions(
     }
 
     public fun vectorToBitmap(vectorDrawable: SVG): BitmapDescriptor {
-        val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(160, 160, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         vectorDrawable.renderToCanvas(canvas)
 
@@ -160,7 +152,6 @@ class UtilsFunctions(
         return null
     }
 
-
     public fun decodePoly(encoded: String): List<LatLng> {
 
         val poly = ArrayList<LatLng>()
@@ -191,8 +182,7 @@ class UtilsFunctions(
             val dlng = if (result and 1 != 0) (result shr 1).inv() else result shr 1
             lng += dlng
 
-            val p = LatLng(lat.toDouble() / 1E5,
-                lng.toDouble() / 1E5)
+            val p = LatLng(lat.toDouble() / 1E5, lng.toDouble() / 1E5)
             poly.add(p)
         }
 

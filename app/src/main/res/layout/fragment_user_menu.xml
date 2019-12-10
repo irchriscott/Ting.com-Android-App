@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hello World"
-                android:textSize="17dp"
+                android:textSize="17sp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="5dp"
@@ -45,21 +45,21 @@
                 app:layout_constraintStart_toEndOf="@id/userProfileImage"
                 android:lines="1"
                 android:ellipsize="end"
-                tools:ignore="HardcodedText,SpUsage"/>
+                tools:ignore="HardcodedText,RtlHardcoded"/>
 
         <TextView
                 android:id="@+id/userProfileEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="helloworld@hello.com"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:fontFamily="@font/poppins_regular"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/userProfileImage"
-                tools:ignore="HardcodedText,SpUsage"/>
+                tools:ignore="HardcodedText,RtlHardcoded"/>
 
         <ImageButton
                 android:id="@+id/userProfileSettings"

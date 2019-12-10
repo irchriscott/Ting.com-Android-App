@@ -18,7 +18,7 @@ class UserAuthentication(
     private val SESSION_SHARED_PREFERENCES_KEY = "session_user"
 
     public fun set(data: String){
-        this.sharedPreferencesEditor.putString(SESSION_SHARED_PREFERENCES_KEY, data);
+        this.sharedPreferencesEditor.putString(SESSION_SHARED_PREFERENCES_KEY, data)
         this.sharedPreferencesEditor.apply()
         this.sharedPreferencesEditor.commit()
     }

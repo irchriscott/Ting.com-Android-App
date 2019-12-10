@@ -44,14 +44,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/edit_user_profile_image"
                         android:fontFamily="@font/poppins_medium"
-                        android:textSize="17dp"
+                        android:textSize="17sp"
                         android:textColor="@color/colorLightGray"
                         app:layout_constraintStart_toEndOf="@id/edit_user_image_view"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
-                        tools:ignore="RtlHardcoded,SpUsage"/>
+                        tools:ignore="RtlHardcoded"/>
 
                 <ImageButton
                         android:id="@+id/edit_user_image_button"
@@ -89,11 +89,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/edit_user_profile_login"
-                            android:textSize="18dp"
+                            android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="SpUsage"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
 
                     <TableLayout
@@ -127,10 +126,10 @@
                                     android:editable="false"
                                     android:inputType="none"
                                     android:lines="1"
-                                    android:textSize="13dp"
+                                    android:textSize="13sp"
                                     android:fontFamily="@font/poppins_regular"
                                     android:textColor="@color/colorVeryLightGray"
-                                    tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                    tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
 
                             <ImageButton
@@ -204,11 +203,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_user_profile_private"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_medium"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="SpUsage"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TableLayout
@@ -242,10 +240,10 @@
                                 android:editable="false"
                                 android:inputType="none"
                                 android:lines="1"
-                                android:textSize="14dp"
+                                android:textSize="14sp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:textColor="@color/colorGray"
-                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
                     </TableRow>
 
@@ -272,9 +270,9 @@
                                 android:editable="false"
                                 android:inputType="number"
                                 android:lines="1"
-                                android:textSize="14dp"
+                                android:textSize="14sp"
                                 android:textColor="@color/colorGray"
-                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
                     </TableRow>
 
@@ -304,11 +302,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_user_profile_public"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:fontFamily="@font/poppins_medium"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="SpUsage"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 <TableLayout
@@ -342,10 +339,10 @@
                                 android:editable="false"
                                 android:inputType="text"
                                 android:lines="1"
-                                android:textSize="14dp"
+                                android:textSize="14sp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:textColor="@color/colorGray"
-                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
                     </TableRow>
 
@@ -372,9 +369,9 @@
                                 android:editable="false"
                                 android:inputType="text"
                                 android:lines="1"
-                                android:textSize="14dp"
+                                android:textSize="14sp"
                                 android:textColor="@color/colorGray"
-                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
                     </TableRow>
 
@@ -401,9 +398,9 @@
                                 android:editable="false"
                                 android:inputType="none"
                                 android:lines="1"
-                                android:textSize="14dp"
+                                android:textSize="14sp"
                                 android:textColor="@color/colorGray"
-                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,SpUsage,TextFields"/>
+                                tools:ignore="Autofill,Deprecated,LabelFor,RtlHardcoded,TextFields"/>
 
                     </TableRow>
 
@@ -431,11 +428,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/edit_user_profile_addresses"
-                            android:textSize="18dp"
+                            android:textSize="18sp"
                             android:fontFamily="@font/poppins_medium"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="SpUsage"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     <android.support.v7.widget.RecyclerView
                             android:id="@+id/user_addresses_recycle_view"
@@ -455,10 +451,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="43dp"
                             android:text="@string/global_add"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:fontFamily="@font/poppins_medium"
                             android:layout_marginTop="15dp"
-                            tools:ignore="SpUsage"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/user_addresses_recycle_view"/>
 

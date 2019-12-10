@@ -61,7 +61,7 @@ class RatingUtils {
     static Drawable getRoundedBarDrawable(int bgColor, int radius) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setShape(GradientDrawable.RECTANGLE);
-        drawable.setCornerRadii(new float[]{
+        drawable.setCornerRadii(new float[] {
                 radius, radius, radius, radius, radius, radius, radius, radius
         });
         drawable.setColor(bgColor);

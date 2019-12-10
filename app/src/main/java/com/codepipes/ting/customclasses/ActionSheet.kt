@@ -23,8 +23,8 @@ class ActionSheet(var context: Context, var data: MutableList<String>) {
 
     var alertDialog: AlertDialog? = null
     lateinit var title : TextView
-    lateinit var cancle : TextView
-    lateinit var myRecyclerView: RecyclerView
+    private lateinit var cancle : TextView
+    private lateinit var myRecyclerView: RecyclerView
     private val actionSheetRecyclerViewAdapter by lazy { ActionSheetRecyclerViewAdapter(data) }
 
     fun setColorTitle(title: Int): ActionSheet {

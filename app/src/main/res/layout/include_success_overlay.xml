@@ -46,8 +46,7 @@
                 android:layout_gravity="center"
                 android:background="@color/colorTransparent"
                 android:textColor="@color/colorWhite"
-                android:textSize="22dp"
-                tools:ignore="SpUsage"/>
+                android:textSize="22sp" />
     </LinearLayout>
 
 

@@ -296,6 +296,5 @@ class LogIn : AppCompatActivity() {
                 }
             }
         } catch (e: ApiException) { TingToast(this@LogIn, "Google Sign In Failed", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
-
     }
 }

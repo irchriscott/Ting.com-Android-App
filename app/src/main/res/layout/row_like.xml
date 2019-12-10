@@ -39,11 +39,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:paddingRight="64dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <ImageView
                     android:id="@+id/like_address_pin"
@@ -100,9 +100,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Thu 26th September 2019 at 06:00"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 

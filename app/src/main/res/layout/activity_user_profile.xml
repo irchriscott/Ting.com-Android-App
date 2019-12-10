@@ -86,10 +86,10 @@
                                     android:layout_centerHorizontal="true"
                                     android:layout_marginTop="10dp"
                                     android:background="@color/colorVeryLightGray"
-                                    android:textSize="24dp"
+                                    android:textSize="24sp"
                                     android:fontFamily="@font/poppins_semi_bold"
                                     android:includeFontPadding="false"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
 
                             <TextView
@@ -99,11 +99,11 @@
                                     android:layout_marginTop="8dp"
                                     android:layout_below="@id/userProfileNameShimmer"
                                     android:layout_centerHorizontal="true"
-                                    android:textSize="15dp"
+                                    android:textSize="15sp"
                                     android:includeFontPadding="false"
                                     android:fontFamily="@font/poppins_regular"
                                     android:background="@color/colorVeryLightGray"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
                         </RelativeLayout>
 
@@ -140,9 +140,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="10dp"
                                 android:includeFontPadding="false"
-                                android:textSize="24dp"
+                                android:textSize="24sp"
                                 android:fontFamily="@font/poppins_semi_bold"
-                                tools:ignore="HardcodedText,SpUsage"/>
+                                tools:ignore="HardcodedText"/>
 
 
                         <TextView
@@ -153,9 +153,9 @@
                                 android:layout_below="@id/userProfileName"
                                 android:layout_centerHorizontal="true"
                                 android:includeFontPadding="false"
-                                android:textSize="15dp"
+                                android:textSize="15sp"
                                 android:fontFamily="@font/poppins_regular"
-                                tools:ignore="HardcodedText,SpUsage"/>
+                                tools:ignore="HardcodedText"/>
 
                     </RelativeLayout>
 

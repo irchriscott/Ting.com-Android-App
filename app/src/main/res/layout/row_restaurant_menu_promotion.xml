@@ -38,11 +38,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:paddingRight="94dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <ImageView
                     android:id="@+id/promotion_time_icon"
@@ -63,13 +63,13 @@
                     android:layout_marginStart="5dp"
                     android:text="This is a description on a menu"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="106dp"
                     android:paddingRight="106dp"
                     android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/promotion_title"
                     app:layout_constraintStart_toEndOf="@id/promotion_time_icon"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <ImageView
                     android:id="@+id/promotion_reduction_icon"
@@ -90,13 +90,13 @@
                     android:layout_marginStart="5dp"
                     android:text="This is a description on a menu"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="106dp"
                     android:paddingRight="106dp"
                     android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/promotion_time"
                     app:layout_constraintStart_toEndOf="@id/promotion_reduction_icon"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <ImageView
                     android:id="@+id/promotion_supplement_icon"
@@ -117,13 +117,13 @@
                     android:layout_marginStart="5dp"
                     android:text="This is a description on a menu"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="106dp"
                     android:paddingRight="106dp"
                     android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/promotion_reduction"
                     app:layout_constraintStart_toEndOf="@id/promotion_supplement_icon"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
 
         </android.support.constraint.ConstraintLayout>

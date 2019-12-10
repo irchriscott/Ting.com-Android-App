@@ -35,7 +35,7 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getRestaurants() : MutableList<Branch>{
+    private fun getRestaurants() : MutableList<Branch>{
         val restaurantsString = this.sharedPreferences.getString(RESTAURANTS_SHARED_PREFERENCES_KEY, "[]")
         return gson.fromJson<MutableList<Branch>>(restaurantsString, object : TypeToken<MutableList<Branch>>(){}.type)
     }
@@ -56,12 +56,12 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getPromotions(branch: Int) : MutableList<MenuPromotion> {
+    private fun getPromotions(branch: Int) : MutableList<MenuPromotion> {
         val promotionsString = this.sharedPreferences.getString("${PROMOTIONS_SHARED_PREFERENCES_KEY}$branch", "[]")
         return  gson.fromJson<MutableList<MenuPromotion>>(promotionsString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
     }
 
-    public fun getAllPromotions() : MutableList<MenuPromotion> {
+    private fun getAllPromotions() : MutableList<MenuPromotion> {
         val promotions = mutableListOf<MenuPromotion>()
         this.getRestaurants().forEach { it.promotions?.promotions?.let { p -> promotions.addAll(p) } }
         return promotions
@@ -77,7 +77,7 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getFoods(branch: Int) : MutableList<RestaurantMenu> {
+    private fun getFoods(branch: Int) : MutableList<RestaurantMenu> {
         val foodsString = this.sharedPreferences.getString("${FOODS_SHARED_PREFERENCES_KEY}$branch", "[]")
         return  gson.fromJson<MutableList<RestaurantMenu>>(foodsString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
     }
@@ -90,7 +90,7 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getDrinks(branch: Int) : MutableList<RestaurantMenu> {
+    private fun getDrinks(branch: Int) : MutableList<RestaurantMenu> {
         val drinksString = this.sharedPreferences.getString("${DRINKS_SHARED_PREFERENCES_KEY}$branch", "[]")
         return  gson.fromJson<MutableList<RestaurantMenu>>(drinksString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
     }
@@ -103,14 +103,14 @@ class LocalData (
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getDishes(branch: Int) : MutableList<RestaurantMenu> {
+    private fun getDishes(branch: Int) : MutableList<RestaurantMenu> {
         val dishesString = this.sharedPreferences.getString("${DISHES_SHARED_PREFERENCES_KEY}$branch", "[]")
         return  gson.fromJson<MutableList<RestaurantMenu>>(dishesString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
     }
 
     public fun getDish(branch: Int, id: Int) : RestaurantMenu? = this.getDishes(branch).find { it.id == id }
 
-    public fun getRestaurantMenus(branch: Int) : MutableList<RestaurantMenu> {
+    private fun getRestaurantMenus(branch: Int) : MutableList<RestaurantMenu> {
         val menus = mutableListOf<RestaurantMenu>()
         menus.addAll(this.getFoods(branch))
         menus.addAll(this.getDrinks(branch))
@@ -120,7 +120,7 @@ class LocalData (
 
     public fun getMenuRestaurant(branch: Int, id: Int) : RestaurantMenu? = this.getRestaurantMenus(branch).find { it.id == id }
 
-    public fun getAllMenus() : MutableList<RestaurantMenu>{
+    private fun getAllMenus() : MutableList<RestaurantMenu>{
         val menus = mutableListOf<RestaurantMenu>()
         this.getRestaurants().forEach { it.menus.menus?.let { m -> menus.addAll(m) } }
         return menus
@@ -128,13 +128,13 @@ class LocalData (
 
     public fun getMenu(id: Int) : RestaurantMenu? = this.getAllMenus().find { it.id == id }
 
-    public fun saveUsers(data: String){
+    private fun saveUsers(data: String){
         this.sharedPreferencesEditor.putString(USERS_SHARED_PREFERENCES_KEY, data)
         this.sharedPreferencesEditor.apply()
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getUsers() : MutableList<User>{
+    private fun getUsers() : MutableList<User>{
         val usersString = this.sharedPreferences.getString(USERS_SHARED_PREFERENCES_KEY, "[]")
         return gson.fromJson<MutableList<User>>(usersString, object : TypeToken<MutableList<User>>(){}.type)
     }

@@ -29,12 +29,12 @@
                     android:paddingTop="15dp"
                     android:text="Restaurant Menu"
                     android:fontFamily="@font/poppins_medium"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textAllCaps="true"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toTopOf="parent"
-                    tools:ignore="HardcodedText,SpUsage"/>
+                    tools:ignore="HardcodedText"/>
 
             <com.codepipes.ting.customclasses.RoundedCornerImageView
                     android:id="@+id/menu_image"
@@ -55,10 +55,10 @@
                     android:layout_marginTop="8dp"
                     android:text="Hello World"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     app:layout_constraintTop_toBottomOf="@id/menu_image"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,SpUsage"/>
+                    tools:ignore="HardcodedText"/>
 
             <RatingBar
                     android:id="@+id/menu_rating"
@@ -91,12 +91,12 @@
                     android:layout_marginStart="5dp"
                     android:text="This is a description on a menu"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="17dp"
                     android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/menu_rating"
                     app:layout_constraintStart_toEndOf="@id/menu_description_icon"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <LinearLayout
                     android:id="@+id/menu_type_view"
@@ -132,9 +132,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Walking Mode"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -160,9 +160,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Food"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -190,9 +190,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Meal"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -240,11 +240,11 @@
                             android:text="UGX 35,000"
                             android:fontFamily="@font/poppins_medium"
                             android:textAllCaps="true"
-                            android:textSize="30dp"
+                            android:textSize="30sp"
                             android:includeFontPadding="false"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/menu_quantity"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                     <TextView
                             android:id="@+id/menu_old_price"
@@ -305,8 +305,8 @@
                             android:layout_marginLeft="5dp"
                             android:text="12,789"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
-                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText,RtlHardcoded"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -333,8 +333,8 @@
                             android:layout_marginLeft="5dp"
                             android:text="99,876"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -364,9 +364,9 @@
                             android:layout_marginLeft="5dp"
                             android:text="Available"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorWhite"
-                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                            tools:ignore="HardcodedText,RtlHardcoded"/>
 
                 </LinearLayout>
 

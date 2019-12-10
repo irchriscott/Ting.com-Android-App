@@ -37,12 +37,12 @@
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:paddingRight="64dp"
                     android:background="@color/colorVeryLightGray"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <RatingBar
                     android:id="@+id/review_rating"
@@ -62,14 +62,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="54dp"
                     android:paddingRight="54dp"
                     android:textColor="@color/colorGray"
                     android:background="@color/colorVeryLightGray"
                     app:layout_constraintTop_toBottomOf="@id/review_rating"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <LinearLayout
                     android:id="@+id/review_date_view"
@@ -101,9 +101,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 

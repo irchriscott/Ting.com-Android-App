@@ -79,13 +79,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="45dp"
                             android:fontFamily="@font/poppins_regular"
-                            android:textSize="14dp"
+                            android:textSize="14sp"
                             android:layout_marginRight="15dp"
                             android:ellipsize="end"
                             app:layout_constraintStart_toEndOf="@id/address_icon"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                            tools:ignore="HardcodedText,RtlHardcoded"/>
 
                 </android.support.constraint.ConstraintLayout>
 

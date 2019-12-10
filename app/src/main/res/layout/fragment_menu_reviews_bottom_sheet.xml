@@ -24,12 +24,12 @@
                 android:paddingTop="15dp"
                 android:text="Menu Reviews"
                 android:fontFamily="@font/poppins_medium"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textAllCaps="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="parent"
-                tools:ignore="HardcodedText,SpUsage"/>
+                tools:ignore="HardcodedText"/>
 
         <include
                 android:id="@+id/progress_loader"

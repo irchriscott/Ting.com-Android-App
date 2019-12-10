@@ -24,10 +24,10 @@
             android:layout_marginTop="15dp"
             android:text="Hello World"
             android:fontFamily="@font/poppins_semi_bold"
-            android:textSize="24dp"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_image"
-            tools:ignore="HardcodedText,SpUsage"/>
+            tools:ignore="HardcodedText"/>
 
     <TextView
             android:id="@+id/info_branch"
@@ -36,11 +36,11 @@
             android:paddingTop="10dp"
             android:text="World Hello"
             android:fontFamily="@font/poppins_regular"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/info_name"
             app:layout_constraintBottom_toBottomOf="@id/info_name"
-            tools:ignore="HardcodedText,SpUsage"/>
+            tools:ignore="HardcodedText"/>
 
     <ImageView
             android:id="@+id/info_address_pin"
@@ -61,11 +61,11 @@
             android:layout_marginStart="8dp"
             android:text="Nana Hostel, Kampala, Uganda"
             android:fontFamily="@font/poppins_regular"
-            android:textSize="13dp"
+            android:textSize="13sp"
             android:textColor="@color/colorGray"
             app:layout_constraintTop_toBottomOf="@id/info_branch"
             app:layout_constraintStart_toEndOf="@id/info_address_pin"
-            tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+            tools:ignore="HardcodedText,RtlSymmetry"/>
 
     <View
             android:id="@+id/info_separator"
@@ -101,9 +101,9 @@
                 android:layout_marginStart="8dp"
                 android:text="info@gmail.com"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textColor="@color/colorGray"
-                tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                tools:ignore="HardcodedText,RtlSymmetry"/>
 
     </LinearLayout>
 
@@ -130,9 +130,9 @@
                 android:layout_marginStart="8dp"
                 android:text="0123456789"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textColor="@color/colorGray"
-                tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                tools:ignore="HardcodedText,RtlSymmetry"/>
 
     </LinearLayout>
 
@@ -160,9 +160,9 @@
                 android:layout_marginStart="8dp"
                 android:text="08AM - 10PM"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:textColor="@color/colorGray"
-                tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                tools:ignore="HardcodedText,RtlSymmetry"/>
 
     </LinearLayout>
 

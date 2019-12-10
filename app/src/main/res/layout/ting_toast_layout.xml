@@ -43,11 +43,11 @@
                 android:textColor="@color/colorGray"
                 android:ellipsize="end"
                 android:lines="1"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="RtlCompat,SpUsage"/>
+                tools:ignore="RtlCompat"/>
 
     </android.support.constraint.ConstraintLayout>
 

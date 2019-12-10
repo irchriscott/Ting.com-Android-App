@@ -43,11 +43,11 @@ public class Bar {
         this.starLabel = starLabel;
     }
 
-    public int getRaters() {
+    int getRaters() {
         return raters;
     }
 
-    public void setRaters(int raters) {
+    void setRaters(int raters) {
         this.raters = raters;
     }
 
@@ -59,11 +59,11 @@ public class Bar {
         this.color = color;
     }
 
-    public String getStarLabel() {
+    String getStarLabel() {
         return starLabel;
     }
 
-    public void setStarLabel(String starLabel) {
+    void setStarLabel(String starLabel) {
         this.starLabel = starLabel;
     }
 
@@ -75,7 +75,7 @@ public class Bar {
         this.endColor = endColor;
     }
 
-    public boolean isGradientBar() {
+    boolean isGradientBar() {
         return endColor != 0;
     }
 

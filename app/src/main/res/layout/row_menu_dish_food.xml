@@ -38,11 +38,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:paddingRight="94dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <RatingBar
                     android:id="@+id/menu_rating"
@@ -75,13 +75,13 @@
                     android:layout_marginStart="5dp"
                     android:text="This is a description on a menu"
                     android:fontFamily="@font/poppins_regular"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:paddingEnd="110dp"
                     android:paddingRight="110dp"
                     android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/menu_rating"
                     app:layout_constraintStart_toEndOf="@id/menu_description_icon"
-                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <TextView
                     android:id="@+id/menu_quantity"
@@ -124,9 +124,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Food"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -154,9 +154,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Meal"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -186,9 +186,9 @@
                             android:layout_marginLeft="5dp"
                             android:text="Available"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorWhite"
-                            tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                            tools:ignore="HardcodedText,RtlHardcoded"/>
 
                 </LinearLayout>
 

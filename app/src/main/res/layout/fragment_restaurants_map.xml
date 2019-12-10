@@ -66,12 +66,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:paddingEnd="94dp"
                             android:textColor="@color/colorGray"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                            tools:ignore="HardcodedText,RtlSymmetry"/>
 
                     <RatingBar
                             android:id="@+id/restaurant_rating"
@@ -104,12 +104,12 @@
                             android:layout_marginStart="2dp"
                             android:text="Nana Hostel, Kampala, Uganda"
                             android:fontFamily="@font/poppins_regular"
-                            android:textSize="13dp"
+                            android:textSize="13sp"
                             android:paddingEnd="114dp"
                             android:textColor="@color/colorGray"
                             app:layout_constraintTop_toBottomOf="@id/restaurant_rating"
                             app:layout_constraintStart_toEndOf="@id/restaurant_address_pin"
-                            tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                            tools:ignore="HardcodedText,RtlSymmetry"/>
 
                     <LinearLayout
                             android:id="@+id/restaurant_distance_view"
@@ -142,9 +142,9 @@
                                     android:layout_marginStart="5dp"
                                     android:text="12 km"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
+                                    android:textSize="12sp"
                                     android:textColor="@color/colorGray"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -172,9 +172,9 @@
                                     android:layout_marginStart="5dp"
                                     android:text="Opening in 18 min"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
+                                    android:textSize="12sp"
                                     android:textColor="@color/colorWhite"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
                         </LinearLayout>
 
@@ -237,9 +237,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Driving Mode"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -265,9 +265,9 @@
                             android:layout_marginStart="5dp"
                             android:text="Walking Mode"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="12dp"
+                            android:textSize="12sp"
                             android:textColor="@color/colorGray"
-                            tools:ignore="HardcodedText,SpUsage"/>
+                            tools:ignore="HardcodedText"/>
 
                 </LinearLayout>
 
@@ -281,11 +281,11 @@
                     android:text="45min (25km)"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:visibility="gone"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textColor="@color/colorPrimaryDark"
                     wheel:layout_constraintStart_toStartOf="parent"
                     wheel:layout_constraintTop_toBottomOf="@+id/restaurant_directions_menu"
-                    tools:ignore="HardcodedText,SpUsage"/>
+                    tools:ignore="HardcodedText"/>
 
         </android.support.constraint.ConstraintLayout>
 

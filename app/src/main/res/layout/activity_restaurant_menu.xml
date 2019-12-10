@@ -55,10 +55,10 @@
                                         android:layout_height="wrap_content"
                                         android:background="@color/colorVeryLightGray"
                                         android:fontFamily="@font/poppins_semi_bold"
-                                        android:textSize="18dp"
+                                        android:textSize="18sp"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        tools:ignore="HardcodedText,SpUsage"/>
+                                        tools:ignore="HardcodedText"/>
 
                                 <RatingBar
                                         android:id="@+id/menu_ratingShimmer"
@@ -91,12 +91,12 @@
                                         android:layout_marginStart="5dp"
                                         android:background="@color/colorVeryLightGray"
                                         android:fontFamily="@font/poppins_regular"
-                                        android:textSize="13dp"
+                                        android:textSize="13sp"
                                         android:paddingEnd="17dp"
                                         android:textColor="@color/colorGray"
                                         app:layout_constraintTop_toBottomOf="@id/menu_ratingShimmer"
                                         app:layout_constraintStart_toEndOf="@id/menu_description_iconShimmer"
-                                        tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                                        tools:ignore="HardcodedText,RtlSymmetry"/>
 
                                 <LinearLayout
                                         android:id="@+id/menu_type_viewShimmer"
@@ -131,9 +131,9 @@
                                                 android:layout_marginTop="2dp"
                                                 android:layout_marginStart="5dp"
                                                 android:fontFamily="@font/poppins_medium"
-                                                android:textSize="12dp"
+                                                android:textSize="12sp"
                                                 android:textColor="@color/colorGray"
-                                                tools:ignore="HardcodedText,SpUsage"/>
+                                                tools:ignore="HardcodedText"/>
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -158,9 +158,9 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="5dp"
                                                 android:fontFamily="@font/poppins_medium"
-                                                android:textSize="12dp"
+                                                android:textSize="12sp"
                                                 android:textColor="@color/colorGray"
-                                                tools:ignore="HardcodedText,SpUsage"/>
+                                                tools:ignore="HardcodedText"/>
 
                                     </LinearLayout>
 
@@ -187,9 +187,9 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginStart="5dp"
                                                 android:fontFamily="@font/poppins_medium"
-                                                android:textSize="12dp"
+                                                android:textSize="12sp"
                                                 android:textColor="@color/colorGray"
-                                                tools:ignore="HardcodedText,SpUsage"/>
+                                                tools:ignore="HardcodedText"/>
 
                                     </LinearLayout>
 
@@ -263,10 +263,10 @@
                                     android:layout_height="wrap_content"
                                     android:text="Hello World"
                                     android:fontFamily="@font/poppins_semi_bold"
-                                    android:textSize="18dp"
+                                    android:textSize="18sp"
                                     app:layout_constraintTop_toTopOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
                             <RatingBar
                                     android:id="@+id/menu_rating"
@@ -299,12 +299,12 @@
                                     android:layout_marginStart="5dp"
                                     android:text="This is a description on a menu"
                                     android:fontFamily="@font/poppins_regular"
-                                    android:textSize="13dp"
+                                    android:textSize="13sp"
                                     android:paddingEnd="17dp"
                                     android:textColor="@color/colorGray"
                                     app:layout_constraintTop_toBottomOf="@id/menu_rating"
                                     app:layout_constraintStart_toEndOf="@id/menu_description_icon"
-                                    tools:ignore="HardcodedText,RtlSymmetry,SpUsage"/>
+                                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
                             <LinearLayout
                                     android:id="@+id/menu_type_view"
@@ -340,9 +340,9 @@
                                             android:layout_marginStart="5dp"
                                             android:text="Walking Mode"
                                             android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
+                                            android:textSize="12sp"
                                             android:textColor="@color/colorGray"
-                                            tools:ignore="HardcodedText,SpUsage"/>
+                                            tools:ignore="HardcodedText"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -368,9 +368,9 @@
                                             android:layout_marginStart="5dp"
                                             android:text="Food"
                                             android:fontFamily="@font/poppins_medium"
-                                            android:textSize="12dp"
+                                            android:textSize="12sp"
                                             android:textColor="@color/colorGray"
-                                            tools:ignore="HardcodedText,SpUsage"/>
+                                            tools:ignore="HardcodedText"/>
 
                                 </LinearLayout>
 
@@ -400,7 +400,7 @@
                                             android:fontFamily="@font/poppins_medium"
                                             android:textSize="12dp"
                                             android:textColor="@color/colorGray"
-                                            tools:ignore="HardcodedText,SpUsage"/>
+                                            tools:ignore="HardcodedText"/>
 
                                 </LinearLayout>
 
@@ -482,11 +482,11 @@
                                             android:text="UGX 35,000"
                                             android:fontFamily="@font/poppins_medium"
                                             android:textAllCaps="true"
-                                            android:textSize="30dp"
+                                            android:textSize="30sp"
                                             android:includeFontPadding="false"
                                             app:layout_constraintStart_toStartOf="parent"
                                             app:layout_constraintTop_toBottomOf="@id/menu_quantity"
-                                            tools:ignore="HardcodedText,SpUsage"/>
+                                            tools:ignore="HardcodedText"/>
 
                                     <TextView
                                             android:id="@+id/menu_old_price"
@@ -563,8 +563,8 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="12,789"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
-                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                    android:textSize="12sp"
+                                    tools:ignore="HardcodedText,RtlHardcoded"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -591,8 +591,8 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="99,876"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    android:textSize="12sp"
+                                    tools:ignore="HardcodedText"/>
 
                         </LinearLayout>
 
@@ -622,9 +622,9 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="Available"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
+                                    android:textSize="12sp"
                                     android:textColor="@color/colorWhite"
-                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                    tools:ignore="HardcodedText,RtlHardcoded"/>
 
                         </LinearLayout>
 
@@ -645,73 +645,81 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
+                            android:orientation="vertical"
                             app:layout_constraintTop_toBottomOf="@id/menu_separator_third"
                             app:layout_constraintStart_toStartOf="parent">
 
                         <LinearLayout
-                                android:id="@+id/menu_restaurant_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:paddingRight="8dp"
-                                android:background="@drawable/background_labeled_button"
-                                tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
+                                android:orientation="horizontal">
 
-                            <ImageView
-                                    android:id="@+id/menu_restaurant_image"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="24dp"
-                                    android:adjustViewBounds="true"
-                                    android:scaleType="fitCenter"
-                                    android:src="@drawable/default_restaurant"
-                                    tools:ignore="ContentDescription"/>
-
-                            <TextView
-                                    android:id="@+id/menu_restaurant_name"
+                            <LinearLayout
+                                    android:id="@+id/menu_restaurant_view"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:layout_marginStart="5dp"
-                                    android:text="Cafe Java, Kampala Road"
-                                    android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
-                                    android:textColor="@color/colorGray"
-                                    tools:ignore="HardcodedText,SpUsage"/>
-                        </LinearLayout>
+                                    android:layout_marginEnd="8dp"
+                                    android:paddingRight="8dp"
+                                    android:background="@drawable/background_labeled_button"
+                                    tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
 
-                        <LinearLayout
-                                android:id="@+id/menu_restaurant_distance_view"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="8dp"
-                                android:paddingRight="8dp"
-                                android:paddingTop="3dp"
-                                android:paddingBottom="2dp"
-                                android:background="@drawable/background_labeled_button">
+                                <ImageView
+                                        android:id="@+id/menu_restaurant_image"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="24dp"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/default_restaurant"
+                                        tools:ignore="ContentDescription"/>
 
-                            <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:src="@drawable/ic_place_gray_24dp"
-                                    android:alpha="0.6"
-                                    tools:ignore="ContentDescription"/>
+                                <TextView
+                                        android:id="@+id/menu_restaurant_name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:layout_marginStart="5dp"
+                                        android:text="Cafe Java, Kampala Road"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/colorGray"
+                                        tools:ignore="HardcodedText"/>
+                            </LinearLayout>
 
-                            <TextView
-                                    android:id="@+id/menu_restaurant_distance"
+                            <LinearLayout
+                                    android:id="@+id/menu_restaurant_distance_view"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:text="12 km"
-                                    android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
-                                    tools:ignore="HardcodedText,RtlHardcoded,SpUsage"/>
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="2dp"
+                                    android:background="@drawable/background_labeled_button">
+
+                                <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_place_gray_24dp"
+                                        android:alpha="0.6"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:id="@+id/menu_restaurant_distance"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="12 km"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        tools:ignore="HardcodedText,RtlHardcoded"/>
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <LinearLayout
                                 android:id="@+id/menu_restaurant_work_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
+                                android:layout_marginTop="6dp"
                                 android:paddingLeft="8dp"
                                 android:paddingRight="8dp"
                                 android:paddingTop="3dp"
@@ -733,9 +741,9 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="Opening in 18 min"
                                     android:fontFamily="@font/poppins_medium"
-                                    android:textSize="12dp"
+                                    android:textSize="12sp"
                                     android:textColor="@color/colorWhite"
-                                    tools:ignore="HardcodedText,SpUsage"/>
+                                    tools:ignore="HardcodedText"/>
 
                         </LinearLayout>
 

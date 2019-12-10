@@ -286,7 +286,6 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(menu_image)
 
         menu_image.setOnClickListener {
-
             StfalconImageViewer.Builder<MenuImage>(this@RestaurantMenu, menu.menu.images.images) { view, image ->
                 Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view)
             }.show(true)
@@ -298,17 +297,13 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         if (menu.menu.showIngredients) {
             menu_ingredients.setHtml(menu.menu.ingredients)
-        } else {
-            menu_ingredients.text = "Not Available"
-        }
+        } else { menu_ingredients.text = "Not Available" }
 
         if (menu.type.id != 2) {
             menu_subcategory_name.text = menu.menu.category?.name
             Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}")
                 .into(menu_subcategory_image)
-        } else {
-            menu_subcategory.visibility = View.GONE
-        }
+        } else { menu_subcategory.visibility = View.GONE }
 
         menu_type_name.text = menu.type.name.capitalize()
         menu_new_price.text =
@@ -317,9 +312,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             menu_old_price.text =
                 "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.lastPrice)}".toUpperCase()
             menu_old_price.paintFlags = menu_old_price.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        } else {
-            menu_old_price.visibility = View.GONE
-        }
+        } else { menu_old_price.visibility = View.GONE }
 
 
         when (menu.type.id) {
