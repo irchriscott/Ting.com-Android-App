@@ -21,6 +21,7 @@ import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.activity_restaurant_about.*
 import okhttp3.*
 import java.io.IOException
+import java.lang.Exception
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
@@ -54,9 +55,11 @@ class RestaurantAbout : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = "Restaurant About".toUpperCase()
 
-        val upArrow = ContextCompat.getDrawable(this@RestaurantAbout, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantAbout, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@RestaurantAbout, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantAbout, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: Exception) {}
 
         branchId = intent.getIntExtra("resto", 0)
         val apiGet = intent.getStringExtra("apiGet")

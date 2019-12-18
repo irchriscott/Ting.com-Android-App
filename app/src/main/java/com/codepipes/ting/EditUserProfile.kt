@@ -99,9 +99,11 @@ class EditUserProfile : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = user.username.capitalize()
 
-        val upArrow = ContextCompat.getDrawable(this@EditUserProfile, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@EditUserProfile, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@EditUserProfile, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@EditUserProfile, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: java.lang.Exception) {}
 
         utilsFunctions = UtilsFunctions(this@EditUserProfile)
 

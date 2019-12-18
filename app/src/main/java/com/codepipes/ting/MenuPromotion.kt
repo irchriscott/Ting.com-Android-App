@@ -79,9 +79,11 @@ class MenuPromotion : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = "Menu Promotion".toUpperCase()
 
-        val upArrow = ContextCompat.getDrawable(this@MenuPromotion, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@MenuPromotion, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@MenuPromotion, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@MenuPromotion, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: java.lang.Exception) {}
 
         val promoId = intent.getIntExtra("promo", 0)
         val url = intent.getStringExtra("url")

@@ -13,11 +13,6 @@
           android:title="@string/nav_bar_restaurants"
           app:showAsAction="always"/>
 
-    <item android:id="@+id/moments_item_menu"
-          android:icon="@drawable/ic_moments"
-          android:title="@string/nav_bar_moments"
-          app:showAsAction="always"/>
-
     <item android:id="@+id/user_menu_item_menu"
           android:icon="@drawable/ic_user_menu"
           android:title="@string/nav_bar_user_menu"

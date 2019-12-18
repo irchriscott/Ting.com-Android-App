@@ -77,9 +77,11 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = "Restaurant Reviews".toUpperCase()
 
-        val upArrow = ContextCompat.getDrawable(this@RestaurantReviews, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantReviews, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@RestaurantReviews, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantReviews, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: java.lang.Exception) {}
 
         branchId = intent.getIntExtra("resto", 0)
         val apiGet = intent.getStringExtra("apiGet")
@@ -355,13 +357,9 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         })
     }
 
-    override fun onNegativeButtonClicked() {
-        TingToast(this@RestaurantReviews, "Operation Canceled !!!", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
-    }
+    override fun onNegativeButtonClicked() {}
 
-    override fun onNeutralButtonClicked() {
-        TingToast(this@RestaurantReviews, "We will remind you later !!!", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
-    }
+    override fun onNeutralButtonClicked() {}
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

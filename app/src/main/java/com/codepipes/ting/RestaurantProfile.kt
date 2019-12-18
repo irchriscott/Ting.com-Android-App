@@ -103,9 +103,11 @@ class RestaurantProfile : AppCompatActivity() {
         supportActionBar!!.title = ""
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimaryDark)))
 
-        val upArrow = ContextCompat.getDrawable(this@RestaurantProfile, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@RestaurantProfile, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: java.lang.Exception) {}
 
         val restoId = intent.getIntExtra("resto", 0)
         val localBranch  = localData.getRestaurant(restoId)

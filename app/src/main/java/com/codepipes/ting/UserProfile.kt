@@ -82,9 +82,11 @@ class UserProfile : AppCompatActivity() {
         supportActionBar!!.title = ""
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimaryDark)))
 
-        val upArrow = ContextCompat.getDrawable(this@UserProfile, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@UserProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@UserProfile, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@UserProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: Exception) {}
 
         mUserProfileName = findViewById<TextView>(R.id.userProfileName) as TextView
         mUserProfileAddress = findViewById<TextView>(R.id.userProfileAddress) as TextView

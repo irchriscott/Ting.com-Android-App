@@ -36,10 +36,6 @@ class TingDotCom : AppCompatActivity() {
                 changeFragment(RestaurantsFragment())
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.moments_item_menu -> {
-                changeFragment(MomentsFragment())
-                return@OnNavigationItemSelectedListener true
-            }
             R.id.user_menu_item_menu -> {
                 val mUserMenu = UserMenuFragment()
                 mUserMenu.show(supportFragmentManager, mUserMenu.tag)

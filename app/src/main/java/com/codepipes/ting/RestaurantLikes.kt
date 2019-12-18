@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_restaurant_likes.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
+import java.lang.Exception
 import java.text.NumberFormat
 import java.time.Duration
 import java.util.ArrayList
@@ -64,9 +65,11 @@ class RestaurantLikes : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = "Restaurant Likes".toUpperCase()
 
-        val upArrow = ContextCompat.getDrawable(this@RestaurantLikes, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantLikes, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@RestaurantLikes, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@RestaurantLikes, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: Exception) {}
 
         branchId = intent.getIntExtra("resto", 0)
         val apiGet = intent.getStringExtra("apiGet")

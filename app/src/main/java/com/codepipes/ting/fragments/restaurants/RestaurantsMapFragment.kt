@@ -197,7 +197,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "DefaultLocale")
     override fun onMapReady(googleMap: GoogleMap) {
 
         mMap = googleMap
@@ -237,7 +237,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             if(mUtilFunctions.checkLocationPermissions()){
                 try {
                     fusedLocationClient.lastLocation.addOnSuccessListener {
-                        this.getLocation(it)
+                        if(it != null) { this.getLocation(it) }
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
                             TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)

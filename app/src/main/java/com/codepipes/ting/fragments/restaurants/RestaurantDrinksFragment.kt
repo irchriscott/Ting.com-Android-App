@@ -80,7 +80,6 @@ class RestaurantDrinksFragment : Fragment() {
             view.empty_data.visibility = View.VISIBLE
             view.empty_data.empty_image.setImageResource(R.drawable.ic_glass_gray)
             view.empty_data.empty_text.text = "No Menu Drink To Show"
-            TingToast(context!!, "No Menu Drink To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
         }
     }
 

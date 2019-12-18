@@ -58,6 +58,7 @@
         <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
         <item name="android:actionMenuTextAppearance">@style/AppTheme.ActionBar.Menu.TextStyle</item>
+
         <item name="actionMenuTextColor">@color/colorPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorPrimary</item>
         <item name="android:itemTextAppearance">@font/poppins_semi_bold</item>

@@ -2,7 +2,7 @@ package com.codepipes.ting.utils
 
 class Routes {
 
-    public val HOST_END_POINT: String              = "http://192.168.43.138:8000"
+    public val HOST_END_POINT: String              = "http://10.0.2.2:8000"
     private val END_POINT: String           = "${HOST_END_POINT}/api/v1/"
     public val UPLOAD_END_POINT: String     = "${HOST_END_POINT}/tinguploads/"
 
