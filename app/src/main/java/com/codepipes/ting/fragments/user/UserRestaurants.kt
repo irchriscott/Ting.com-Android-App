@@ -73,7 +73,7 @@ class UserRestaurants : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showRestaurants(restos: MutableList<UserRestaurant>, view: View){
+    private fun showRestaurants(restos: MutableList<UserRestaurant>?, view: View){
         view.shimmerLoader.stopShimmer()
         view.shimmerLoader.visibility = View.GONE
         if(!restos.isNullOrEmpty()){
@@ -122,7 +122,7 @@ class UserRestaurants : Fragment() {
                 val dataString = response.body()!!.string()
                 user = gson.fromJson(dataString, User::class.java)
                 activity?.runOnUiThread{
-                    showRestaurants(user.restaurants?.restaurants!!.toMutableList(), view)
+                    showRestaurants(user.restaurants?.restaurants?.toMutableList(), view)
                 }
             }
         })

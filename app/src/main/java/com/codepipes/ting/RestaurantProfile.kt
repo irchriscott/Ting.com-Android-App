@@ -167,7 +167,7 @@ class RestaurantProfile : AppCompatActivity() {
         mUserProfileImage = findViewById<CircleImageView>(R.id.userProfileImage) as CircleImageView
 
         mUserProfileName.text = "${branch.restaurant?.name}, ${branch.name}"
-        mUserProfileAddress.text = "${branch.town}, ${branch.country}"
+        mUserProfileAddress.text = branch.address
         Picasso.get().load(branch.restaurant?.logoURL()).into(mUserProfileImage)
         restaurant_rating.rating = branch.reviews?.average!!
 
