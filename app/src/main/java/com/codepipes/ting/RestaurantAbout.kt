@@ -73,33 +73,33 @@ class RestaurantAbout : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showRestaurantProfile(_branch: Branch){
-        restaurant_name.text = ": ${_branch.restaurant?.name}"
-        restaurant_branch.text = ": ${_branch.name}"
-        restaurant_address.text = ": ${_branch.town}, ${_branch.country}"
-        restaurant_open_close.text = ": ${_branch.restaurant?.opening} - ${_branch.restaurant?.closing}"
-        restaurant_motto.text = ": ${_branch.restaurant?.motto}"
+        restaurant_name.text = _branch.restaurant?.name
+        restaurant_branch.text = _branch.name
+        restaurant_address.text = "${_branch.town}, ${_branch.country}"
+        restaurant_open_close.text = "${_branch.restaurant?.opening} - ${_branch.restaurant?.closing}"
+        restaurant_motto.text = _branch.restaurant?.motto
 
-        restaurant_email.text = ": ${_branch.email}"
-        restaurant_phone.text = ": ${_branch.phone}"
-        restaurant_full_address.text = ": ${_branch.address}"
+        restaurant_email.text = _branch.email
+        restaurant_phone.text = _branch.phone
+        restaurant_full_address.text = _branch.address
 
-        restaurant_foods.text = ": ${_branch.menus.type.foods.count} Foods"
-        restaurant_drinks.text = ": ${_branch.menus.type.drinks} Drinks"
-        restaurant_dishes.text = ": ${_branch.menus.type.dishes} Dishes"
-        restaurant_likes.text = ": ${_branch.likes?.count} Likes"
-        restaurant_reviews.text = ": ${_branch.reviews?.count} Reviews"
+        restaurant_foods.text = _branch.menus.type.foods.count.toString()
+        restaurant_drinks.text = _branch.menus.type.drinks.toString()
+        restaurant_dishes.text = _branch.menus.type.dishes.toString()
+        restaurant_likes.text = _branch.likes?.count.toString()
+        restaurant_reviews.text = _branch.reviews?.count.toString()
         review_rating.rating = _branch.reviews?.average!!
 
-        restaurant_currency.text = ": ${_branch.restaurant?.config?.currency}"
-        restaurant_vat.text = ": ${_branch.restaurant?.config?.tax} %"
-        restaurant_late_reservation.text = ": ${_branch.restaurant?.config?.cancelLateBooking} minutes"
-        restaurant_reservation_with_advance.text = if(_branch.restaurant?.config?.bookWithAdvance!!){ ": YES"} else { ": NO" }
-        restaurant_reservation_advance.text = if(_branch.restaurant.config.bookWithAdvance){ ": ${_branch.restaurant.config.bookingAdvance} ${_branch.restaurant.config.currency}"} else { ": -" }
-        restaurant_refund_after_cancelation.text = if(_branch.restaurant.config.bookingCancelationRefund) { ": YES" } else { ": NO" }
-        restaurant_booking_payment_mode.text = ": ${_branch.restaurant.config.bookingPaymentMode}"
-        restaurant_days_before_booking.text = ": ${_branch.restaurant.config.daysBeforeReservation} Days"
-        restaurant_can_take_away.text = if(_branch.restaurant.config.canTakeAway) { ": YES" } else { ": NO" }
-        restaurant_pay_before.text = if(_branch.restaurant.config.userShouldPayBefore) { ": YES" } else { ": NO" }
+        restaurant_currency.text = _branch.restaurant?.config?.currency
+        restaurant_vat.text = "${_branch.restaurant?.config?.tax} %"
+        restaurant_late_reservation.text = "${_branch.restaurant?.config?.cancelLateBooking} minutes"
+        restaurant_reservation_with_advance.text = if(_branch.restaurant?.config?.bookWithAdvance!!){ "YES"} else { "NO" }
+        restaurant_reservation_advance.text = if(_branch.restaurant.config.bookWithAdvance){ "${_branch.restaurant.config.currency} ${_branch.restaurant.config.bookingAdvance}"} else { "-" }
+        restaurant_refund_after_cancelation.text = if(_branch.restaurant.config.bookingCancelationRefund) { "YES" } else { "NO" }
+        restaurant_booking_payment_mode.text = _branch.restaurant.config.bookingPaymentMode
+        restaurant_days_before_booking.text = "${_branch.restaurant.config.daysBeforeReservation} Days"
+        restaurant_can_take_away.text = if(_branch.restaurant.config.canTakeAway) { "YES" } else { "NO" }
+        restaurant_pay_before.text = if(_branch.restaurant.config.userShouldPayBefore) { "YES" } else { "NO" }
     }
 
     @SuppressLint("DefaultLocale")
