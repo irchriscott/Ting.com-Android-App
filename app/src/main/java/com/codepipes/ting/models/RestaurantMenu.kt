@@ -30,6 +30,7 @@ class Menu (
     val branch: Branch?,
     val name: String,
     val category: FoodCategory?,
+    val cuisine: RestaurantCategory?,
     val dishTimeId: Int?,
     val dishTime: String?,
     val foodType: String?,

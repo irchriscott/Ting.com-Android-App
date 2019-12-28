@@ -16,6 +16,7 @@ class Branch (
     val email: String,
     val phone: String,
     val isAvailable: Boolean,
+    val categories: RestaurantCategories,
     val tables: BranchTables,
     val specials: List<BranchSpecial>,
     val menus: BranchMenus,
