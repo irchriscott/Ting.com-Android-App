@@ -303,9 +303,15 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         if (menu.type.id != 2) {
             menu_subcategory_name.text = menu.menu.category?.name
+            menu_cuisine_name.text = menu.menu.cuisine?.name
             Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}")
                 .into(menu_subcategory_image)
-        } else { menu_subcategory.visibility = View.GONE }
+            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}")
+                .into(menu_cuisine_image)
+        } else {
+            menu_subcategory.visibility = View.GONE
+            menu_cuisine_view.visibility = View.GONE
+        }
 
         menu_type_name.text = menu.type.name.capitalize()
         menu_new_price.text =

@@ -28,7 +28,7 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
         savedInstanceState?.clear()
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,10 +47,14 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
 
         if(menu.foodType != null || menu.dishTime != null){
             view.menu_subcategory_name.text = menu.category?.name
+            view.menu_cuisine_name.text = menu.cuisine?.name
             Picasso.get().load("${Routes().HOST_END_POINT}${menu.category?.image}").into(view.menu_subcategory_image)
-        } else { view.menu_subcategory.visibility = View.GONE }
+            Picasso.get().load("${Routes().HOST_END_POINT}${menu.cuisine?.image}").into(view.menu_cuisine_image)
+        } else {
+            view.menu_subcategory.visibility = View.GONE
+            view.menu_cuisine_view.visibility = View.GONE
+        }
 
-        view.menu_type_name.text = menu.name.capitalize()
         view.menu_new_price.text = "${menu.currency} ${NumberFormat.getNumberInstance().format(menu.price)}".toUpperCase()
         if(menu.price != menu.lastPrice){
             view.menu_old_price.text = "${menu.currency} ${NumberFormat.getNumberInstance().format(menu.lastPrice)}".toUpperCase()
@@ -60,6 +64,7 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
 
         if(menu.foodType != null){
             view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_spoon_gray))
+            view.menu_type_name.text = "Food"
             view.menu_category_name.text = menu.foodType
             if(menu.isCountable){ view.menu_quantity.text = "${menu.quantity} pieces / packs" }
             else { view.menu_quantity.visibility = View.GONE }
@@ -68,6 +73,7 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
         if(menu.drinkType != null){
             view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_glass_gray))
             view.menu_category_name.text = menu.drinkType
+            view.menu_type_name.text = "Drink"
             if(menu.isCountable){ view.menu_quantity.text = "${menu.quantity} cups / bottles" }
             else { view.menu_quantity.visibility = View.GONE }
         }
@@ -76,6 +82,7 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
             view.menu_type_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_fork_knife_gray))
             view.menu_category_image.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_clock_gray_24dp))
             view.menu_category_name.text = menu.dishTime
+            view.menu_type_name.text = "Dish"
             if(menu.isCountable){ view.menu_quantity.text = "${menu.quantity} plates / packs" }
             else { view.menu_quantity.visibility = View.GONE }
         }

@@ -404,6 +404,38 @@
 
                                 </LinearLayout>
 
+                                <LinearLayout
+                                        android:id="@+id/menu_cuisine_view"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:paddingRight="8dp"
+                                        android:layout_marginStart="8dp"
+                                        android:background="@drawable/background_labeled_button"
+                                        tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
+
+                                    <ImageView
+                                            android:id="@+id/menu_cuisine_image"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="24dp"
+                                            android:adjustViewBounds="true"
+                                            android:scaleType="fitCenter"
+                                            android:src="@drawable/default_restaurant"
+                                            tools:ignore="ContentDescription"/>
+
+                                    <TextView
+                                            android:id="@+id/menu_cuisine_name"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="2dp"
+                                            android:layout_marginStart="5dp"
+                                            android:text="Chicken"
+                                            android:fontFamily="@font/poppins_medium"
+                                            android:textSize="12sp"
+                                            android:textColor="@color/colorGray"
+                                            tools:ignore="HardcodedText"/>
+
+                                </LinearLayout>
+
                             </LinearLayout>
 
                             <View

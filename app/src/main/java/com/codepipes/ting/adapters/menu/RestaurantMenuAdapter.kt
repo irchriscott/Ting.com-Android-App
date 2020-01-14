@@ -60,6 +60,8 @@ class RestaurantMenuAdapter (private val menus: MutableList<RestaurantMenu>, val
                 holder.view.menu_type_name.text = menu.menu.foodType
                 holder.view.menu_category_name.text = menu.menu.category?.name
                 Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
+                holder.view.menu_cuisine_name.text = menu.menu.cuisine?.name
+                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} pieces / packs"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
@@ -67,6 +69,7 @@ class RestaurantMenuAdapter (private val menus: MutableList<RestaurantMenu>, val
             2 -> {
                 holder.view.menu_type_name.text = menu.menu.drinkType
                 holder.view.menu_category_view.visibility = View.GONE
+                holder.view.menu_cuisine_view.visibility = View.GONE
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} cups / bottles"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
@@ -76,6 +79,8 @@ class RestaurantMenuAdapter (private val menus: MutableList<RestaurantMenu>, val
                 holder.view.menu_category_name.text = menu.menu.category?.name
                 Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
                 holder.view.menu_type_name.text = menu.menu.dishTime
+                holder.view.menu_cuisine_name.text = menu.menu.cuisine?.name
+                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} plates / packs"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
