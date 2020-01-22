@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.codepipes.ting.models.Branch
-import com.codepipes.ting.models.MenuPromotion
-import com.codepipes.ting.models.RestaurantMenu
-import com.codepipes.ting.models.User
+import com.codepipes.ting.models.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -28,6 +25,7 @@ class LocalData (
     private val DISHES_SHARED_PREFERENCES_KEY = "dishes_"
 
     private val USERS_SHARED_PREFERENCES_KEY = "users"
+    private val CUISINES_SHARED_PREFERENCES_KEY = "cuisines"
 
     public fun saveRestaurants(data: String){
         this.sharedPreferencesEditor.putString(RESTAURANTS_SHARED_PREFERENCES_KEY, data)
@@ -147,5 +145,16 @@ class LocalData (
         users.forEach { if(it.id == user.id) users.remove(it) }
         users.add(user)
         this.saveUsers(gson.toJson(users))
+    }
+
+    public fun saveCuisines(data: String) {
+        this.sharedPreferencesEditor.putString(CUISINES_SHARED_PREFERENCES_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun getCuisines(): MutableList<RestaurantCategory> {
+        val usersString = this.sharedPreferences.getString(CUISINES_SHARED_PREFERENCES_KEY, "[]")
+        return gson.fromJson<MutableList<RestaurantCategory>>(usersString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
     }
 }

@@ -5,7 +5,13 @@ class RestaurantMenu (
     val type: MenuType,
     val urls: MenuUrls,
     val url: String,
+    val restaurant: RestaurantAbout,
     val menu: Menu
+){}
+
+class RestaurantAbout (
+   val name: String,
+   val logo: String
 ){}
 
 class MenuType (

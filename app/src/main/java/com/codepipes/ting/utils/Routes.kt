@@ -25,4 +25,9 @@ class Routes {
     //RESTAURANTS
     val restaurantsGlobal: String           = "${END_POINT}usr/g/restaurants/all/"
     val restaurantGet: String               = "${END_POINT}usr/g/restaurants/get/"
+
+    //CUISINES
+    val cuisinesGlobal: String              = "${END_POINT}usr/g/cuisines/all/"
+    val cuisineRestaurants: String          = "${END_POINT}usr/g/cuisine/r/"
+    val cuisineMenus: String                = "${END_POINT}usr/g/cuisine/m/"
 }

@@ -188,9 +188,7 @@ class RestaurantProfile : AppCompatActivity() {
 
         val menuList = mutableListOf<String>()
         menuList.add("Current Location")
-        session.addresses?.addresses!!.forEach {
-            menuList.add("${it.type} - ${it.address}")
-        }
+        session.addresses?.addresses!!.forEach { menuList.add("${it.type} - ${it.address}") }
 
         restaurant_distance_view.setOnClickListener {
             val cx = (it.x + it.width / 2).toInt()

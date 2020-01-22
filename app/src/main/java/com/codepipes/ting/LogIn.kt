@@ -105,6 +105,7 @@ class LogIn : AppCompatActivity() {
         }
 
         mSignInWithGoogleButton.setOnClickListener{
+            mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
             if (mUtilFunctions.isConnectedToInternet() && mUtilFunctions.isConnected()) {
                 mGoogleSignInClient.signOut()
                 val signInIntent = mGoogleSignInClient.signInIntent
@@ -140,7 +141,7 @@ class LogIn : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    mProgressOverlay.dismiss()
+                    if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                     TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
@@ -151,7 +152,7 @@ class LogIn : AppCompatActivity() {
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
                     runOnUiThread {
-                        mProgressOverlay.dismiss()
+                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                         if (serverResponse.status == 200){
                             val successDialog = SuccessOverlay()
                             val args: Bundle = Bundle()
@@ -175,7 +176,7 @@ class LogIn : AppCompatActivity() {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        mProgressOverlay.dismiss()
+                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                         TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
@@ -214,7 +215,7 @@ class LogIn : AppCompatActivity() {
                         val geocoder = Geocoder(this@LogIn, Locale.getDefault())
                         val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
-                        mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                        if(!mProgressOverlay.dialog.isShowing) {  mProgressOverlay.show(fragmentManager, mProgressOverlay.tag) }
                         val idToken = mUtilFunctions.getToken(512)
                         val url = this.routes.submitGoogleSignUp
 
@@ -240,7 +241,7 @@ class LogIn : AppCompatActivity() {
                         client.newCall(request).enqueue(object : Callback {
                             override fun onFailure(call: Call, e: IOException) {
                                 runOnUiThread {
-                                    mProgressOverlay.dismiss()
+                                    if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                                     TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                 }
                             }
@@ -251,7 +252,7 @@ class LogIn : AppCompatActivity() {
                                 try{
                                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
                                     runOnUiThread {
-                                        mProgressOverlay.dismiss()
+                                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                                         if (serverResponse.status == 200){
                                             val successDialog = SuccessOverlay()
                                             val args: Bundle = Bundle()
@@ -275,7 +276,7 @@ class LogIn : AppCompatActivity() {
                                     }
                                 } catch (e: Exception){
                                     runOnUiThread {
-                                        mProgressOverlay.dismiss()
+                                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                                         TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                     }
                                 }
@@ -284,7 +285,7 @@ class LogIn : AppCompatActivity() {
                         })
                     } else {
                         runOnUiThread {
-                            mProgressOverlay.dismiss()
+                            if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
                             TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     }

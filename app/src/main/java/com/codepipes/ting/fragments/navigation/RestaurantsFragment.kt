@@ -1,7 +1,6 @@
 package com.codepipes.ting.fragments.navigation
 
 
-import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
@@ -10,30 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
-import android.R.attr.start
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
-import android.content.DialogInterface
-import android.view.ViewAnimationUtils
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.widget.Toast
+import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
 import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.ActionSheetCallBack
-import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
+import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.APILoadGlobalRestaurants
 import com.codepipes.ting.providers.LocalData
@@ -46,12 +37,12 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
+import kotlinx.android.synthetic.main.fragment_restaurants.*
+import kotlinx.android.synthetic.main.fragment_restaurants.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
-import java.time.Duration
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
@@ -88,7 +79,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState?.clear()
     }
 
-    @SuppressLint("SetTextI18n", "NewApi", "MissingPermission")
+    @SuppressLint("SetTextI18n", "NewApi", "MissingPermission", "DefaultLocale")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -129,11 +120,25 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mOpenRestaurantMapButton.isClickable = false
 
+        view.cuisines_shimmer.startShimmer()
+        view.shimmer_loader.startShimmer()
+
+        val cuisines = mLocalData.getCuisines()
+
+        if(!cuisines.isNullOrEmpty()) {
+            view.cuisines_recycler_view.visibility = View.VISIBLE
+            view.cuisines_shimmer.stopShimmer()
+            view.cuisines_shimmer.visibility = View.GONE
+            val layoutManager = LinearLayoutManager(context)
+            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+            view.cuisines_recycler_view.layoutManager = layoutManager
+            view.cuisines_recycler_view.adapter =
+                CuisinesAdapter(cuisines.shuffled().toMutableList())
+        } else { this.getCuisines() }
+
         val menuList = mutableListOf<String>()
         menuList.add("Current Location")
-        session.addresses?.addresses!!.forEach {
-            menuList.add("${it.type} - ${it.address}")
-        }
+        session.addresses?.addresses!!.forEach { menuList.add("${it.type} - ${it.address}") }
 
         mOpenRestaurantMapButton.setOnLongClickListener {
             val actionSheet = ActionSheet(context!!, menuList)
@@ -266,6 +271,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     mRestaurantsRecyclerView.visibility = View.GONE
                     mProgressLoader.visibility = View.GONE
                     mEmptyDataView.visibility = View.VISIBLE
+                    shimmer_loader.stopShimmer()
+                    shimmer_loader.visibility = View.GONE
                     mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                     mEmptyDataView.empty_text.text = "No Restaurant To Show"
                     TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
@@ -309,6 +316,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
+                                    shimmer_loader.stopShimmer()
+                                    shimmer_loader.visibility = View.GONE
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
                                 }.addOnFailureListener {
@@ -325,6 +334,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
+                                    shimmer_loader.stopShimmer()
+                                    shimmer_loader.visibility = View.GONE
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
                                     TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
@@ -335,10 +346,47 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         mRestaurantsRecyclerView.visibility = View.GONE
                         mProgressLoader.visibility = View.GONE
                         mEmptyDataView.visibility = View.VISIBLE
+                        shimmer_loader.stopShimmer()
+                        shimmer_loader.visibility = View.GONE
                         mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                         mEmptyDataView.empty_text.text = "No Restaurant To Show"
                         TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
                     }
+                }
+            }
+        })
+    }
+
+    private fun getCuisines() {
+        val url = routes.cuisinesGlobal
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+
+        val request = Request.Builder().url(url).get().build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                activity.runOnUiThread {}
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val dataString = response.body()!!.string()
+                val cuisines = gson.fromJson<MutableList<RestaurantCategory>>(dataString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
+
+                activity.runOnUiThread{
+                    mLocalData.saveCuisines(dataString)
+                    cuisines_shimmer.stopShimmer()
+                    cuisines_shimmer.visibility = View.GONE
+                    cuisines_recycler_view.visibility = View.VISIBLE
+
+                    val layoutManager = LinearLayoutManager(context)
+                    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    cuisines_recycler_view.layoutManager = layoutManager
+                    cuisines_recycler_view.adapter =
+                        CuisinesAdapter(cuisines.shuffled().toMutableList())
                 }
             }
         })

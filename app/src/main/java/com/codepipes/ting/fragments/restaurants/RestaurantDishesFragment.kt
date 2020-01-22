@@ -126,7 +126,6 @@ class RestaurantDishesFragment : Fragment() {
         Bridge.clear(this)
     }
 
-
     companion object {
 
         fun newInstance(resto: String) =

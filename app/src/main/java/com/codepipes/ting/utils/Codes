@@ -74,3 +74,47 @@ private fun addFragment(v: View) {
 //        super.onSaveInstanceState(outState)
 //        outState.putString("promos", gson.toJson(promotions))
 //    }
+
+
+<RelativeLayout
+                        android:background="@drawable/background_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+
+                    <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:paddingBottom="30dp">
+
+                        <TextView
+                                android:id="@+id/restaurants_text"
+                                android:text="@string/global_restaurants"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorWhite"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_thin"
+                                android:textSize="35sp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                                android:id="@+id/restaurants_sub_text"
+                                android:text="@string/global_restaurant_sub"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:layout_centerInParent="true"
+                                android:textAlignment="center"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/restaurants_text"/>
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </RelativeLayout>
