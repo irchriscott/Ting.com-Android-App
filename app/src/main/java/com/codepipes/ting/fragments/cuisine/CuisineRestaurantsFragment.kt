@@ -72,6 +72,12 @@ class CuisineRestaurantsFragment : Fragment() {
         view.shimmer_loader.startShimmer()
         this.loadRestaurants(view)
 
+        view.refresh_cuisine_restaurants.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
+        view.refresh_cuisine_restaurants.setOnRefreshListener {
+            view.refresh_cuisine_restaurants.isRefreshing = true
+            this.loadRestaurants(view)
+        }
+
         return view
     }
 
@@ -91,8 +97,12 @@ class CuisineRestaurantsFragment : Fragment() {
                 activity?.runOnUiThread {
                     view.shimmer_loader.stopShimmer()
                     view.shimmer_loader.visibility = View.GONE
+
                     view.cuisine_restaurants.visibility = View.GONE
                     view.empty_data.visibility = View.VISIBLE
+
+                    view.refresh_cuisine_restaurants.isRefreshing = false
+
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                     view.empty_data.empty_text.text = "No Restaurant To Show"
                 }
@@ -106,8 +116,12 @@ class CuisineRestaurantsFragment : Fragment() {
                         if (branches.size > 0) {
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
+
                             view.cuisine_restaurants.visibility = View.VISIBLE
                             view.empty_data.visibility = View.GONE
+
+                            view.refresh_cuisine_restaurants.isRefreshing = false
+
                             if(mUtilFunctions.checkLocationPermissions()){
                                 try {
                                     fusedLocationClient.lastLocation.addOnSuccessListener {
@@ -148,8 +162,12 @@ class CuisineRestaurantsFragment : Fragment() {
                         } else {
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
+
                             view.cuisine_restaurants.visibility = View.GONE
                             view.empty_data.visibility = View.VISIBLE
+
+                            view.refresh_cuisine_restaurants.isRefreshing = false
+
                             view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                             view.empty_data.empty_text.text = "No Restaurant To Show"
                         }
@@ -158,8 +176,12 @@ class CuisineRestaurantsFragment : Fragment() {
                     activity?.runOnUiThread {
                         view.shimmer_loader.stopShimmer()
                         view.shimmer_loader.visibility = View.GONE
+
                         view.cuisine_restaurants.visibility = View.GONE
                         view.empty_data.visibility = View.VISIBLE
+
+                        view.refresh_cuisine_restaurants.isRefreshing = false
+
                         view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                         view.empty_data.empty_text.text = "No Restaurant To Show"
                     }

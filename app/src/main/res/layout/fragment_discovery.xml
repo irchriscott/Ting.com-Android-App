@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragments.navigation.DiscoveryFragment">
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".fragments.navigation.DiscoveryFragment">
 
+        <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+            <TextView
+                    android:id="@+id/restaurant_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Recommended Restaurants"
+                    android:textAllCaps="true"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="HardcodedText" />
+
+            <com.codepipes.ting.carouselview.CarouselView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_label"
+                    app:enableSnapping="true"
+                    app:scaleOnScroll="false"
+                    app:carouselOffset="center"
+                    app:indicatorAnimationType="drop"
+                    app:indicatorRadius="5"
+                    app:indicatorPadding="5"
+                    app:indicatorSelectedColor="@color/colorPrimary"
+                    app:indicatorUnselectedColor="@color/colorLightGray"
+                    app:size="10"
+                    app:spacing="10"
+                    app:resource="@layout/row_restaurant_carousel"/>
+
+        </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

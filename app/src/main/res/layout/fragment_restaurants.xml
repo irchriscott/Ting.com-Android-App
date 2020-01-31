@@ -36,7 +36,7 @@
                             android:text="Cuisines"
                             android:textAllCaps="true"
                             android:fontFamily="@font/poppins_medium"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             tools:ignore="HardcodedText" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout

@@ -24,4 +24,7 @@
     <color name="titleTabColor">@color/colorVeryLightGray</color>
     <color name="titleSelectedTabColor">@color/colorWhite</color>
     <color name="fabColor">@color/colorPrimary</color>
+
+    <color name="selected">#212121</color>
+    <color name="unselected">#9E9E9E</color>
 </resources>

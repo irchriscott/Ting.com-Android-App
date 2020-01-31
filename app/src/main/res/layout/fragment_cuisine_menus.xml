@@ -8,39 +8,58 @@
         tools:context=".fragments.cuisine.CuisineMenusFragment">
 
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_loader"
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_cuisine_menus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:shimmer_auto_start="true"
-            app:shimmer_highlight_color="@color/colorVeryLightGray"
-            app:shimmer_base_alpha="0.6">
+            android:layout_height="match_parent">
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <include layout="@layout/row_list_shimmer" />
-            <include layout="@layout/row_list_shimmer" />
-            <include layout="@layout/row_list_shimmer" />
-            <include layout="@layout/row_list_shimmer" />
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-        </LinearLayout>
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/shimmer_loader"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/cuisine_menus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
+                                <include layout="@layout/row_list_shimmer" />
+                                <include layout="@layout/row_list_shimmer" />
+                                <include layout="@layout/row_list_shimmer" />
+                                <include layout="@layout/row_list_shimmer" />
 
-    <include
-            android:id="@+id/empty_data"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            layout="@layout/include_empty_data" />
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/cuisine_menus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
+
+                        <include
+                                android:id="@+id/empty_data"
+                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                android:visibility="gone"
+                                layout="@layout/include_empty_data" />
+
+                    </RelativeLayout>
+
+            </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

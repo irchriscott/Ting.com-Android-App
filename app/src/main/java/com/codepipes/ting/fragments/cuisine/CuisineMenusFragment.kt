@@ -68,6 +68,12 @@ class CuisineMenusFragment : Fragment() {
         view.shimmer_loader.startShimmer()
         this.loadMenus(view)
 
+        view.refresh_cuisine_menus.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
+        view.refresh_cuisine_menus.setOnRefreshListener {
+            view.refresh_cuisine_menus.isRefreshing = true
+            this.loadMenus(view)
+        }
+
         return view
     }
 
@@ -98,8 +104,12 @@ class CuisineMenusFragment : Fragment() {
                 activity?.runOnUiThread {
                     view.shimmer_loader.stopShimmer()
                     view.shimmer_loader.visibility = View.GONE
+
                     view.cuisine_menus.visibility = View.GONE
                     view.empty_data.visibility = View.VISIBLE
+
+                    view.refresh_cuisine_menus.isRefreshing = false
+
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
                     view.empty_data.empty_text.text = "No Menu To Show"
                 }
@@ -113,15 +123,23 @@ class CuisineMenusFragment : Fragment() {
                         if (menus.size > 0) {
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
+
                             view.cuisine_menus.visibility = View.VISIBLE
                             view.empty_data.visibility = View.GONE
+
+                            view.refresh_cuisine_menus.isRefreshing = false
+
                             view.cuisine_menus.layoutManager = LinearLayoutManager(context)
                             view.cuisine_menus.adapter = CuisineMenusAdapter(menus)
                         } else {
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
+
                             view.cuisine_menus.visibility = View.GONE
                             view.empty_data.visibility = View.VISIBLE
+
+                            view.refresh_cuisine_menus.isRefreshing = false
+
                             view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                             view.empty_data.empty_text.text = "No Menu To Show"
                         }
@@ -130,8 +148,12 @@ class CuisineMenusFragment : Fragment() {
                     activity?.runOnUiThread {
                         view.shimmer_loader.stopShimmer()
                         view.shimmer_loader.visibility = View.GONE
+
                         view.cuisine_menus.visibility = View.GONE
                         view.empty_data.visibility = View.VISIBLE
+
+                        view.refresh_cuisine_menus.isRefreshing = false
+
                         view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                         view.empty_data.empty_text.text = "No Menu To Show"
                     }

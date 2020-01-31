@@ -79,7 +79,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState?.clear()
     }
 
-    @SuppressLint("SetTextI18n", "NewApi", "MissingPermission", "DefaultLocale")
+    @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -224,7 +224,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mEmptyDataView = view.findViewById<View>(R.id.empty_data) as View
         mRefreshRestaurant = view.findViewById<SwipeRefreshLayout>(R.id.refresh_restaurants) as SwipeRefreshLayout
 
-        mRefreshRestaurant.setColorSchemeColors(context!!.getColor(R.color.colorPrimary), context!!.getColor(R.color.colorAccentMain), context!!.getColor(R.color.colorPrimaryDark), context!!.getColor(R.color.colorAccentMain))
+        mRefreshRestaurant.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
         mRefreshRestaurant.setOnRefreshListener(this)
 
         if(isAsync){
