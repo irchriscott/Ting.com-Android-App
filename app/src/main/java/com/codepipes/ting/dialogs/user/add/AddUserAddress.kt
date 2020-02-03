@@ -104,13 +104,19 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
                     val geocoder = Geocoder(activity, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    activity!!.runOnUiThread {
-                        mSearchAddressInput.setText(addresses[0].getAddressLine(0))
-                        newAddress["address"] = addresses[0].getAddressLine(0)
-                        newAddress["longitude"] = it.longitude.toString()
-                        newAddress["latitude"] = it.latitude.toString()
-                        newAddress["type"] = UtilData().addressType[0]
+                    if(it != null) {
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        activity!!.runOnUiThread {
+                            mSearchAddressInput.setText(addresses[0].getAddressLine(0))
+                            newAddress["address"] = addresses[0].getAddressLine(0)
+                            newAddress["longitude"] = it.longitude.toString()
+                            newAddress["latitude"] = it.latitude.toString()
+                            newAddress["type"] = UtilData().addressType[0]
+                        }
+                    } else {
+                        activity!!.runOnUiThread {
+                            TingToast(context!!, context?.resources!!.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
@@ -165,8 +171,10 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
         if(mUtilFunctions.checkLocationPermissions()){
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
-                    mMap.clear()
-                    this.getLocation(it)
+                    if(it != null) {
+                        mMap.clear()
+                        this.getLocation(it)
+                    } else { TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
                         TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)

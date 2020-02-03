@@ -16,8 +16,8 @@ import android.widget.FrameLayout;
 import com.codepipes.ting.R;
 import com.codepipes.ting.carouselview.enums.IndicatorAnimationType;
 import com.codepipes.ting.carouselview.enums.OffsetType;
-import com.rd.PageIndicatorView;
-import com.rd.animation.type.AnimationType;
+import com.codepipes.ting.pageindicatorview.PageIndicatorView;
+import com.codepipes.ting.pageindicatorview.animation.type.AnimationType;
 
 public class CarouselView extends FrameLayout {
 

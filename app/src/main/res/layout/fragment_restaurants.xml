@@ -23,34 +23,36 @@
                     android:layout_height="wrap_content">
 
                 <RelativeLayout
+                        android:id="@+id/cuisines_view"
                         android:layout_width="match_parent"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_height="180dp">
+                        android:layout_height="wrap_content">
 
                     <TextView
+                            android:id="@+id/cuisines_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cuisines"
-                            android:textAllCaps="true"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textSize="15sp"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="@color/colorDarkGray"
+                            android:textSize="23sp"
                             tools:ignore="HardcodedText" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout
                                 android:id="@+id/cuisines_shimmer"
                                 android:layout_width="wrap_content"
-                                android:layout_height="150dp"
-                                android:layout_marginTop="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cuisines_label"
                                 app:shimmer_auto_start="true"
                                 app:shimmer_highlight_color="@color/colorVeryLightGray"
                                 app:shimmer_base_alpha="0.6">
 
                                 <LinearLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:orientation="horizontal">
 
                                         <include layout="@layout/row_cuisine_shimmer"/>
@@ -62,12 +64,11 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-
                         <android.support.v7.widget.RecyclerView
                                 android:id="@+id/cuisines_recycler_view"
                                 android:layout_width="wrap_content"
-                                android:layout_marginTop="30dp"
-                                android:layout_height="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cuisines_label"
                                 android:visibility="gone"/>
 
                 </RelativeLayout>
@@ -76,14 +77,16 @@
                         android:id="@+id/restaurants_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="188dp"
+                        android:layout_below="@id/cuisines_view"
+                        android:layout_marginTop="12dp"
                         android:visibility="gone"/>
 
                 <include
                         android:id="@+id/progress_loader"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        android:layout_marginTop="200dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@id/cuisines_view"
                         android:visibility="gone"
                         layout="@layout/include_progress_loader" />
 
@@ -91,7 +94,8 @@
                         android:id="@+id/shimmer_loader"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="190dp"
+                        android:layout_below="@id/cuisines_view"
+                        android:layout_marginTop="12dp"
                         app:shimmer_auto_start="true"
                         app:shimmer_highlight_color="@color/colorVeryLightGray"
                         app:shimmer_base_alpha="0.6">
@@ -113,7 +117,8 @@
                         android:id="@+id/empty_data"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
-                        android:layout_marginTop="200dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_below="@id/cuisines_view"
                         android:visibility="gone"
                         layout="@layout/include_empty_data" />
 

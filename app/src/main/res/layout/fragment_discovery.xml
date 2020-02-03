@@ -7,41 +7,175 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragments.navigation.DiscoveryFragment">
 
-        <android.support.constraint.ConstraintLayout
+        <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent">
 
-            <TextView
-                    android:id="@+id/restaurant_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="Recommended Restaurants"
-                    android:textAllCaps="true"
-                    android:fontFamily="@font/poppins_medium"
-                    android:textSize="15sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="HardcodedText" />
-
-            <com.codepipes.ting.carouselview.CarouselView
+            <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/restaurant_label"
-                    app:enableSnapping="true"
-                    app:scaleOnScroll="false"
-                    app:carouselOffset="center"
-                    app:indicatorAnimationType="drop"
-                    app:indicatorRadius="5"
-                    app:indicatorPadding="5"
-                    app:indicatorSelectedColor="@color/colorPrimary"
-                    app:indicatorUnselectedColor="@color/colorLightGray"
-                    app:size="10"
-                    app:spacing="10"
-                    app:resource="@layout/row_restaurant_carousel"/>
+                    android:layout_height="wrap_content">
 
-        </android.support.constraint.ConstraintLayout>
+                <RelativeLayout
+                        android:id="@+id/discover_recommended_restaurants_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                            android:id="@+id/restaurant_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="Recommended Restaurants"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="@color/colorDarkGray"
+                            android:textSize="23sp"
+                            tools:ignore="HardcodedText" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/discover_restaurants_shimmer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/restaurant_label"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            app:shimmer_auto_start="true"
+                            app:shimmer_highlight_color="@color/colorVeryLightGray"
+                            app:shimmer_base_alpha="0.6">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <include layout="@layout/row_discover_restaurant_shimmer" />
+                                    <include layout="@layout/row_discover_restaurant_shimmer" />
+
+                            </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <com.codepipes.ting.carouselview.CarouselView
+                            android:id="@+id/discover_restaurants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/restaurant_label"
+                            android:visibility="gone"
+                            app:enableSnapping="true"
+                            app:scaleOnScroll="true"
+                            app:carouselOffset="center"
+                            app:indicatorAnimationType="drop"
+                            app:indicatorRadius="5"
+                            app:indicatorPadding="5"
+                            app:indicatorSelectedColor="@color/colorPrimary"
+                            app:indicatorUnselectedColor="@color/colorLightGray"
+                            app:spacing="10"
+                            app:resource="@layout/row_discover_restaurant"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:id="@+id/discover_cuisines_view"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/discover_recommended_restaurants_view">
+
+                    <TextView
+                            android:id="@+id/cuisines_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cuisines"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="@color/colorDarkGray"
+                            android:textSize="23sp"
+                            android:paddingBottom="8dp"
+                            tools:ignore="HardcodedText" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/cuisines_shimmer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="150dp"
+                            android:layout_below="@id/cuisines_label"
+                            app:shimmer_auto_start="true"
+                            app:shimmer_highlight_color="@color/colorVeryLightGray"
+                            app:shimmer_base_alpha="0.6">
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                            <include layout="@layout/row_cuisine_shimmer"/>
+                            <include layout="@layout/row_cuisine_shimmer"/>
+                            <include layout="@layout/row_cuisine_shimmer"/>
+                            <include layout="@layout/row_cuisine_shimmer"/>
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                            android:id="@+id/cuisines_recycler_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/cuisines_label"
+                            android:visibility="gone"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/discover_cuisines_view">
+
+                    <TextView
+                            android:id="@+id/promotions_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today's Promotions"
+                            android:paddingBottom="8dp"
+                            android:paddingTop="8dp"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="@color/colorDarkGray"
+                            android:textSize="23sp"
+                            tools:ignore="HardcodedText" />
+
+                    <com.codepipes.ting.carouselview.CarouselView
+                            android:id="@+id/discover_promotions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/promotions_label"
+                            app:enableSnapping="true"
+                            app:scaleOnScroll="true"
+                            app:carouselOffset="center"
+                            app:indicatorAnimationType="drop"
+                            app:indicatorRadius="5"
+                            app:indicatorPadding="5"
+                            app:indicatorSelectedColor="@color/colorPrimary"
+                            app:indicatorUnselectedColor="@color/colorLightGray"
+                            app:spacing="10"
+                            app:resource="@layout/row_discover_promotion"/>
+
+                </RelativeLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </ScrollView>
 
 </FrameLayout>

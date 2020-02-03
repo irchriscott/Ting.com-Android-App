@@ -30,4 +30,11 @@ class Routes {
     val cuisinesGlobal: String              = "${END_POINT}usr/g/cuisines/all/"
     val cuisineRestaurants: String          = "${END_POINT}usr/g/cuisine/r/"
     val cuisineMenus: String                = "${END_POINT}usr/g/cuisine/m/"
+
+    //DISCOVERY
+    val discoverRestaurants: String         = "${END_POINT}usr/d/restaurants/"
+    val discoverTodayPromosRand: String     = "${END_POINT}usr/d/today/promotions/rand/"
+    val discoverTodayPromosAll: String      = "${END_POINT}usr/d/today/promotions/all/"
+    val discoverReviewedMenus: String       = "${END_POINT}usr/d/menus/reviewed/"
+    val discoverMenus: String               = "${END_POINT}usr/d/menus/discover/"
 }
