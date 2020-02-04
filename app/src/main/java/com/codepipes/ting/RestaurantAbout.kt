@@ -23,18 +23,21 @@ import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
 import java.time.Duration
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RestaurantAbout : AppCompatActivity() {
 
-    lateinit var localData: LocalData
-    lateinit var userAuthentication: UserAuthentication
-    lateinit var utilsFunctions: UtilsFunctions
+    private lateinit var localData: LocalData
+    private lateinit var userAuthentication: UserAuthentication
+    private lateinit var utilsFunctions: UtilsFunctions
 
-    lateinit var session: User
-    var branchId: Int = 0
+    private lateinit var session: User
+    private var branchId: Int = 0
 
-    lateinit var branch: Branch
+    private lateinit var branch: Branch
+    private lateinit var branchTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     @SuppressLint("DefaultLocale", "PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +52,7 @@ class RestaurantAbout : AppCompatActivity() {
         utilsFunctions = UtilsFunctions(this@RestaurantAbout)
 
         session = userAuthentication.get()!!
+        branchTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -63,6 +67,9 @@ class RestaurantAbout : AppCompatActivity() {
 
         branchId = intent.getIntExtra("resto", 0)
         val apiGet = intent.getStringExtra("apiGet")
+        branchTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadRestaurant(branchId) }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.loadRestaurant(branchId)
 
         if(localData.getRestaurant(branchId) != null){
@@ -115,16 +122,14 @@ class RestaurantAbout : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    TingToast(this@RestaurantAbout, e.message!!.capitalize(), TingToastType.ERROR).showToast(
-                        Toast.LENGTH_LONG)
-                }
+                runOnUiThread {}
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
                 branch = Gson().fromJson(dataString, Branch::class.java)
                 runOnUiThread {
+                    branchTimer.cancel()
                     localData.updateRestaurant(branch)
                     showRestaurantProfile(branch)
                 }
@@ -156,6 +161,12 @@ class RestaurantAbout : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { branchTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { branchTimer.cancel() } catch (e: Exception) {}
     }
 }

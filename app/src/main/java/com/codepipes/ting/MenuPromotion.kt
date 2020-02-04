@@ -58,6 +58,9 @@ class MenuPromotion : AppCompatActivity() {
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
+    private lateinit var promotionTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
+
     @SuppressLint("PrivateResource", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +76,7 @@ class MenuPromotion : AppCompatActivity() {
         session = userAuthentication.get()!!
 
         localData = LocalData(this@MenuPromotion)
+        promotionTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -94,11 +98,17 @@ class MenuPromotion : AppCompatActivity() {
             shimmerLoader.visibility = View.GONE
             promotion_view.visibility = View.VISIBLE
             this.showMenuPromotion(promotion, false)
+            promotionTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { getMenuPromotion(url) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.getMenuPromotion(url)
         } else {
             shimmerLoader.startShimmer()
             shimmerLoader.visibility = View.VISIBLE
             promotion_view.visibility = View.GONE
+            promotionTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { getMenuPromotion(intent.getStringExtra("url")) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.getMenuPromotion(intent.getStringExtra("url"))
         }
 
@@ -124,10 +134,7 @@ class MenuPromotion : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    refresh_promotion.isRefreshing = false
-                    TingToast(this@MenuPromotion, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                }
+                runOnUiThread { refresh_promotion.isRefreshing = false }
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -136,10 +143,13 @@ class MenuPromotion : AppCompatActivity() {
                 try{
                     val menuPromotion = gson.fromJson(responseBody, MenuPromotion::class.java)
                     runOnUiThread {
+                        promotionTimer.cancel()
                         promotion = menuPromotion
+
                         progress_loader.visibility = View.GONE
                         promotion_view.visibility = View.VISIBLE
                         refresh_promotion.isRefreshing = false
+
                         shimmerLoader.stopShimmer()
                         shimmerLoader.visibility = View.GONE
                         promotion_view.visibility = View.VISIBLE
@@ -269,6 +279,7 @@ class MenuPromotion : AppCompatActivity() {
         Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(promotion_poster_image)
         promotion_title.text = promotion.occasionEvent
         promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
+        promotion_time.text = promotion.period
 
         if(promotion.isOn && promotion.isOnToday){
             promotion_status.background = resources.getDrawable(R.drawable.background_time_green)
@@ -596,6 +607,12 @@ class MenuPromotion : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 }

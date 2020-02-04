@@ -95,4 +95,89 @@
         </attr>
     </declare-styleable>
 
+
+    <declare-styleable name="ViewPagerIndicator">
+        <attr name="vpiCirclePageIndicatorStyle" format="reference" />
+    </declare-styleable>
+
+    <!--<attr name="selectedColor" format="color"/>-->
+    <!--<attr name="unselectedColor" format="color"/>-->
+
+    <attr name="indicatorGravity">
+        <flag name="top" value="0x30" />
+        <flag name="bottom" value="0x50" />
+        <flag name="left" value="0x03" />
+        <flag name="right" value="0x05" />
+        <flag name="center_vertical" value="0x10" />
+        <flag name="center_horizontal" value="0x01" />
+        <flag name="center" value="0x11" />
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+    </attr>
+
+    <attr name="indicatorOrientation">
+        <enum name="horizontal" value="0" />
+        <enum name="vertical" value="1" />
+    </attr>
+
+    <attr name="pageTransformer">
+        <enum name="flow" value="0" />
+        <enum name="depth" value="1" />
+        <enum name="zoom" value="2" />
+        <enum name="slide_over" value="3" />
+    </attr>
+
+    <attr name="centered" format="boolean" />
+    <attr name="strokeWidth" format="dimension" />
+    <attr name="slideInterval" format="integer" />
+    <attr name="pageTransformInterval" format="integer" />
+    <attr name="fillColor" format="color" />
+    <attr name="pageColor" format="color" />
+    <attr name="radius" format="dimension" />
+    <attr name="snap" format="boolean" />
+    <attr name="strokeColor" format="color" />
+    <attr name="autoPlay" format="boolean" />
+    <attr name="disableAutoPlayOnUserInteraction" format="boolean" />
+    <attr name="indicatorMarginHorizontal" format="dimension" />
+    <attr name="indicatorMarginVertical" format="dimension" />
+    <attr name="animateOnBoundary" format="boolean" />
+
+    <attr name="indicatorVisibility">
+        <enum name="visible" value="0" />
+        <enum name="invisible" value="4" />
+        <enum name="gone" value="8" />
+    </attr>
+
+    <declare-styleable name="CirclePageIndicator">
+        <attr name="centered" />
+        <attr name="fillColor" />
+        <attr name="pageColor" />
+        <attr name="android:orientation" />
+        <attr name="radius" />
+        <attr name="snap" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
+        <attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="SliderView">
+        <attr name="slideInterval" />
+        <attr name="indicatorGravity" />
+        <attr name="indicatorOrientation" />
+        <attr name="fillColor" />
+        <attr name="pageColor" />
+        <attr name="radius" />
+        <attr name="snap" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
+        <attr name="autoPlay" />
+        <attr name="disableAutoPlayOnUserInteraction" />
+        <attr name="indicatorMarginHorizontal" />
+        <attr name="indicatorMarginVertical" />
+        <attr name="pageTransformInterval" />
+        <attr name="pageTransformer" />
+        <attr name="animateOnBoundary" />
+        <attr name="indicatorVisibility" />
+    </declare-styleable>
+
 </resources>

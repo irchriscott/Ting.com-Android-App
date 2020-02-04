@@ -48,6 +48,7 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
         Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
         holder.view.promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
+        holder.view.promotion_time.text = promotion.period
 
         if(promotion.isOn && promotion.isOnToday){
             holder.view.promotion_status.background = activity.resources.getDrawable(R.drawable.background_time_green)

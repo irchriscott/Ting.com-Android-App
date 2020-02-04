@@ -29,6 +29,7 @@ import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
 import java.time.Duration
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -38,6 +39,9 @@ class RestaurantPromotionsFragment : Fragment() {
     private lateinit var promotions: MutableList<MenuPromotion>
 
     private lateinit var gson: Gson
+
+    private lateinit var promotionsTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,8 @@ class RestaurantPromotionsFragment : Fragment() {
         gson = Gson()
         branch = gson.fromJson(arguments?.getString("resto"), Branch::class.java)
 
+        promotionsTimer = Timer()
+
         if(savedInstanceState != null){
             promotions = gson.fromJson<MutableList<MenuPromotion>>(savedInstanceState.getString("resto", "[]"), object : TypeToken<MutableList<MenuPromotion>>(){}.type)
             promotions.sortBy { it.isOnToday && it.isOn }
@@ -64,6 +70,9 @@ class RestaurantPromotionsFragment : Fragment() {
             showPromotions(promotions.reversed().toMutableList(), view)
         }
 
+        promotionsTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadRestaurantPromotions(view) }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.loadRestaurantPromotions(view)
 
         return view
@@ -104,9 +113,9 @@ class RestaurantPromotionsFragment : Fragment() {
                     view.promotions_recycler_view.visibility = View.GONE
                     view.progress_loader.visibility = View.GONE
                     view.empty_data.visibility = View.VISIBLE
+
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
                     view.empty_data.empty_text.text = "No Promotion To Show"
-                    TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -114,7 +123,8 @@ class RestaurantPromotionsFragment : Fragment() {
                 val dataString = response.body()!!.string()
                 promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
 
-                activity?.runOnUiThread{
+                activity?.runOnUiThread {
+                    promotionsTimer.cancel()
                     showPromotions(promotions, view)
                 }
             }
@@ -129,7 +139,13 @@ class RestaurantPromotionsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
     }
 
     companion object {

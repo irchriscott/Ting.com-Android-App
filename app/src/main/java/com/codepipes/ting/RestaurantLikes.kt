@@ -31,20 +31,23 @@ import java.io.IOException
 import java.lang.Exception
 import java.text.NumberFormat
 import java.time.Duration
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RestaurantLikes : AppCompatActivity() {
 
-    lateinit var localData: LocalData
-    lateinit var userAuthentication: UserAuthentication
-    lateinit var utilsFunctions: UtilsFunctions
+    private lateinit var localData: LocalData
+    private lateinit var userAuthentication: UserAuthentication
+    private lateinit var utilsFunctions: UtilsFunctions
 
-    lateinit var session: User
-    var branchId: Int = 0
+    private lateinit var session: User
+    private var branchId: Int = 0
 
-    lateinit var branch: Branch
-    lateinit var likes: MutableList<UserRestaurant>
+    private lateinit var branch: Branch
+    private lateinit var likes: MutableList<UserRestaurant>
+
+    private lateinit var likesTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     @SuppressLint("DefaultLocale", "PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +62,7 @@ class RestaurantLikes : AppCompatActivity() {
         utilsFunctions = UtilsFunctions(this@RestaurantLikes)
 
         session = userAuthentication.get()!!
+        likesTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -80,10 +84,16 @@ class RestaurantLikes : AppCompatActivity() {
             likes = branch.likes?.likes!!.toMutableList()
             this.showLikes(likes, branch)
             this.loadRestaurant(branch.id, false)
+            likesTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}${branch.urls.apiReviews}") }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurantLikes("${Routes().HOST_END_POINT}${branch.urls.apiReviews}")
         } else {
             likes = mutableListOf()
             this.loadRestaurant(branchId, true)
+            likesTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}$url") }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurantLikes("${Routes().HOST_END_POINT}$url")
         }
 
@@ -157,18 +167,17 @@ class RestaurantLikes : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    TingToast(this@RestaurantLikes, e.message!!.capitalize(), TingToastType.ERROR).showToast(
-                        Toast.LENGTH_LONG)
-                }
+                runOnUiThread {}
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
                 likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
                 runOnUiThread {
+                    likesTimer.cancel()
                     shimmerLoader.stopShimmer()
                     shimmerLoader.visibility = View.GONE
+
                     if(likes.isNotEmpty()){
                         restaurant_likes_recycler_view.visibility = View.VISIBLE
                         empty_data.visibility = View.GONE
@@ -209,6 +218,12 @@ class RestaurantLikes : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { likesTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { likesTimer.cancel() } catch (e: Exception) {}
     }
 }

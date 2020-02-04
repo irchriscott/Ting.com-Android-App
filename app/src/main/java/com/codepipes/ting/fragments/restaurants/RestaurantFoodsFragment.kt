@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
 import java.time.Duration
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RestaurantFoodsFragment : Fragment() {
@@ -33,6 +34,9 @@ class RestaurantFoodsFragment : Fragment() {
     private lateinit var foods: MutableList<RestaurantMenu>
 
     private lateinit var gson: Gson
+
+    private lateinit var foodsTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,8 @@ class RestaurantFoodsFragment : Fragment() {
         gson = Gson()
         branch = gson.fromJson(arguments?.getString("resto"), Branch::class.java)
 
+        foodsTimer = Timer()
+
         if(savedInstanceState != null){
             foods = gson.fromJson<MutableList<RestaurantMenu>>(savedInstanceState.getString("resto", "[]"), object : TypeToken<MutableList<RestaurantMenu>>(){}.type).filter { it.type.id == 1 }.toMutableList()
             foods.filter { it.type.id == 1 }.sortedByDescending { it.menu.reviews?.average }
@@ -59,6 +65,9 @@ class RestaurantFoodsFragment : Fragment() {
             showMenuFoods(foods.toMutableList(), view)
         }
 
+        foodsTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadRestaurantMenuFoods(view) }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.loadRestaurantMenuFoods(view)
 
         return view
@@ -99,17 +108,17 @@ class RestaurantFoodsFragment : Fragment() {
                     view.foods_recycler_view.visibility = View.GONE
                     view.progress_loader.visibility = View.GONE
                     view.empty_data.visibility = View.VISIBLE
+
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
                     view.empty_data.empty_text.text = "No Menu Food To Show"
-                    TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(
-                        Toast.LENGTH_LONG)
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
                 foods = gson.fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type).filter { it.type.id == 1 }.toMutableList()
-                activity?.runOnUiThread{
+                activity?.runOnUiThread {
+                    foodsTimer.cancel()
                     showMenuFoods(foods.filter { it.type.id == 1 }.toMutableList(), view)
                 }
             }
@@ -124,7 +133,13 @@ class RestaurantFoodsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { foodsTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { foodsTimer.cancel() } catch (e: Exception) {}
     }
 
     companion object {

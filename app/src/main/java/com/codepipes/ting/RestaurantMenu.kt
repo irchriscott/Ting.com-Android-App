@@ -74,6 +74,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
+    private lateinit var menuTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
+
     @SuppressLint("PrivateResource", "MissingPermission", "SetTextI18n", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +92,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         session = userAuthentication.get()!!
 
         localData = LocalData(this@RestaurantMenu)
+        menuTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -110,11 +114,17 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             shimmerLoader.visibility = View.GONE
             menu_view.visibility = View.VISIBLE
             this.showRestaurantMenu(menu, false)
+            menuTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { getRestaurantMenu(intent.getStringExtra("url")) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.getRestaurantMenu(intent.getStringExtra("url"))
         } else {
             shimmerLoader.startShimmer()
             shimmerLoader.visibility = View.VISIBLE
             menu_view.visibility = View.GONE
+            menuTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { getRestaurantMenu(intent.getStringExtra("url")) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.getRestaurantMenu(intent.getStringExtra("url"))
         }
 
@@ -141,10 +151,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    refresh_menu.isRefreshing = false
-                    TingToast(this@RestaurantMenu, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                }
+                runOnUiThread { refresh_menu.isRefreshing = false }
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -153,10 +160,12 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                 try{
                     val restaurantMenu = gson.fromJson(responseBody, com.codepipes.ting.models.RestaurantMenu::class.java)
                     runOnUiThread {
+                        menuTimer.cancel()
                         menu = restaurantMenu
                         progress_loader.visibility = View.GONE
                         menu_view.visibility = View.VISIBLE
                         refresh_menu.isRefreshing = false
+
                         shimmerLoader.stopShimmer()
                         shimmerLoader.visibility = View.GONE
                         menu_view.visibility = View.VISIBLE
@@ -783,6 +792,12 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 }

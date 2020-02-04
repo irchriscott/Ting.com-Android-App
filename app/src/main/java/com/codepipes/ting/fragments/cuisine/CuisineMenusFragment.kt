@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class CuisineMenusFragment : Fragment() {
@@ -43,6 +44,9 @@ class CuisineMenusFragment : Fragment() {
 
     private lateinit var session: User
     private lateinit var userAuthentication: UserAuthentication
+
+    private lateinit var cuisineMenusTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +65,15 @@ class CuisineMenusFragment : Fragment() {
 
         mUtilFunctions = UtilsFunctions(context!!)
         mLocalData = LocalData(context!!)
+        cuisineMenusTimer = Timer()
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
 
         view.shimmer_loader.startShimmer()
+        cuisineMenusTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadMenus(view) }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.loadMenus(view)
 
         view.refresh_cuisine_menus.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
@@ -75,17 +83,6 @@ class CuisineMenusFragment : Fragment() {
         }
 
         return view
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Bridge.saveInstanceState(this, outState)
-        outState.clear()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Bridge.clear(this)
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
@@ -120,7 +117,9 @@ class CuisineMenusFragment : Fragment() {
                 try {
                     activity?.runOnUiThread {
                         val menus = Gson().fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
+                        cuisineMenusTimer.cancel()
                         if (menus.size > 0) {
+
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
 
@@ -146,6 +145,8 @@ class CuisineMenusFragment : Fragment() {
                     }
                 } catch (e: Exception) {
                     activity?.runOnUiThread {
+                        cuisineMenusTimer.cancel()
+
                         view.shimmer_loader.stopShimmer()
                         view.shimmer_loader.visibility = View.GONE
 
@@ -160,6 +161,23 @@ class CuisineMenusFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
     }
 
     companion object {

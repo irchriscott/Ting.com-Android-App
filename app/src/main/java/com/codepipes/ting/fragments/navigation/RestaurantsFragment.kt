@@ -43,6 +43,7 @@ import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
@@ -73,6 +74,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
+    private lateinit var cuisinesTimer: Timer
+    private lateinit var restaurantsTimer: Timer
+
+    private val TIMER_PERIOD = 6000.toLong()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Bridge.restoreInstanceState(this, savedInstanceState)
@@ -96,6 +102,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
+
+        cuisinesTimer = Timer()
+        restaurantsTimer = Timer()
 
         mOpenRestaurantMapButton = view.findViewById(R.id.open_restaurant_map) as FloatingActionButton
         mOpenRestaurantMapButton.setOnClickListener {
@@ -127,14 +136,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         if(!cuisines.isNullOrEmpty()) {
             view.cuisines_recycler_view.visibility = View.VISIBLE
-            view.cuisines_shimmer.stopShimmer()
             view.cuisines_shimmer.visibility = View.GONE
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = LinearLayoutManager.HORIZONTAL
             view.cuisines_recycler_view.layoutManager = layoutManager
             view.cuisines_recycler_view.adapter =
                 CuisinesAdapter(cuisines.shuffled().toMutableList())
-        } else { this.getCuisines() }
+        } else {
+            cuisinesTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { getCuisines() }
+            }, TIMER_PERIOD, TIMER_PERIOD)
+            this.getCuisines()
+        }
 
         val menuList = mutableListOf<String>()
         menuList.add("Current Location")
@@ -236,6 +249,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mRestaurantsRecyclerView.visibility = View.VISIBLE
                 mProgressLoader.visibility = View.GONE
                 mEmptyDataView.visibility = View.GONE
+
                 mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                 mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
             } else {
@@ -243,11 +257,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mRestaurantsRecyclerView.visibility = View.GONE
                 mProgressLoader.visibility = View.GONE
                 mEmptyDataView.visibility = View.VISIBLE
+
                 mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                 mEmptyDataView.empty_text.text = "No Restaurant To Show"
                 TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
             }
         }
+
+        restaurantsTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { getRestaurants() }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.getRestaurants()
 
         return view
@@ -271,11 +290,10 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     mRestaurantsRecyclerView.visibility = View.GONE
                     mProgressLoader.visibility = View.GONE
                     mEmptyDataView.visibility = View.VISIBLE
-                    shimmer_loader.stopShimmer()
-                    shimmer_loader.visibility = View.GONE
+
+                    if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                     mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                     mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                    TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -284,8 +302,10 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
 
                 activity.runOnUiThread{
+                    restaurantsTimer.cancel()
                     mRefreshRestaurant.isRefreshing = false
                     mLocalData.saveRestaurants(dataString)
+
                     if(!restaurants.isNullOrEmpty()){
                         if(mUtilFunctions.checkLocationPermissions()){
                             try {
@@ -316,8 +336,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
-                                    shimmer_loader.stopShimmer()
-                                    shimmer_loader.visibility = View.GONE
+
+                                    if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
                                 }.addOnFailureListener {
@@ -334,8 +354,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     mRestaurantsRecyclerView.visibility = View.VISIBLE
                                     mProgressLoader.visibility = View.GONE
                                     mEmptyDataView.visibility = View.GONE
-                                    shimmer_loader.stopShimmer()
-                                    shimmer_loader.visibility = View.GONE
+
+                                    if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
                                     TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
@@ -346,8 +366,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         mRestaurantsRecyclerView.visibility = View.GONE
                         mProgressLoader.visibility = View.GONE
                         mEmptyDataView.visibility = View.VISIBLE
-                        shimmer_loader.stopShimmer()
-                        shimmer_loader.visibility = View.GONE
+
+                        if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                         mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                         mEmptyDataView.empty_text.text = "No Restaurant To Show"
                         TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
@@ -377,7 +397,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val cuisines = gson.fromJson<MutableList<RestaurantCategory>>(dataString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
 
                 activity.runOnUiThread{
+                    cuisinesTimer.cancel()
                     mLocalData.saveCuisines(dataString)
+
                     cuisines_shimmer.stopShimmer()
                     cuisines_shimmer.visibility = View.GONE
                     cuisines_recycler_view.visibility = View.VISIBLE
@@ -405,6 +427,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        try {
+            cuisinesTimer.cancel()
+            restaurantsTimer.cancel()
+        } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            cuisinesTimer.cancel()
+            restaurantsTimer.cancel()
+        } catch (e: Exception) {}
     }
 }

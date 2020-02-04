@@ -78,6 +78,9 @@ class RestaurantProfile : AppCompatActivity() {
     private var selectedLatitude: Double = 0.0
     private var selectedLongitude: Double = 0.0
 
+    private lateinit var restaurantTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
+
     @SuppressLint("SetTextI18n", "PrivateResource", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +91,7 @@ class RestaurantProfile : AppCompatActivity() {
 
         userAuthentication = UserAuthentication(this@RestaurantProfile)
         session = userAuthentication.get()!!
+        restaurantTimer = Timer()
 
         utilsFunctions = UtilsFunctions(this@RestaurantProfile)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@RestaurantProfile)
@@ -115,11 +119,17 @@ class RestaurantProfile : AppCompatActivity() {
         if(localBranch != null) {
             branch = localBranch
             this.showBranch()
+            restaurantTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurant(restoId, false) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurant(restoId, false)
         } else {
             shimmerLoader.startShimmer()
             userProfileData.visibility = View.GONE
             shimmerLoader.visibility = View.VISIBLE
+            restaurantTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurant(restoId, false) }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurant(restoId, true)
         }
     }
@@ -137,9 +147,7 @@ class RestaurantProfile : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    TingToast(this@RestaurantProfile, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                }
+                runOnUiThread {}
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -147,6 +155,7 @@ class RestaurantProfile : AppCompatActivity() {
                 try{
                     branch = Gson().fromJson(dataString, Branch::class.java)
                     runOnUiThread {
+                        restaurantTimer.cancel()
                         localData.updateRestaurant(branch)
                         if(load){ showBranch() }
                     }
@@ -477,6 +486,12 @@ class RestaurantProfile : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 }

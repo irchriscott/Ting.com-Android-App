@@ -134,13 +134,14 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                        android:id="@+id/discover_promotions_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginLeft="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/discover_cuisines_view">
 
@@ -156,21 +157,93 @@
                             android:textSize="23sp"
                             tools:ignore="HardcodedText" />
 
-                    <com.codepipes.ting.carouselview.CarouselView
-                            android:id="@+id/discover_promotions"
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/promotions_shimmer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/promotions_label"
-                            app:enableSnapping="true"
-                            app:scaleOnScroll="true"
-                            app:carouselOffset="center"
-                            app:indicatorAnimationType="drop"
-                            app:indicatorRadius="5"
-                            app:indicatorPadding="5"
-                            app:indicatorSelectedColor="@color/colorPrimary"
-                            app:indicatorUnselectedColor="@color/colorLightGray"
-                            app:spacing="10"
-                            app:resource="@layout/row_discover_promotion"/>
+                            app:shimmer_auto_start="true"
+                            app:shimmer_highlight_color="@color/colorVeryLightGray"
+                            app:shimmer_base_alpha="0.6">
+
+                        <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="230dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                            <com.codepipes.ting.customclasses.RoundedCornerImageView
+                                    android:id="@+id/promotion_poster_shimmer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/colorVeryLightGray"
+                                    android:scaleType="centerCrop"/>
+
+                            <android.support.constraint.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/background_dark_to_transparent"
+                                    android:padding="12dp">
+
+                                <TextView
+                                        android:id="@+id/promotion_title_shimmer"
+                                        android:layout_width="200dp"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="22sp"
+                                        android:background="@color/colorTransparent"
+                                        android:fontFamily="@font/poppins_semi_bold"
+                                        android:textColor="@color/colorWhite"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        tools:ignore="HardcodedText"/>
+
+                                <View
+                                        android:id="@+id/separator_shimmer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="0.5dp"
+                                        android:layout_marginRight="70dp"
+                                        android:layout_marginEnd="70dp"
+                                        android:layout_marginTop="4dp"
+                                        android:background="@color/colorWhite"
+                                        tools:ignore="RtlHardcoded"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/promotion_title_shimmer"/>
+
+                            </android.support.constraint.ConstraintLayout>
+
+                        </RelativeLayout>
+
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <com.codepipes.ting.sliderview.SliderView
+                            android:id="@+id/discover_promotions"
+                            android:layout_width="match_parent"
+                            android:layout_height="230dp"
+                            android:layout_below="@id/promotions_label"
+                            android:visibility="gone"
+                            app:fillColor="@color/colorPrimary"
+                            app:pageColor="@color/colorTransparent"
+                            app:radius="4dp"
+                            app:slideInterval="8000"
+                            app:strokeColor="@color/colorVeryLightGray"
+                            app:strokeWidth="1dp"
+                            app:indicatorMarginVertical="10dp"
+                            app:indicatorGravity="right|bottom"/>
+
+                    <TextView
+                            android:id="@+id/discover_more_promotions"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="260dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
+                            android:visibility="gone"
+                            android:text="SHOW MORE"
+                            android:textColor="@color/colorWhite"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:background="@color/colorTransparent"
+                            tools:ignore="HardcodedText,RtlHardcoded" />
 
                 </RelativeLayout>
 

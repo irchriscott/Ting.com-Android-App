@@ -43,20 +43,23 @@ import okhttp3.*
 import java.io.IOException
 import java.text.NumberFormat
 import java.time.Duration
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
-    lateinit var localData: LocalData
-    lateinit var userAuthentication: UserAuthentication
-    lateinit var utilsFunctions: UtilsFunctions
+    private lateinit var localData: LocalData
+    private lateinit var userAuthentication: UserAuthentication
+    private lateinit var utilsFunctions: UtilsFunctions
 
-    lateinit var session: User
-    var branchId: Int = 0
+    private lateinit var session: User
+    private var branchId: Int = 0
 
-    lateinit var branch: Branch
-    lateinit var reviews: MutableList<RestaurantReview>
+    private lateinit var branch: Branch
+    private lateinit var reviews: MutableList<RestaurantReview>
+
+    private lateinit var reviewsTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     @SuppressLint("DefaultLocale", "PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +74,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         utilsFunctions = UtilsFunctions(this@RestaurantReviews)
 
         session = userAuthentication.get()!!
+        reviewsTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -92,10 +96,16 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             reviews = branch.reviews?.reviews!!.toMutableList()
             this.showReviews(reviews, branch)
             this.loadRestaurant(branch.id, false)
+            reviewsTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurantReviews("${Routes().HOST_END_POINT}${branch.urls.apiReviews}") }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurantReviews("${Routes().HOST_END_POINT}${branch.urls.apiReviews}")
         } else {
             reviews = mutableListOf()
             this.loadRestaurant(branchId, true)
+            reviewsTimer.scheduleAtFixedRate(object : TimerTask() {
+                override fun run() { loadRestaurantReviews("${Routes().HOST_END_POINT}$url") }
+            }, TIMER_PERIOD, TIMER_PERIOD)
             this.loadRestaurantReviews("${Routes().HOST_END_POINT}$url")
         }
 
@@ -231,16 +241,14 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    TingToast(this@RestaurantReviews, e.message!!.capitalize(), TingToastType.ERROR).showToast(
-                        Toast.LENGTH_LONG)
-                }
+                runOnUiThread {}
             }
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
                 reviews = Gson().fromJson<MutableList<RestaurantReview>>(dataString, object : TypeToken<MutableList<RestaurantReview>>(){}.type)
                 runOnUiThread {
+                    reviewsTimer.cancel()
                     shimmerLoader.stopShimmer()
                     shimmerLoader.visibility = View.GONE
                     if(reviews.isNotEmpty()){
@@ -376,6 +384,12 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { reviewsTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { reviewsTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 }

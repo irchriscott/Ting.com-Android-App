@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class CuisineRestaurantsFragment : Fragment() {
@@ -46,6 +47,9 @@ class CuisineRestaurantsFragment : Fragment() {
 
     private lateinit var session: User
     private lateinit var userAuthentication: UserAuthentication
+
+    private lateinit var cuisineRestaurantsTimer: Timer
+    private val TIMER_PERIOD = 6000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +72,12 @@ class CuisineRestaurantsFragment : Fragment() {
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
+        cuisineRestaurantsTimer = Timer()
 
         view.shimmer_loader.startShimmer()
+        cuisineRestaurantsTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadRestaurants(view) }
+        }, TIMER_PERIOD, TIMER_PERIOD)
         this.loadRestaurants(view)
 
         view.refresh_cuisine_restaurants.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
@@ -113,6 +121,7 @@ class CuisineRestaurantsFragment : Fragment() {
                 try {
                     activity?.runOnUiThread {
                         val branches = Gson().fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+                        cuisineRestaurantsTimer.cancel()
                         if (branches.size > 0) {
                             view.shimmer_loader.stopShimmer()
                             view.shimmer_loader.visibility = View.GONE
@@ -174,6 +183,8 @@ class CuisineRestaurantsFragment : Fragment() {
                     }
                 } catch (e: Exception) {
                     activity?.runOnUiThread {
+                        cuisineRestaurantsTimer.cancel()
+
                         view.shimmer_loader.stopShimmer()
                         view.shimmer_loader.visibility = View.GONE
 
@@ -198,7 +209,13 @@ class CuisineRestaurantsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
     }
 
     companion object {

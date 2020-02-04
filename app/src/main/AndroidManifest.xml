@@ -24,9 +24,13 @@
             android:usesCleartextTraffic="true"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity
-                android:name=".Cuisine"
+                android:name=".TodayPromotions"
                 android:parentActivityName=".TingDotCom"
                 android:theme="@style/AppTheme.WhiteActionBarDefault"/>
+        <activity
+                android:name=".Cuisine"
+                android:parentActivityName=".TingDotCom"
+                android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".RestaurantAbout"
                 android:parentActivityName=".TingDotCom"

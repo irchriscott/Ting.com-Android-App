@@ -2,12 +2,13 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="230dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -24,7 +25,98 @@
                         android:background="@drawable/background_dark_to_transparent"
                         android:padding="12dp">
 
+                        <TextView
+                                android:id="@+id/promotion_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Promotion"
+                                android:textSize="22sp"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorWhite"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="HardcodedText"/>
 
+                        <View
+                                android:id="@+id/separator"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_marginRight="70dp"
+                                android:layout_marginEnd="70dp"
+                                android:layout_marginTop="4dp"
+                                android:background="@color/colorWhite"
+                                tools:ignore="RtlHardcoded"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/promotion_title"/>
+
+                        <TextView
+                                android:id="@+id/promotion_type"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Promotion on Chips"
+                                android:textSize="15sp"
+                                android:textColor="@color/colorWhite"
+                                android:fontFamily="@font/poppins_medium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/separator"
+                                tools:ignore="HardcodedText" />
+
+                    <ImageView
+                            android:id="@+id/promotion_reduction_icon"
+                            android:src="@drawable/ic_minus_outline_gray"
+                            android:tint="@color/colorWhite"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:layout_marginTop="2dp"
+                            android:alpha="0.6"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/promotion_type"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:id="@+id/promotion_reduction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginStart="5dp"
+                            android:paddingRight="20dp"
+                            android:paddingEnd="20dp"
+                            android:text="This is a description on a menu"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textSize="13sp"
+                            android:textColor="@color/colorWhite"
+                            app:layout_constraintTop_toBottomOf="@id/promotion_type"
+                            app:layout_constraintStart_toEndOf="@id/promotion_reduction_icon"
+                            tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry"/>
+
+                    <ImageView
+                            android:id="@+id/promotion_supplement_icon"
+                            android:src="@drawable/ic_plus_outline_gray"
+                            android:tint="@color/colorWhite"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
+                            android:layout_marginTop="2dp"
+                            android:alpha="0.6"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/promotion_reduction"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:id="@+id/promotion_supplement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginStart="5dp"
+                            android:paddingRight="20dp"
+                            android:paddingEnd="20dp"
+                            android:text="This is a description on a menu"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textSize="13sp"
+                            android:textColor="@color/colorWhite"
+                            app:layout_constraintTop_toBottomOf="@id/promotion_reduction"
+                            app:layout_constraintStart_toEndOf="@id/promotion_supplement_icon"
+                            tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry"/>
 
                 </android.support.constraint.ConstraintLayout>
 
