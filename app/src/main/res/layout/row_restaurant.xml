@@ -94,13 +94,63 @@
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="RtlSymmetry"/>
 
+            <ImageView
+                    android:id="@+id/restaurant_cuisines_pin"
+                    android:src="@drawable/ic_cuisines"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_menus"
+                    tools:ignore="ContentDescription"/>
+
+            <TextView
+                    android:id="@+id/restaurant_cuisines"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="2dp"
+                    android:text="Fast Food, Congolese Food"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="13sp"
+                    android:paddingRight="106dp"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_menus"
+                    app:layout_constraintStart_toEndOf="@id/restaurant_cuisines_pin"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+            <ImageView
+                    android:id="@+id/restaurant_categories_pin"
+                    android:src="@drawable/ic_categories"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_cuisines"
+                    tools:ignore="ContentDescription"/>
+
+            <TextView
+                    android:id="@+id/restaurant_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:text="Fast Food, Congolese Food"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="13sp"
+                    android:paddingRight="106dp"
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_cuisines"
+                    app:layout_constraintStart_toEndOf="@id/restaurant_categories_pin"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
             <LinearLayout
                     android:id="@+id/restaurant_time_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/restaurant_menus">
+                    app:layout_constraintTop_toBottomOf="@id/restaurant_categories">
 
                 <LinearLayout
                     android:id="@+id/restaurant_distance_view"

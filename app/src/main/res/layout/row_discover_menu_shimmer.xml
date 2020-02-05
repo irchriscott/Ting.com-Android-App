@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+    <com.codepipes.ting.customclasses.RoundedCornerImageView
+            android:id="@+id/restaurant_image"
+            android:layout_width="260dp"
+            android:layout_height="130dp"
+            android:background="@color/colorVeryLightGray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+            android:id="@+id/restaurant_name"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="15sp"
+            android:background="@color/colorVeryLightGray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/restaurant_image"/>
+
+    <RatingBar
+            android:id="@+id/restaurant_review_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:numStars="5"
+            app:layout_constraintTop_toBottomOf="@id/restaurant_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/restaurant_name"
+            style="@style/AppTheme.SmallRating"
+            android:theme="@style/AppTheme.SmallRating"/>
+
+    <TextView
+            android:id="@+id/restaurant_address"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="12sp"
+            android:background="@color/colorVeryLightGray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/restaurant_review_rating"/>
+
+</android.support.constraint.ConstraintLayout>

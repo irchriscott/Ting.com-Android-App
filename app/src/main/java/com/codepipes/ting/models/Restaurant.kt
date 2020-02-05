@@ -49,7 +49,7 @@ class RestaurantConfig (
 
 class RestaurantCategories (
     val count: Int,
-    val categories: List<CategoryRestaurant>
+    val categories: List<RestaurantCategory>
 ){}
 
 class RestaurantBranches (
@@ -70,5 +70,5 @@ class RestaurantImages (
 
 class RestaurantFoodCategories (
     val count: Int,
-    val foodCategories: List<FoodCategory>
+    val categories: List<FoodCategory>
 ){}

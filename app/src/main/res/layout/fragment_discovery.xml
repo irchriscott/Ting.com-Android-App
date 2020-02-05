@@ -7,248 +7,437 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragments.navigation.DiscoveryFragment">
 
-        <ScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh_discovery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="UselessParent">
+                android:layout_height="wrap_content">
 
-            <android.support.constraint.ConstraintLayout
+            <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    tools:ignore="UselessParent">
 
-                <RelativeLayout
-                        android:id="@+id/discover_recommended_restaurants_view"
+                <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                            android:id="@+id/restaurant_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:text="Recommended Restaurants"
-                            android:fontFamily="@font/poppins_semi_bold"
-                            android:textColor="@color/colorDarkGray"
-                            android:textSize="23sp"
-                            tools:ignore="HardcodedText" />
-
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/discover_restaurants_shimmer"
+                    <RelativeLayout
+                            android:id="@+id/discover_recommended_restaurants_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/restaurant_label"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginRight="8dp"
-                            app:shimmer_auto_start="true"
-                            app:shimmer_highlight_color="@color/colorVeryLightGray"
-                            app:shimmer_base_alpha="0.6">
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                                android:id="@+id/restaurant_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingStart="8dp"
+                                android:paddingLeft="8dp"
+                                android:paddingTop="8dp"
+                                android:text="Recommended Restaurants"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/discover_restaurants_shimmer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/restaurant_label"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="8dp"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
 
                             <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal">
 
-                                    <include layout="@layout/row_discover_restaurant_shimmer" />
-                                    <include layout="@layout/row_discover_restaurant_shimmer" />
+                                <include layout="@layout/row_discover_restaurant_shimmer" />
+                                <include layout="@layout/row_discover_restaurant_shimmer" />
 
                             </LinearLayout>
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                    <com.codepipes.ting.carouselview.CarouselView
-                            android:id="@+id/discover_restaurants"
+                        <com.codepipes.ting.carouselview.CarouselView
+                                android:id="@+id/discover_restaurants"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/restaurant_label"
+                                android:visibility="gone"
+                                app:enableSnapping="true"
+                                app:scaleOnScroll="true"
+                                app:carouselOffset="center"
+                                app:indicatorAnimationType="drop"
+                                app:indicatorRadius="5"
+                                app:indicatorPadding="5"
+                                app:indicatorSelectedColor="@color/colorPrimary"
+                                app:indicatorUnselectedColor="@color/colorLightGray"
+                                app:spacing="10"
+                                app:resource="@layout/row_discover_restaurant"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                            android:id="@+id/discover_cuisines_view"
                             android:layout_width="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/restaurant_label"
-                            android:visibility="gone"
-                            app:enableSnapping="true"
-                            app:scaleOnScroll="true"
-                            app:carouselOffset="center"
-                            app:indicatorAnimationType="drop"
-                            app:indicatorRadius="5"
-                            app:indicatorPadding="5"
-                            app:indicatorSelectedColor="@color/colorPrimary"
-                            app:indicatorUnselectedColor="@color/colorLightGray"
-                            app:spacing="10"
-                            app:resource="@layout/row_discover_restaurant"/>
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/discover_recommended_restaurants_view">
 
-                </RelativeLayout>
-
-                <RelativeLayout
-                        android:id="@+id/discover_cuisines_view"
-                        android:layout_width="match_parent"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/discover_recommended_restaurants_view">
-
-                    <TextView
-                            android:id="@+id/cuisines_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Cuisines"
-                            android:fontFamily="@font/poppins_semi_bold"
-                            android:textColor="@color/colorDarkGray"
-                            android:textSize="23sp"
-                            android:paddingBottom="8dp"
-                            tools:ignore="HardcodedText" />
-
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/cuisines_shimmer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="150dp"
-                            android:layout_below="@id/cuisines_label"
-                            app:shimmer_auto_start="true"
-                            app:shimmer_highlight_color="@color/colorVeryLightGray"
-                            app:shimmer_base_alpha="0.6">
-
-                        <LinearLayout
+                        <TextView
+                                android:id="@+id/cuisines_label"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
+                                android:layout_height="wrap_content"
+                                android:text="Cuisines"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                android:paddingBottom="8dp"
+                                tools:ignore="HardcodedText" />
 
-                            <include layout="@layout/row_cuisine_shimmer"/>
-                            <include layout="@layout/row_cuisine_shimmer"/>
-                            <include layout="@layout/row_cuisine_shimmer"/>
-                            <include layout="@layout/row_cuisine_shimmer"/>
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/cuisines_shimmer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="150dp"
+                                android:layout_below="@id/cuisines_label"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
 
-                        </LinearLayout>
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
+                                <include layout="@layout/row_cuisine_shimmer"/>
+                                <include layout="@layout/row_cuisine_shimmer"/>
+                                <include layout="@layout/row_cuisine_shimmer"/>
+                                <include layout="@layout/row_cuisine_shimmer"/>
 
-                    <android.support.v7.widget.RecyclerView
-                            android:id="@+id/cuisines_recycler_view"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/cuisines_label"
-                            android:visibility="gone"/>
+                            </LinearLayout>
 
-                </RelativeLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                <RelativeLayout
-                        android:id="@+id/discover_promotions_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginTop="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/discover_cuisines_view">
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/cuisines_recycler_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/cuisines_label"
+                                android:visibility="gone"/>
 
-                    <TextView
-                            android:id="@+id/promotions_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Today's Promotions"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:fontFamily="@font/poppins_semi_bold"
-                            android:textColor="@color/colorDarkGray"
-                            android:textSize="23sp"
-                            tools:ignore="HardcodedText" />
+                    </RelativeLayout>
 
-                    <com.facebook.shimmer.ShimmerFrameLayout
-                            android:id="@+id/promotions_shimmer"
+                    <RelativeLayout
+                            android:id="@+id/discover_promotions_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/promotions_label"
-                            app:shimmer_auto_start="true"
-                            app:shimmer_highlight_color="@color/colorVeryLightGray"
-                            app:shimmer_base_alpha="0.6">
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/discover_cuisines_view">
 
-                        <RelativeLayout
+                        <TextView
+                                android:id="@+id/promotions_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Today's Promotions"
+                                android:paddingBottom="8dp"
+                                android:paddingTop="8dp"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                tools:ignore="HardcodedText" />
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/promotions_shimmer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/promotions_label"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
+
+                            <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="230dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                <com.codepipes.ting.customclasses.RoundedCornerImageView
+                                        android:id="@+id/promotion_poster_shimmer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:background="@color/colorVeryLightGray"
+                                        android:scaleType="centerCrop"/>
+
+                                <android.support.constraint.ConstraintLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/background_dark_to_transparent"
+                                        android:padding="12dp">
+
+                                    <TextView
+                                            android:id="@+id/promotion_title_shimmer"
+                                            android:layout_width="200dp"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="22sp"
+                                            android:background="@color/colorTransparent"
+                                            android:fontFamily="@font/poppins_semi_bold"
+                                            android:textColor="@color/colorWhite"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            tools:ignore="HardcodedText"/>
+
+                                    <View
+                                            android:id="@+id/separator_shimmer"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="0.5dp"
+                                            android:layout_marginRight="70dp"
+                                            android:layout_marginEnd="70dp"
+                                            android:layout_marginTop="4dp"
+                                            android:background="@color/colorWhite"
+                                            tools:ignore="RtlHardcoded"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@id/promotion_title_shimmer"/>
+
+                                </android.support.constraint.ConstraintLayout>
+
+                            </RelativeLayout>
+
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <com.codepipes.ting.sliderview.SliderView
+                                android:id="@+id/discover_promotions"
                                 android:layout_width="match_parent"
                                 android:layout_height="230dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
+                                android:layout_below="@id/promotions_label"
+                                android:visibility="gone"
+                                app:fillColor="@color/colorPrimary"
+                                app:pageColor="@color/colorTransparent"
+                                app:radius="4dp"
+                                app:slideInterval="8000"
+                                app:strokeColor="@color/colorVeryLightGray"
+                                app:strokeWidth="1dp"
+                                app:indicatorMarginVertical="10dp"
+                                app:indicatorGravity="right|bottom"/>
 
-                            <com.codepipes.ting.customclasses.RoundedCornerImageView
-                                    android:id="@+id/promotion_poster_shimmer"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/colorVeryLightGray"
-                                    android:scaleType="centerCrop"/>
+                        <TextView
+                                android:id="@+id/discover_more_promotions"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="260dp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
+                                android:visibility="gone"
+                                android:text="SHOW MORE"
+                                android:textColor="@color/colorWhite"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:background="@color/colorTransparent"
+                                tools:ignore="HardcodedText,RtlHardcoded" />
 
-                            <android.support.constraint.ConstraintLayout
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                            android:id="@+id/discover_menus_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/discover_promotions_view">
+
+                        <TextView
+                                android:id="@+id/menus_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="8dp"
+                                android:paddingStart="8dp"
+                                android:paddingLeft="8dp"
+                                android:text="Recommended Menus"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/discover_menus_shimmer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/menus_label"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="8dp"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
+
+                            <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/background_dark_to_transparent"
-                                    android:padding="12dp">
+                                    android:orientation="horizontal">
 
-                                <TextView
-                                        android:id="@+id/promotion_title_shimmer"
-                                        android:layout_width="200dp"
-                                        android:layout_height="wrap_content"
-                                        android:textSize="22sp"
-                                        android:background="@color/colorTransparent"
-                                        android:fontFamily="@font/poppins_semi_bold"
-                                        android:textColor="@color/colorWhite"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        tools:ignore="HardcodedText"/>
+                                <include layout="@layout/row_discover_menu_shimmer" />
+                                <include layout="@layout/row_discover_menu_shimmer" />
 
-                                <View
-                                        android:id="@+id/separator_shimmer"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="0.5dp"
-                                        android:layout_marginRight="70dp"
-                                        android:layout_marginEnd="70dp"
-                                        android:layout_marginTop="4dp"
-                                        android:background="@color/colorWhite"
-                                        tools:ignore="RtlHardcoded"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/promotion_title_shimmer"/>
+                            </LinearLayout>
 
-                            </android.support.constraint.ConstraintLayout>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        </RelativeLayout>
+                        <com.codepipes.ting.carouselview.CarouselView
+                                android:id="@+id/discover_menus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/menus_label"
+                                android:visibility="gone"
+                                app:enableSnapping="true"
+                                app:scaleOnScroll="false"
+                                app:carouselOffset="center"
+                                app:indicatorAnimationType="drop"
+                                app:indicatorRadius="5"
+                                app:indicatorPadding="5"
+                                app:indicatorSelectedColor="@color/colorPrimary"
+                                app:indicatorUnselectedColor="@color/colorLightGray"
+                                app:spacing="4"
+                                app:resource="@layout/row_discover_menu"/>
 
+                    </RelativeLayout>
 
-                    </com.facebook.shimmer.ShimmerFrameLayout>
-
-                    <com.codepipes.ting.sliderview.SliderView
-                            android:id="@+id/discover_promotions"
+                    <RelativeLayout
+                            android:id="@+id/top_restaurants_view"
                             android:layout_width="match_parent"
-                            android:layout_height="230dp"
-                            android:layout_below="@id/promotions_label"
-                            android:visibility="gone"
-                            app:fillColor="@color/colorPrimary"
-                            app:pageColor="@color/colorTransparent"
-                            app:radius="4dp"
-                            app:slideInterval="8000"
-                            app:strokeColor="@color/colorVeryLightGray"
-                            app:strokeWidth="1dp"
-                            app:indicatorMarginVertical="10dp"
-                            app:indicatorGravity="right|bottom"/>
-
-                    <TextView
-                            android:id="@+id/discover_more_promotions"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="260dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginStart="10dp"
-                            android:visibility="gone"
-                            android:text="SHOW MORE"
-                            android:textColor="@color/colorWhite"
-                            android:fontFamily="@font/poppins_semi_bold"
-                            android:background="@color/colorTransparent"
-                            tools:ignore="HardcodedText,RtlHardcoded" />
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/discover_menus_view">
 
-                </RelativeLayout>
+                        <TextView
+                                android:id="@+id/top_restaurants_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="8dp"
+                                android:paddingStart="8dp"
+                                android:paddingLeft="8dp"
+                                android:text="Top Restaurants"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
-            </android.support.constraint.ConstraintLayout>
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/top_restaurants_shimmer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/top_restaurants_label"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="8dp"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
 
-        </ScrollView>
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <include layout="@layout/row_list_shimmer" />
+                                <include layout="@layout/row_list_shimmer" />
+
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+
+                                android:id="@+id/top_restaurants"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/top_restaurants_label"
+                                android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                            android:id="@+id/top_menus_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:paddingBottom="12dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/top_restaurants_view">
+
+                        <TextView
+                                android:id="@+id/top_menus_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="8dp"
+                                android:paddingStart="8dp"
+                                android:paddingLeft="8dp"
+                                android:text="Top Menus"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorDarkGray"
+                                android:textSize="23sp"
+                                tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/top_menus_shimmer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/top_menus_label"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginTop="8dp"
+                                app:shimmer_auto_start="true"
+                                app:shimmer_highlight_color="@color/colorVeryLightGray"
+                                app:shimmer_base_alpha="0.6">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <include layout="@layout/row_list_shimmer" />
+                                <include layout="@layout/row_list_shimmer" />
+
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                                android:id="@+id/top_menus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/top_menus_label"
+                                android:visibility="gone" />
+                    </RelativeLayout>
+
+                </android.support.constraint.ConstraintLayout>
+
+            </ScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

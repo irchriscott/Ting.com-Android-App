@@ -23,13 +23,15 @@ class RestaurantInfoWindowMap (val context: Context) : GoogleMap.InfoWindowAdapt
         val data = marker?.title
         val branch = Gson().fromJson(data,Branch::class.java)
 
-        Picasso.get().load(branch.restaurant?.logoURL()).into(view.info_image)
-        view.info_name.text = branch.restaurant?.name
-        view.info_branch.text = branch.name + " Branch"
-        view.info_address.text = branch.address
-        view.info_mail.text = branch.email
-        view.info_phone.text = branch.phone
-        view.info_time.text = "${branch.restaurant?.opening} - ${branch.restaurant?.closing}"
+        if(branch != null) {
+            Picasso.get().load(branch.restaurant?.logoURL()).into(view.info_image)
+            view.info_name.text = branch.restaurant?.name
+            view.info_branch.text = branch.name + " Branch"
+            view.info_address.text = branch.address
+            view.info_mail.text = branch.email
+            view.info_phone.text = branch.phone
+            view.info_time.text = "${branch.restaurant?.opening} - ${branch.restaurant?.closing}"
+        }
 
         return view
     }

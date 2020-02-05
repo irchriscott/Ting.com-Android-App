@@ -33,8 +33,9 @@ class Routes {
 
     //DISCOVERY
     val discoverRestaurants: String         = "${END_POINT}usr/d/restaurants/"
+    val discoverTopRestaurants: String      = "${END_POINT}usr/d/restaurants/top/"
     val discoverTodayPromosRand: String     = "${END_POINT}usr/d/today/promotions/rand/"
     val discoverTodayPromosAll: String      = "${END_POINT}usr/d/today/promotions/all/"
-    val discoverReviewedMenus: String       = "${END_POINT}usr/d/menus/reviewed/"
+    val discoverTopMenus: String            = "${END_POINT}usr/d/menus/top/"
     val discoverMenus: String               = "${END_POINT}usr/d/menus/discover/"
 }

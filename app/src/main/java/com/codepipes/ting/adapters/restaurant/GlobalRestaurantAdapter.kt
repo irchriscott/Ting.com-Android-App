@@ -62,21 +62,35 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
             activity.startActivity(intent)
         }
 
-        holder.view.restaurant_image.setOnClickListener {
+        holder.view.setOnClickListener {
             val intent = Intent(holder.view.context, RestaurantProfile::class.java)
             intent.putExtra("resto", branch.id)
             intent.putExtra("tab", 0)
             activity.startActivity(intent)
         }
 
-        if(branch.menus.count > 0) {
+        if(!branch.menus.menus.isNullOrEmpty()) {
             val layoutManager = LinearLayoutManager(holder.view.context)
             layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
             holder.view.restaurant_menus.layoutManager = layoutManager
             holder.view.restaurant_menus.adapter =
-                RestaurantListMenuAdapter(branch.menus.menus?.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                RestaurantListMenuAdapter(branch.menus.menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
         } else { holder.view.restaurant_menus.visibility = View.GONE }
+
+        if (branch.categories.count > 0) {
+            holder.view.restaurant_cuisines.text = branch.categories.categories.shuffled().joinToString(", ") { it.name }
+        } else {
+            holder.view.restaurant_cuisines_pin.visibility = View.GONE
+            holder.view.restaurant_cuisines.visibility = View.GONE
+        }
+
+        if (!branch.restaurant?.foodCategories?.categories.isNullOrEmpty()) {
+            holder.view.restaurant_categories.text = branch.restaurant!!.foodCategories.categories.shuffled().joinToString(", ") { it.name }
+        } else {
+            holder.view.restaurant_categories.visibility = View.GONE
+            holder.view.restaurant_categories_pin.visibility = View.GONE
+        }
 
         if(branch.isAvailable) {
 
