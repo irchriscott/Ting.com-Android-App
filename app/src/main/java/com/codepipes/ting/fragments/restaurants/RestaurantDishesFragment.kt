@@ -105,12 +105,14 @@ class RestaurantDishesFragment : Fragment() {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity?.runOnUiThread {
-                    view.dishes_recycler_view.visibility = View.GONE
-                    view.progress_loader.visibility = View.GONE
-                    view.empty_data.visibility = View.VISIBLE
+                    if(view.dishes_recycler_view.visibility != View.VISIBLE) {
+                        view.dishes_recycler_view.visibility = View.GONE
+                        view.progress_loader.visibility = View.GONE
+                        view.empty_data.visibility = View.VISIBLE
 
-                    view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
-                    view.empty_data.empty_text.text = "No Menu Dish To Show"
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                        view.empty_data.empty_text.text = "No Menu Dish To Show"
+                    }
                 }
             }
 

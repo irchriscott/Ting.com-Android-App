@@ -110,12 +110,14 @@ class RestaurantPromotionsFragment : Fragment() {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity?.runOnUiThread {
-                    view.promotions_recycler_view.visibility = View.GONE
-                    view.progress_loader.visibility = View.GONE
-                    view.empty_data.visibility = View.VISIBLE
+                    if (view.promotions_recycler_view.visibility != View.VISIBLE) {
+                        view.promotions_recycler_view.visibility = View.GONE
+                        view.progress_loader.visibility = View.GONE
+                        view.empty_data.visibility = View.VISIBLE
 
-                    view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
-                    view.empty_data.empty_text.text = "No Promotion To Show"
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
+                        view.empty_data.empty_text.text = "No Promotion To Show"
+                    }
                 }
             }
 
