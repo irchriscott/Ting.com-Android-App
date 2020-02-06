@@ -218,6 +218,16 @@ class CuisineRestaurantsFragment : Fragment() {
         try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+    }
+
     companion object {
 
         fun newInstance(cuisine: String) =

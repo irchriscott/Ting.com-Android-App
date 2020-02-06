@@ -8,3 +8,8 @@ class ServerResponse (
     val user: User?,
     val msgs: List<Any>?
 ){}
+
+class MapPin(
+    val id: Int,
+    val pin: String
+){}

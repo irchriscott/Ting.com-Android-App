@@ -6,6 +6,12 @@
     <group>
 
         <item
+                android:id="@+id/restaurant_profile_specification"
+                android:title="@string/restaurant_specification"
+                android:icon="@drawable/ic_restaurant_data"
+                />
+
+        <item
                 android:id="@+id/restaurant_profile_reviews"
                 android:title="@string/global_reviews"
                 android:icon="@drawable/ic_star_filled_gray"

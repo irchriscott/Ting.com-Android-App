@@ -226,4 +226,14 @@ class RestaurantLikes : AppCompatActivity() {
         super.onPause()
         try { likesTimer.cancel() } catch (e: Exception) {}
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { likesTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { likesTimer.cancel() } catch (e: Exception) {}
+    }
 }

@@ -21,6 +21,7 @@ import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
+import com.codepipes.ting.models.MapPin
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
@@ -92,6 +93,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
 
         userAuthentication = UserAuthentication(context!!)
         user = userAuthentication.get()!!
+        gson = Gson()
 
         gson = Gson()
         address = gson.fromJson(mArgs!!.getString("address"), com.codepipes.ting.models.Address::class.java)
@@ -107,10 +109,50 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
 
         mUseLocationBtn.setOnClickListener { this.updateUserAddress() }
 
-        val sharp = SVG.getFromString(user.pinImg)
+        val assetManager = context!!.assets
+        val sharp = SVG.getFromAsset(assetManager, "user_pin.svg")
         mapPin = mUtilFunctions.vectorToBitmap(sharp)
 
         return view
+    }
+
+    private fun requestUserMapPin() {
+        val url = "${Routes().userMapPin}${user.id}/"
+        val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", user.token!!)
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+
+            override fun onFailure(call: Call, e: IOException) {
+                activity!!.runOnUiThread {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "user_pin.svg")
+                    mapPin = mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body()!!.string()
+                mapPin = try {
+                    val pin = gson.fromJson(responseBody, MapPin::class.java)
+                    val sharp = SVG.getFromString(pin.pin)
+                    mUtilFunctions.vectorToBitmap(sharp)
+                } catch (e: Exception) {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "user_pin.svg")
+                    mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+        })
     }
 
     override fun setCancelable(cancelable: Boolean) {

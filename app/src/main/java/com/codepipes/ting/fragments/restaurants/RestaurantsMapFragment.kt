@@ -8,6 +8,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.AssetManager
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
@@ -31,9 +32,11 @@ import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.RetrofitGoogleMapsRoute
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
+import com.codepipes.ting.models.MapPin
 import com.codepipes.ting.models.PolylineMapRoute
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -48,12 +51,16 @@ import com.livefront.bridge.Bridge
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_restaurants_map.view.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.math.hypot
 
 
@@ -84,8 +91,12 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     private lateinit var userAuthentication: UserAuthentication
 
     private var handler: Handler? = null
-
     private var mapCenter: LatLng = LatLng(0.00, 0.00)
+
+    private lateinit var assetManager: AssetManager
+
+    private lateinit var userMapPin: BitmapDescriptor
+    private lateinit var restaurantMapPin: BitmapDescriptor
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val runnable: Runnable = Runnable {
@@ -142,6 +153,16 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             return@setOnKeyListener false
         }
 
+        assetManager = context!!.assets
+
+        val restoSharp = SVG.getFromAsset(assetManager, "restaurant_pin.svg")
+        restaurantMapPin = mUtilFunctions.vectorToBitmap(restoSharp)
+
+        val userSharp = SVG.getFromAsset(assetManager, "user_pin.svg")
+        userMapPin = mUtilFunctions.vectorToBitmap(userSharp)
+
+        requestUserMapPin()
+
         handler = Handler()
         handler?.postDelayed(runnable, 2000)
 
@@ -156,6 +177,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
             view.restaurant_address.text = branch.address
             view.restaurant_distance.text = "${branch.dist} km"
+
+            requestRestaurantMapPin(branch.id)
 
             if(branch.isAvailable) {
 
@@ -207,12 +230,10 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
         if(!restaurant.isNullOrBlank() && !restaurant.isNullOrEmpty()){
 
-            val sharp = SVG.getFromString(branch.restaurant?.pinImg)
-            val mapPin = mUtilFunctions.vectorToBitmap(sharp)
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(branch.latitude, branch.longitude), GOOGLE_MAPS_ZOOM))
 
             val branchString = gson.toJson(branch)
-            val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(mapPin)
+            val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(restaurantMapPin)
             val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
             mMap.setInfoWindowAdapter(infoWindowAdapter)
             mMap.addMarker(marker)
@@ -258,10 +279,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                 if(branches.size > 0){
 
                     for(b in branches){
-                        val svgRestaurant = SVG.getFromString(b.restaurant?.pinImg)
-                        val mapPinRestaurant = mUtilFunctions.vectorToBitmap(svgRestaurant)
                         val branchString = gson.toJson(b)
-                        val marker = MarkerOptions().position(LatLng(b.latitude, b.longitude)).title(branchString).icon(mapPinRestaurant)
+                        val marker = MarkerOptions().position(LatLng(b.latitude, b.longitude)).title(branchString).icon(restaurantMapPin)
                         val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
                         mMap.setInfoWindowAdapter(infoWindowAdapter)
 
@@ -302,6 +321,84 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
                 Toast.LENGTH_LONG)
         }
+    }
+
+    private fun requestUserMapPin() {
+        val url = "${Routes().userMapPin}${session.id}/"
+        val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", session.token!!)
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                activity!!.runOnUiThread {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "user_pin.svg")
+                    userMapPin = mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val responseBody = response.body()!!.string()
+                userMapPin = try {
+                    val pin = gson.fromJson(responseBody, MapPin::class.java)
+                    val sharp = SVG.getFromString(pin.pin)
+                    mUtilFunctions.vectorToBitmap(sharp)
+                } catch (e: Exception) {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "user_pin.svg")
+                    mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+        })
+    }
+
+    private fun requestRestaurantMapPin(restoId: Int) {
+        val url = "${Routes().restaurantMapPin}${restoId}/"
+        val client = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", session.token!!)
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                activity!!.runOnUiThread {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "restaurant_pin.svg")
+                    restaurantMapPin = mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val responseBody = response.body()!!.string()
+                restaurantMapPin = try {
+                    val pin = gson.fromJson(responseBody, MapPin::class.java)
+                    val sharp = SVG.getFromString(pin.pin)
+                    mUtilFunctions.vectorToBitmap(sharp)
+                } catch (e: Exception) {
+                    val assetManager = context!!.assets
+                    val sharp = SVG.getFromAsset(assetManager, "restaurant_pin.svg")
+                    mUtilFunctions.vectorToBitmap(sharp)
+                }
+            }
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -402,17 +499,13 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
                         mMap.clear()
 
-                        val svgRestaurant = SVG.getFromString(branch.restaurant?.pinImg)
-                        val mapPinRestaurant = mUtilFunctions.vectorToBitmap(svgRestaurant)
                         val branchString = gson.toJson(branch)
-                        val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(mapPinRestaurant)
+                        val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(restaurantMapPin)
                         val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
                         mMap.setInfoWindowAdapter(infoWindowAdapter)
                         mMap.addMarker(marker)
 
-                        val svgUser = SVG.getFromString(session.pinImg)
-                        val mapPinUser = mUtilFunctions.vectorToBitmap(svgUser)
-                        mMap.addMarker(MarkerOptions().position(LatLng(origin.latitude, origin.longitude)).icon(mapPinUser))
+                        mMap.addMarker(MarkerOptions().position(LatLng(origin.latitude, origin.longitude)).icon(userMapPin))
 
                         response.body()?.routes!!.forEach {
                             val i = response.body()?.routes!!.indexOf(it)

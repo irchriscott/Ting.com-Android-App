@@ -800,4 +800,14 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         super.onPause()
         try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
 }

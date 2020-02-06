@@ -41,7 +41,7 @@ class RestaurantPromotionsFragment : Fragment() {
     private lateinit var gson: Gson
 
     private lateinit var promotionsTimer: Timer
-    private val TIMER_PERIOD = 6000.toLong()
+    private val TIMER_PERIOD = 10000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,6 +145,16 @@ class RestaurantPromotionsFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDetach() {
+        super.onDetach()
         try { promotionsTimer.cancel() } catch (e: Exception) {}
     }
 

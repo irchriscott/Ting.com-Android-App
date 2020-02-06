@@ -79,7 +79,7 @@ class RestaurantProfile : AppCompatActivity() {
     private var selectedLongitude: Double = 0.0
 
     private lateinit var restaurantTimer: Timer
-    private val TIMER_PERIOD = 6000.toLong()
+    private val TIMER_PERIOD = 10000.toLong()
 
     @SuppressLint("SetTextI18n", "PrivateResource", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -426,6 +426,13 @@ class RestaurantProfile : AppCompatActivity() {
                 onBackPressed()
                 return true
             }
+            R.id.restaurant_profile_specification -> {
+                val intent = Intent(this@RestaurantProfile, RestaurantSpecification::class.java)
+                intent.putExtra("resto", branch.id)
+                intent.putExtra("apiGet", branch.urls.apiGet)
+                startActivity(intent)
+                return true
+            }
             R.id.restaurant_profile_reviews -> {
                 val intent = Intent(this@RestaurantProfile, RestaurantReviews::class.java)
                 intent.putExtra("resto", branch.id)
@@ -452,7 +459,6 @@ class RestaurantProfile : AppCompatActivity() {
         }
         return false
     }
-
 
     internal class RestaurantProfileViewPagerAdapter(fm: FragmentManager): FragmentPagerAdapter(fm) {
 
@@ -492,6 +498,16 @@ class RestaurantProfile : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 }

@@ -615,4 +615,14 @@ class MenuPromotion : AppCompatActivity() {
         super.onPause()
         try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
 }

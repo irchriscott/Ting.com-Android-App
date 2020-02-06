@@ -46,6 +46,9 @@ class TodayPromotions : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_promotions)
 
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.elevation = 0F
@@ -147,6 +150,22 @@ class TodayPromotions : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { promotionsTimer.cancel() } catch (e: Exception) {}
     }
 }

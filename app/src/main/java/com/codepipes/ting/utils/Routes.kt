@@ -1,5 +1,6 @@
 package com.codepipes.ting.utils
 
+
 class Routes {
 
     public val HOST_END_POINT: String       = "http://10.0.2.2:8000"
@@ -12,6 +13,7 @@ class Routes {
     val submitGoogleSignUp: String          = "${END_POINT}usr/signup/google/"
     val authLoginUser: String               = "${END_POINT}usr/auth/login/"
     val authResetPassword                   = "${END_POINT}usr/auth/password/reset/"
+    val userMapPin: String                  = "${END_POINT}usr/profile/map/pin/"
 
     //UPDATE & USER DATA
     val updateProfileImage: String          = "${END_POINT}usr/profile/image/update/"
@@ -25,6 +27,7 @@ class Routes {
     //RESTAURANTS
     val restaurantsGlobal: String           = "${END_POINT}usr/g/restaurants/all/"
     val restaurantGet: String               = "${END_POINT}usr/g/restaurants/get/"
+    val restaurantMapPin: String            = "${END_POINT}usr/g/restaurants/map/pin/"
 
     //CUISINES
     val cuisinesGlobal: String              = "${END_POINT}usr/g/cuisines/all/"

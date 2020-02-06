@@ -25,6 +25,9 @@ class Cuisine : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cuisine)
 
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         val cuisineString = intent.getStringExtra("cuisine")
         val cuisine = Gson().fromJson(cuisineString, RestaurantCategory::class.java)
 

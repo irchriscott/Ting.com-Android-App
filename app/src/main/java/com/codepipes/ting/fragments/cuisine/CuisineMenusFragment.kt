@@ -180,6 +180,16 @@ class CuisineMenusFragment : Fragment() {
         try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
+    }
+
     companion object {
 
         fun newInstance(cuisine: String) =

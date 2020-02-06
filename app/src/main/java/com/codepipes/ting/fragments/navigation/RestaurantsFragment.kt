@@ -77,7 +77,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var cuisinesTimer: Timer
     private lateinit var restaurantsTimer: Timer
 
-    private val TIMER_PERIOD = 6000.toLong()
+    private val TIMER_PERIOD = 10000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +102,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
+
+        this.getRestaurants()
 
         cuisinesTimer = Timer()
         restaurantsTimer = Timer()
@@ -267,7 +269,6 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         restaurantsTimer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() { getRestaurants() }
         }, TIMER_PERIOD, TIMER_PERIOD)
-        this.getRestaurants()
 
         return view
     }
@@ -436,6 +437,22 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onPause() {
         super.onPause()
+        try {
+            cuisinesTimer.cancel()
+            restaurantsTimer.cancel()
+        } catch (e: Exception) {}
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        try {
+            cuisinesTimer.cancel()
+            restaurantsTimer.cancel()
+        } catch (e: Exception) {}
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         try {
             cuisinesTimer.cancel()
             restaurantsTimer.cancel()

@@ -392,4 +392,14 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         super.onPause()
         try { reviewsTimer.cancel() } catch (e: java.lang.Exception) {}
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { reviewsTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { reviewsTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
 }

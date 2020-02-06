@@ -169,4 +169,14 @@ class RestaurantAbout : AppCompatActivity() {
         super.onPause()
         try { branchTimer.cancel() } catch (e: Exception) {}
     }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try { branchTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try { branchTimer.cancel() } catch (e: Exception) {}
+    }
 }
