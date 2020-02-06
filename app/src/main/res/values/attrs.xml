@@ -25,6 +25,8 @@
 
         <attr name="enableSnapping" format="boolean" />
         <attr name="scaleOnScroll" format="boolean" />
+        <attr name="setAutoPlay" format="boolean" />
+        <attr name="setAutoPlayDelay" format="integer" />
         <attr name="carouselOffset" format="enum">
             <enum name="start" value="0"/>
             <enum name="center" value="1"/>
@@ -99,9 +101,6 @@
     <declare-styleable name="ViewPagerIndicator">
         <attr name="vpiCirclePageIndicatorStyle" format="reference" />
     </declare-styleable>
-
-    <!--<attr name="selectedColor" format="color"/>-->
-    <!--<attr name="unselectedColor" format="color"/>-->
 
     <attr name="indicatorGravity">
         <flag name="top" value="0x30" />

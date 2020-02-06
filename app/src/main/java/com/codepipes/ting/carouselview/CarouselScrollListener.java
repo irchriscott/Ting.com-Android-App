@@ -8,5 +8,4 @@ public interface CarouselScrollListener {
     void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState, int position);
 
     void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy);
-
 }
