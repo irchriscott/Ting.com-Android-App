@@ -98,6 +98,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     private lateinit var userMapPin: BitmapDescriptor
     private lateinit var restaurantMapPin: BitmapDescriptor
 
+    private lateinit var fromLocation: LatLng
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val runnable: Runnable = Runnable {
         mProgressWheel.visibility = View.GONE
@@ -228,6 +230,8 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         val mArgs = arguments
         val restaurant = mArgs?.getString("resto")
 
+        fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+
         if(!restaurant.isNullOrBlank() && !restaurant.isNullOrEmpty()){
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(branch.latitude, branch.longitude), GOOGLE_MAPS_ZOOM))
@@ -244,12 +248,12 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             view?.restaurant_direction_driving?.setOnClickListener {
                 view?.restaurant_direction_driving?.background = view?.context?.resources?.getDrawable(R.drawable.background_label_button_active)
                 view?.restaurant_direction_walking?.background = view?.context?.resources?.getDrawable(R.drawable.background_labeled_button)
-                this.getPolyline(branch.fromLocation, destination, "driving")
+                this.getPolyline(branch.fromLocation ?: fromLocation, destination, "driving")
             }
             view?.restaurant_direction_walking?.setOnClickListener {
                 view?.restaurant_direction_walking?.background = view?.context?.resources?.getDrawable(R.drawable.background_label_button_active)
                 view?.restaurant_direction_driving?.background = view?.context?.resources?.getDrawable(R.drawable.background_labeled_button)
-                this.getPolyline(branch.fromLocation, destination, "walking")
+                this.getPolyline(branch.fromLocation ?: fromLocation, destination, "walking")
             }
         } else {
 
@@ -300,10 +304,12 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         this.getLocation(it)
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
+                            fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                             TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: Exception){
+                    fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                     TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
                         Toast.LENGTH_LONG)
                 }
@@ -313,13 +319,14 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     private fun getLocation(location: Location){
-        try {
+        fromLocation = try {
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            if (mapCenter.latitude != 0.0 && mapCenter.longitude != 0.0) { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, GOOGLE_MAPS_ZOOM)) }
-            else { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM)) }
+            if (mapCenter.latitude != 0.0 && mapCenter.longitude != 0.0) { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, GOOGLE_MAPS_ZOOM)) } else { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM)) }
+            LatLng(location.latitude, location.longitude)
         } catch (e: Exception){
             TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
                 Toast.LENGTH_LONG)
+            LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
         }
     }
 
@@ -471,78 +478,80 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     @SuppressLint("DefaultLocale")
-    private fun getPolyline(origin: LatLng, destination: LatLng, type: String){
+    private fun getPolyline(origin: LatLng?, destination: LatLng?, type: String){
+        val originLocation = origin ?: fromLocation
+        if (destination != null) {
+            val url = "https://maps.googleapis.com/maps/"
 
-        val url = "https://maps.googleapis.com/maps/"
-
-        val retrofit = Retrofit.Builder()
+            val retrofit = Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        val service = retrofit.create(RetrofitGoogleMapsRoute::class.java)
-        val call = service.getDistanceDuration("metric",  "${origin.latitude},${origin.longitude}", "${destination.latitude},${destination.longitude}", type)
+            val service = retrofit.create(RetrofitGoogleMapsRoute::class.java)
+            val call = service.getDistanceDuration("metric",  "${originLocation.latitude},${originLocation.longitude}", "${destination.latitude},${destination.longitude}", type)
 
-        call.enqueue(object : Callback<PolylineMapRoute> {
+            call.enqueue(object : Callback<PolylineMapRoute> {
 
 
-            override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
-                activity?.runOnUiThread {
-                    TingToast(context!!, t.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                }
-            }
-
-            @SuppressLint("SetTextI18n")
-            override fun onResponse(call: Call<PolylineMapRoute>, response: Response<PolylineMapRoute>) {
-                try {
+                override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
                     activity?.runOnUiThread {
+                        TingToast(context!!, t.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    }
+                }
 
-                        mMap.clear()
+                @SuppressLint("SetTextI18n")
+                override fun onResponse(call: Call<PolylineMapRoute>, response: Response<PolylineMapRoute>) {
+                    try {
+                        activity?.runOnUiThread {
 
-                        val branchString = gson.toJson(branch)
-                        val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(restaurantMapPin)
-                        val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
-                        mMap.setInfoWindowAdapter(infoWindowAdapter)
-                        mMap.addMarker(marker)
+                            mMap.clear()
 
-                        mMap.addMarker(MarkerOptions().position(LatLng(origin.latitude, origin.longitude)).icon(userMapPin))
+                            val branchString = gson.toJson(branch)
+                            val marker = MarkerOptions().position(LatLng(branch.latitude, branch.longitude)).title(branchString).icon(restaurantMapPin)
+                            val infoWindowAdapter = RestaurantInfoWindowMap(context!!)
+                            mMap.setInfoWindowAdapter(infoWindowAdapter)
+                            mMap.addMarker(marker)
 
-                        response.body()?.routes!!.forEach {
-                            val i = response.body()?.routes!!.indexOf(it)
-                            val  distance = it.legs[i].distance.text
-                            val time = it.legs[i].duration.text
-                            view?.restaurant_direction_text!!.visibility = View.VISIBLE
-                            view?.restaurant_direction_text!!.text = "$time ($distance)"
+                            mMap.addMarker(MarkerOptions().position(LatLng(originLocation.latitude, originLocation.longitude)).icon(userMapPin))
 
-                            val encodedString = response.body()?.routes!![0].overview_polyline.points
-                            val linesList = mUtilFunctions.decodePoly(encodedString)
-                            polyline = mMap.addPolyline(
-                                PolylineOptions()
-                                    .addAll(linesList)
-                                    .width(20.0f)
-                                    .color(Color.parseColor("#BBB56FE8"))
-                                    .geodesic(true))
+                            response.body()?.routes!!.forEach {
+                                val i = response.body()?.routes!!.indexOf(it)
+                                val  distance = it.legs[i].distance.text
+                                val time = it.legs[i].duration.text
+                                view?.restaurant_direction_text!!.visibility = View.VISIBLE
+                                view?.restaurant_direction_text!!.text = "$time ($distance)"
+
+                                val encodedString = response.body()?.routes!![0].overview_polyline.points
+                                val linesList = mUtilFunctions.decodePoly(encodedString)
+                                polyline = mMap.addPolyline(
+                                    PolylineOptions()
+                                        .addAll(linesList)
+                                        .width(20.0f)
+                                        .color(Color.parseColor("#BBB56FE8"))
+                                        .geodesic(true))
+                            }
+
+                            mMap.setMinZoomPreference(2.0f)
+                            mMap.setMaxZoomPreference(17.0f)
+
+                            val latLngBounds = LatLngBounds.builder()
+                            latLngBounds.include(origin)
+                            latLngBounds.include(destination)
+
+                            val bounds = latLngBounds.build()
+                            mMap.setPadding(120, 120, 120, 120)
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
+
                         }
-
-                        mMap.setMinZoomPreference(2.0f)
-                        mMap.setMaxZoomPreference(17.0f)
-
-                        val latLngBounds = LatLngBounds.builder()
-                        latLngBounds.include(origin)
-                        latLngBounds.include(destination)
-
-                        val bounds = latLngBounds.build()
-                        mMap.setPadding(120, 120, 120, 120)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0))
-
-                    }
-                } catch (e: java.lang.Exception) {
-                    activity?.runOnUiThread {
-                        TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    } catch (e: java.lang.Exception) {
+                        activity?.runOnUiThread {
+                            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
                     }
                 }
-            }
-        })
+            })
+        } else { TingToast(context!!, "An Error Has occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

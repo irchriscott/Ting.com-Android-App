@@ -30,6 +30,7 @@ class Routes {
     val restaurantMapPin: String            = "${END_POINT}usr/g/restaurants/map/pin/"
     val restaurantFilters: String           = "${END_POINT}usr/g/restaurants/filters/"
     val restaurantsSearchFiltered: String   = "${END_POINT}usr/g/restaurants/search/filter/"
+    val checkUserRestaurantReview: String   = "${END_POINT}usr/g/restaurants/reviews/check/"
 
     //CUISINES
     val cuisinesGlobal: String              = "${END_POINT}usr/g/cuisines/all/"
@@ -43,4 +44,7 @@ class Routes {
     val discoverTodayPromosAll: String      = "${END_POINT}usr/d/today/promotions/all/"
     val discoverTopMenus: String            = "${END_POINT}usr/d/menus/top/"
     val discoverMenus: String               = "${END_POINT}usr/d/menus/discover/"
+
+    //MENU
+    var checkUserMenuReview: String         = "${END_POINT}usr/menu/reviews/check/"
 }

@@ -296,7 +296,6 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                     .setNegativeButtonText("Cancel")
                     .setNeutralButtonText("Later")
                     .setNoteDescriptions(listOf("Very Bad", "Not good", "Quite Ok", "Very Good", "Excellent !!!"))
-                    .setDefaultRating(restaurantReview?.review ?: 1)
                     .setTitle("Rate this Restaurant")
                     .setDescription("Please select a rate and write a review")
                     .setCommentInputEnabled(true)
@@ -312,9 +311,51 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                     .setCancelable(false)
                     .setCanceledOnTouchOutside(false)
 
-                if(restaurantReview?.comment != null){ ratingDialog.setDefaultComment(restaurantReview.comment) }
+                val url = Routes().checkUserRestaurantReview
+                val client = OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
-                ratingDialog.create(this).show()
+                val form = MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("resto", branchId.toString())
+                    .build()
+
+                val request = Request.Builder()
+                    .header("Authorization", session.token!!)
+                    .url(url)
+                    .post(form)
+                    .build()
+
+                client.newCall(request).enqueue(object : Callback {
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        runOnUiThread {
+                            ratingDialog.setDefaultRating(1)
+                            ratingDialog.create(this@RestaurantReviews).show()
+                        }
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val dataString = response.body()!!.string()
+                        runOnUiThread {
+                            try {
+                                if(response.code() == 200) {
+                                    val review = Gson().fromJson<RestaurantReview>(dataString, RestaurantReview::class.java)
+                                    ratingDialog.setDefaultRating(review.review)
+                                    ratingDialog.setDefaultComment(review.comment)
+                                    ratingDialog.create(this@RestaurantReviews).show()
+                                } else {
+                                    ratingDialog.setDefaultRating(1)
+                                    ratingDialog.create(this@RestaurantReviews).show()
+                                }
+                            } catch (e: java.lang.Exception) {
+                                ratingDialog.setDefaultRating(1)
+                                ratingDialog.create(this@RestaurantReviews).show()
+                            }
+                        }
+                    }
+                })
 
                 return true
             }

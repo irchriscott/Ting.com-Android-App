@@ -280,7 +280,7 @@ class DiscoveryFragment : Fragment() {
                 val dataString = response.body()!!.string()
                 activity!!.runOnUiThread{
                     try {
-                        val restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+                        val branches = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
                         restaurantsTimer.cancel()
                         restaurantsTimerTask.cancel()
                         view.refresh_discovery.isRefreshing = false
@@ -288,25 +288,77 @@ class DiscoveryFragment : Fragment() {
                         view.discover_restaurants_shimmer.visibility = View.GONE
                         view.discover_restaurants.visibility = View.VISIBLE
 
-                        view.discover_restaurants.apply {
-                            size = restaurants.size
-                            resource = R.layout.row_discover_restaurant
-                            indicatorAnimationType = IndicatorAnimationType.THIN_WORM
-                            carouselOffset = OffsetType.START
-                            setCarouselViewListener { view, position ->
-                                val branch = restaurants[position]
-                                view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
-                                view.restaurant_address.text = branch.address
-                                view.restaurant_rating.rating = branch.reviews!!.average
-                                Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
-                                view.setOnClickListener {
-                                    val intent = Intent(context, RestaurantProfile::class.java)
-                                    intent.putExtra("resto", branch.id)
-                                    activity?.startActivity(intent)
+                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                            if(it != null){
+                                val from = LatLng(it.latitude, it.longitude)
+                                branches.forEach { b ->
+                                    val to = LatLng(b.latitude, b.longitude)
+                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                    b.dist = dist
+                                    b.fromLocation = from
+                                }
+                            } else {
+                                val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                branches.forEach { b ->
+                                    val to = LatLng(b.latitude, b.longitude)
+                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                    b.dist = dist
+                                    b.fromLocation = from
                                 }
                             }
-                            hideIndicator(true)
-                            show()
+                            view.discover_restaurants_shimmer.visibility = View.GONE
+                            view.discover_restaurants.visibility = View.VISIBLE
+                            view.discover_restaurants.apply {
+                                size = branches.size
+                                resource = R.layout.row_discover_restaurant
+                                indicatorAnimationType = IndicatorAnimationType.THIN_WORM
+                                carouselOffset = OffsetType.START
+                                setCarouselViewListener { view, position ->
+                                    val branch = branches[position]
+                                    view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
+                                    view.restaurant_address.text = branch.address
+                                    view.restaurant_rating.rating = branch.reviews!!.average
+                                    Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
+                                    view.setOnClickListener {
+                                        val intent = Intent(context, RestaurantProfile::class.java)
+                                        intent.putExtra("resto", branch.id)
+                                        activity?.startActivity(intent)
+                                    }
+                                }
+                                hideIndicator(true)
+                                show()
+                            }
+                        }.addOnFailureListener {
+                            val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                            branches.forEach { b ->
+                                val to = LatLng(b.latitude, b.longitude)
+                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                b.dist = dist
+                                b.fromLocation = from
+                            }
+                            view.discover_restaurants_shimmer.visibility = View.GONE
+                            view.discover_restaurants.visibility = View.VISIBLE
+                            view.discover_restaurants.apply {
+                                size = branches.size
+                                resource = R.layout.row_discover_restaurant
+                                indicatorAnimationType = IndicatorAnimationType.THIN_WORM
+                                carouselOffset = OffsetType.START
+                                setCarouselViewListener { view, position ->
+                                    val branch = branches[position]
+                                    view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
+                                    view.restaurant_address.text = branch.address
+                                    view.restaurant_rating.rating = branch.reviews!!.average
+                                    Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
+                                    view.setOnClickListener {
+                                        val intent = Intent(context, RestaurantProfile::class.java)
+                                        intent.putExtra("resto", branch.id)
+                                        activity?.startActivity(intent)
+                                    }
+                                }
+                                hideIndicator(true)
+                                show()
+                            }
+                            TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     } catch (e: Exception) {
                         restaurantsTimer.cancel()

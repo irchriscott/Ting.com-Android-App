@@ -510,8 +510,8 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             } else { menu_dish_foods_view.visibility = View.GONE }
         } else { menu_dish_foods_view.visibility = View.GONE }
 
-        if (menu.menu.promotions?.count!! > 0) {
-            val promotions = menu.menu.promotions.promotions!!.filter { return@filter it.isOn && it.isOnToday }
+        if (menu.menu.promotions?.promotions != null) {
+            val promotions = menu.menu.promotions.promotions.filter { return@filter it.isOn && it.isOnToday }
             if (promotions.isNotEmpty()){
                 menu_promotions_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantMenu)
                 menu_promotions_recycler_view.adapter = PromotionRestaurantMenuAdapter(promotions as MutableList<MenuPromotion>)
@@ -597,13 +597,13 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         ratingChart.data = data
         ratingChart.invalidate()
 
-        if(menu.menu.reviews.count > 0){
+        if(menu.menu.reviews.count > 0 && menu.menu.reviews.reviews != null){
             empty_data.visibility = View.GONE
             menu_reviews_recycler_view.visibility = View.VISIBLE
 
             val max = if(menu.menu.reviews.count > 6){ 5 } else { menu.menu.reviews.count }
 
-            val reviews = menu.menu.reviews.reviews!!.subList(0, max)
+            val reviews = menu.menu.reviews.reviews.subList(0, max)
             menu_reviews_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantMenu)
             menu_reviews_recycler_view.adapter = MenuReviewsAdapter(reviews as MutableList<MenuReview>)
 
@@ -697,14 +697,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             }
             R.id.menu_rate -> {
 
-                val menuReview = utilsFunctions.userMenuReview(menu.menu.reviews?.reviews!!, session)
-
                 val ratingDialog = AppRatingDialog.Builder()
                     .setPositiveButtonText("Submit")
                     .setNegativeButtonText("Cancel")
                     .setNeutralButtonText("Later")
                     .setNoteDescriptions(listOf("Very Bad", "Not good", "Quite Ok", "Very Good", "Excellent !!!"))
-                    .setDefaultRating(menuReview?.review ?: 1)
                     .setTitle("Rate this Menu")
                     .setDescription("Please select a rate and write a review")
                     .setCommentInputEnabled(true)
@@ -720,9 +717,51 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     .setCancelable(false)
                     .setCanceledOnTouchOutside(false)
 
-                if(menuReview?.comment != null){ ratingDialog.setDefaultComment(menuReview.comment) }
+                val url = Routes().checkUserMenuReview
+                val client = OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .callTimeout(60 * 5, TimeUnit.SECONDS).build()
 
-                ratingDialog.create(this).show()
+                val form = MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("menu", menu.id.toString())
+                    .build()
+
+                val request = Request.Builder()
+                    .header("Authorization", session.token!!)
+                    .url(url)
+                    .post(form)
+                    .build()
+
+                client.newCall(request).enqueue(object : Callback {
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        runOnUiThread {
+                            ratingDialog.setDefaultRating(1)
+                            ratingDialog.create(this@RestaurantMenu).show()
+                        }
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val dataString = response.body()!!.string()
+                        runOnUiThread {
+                            try {
+                                if(response.code() == 200) {
+                                    val review = gson.fromJson<MenuReview>(dataString, MenuReview::class.java)
+                                    ratingDialog.setDefaultRating(review.review)
+                                    ratingDialog.setDefaultComment(review.comment)
+                                    ratingDialog.create(this@RestaurantMenu).show()
+                                } else {
+                                    ratingDialog.setDefaultRating(1)
+                                    ratingDialog.create(this@RestaurantMenu).show()
+                                }
+                            } catch (e: java.lang.Exception) {
+                                ratingDialog.setDefaultRating(1)
+                                ratingDialog.create(this@RestaurantMenu).show()
+                            }
+                        }
+                    }
+                })
 
                 return true
             }
