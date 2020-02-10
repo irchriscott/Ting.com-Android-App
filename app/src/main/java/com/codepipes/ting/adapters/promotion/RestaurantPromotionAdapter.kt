@@ -62,8 +62,8 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
 
         when(promotion.promotionItem.type.id){
             0 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -76,8 +76,8 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 holder.view.promotion_menu_on.visibility = View.GONE
             }
             1 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 1 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -90,8 +90,8 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 holder.view.promotion_menu_on.visibility = View.GONE
             }
             2 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 2 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -104,8 +104,8 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 holder.view.promotion_menu_on.visibility = View.GONE
             }
             3 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 3 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -138,8 +138,8 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 holder.view.promotion_data_recycler_view.adapter = MenuImageListAdapter(promotion.promotionItem.menu.menu.images.images.shuffled() as MutableList<MenuImage>)
             }
             5 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.menu.category?.id == promotion.promotionItem.category?.id }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL

@@ -78,7 +78,7 @@ class MenuReviews (
 
 class MenuLikes (
     val count: Int,
-    val likes: List<MenuLike>?
+    val likes: List<Int>?
 ){}
 
 class MenuFoods (

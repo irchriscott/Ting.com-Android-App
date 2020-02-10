@@ -94,7 +94,7 @@ class BranchReviews (
 
 class BranchLikes (
     val count: Int,
-    val likes: List<UserRestaurant>?
+    val likes: List<Int>?
 ){}
 
 class BranchUrls (

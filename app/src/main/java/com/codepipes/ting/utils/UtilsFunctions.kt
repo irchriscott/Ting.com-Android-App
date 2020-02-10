@@ -189,12 +189,7 @@ class UtilsFunctions( private val context: Context ) {
         return poly
     }
 
-    public fun likesMenu(likes: List<MenuLike>, session: User) : Boolean {
-        if(likes.isNotEmpty()){
-            likes.forEach { if (it.user.id == session.id){ return true } }
-            return false
-        } else { return false }
-    }
+    public fun likesMenu(likes: List<Int>, session: User) : Boolean = likes.contains(session.id)
 
     public fun userMenuReview(reviews: List<MenuReview>, session: User) : MenuReview? {
         return if(reviews.isNotEmpty()){
@@ -208,12 +203,7 @@ class UtilsFunctions( private val context: Context ) {
         } else { null }
     }
 
-    public  fun userPromotionInterest(interests: List<PromotionInterest>, session: User) : Boolean {
-        if(interests.isNotEmpty()){
-            interests.forEach { if(it.user.id == session.id) { return true } }
-            return false
-        } else { return false }
-    }
+    public  fun userPromotionInterest(interests: List<Int>, session: User) : Boolean = interests.contains(session.id)
 
     @SuppressLint("SimpleDateFormat")
     public fun timeAgo(date: String) : String {

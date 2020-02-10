@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.codepipes.ting.fragments.navigation.RestaurantsFragment
 import com.codepipes.ting.models.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -26,6 +27,15 @@ class LocalData (
 
     private val USERS_SHARED_PREFERENCES_KEY = "users"
     private val CUISINES_SHARED_PREFERENCES_KEY = "cuisines"
+    private val FILTERS_SHARED_PREFERENCES_KEY = "filters"
+    private val PARAMS_FILTERS_SHARED_PREFERENCES_KEY = "params_filters"
+
+    private val DEFAULT_PARAMS = "{'${RestaurantsFragment.AVAILABILITY_KEY}': [], " +
+                                        "'${RestaurantsFragment.CUISINES_KEY}': [], " +
+                                        "'${RestaurantsFragment.SERVICES_KEY}': [], " +
+                                        "'${RestaurantsFragment.SPECIALS_KEY}': [], " +
+                                        "'${RestaurantsFragment.TYPES_KEY}': [], " +
+                                        "'${RestaurantsFragment.RATINGS_KEY}': []}"
 
     public fun saveRestaurants(data: String){
         this.sharedPreferencesEditor.putString(RESTAURANTS_SHARED_PREFERENCES_KEY, data)
@@ -156,5 +166,27 @@ class LocalData (
     public fun getCuisines(): MutableList<RestaurantCategory> {
         val usersString = this.sharedPreferences.getString(CUISINES_SHARED_PREFERENCES_KEY, "[]")
         return gson.fromJson<MutableList<RestaurantCategory>>(usersString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
+    }
+
+    public fun saveFilters(data: String){
+        this.sharedPreferencesEditor.putString(FILTERS_SHARED_PREFERENCES_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun getFilters() : RestaurantFilters? {
+        val filtersString = this.sharedPreferences.getString(FILTERS_SHARED_PREFERENCES_KEY, null)
+        return if(filtersString != null) { gson.fromJson(filtersString, RestaurantFilters::class.java) } else { null }
+    }
+    
+    public fun saveParametersFilters(data: String?) {
+        this.sharedPreferencesEditor.putString(PARAMS_FILTERS_SHARED_PREFERENCES_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun getParametersFilters() : FiltersParameters {
+        val filtersString = this.sharedPreferences.getString(PARAMS_FILTERS_SHARED_PREFERENCES_KEY, DEFAULT_PARAMS)
+        return gson.fromJson(filtersString, FiltersParameters::class.java)
     }
 }

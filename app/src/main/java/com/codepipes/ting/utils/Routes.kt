@@ -28,6 +28,8 @@ class Routes {
     val restaurantsGlobal: String           = "${END_POINT}usr/g/restaurants/all/"
     val restaurantGet: String               = "${END_POINT}usr/g/restaurants/get/"
     val restaurantMapPin: String            = "${END_POINT}usr/g/restaurants/map/pin/"
+    val restaurantFilters: String           = "${END_POINT}usr/g/restaurants/filters/"
+    val restaurantsSearchFiltered: String   = "${END_POINT}usr/g/restaurants/search/filter/"
 
     //CUISINES
     val cuisinesGlobal: String              = "${END_POINT}usr/g/cuisines/all/"

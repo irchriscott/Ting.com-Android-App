@@ -38,7 +38,7 @@
                                 android:text="Recommended Restaurants"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout
@@ -105,7 +105,7 @@
                                 android:text="Cuisines"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 android:paddingBottom="8dp"
                                 tools:ignore="HardcodedText" />
 
@@ -162,7 +162,7 @@
                                 android:paddingTop="8dp"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 tools:ignore="HardcodedText" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout
@@ -273,7 +273,7 @@
                                 android:text="Recommended Menus"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout
@@ -339,7 +339,7 @@
                                 android:text="Top Restaurants"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout
@@ -397,7 +397,7 @@
                                 android:text="Top Menus"
                                 android:fontFamily="@font/poppins_semi_bold"
                                 android:textColor="@color/colorDarkGray"
-                                android:textSize="23sp"
+                                android:textSize="20sp"
                                 tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
                         <com.facebook.shimmer.ShimmerFrameLayout

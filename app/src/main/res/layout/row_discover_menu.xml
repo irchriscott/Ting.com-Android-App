@@ -31,15 +31,15 @@
 
     <RatingBar
             android:id="@+id/menu_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:numStars="5"
-            app:layout_constraintTop_toBottomOf="@id/menu_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/menu_name"
             style="@style/AppTheme.SmallRating"
-            android:theme="@style/AppTheme.SmallRating"/>
+            android:layout_width="81dp"
+            android:layout_height="27dp"
+            android:numStars="5"
+            android:paddingTop="10dp"
+            android:theme="@style/AppTheme.SmallRating"
+            app:layout_constraintBottom_toBottomOf="@id/menu_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menu_name" />
 
     <ImageView
             android:id="@+id/menu_restaurant_address_pin"

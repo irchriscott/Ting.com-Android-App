@@ -240,4 +240,9 @@
         <item name="android:fitsSystemWindows">true</item>
     </style>
 
+    <style name="CheckBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorGray</item>
+    </style>
+
 </resources>

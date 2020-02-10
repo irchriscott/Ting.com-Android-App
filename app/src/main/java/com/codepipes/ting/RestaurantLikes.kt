@@ -43,13 +43,10 @@ class RestaurantLikes : AppCompatActivity() {
     private lateinit var session: User
     private var branchId: Int = 0
 
-    private lateinit var branch: Branch
-    private lateinit var likes: MutableList<UserRestaurant>
-
     private lateinit var likesTimer: Timer
     private val TIMER_PERIOD = 6000.toLong()
 
-    @SuppressLint("DefaultLocale", "PrivateResource")
+    @SuppressLint("DefaultLocale", "PrivateResource", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_restaurant_likes)
@@ -79,28 +76,18 @@ class RestaurantLikes : AppCompatActivity() {
         val apiGet = intent.getStringExtra("apiGet")
         val url = intent.getStringExtra("url")
 
-        if(localData.getRestaurant(branchId) != null){
-            branch = localData.getRestaurant(branchId)!!
-            likes = branch.likes?.likes!!.toMutableList()
-            this.showLikes(likes, branch)
-            this.loadRestaurant(branch.id, false)
-            likesTimer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}${branch.urls.apiReviews}") }
-            }, TIMER_PERIOD, TIMER_PERIOD)
-            this.loadRestaurantLikes("${Routes().HOST_END_POINT}${branch.urls.apiReviews}")
-        } else {
-            likes = mutableListOf()
-            this.loadRestaurant(branchId, true)
-            likesTimer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}$url") }
-            }, TIMER_PERIOD, TIMER_PERIOD)
-            this.loadRestaurantLikes("${Routes().HOST_END_POINT}$url")
-        }
+        val branch = localData.getRestaurant(branchId)
+        if(branch != null) { restaurant_likes_title.text = "${branch.likes?.count} Likes".toUpperCase() }
+
+        likesTimer.scheduleAtFixedRate(object : TimerTask() {
+            override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}$url") }
+        }, TIMER_PERIOD, TIMER_PERIOD)
+        this.loadRestaurantLikes("${Routes().HOST_END_POINT}$url")
 
         refresh_likes.setColorSchemeColors(resources.getColor(R.color.colorPrimary), resources.getColor(R.color.colorAccentMain), resources.getColor(R.color.colorPrimaryDark), resources.getColor(R.color.colorAccentMain))
         refresh_likes.setOnRefreshListener {
             refresh_likes.isRefreshing = true
-            this.loadRestaurant(branchId, true)
+            this.loadRestaurantLikes(url)
         }
     }
 
@@ -125,36 +112,6 @@ class RestaurantLikes : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("NewApi", "DefaultLocale")
-    private fun loadRestaurant(id: Int, load: Boolean){
-        val url = "${Routes().restaurantGet}$id/"
-        val client = OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
-
-        val request = Request.Builder().url(url).get().build()
-
-        client.newCall(request).enqueue(object : Callback {
-
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    TingToast(this@RestaurantLikes, e.message!!.capitalize(), TingToastType.ERROR).showToast(
-                        Toast.LENGTH_LONG)
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
-                branch = Gson().fromJson(dataString, Branch::class.java)
-                runOnUiThread {
-                    localData.updateRestaurant(branch)
-                    if(load){ showLikes(branch.likes?.likes!!.toMutableList(), branch) }
-                }
-            }
-        })
-    }
-
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun loadRestaurantLikes(url: String){
         val client = OkHttpClient.Builder()
@@ -172,11 +129,13 @@ class RestaurantLikes : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
+                val likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
                 runOnUiThread {
                     likesTimer.cancel()
                     shimmerLoader.stopShimmer()
                     shimmerLoader.visibility = View.GONE
+
+                    restaurant_likes_title.text = "${likes.size} Likes".toUpperCase()
 
                     if(likes.isNotEmpty()){
                         restaurant_likes_recycler_view.visibility = View.VISIBLE

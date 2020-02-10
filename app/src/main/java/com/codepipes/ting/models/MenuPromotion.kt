@@ -8,6 +8,7 @@ class MenuPromotion (
     val uuid: String,
     val uuidUrl: String,
     val promotionItem: PromotionItem,
+    val menus: PromotionMenus,
     val reduction: PromotionReduction,
     val supplement: PromotionSupplement,
     val period: String,
@@ -55,7 +56,7 @@ class PromotionInterest (
 
 class PromotionInterests (
     val count: Int,
-    val interests: List<PromotionInterest>
+    val interests: List<Int>
 ){}
 
 class PromotionUrls (
@@ -63,4 +64,9 @@ class PromotionUrls (
     val interest: String,
     val apiGet: String,
     val apiInterest: String
+){}
+
+class PromotionMenus(
+    val count: Int,
+    val menus: List<RestaurantMenu>?
 ){}

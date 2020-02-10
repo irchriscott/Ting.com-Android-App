@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
@@ -14,7 +15,7 @@ import com.codepipes.ting.utils.UtilData
 import com.codepipes.ting.utils.UtilsFunctions
 
 
-enum class TingToastType{
+enum class TingToastType {
     DEFAULT, SUCCESS, WARNING, ERROR
 }
 
@@ -30,26 +31,26 @@ class TingToast(
         val inflater: LayoutInflater = this.activity.layoutInflater
         val layout = inflater.inflate(R.layout.ting_toast_layout, activity.findViewById(R.id.tingToastLayout), false)
 
-        val containerView = layout.findViewById<ConstraintLayout>(R.id.toastContainer) as ConstraintLayout
+        val containerView = layout.findViewById<LinearLayout>(R.id.toastContainer) as LinearLayout
         val imageView = layout.findViewById<ImageView>(R.id.toastIcon) as ImageView
         val textView = layout.findViewById<TextView>(R.id.toastText) as TextView
 
         when(this.toastType){
 
             TingToastType.DEFAULT -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { containerView.background = context.getDrawable(R.drawable.background_toast_default) }
+                containerView.background = context.resources.getDrawable(R.drawable.background_toast_default)
                 imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastDefaultImage))
             }
             TingToastType.SUCCESS -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { containerView.background = context.getDrawable(R.drawable.background_toast_success) }
+                containerView.background = context.resources.getDrawable(R.drawable.background_toast_success)
                 imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastSuccessImage))
             }
             TingToastType.WARNING -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { containerView.background = context.getDrawable(R.drawable.background_toast_warning) }
+                containerView.background = context.resources.getDrawable(R.drawable.background_toast_warning)
                 imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastWarningImage))
             }
             TingToastType.ERROR -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { containerView.background = context.getDrawable(R.drawable.background_toast_error) }
+                containerView.background = context.resources.getDrawable(R.drawable.background_toast_error)
                 imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastErrorImage))
             }
         }

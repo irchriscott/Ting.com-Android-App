@@ -308,8 +308,8 @@ class MenuPromotion : AppCompatActivity() {
 
         when(promotion.promotionItem.type.id){
             0 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         promotion_menus_view.visibility = View.VISIBLE
                         promotion_menus.layoutManager = LinearLayoutManager(this@MenuPromotion)
@@ -319,8 +319,8 @@ class MenuPromotion : AppCompatActivity() {
                 promotion_menu_on.visibility = View.GONE
             }
             1 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 1 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         promotion_menus_view.visibility = View.VISIBLE
                         promotion_menus.layoutManager = LinearLayoutManager(this@MenuPromotion)
@@ -330,8 +330,8 @@ class MenuPromotion : AppCompatActivity() {
                 promotion_menu_on.visibility = View.GONE
             }
             2 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 2 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         promotion_menus_view.visibility = View.VISIBLE
                         promotion_menus.layoutManager = LinearLayoutManager(this@MenuPromotion)
@@ -341,8 +341,8 @@ class MenuPromotion : AppCompatActivity() {
                 promotion_menu_on.visibility = View.GONE
             }
             3 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.type.id == 3 }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         promotion_menus_view.visibility = View.VISIBLE
                         promotion_menus.layoutManager = LinearLayoutManager(this@MenuPromotion)
@@ -365,8 +365,8 @@ class MenuPromotion : AppCompatActivity() {
                 promotion_menus.adapter = PromotionMenusListAdapter(menus.toMutableList(), supportFragmentManager)
             }
             5 -> {
-                if(promotion.branch?.menus?.menus != null){
-                    val menus = promotion.branch.menus.menus.filter { it.menu.category?.id == promotion.promotionItem.category?.id }
+                if(promotion.menus.menus != null){
+                    val menus = promotion.menus.menus
                     if (menus.isNotEmpty()){
                         promotion_menus_view.visibility = View.VISIBLE
                         promotion_menus.layoutManager = LinearLayoutManager(this@MenuPromotion)

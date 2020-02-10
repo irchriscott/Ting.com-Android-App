@@ -124,7 +124,7 @@ class SignUpAddressFragment : Fragment() {
                     val otherAddressType = otherAddressInputLayout.findViewById<EditText>(R.id.otherAddressTypeInput) as EditText
 
                     otherAddressAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", DialogInterface.OnClickListener { _, _ ->
-                        if(!otherAddressType.text.toString().isEmpty()){
+                        if(otherAddressType.text.toString().isNotEmpty()){
                             mSignUpAddressTypeInput.setText(otherAddressType.text.toString())
                             this.inputOtherAddressType = otherAddressType.text.toString()
                             otherAddressAlertDialog.dismiss()

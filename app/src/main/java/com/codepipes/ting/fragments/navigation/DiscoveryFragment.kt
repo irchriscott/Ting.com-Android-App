@@ -3,7 +3,9 @@ package com.codepipes.ting.fragments.navigation
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -77,6 +79,9 @@ class DiscoveryFragment : Fragment() {
 
     private val TIMER_PERIOD = 10000.toLong()
 
+    private var country: String = ""
+    private var town: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Bridge.restoreInstanceState(this, savedInstanceState)
@@ -95,6 +100,26 @@ class DiscoveryFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         mUtilFunctions = UtilsFunctions(context!!)
+
+        country = session.country
+        town = session.town
+
+        if(mUtilFunctions.checkLocationPermissions()){
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    if(it != null){
+                        val geocoder = Geocoder(activity, Locale.getDefault())
+                        activity!!.runOnUiThread {
+                            try {
+                                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                                country = addresses[0].countryName
+                                town = addresses[0].locality
+                            } catch (e: Exception) {}
+                        }
+                    }
+                }
+            } catch (e: Exception){ }
+        }
 
         gson = Gson()
         routes = Routes()
@@ -219,13 +244,29 @@ class DiscoveryFragment : Fragment() {
         return view
     }
 
+    inner class LocationInterceptor : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val url = chain.request().url().newBuilder()
+                .addQueryParameter("country", country)
+                .addQueryParameter("town", town)
+                .build()
+            val request = chain.request().newBuilder()
+                .header("Authorization", session.token!!)
+                .url(url)
+                .build()
+            return chain.proceed(request)
+        }
+    }
+
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverRestaurants(view: View) {
         val url = routes.discoverRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS)
+            .addInterceptor(LocationInterceptor())
+            .build()
 
         val request = Request.Builder().header("Authorization", session.token!!).url(url).get().build()
 
@@ -293,22 +334,24 @@ class DiscoveryFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                val cuisines = gson.fromJson<MutableList<RestaurantCategory>>(dataString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
+                try {
+                    val cuisines = gson.fromJson<MutableList<RestaurantCategory>>(dataString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
 
-                activity!!.runOnUiThread {
-                    cuisinesTimer.cancel()
-                    cuisinesTimerTask.cancel()
-                    mLocalData.saveCuisines(dataString)
+                    activity!!.runOnUiThread {
+                        cuisinesTimer.cancel()
+                        cuisinesTimerTask.cancel()
+                        mLocalData.saveCuisines(dataString)
 
-                    cuisines_shimmer.visibility = View.GONE
-                    cuisines_recycler_view.visibility = View.VISIBLE
+                        cuisines_shimmer.visibility = View.GONE
+                        cuisines_recycler_view.visibility = View.VISIBLE
 
-                    val layoutManager = LinearLayoutManager(context)
-                    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-                    cuisines_recycler_view.layoutManager = layoutManager
-                    cuisines_recycler_view.adapter =
-                        CuisinesAdapter(cuisines.shuffled().toMutableList())
-                }
+                        val layoutManager = LinearLayoutManager(context)
+                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                        cuisines_recycler_view.layoutManager = layoutManager
+                        cuisines_recycler_view.adapter =
+                            CuisinesAdapter(cuisines.shuffled().toMutableList())
+                    }
+                } catch (e: Exception) {}
             }
         })
     }
@@ -319,7 +362,9 @@ class DiscoveryFragment : Fragment() {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS)
+            .addInterceptor(LocationInterceptor())
+            .build()
 
         val request = Request.Builder().header("Authorization", session.token!!).url(url).get().build()
 
@@ -331,9 +376,9 @@ class DiscoveryFragment : Fragment() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                val promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
                 activity!!.runOnUiThread{
                     try {
+                        val promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
                         promotionsTimer.cancel()
                         promotionsTimerTask.cancel()
                         view.refresh_discovery.isRefreshing = false
@@ -402,7 +447,9 @@ class DiscoveryFragment : Fragment() {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS)
+            .addInterceptor(LocationInterceptor())
+            .build()
 
         val request = Request.Builder().header("Authorization", session.token!!).url(url).get().build()
 
@@ -469,7 +516,9 @@ class DiscoveryFragment : Fragment() {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS)
+            .addInterceptor(LocationInterceptor())
+            .build()
 
         val request = Request.Builder().header("Authorization", session.token!!).url(url).get().build()
 
@@ -541,7 +590,9 @@ class DiscoveryFragment : Fragment() {
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+            .callTimeout(60 * 5, TimeUnit.SECONDS)
+            .addInterceptor(LocationInterceptor())
+            .build()
 
         val request = Request.Builder().header("Authorization", session.token!!).url(url).get().build()
 

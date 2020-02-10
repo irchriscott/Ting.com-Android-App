@@ -257,6 +257,7 @@ class EditUserProfile : AppCompatActivity() {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
+                    mProgressOverlay.dismiss()
                     Picasso.get().load(user.imageURL()).into(mProfileImageView)
                     TingToast(this@EditUserProfile, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
@@ -286,6 +287,7 @@ class EditUserProfile : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_IMAGE_PICKER) {
@@ -313,7 +315,7 @@ class EditUserProfile : AppCompatActivity() {
                             .addFormDataPart("image", imageName, RequestBody.create(MEDIA_TYPE_PNG, image)).build()
 
                         val request = Request.Builder()
-                            .header("Authorization", user.token)
+                            .header("Authorization", user.token!!)
                             .url(url)
                             .post(requestBody)
                             .build()
@@ -324,6 +326,7 @@ class EditUserProfile : AppCompatActivity() {
 
                             override fun onFailure(call: Call, e: IOException) {
                                 runOnUiThread {
+                                    mProgressOverlay.dismiss()
                                     Picasso.get().load(user.imageURL()).into(mProfileImageView)
                                     TingToast(this@EditUserProfile, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                 }
