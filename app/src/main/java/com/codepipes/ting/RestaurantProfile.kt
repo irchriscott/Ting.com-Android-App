@@ -298,9 +298,9 @@ class RestaurantProfile : AppCompatActivity() {
 
             val status =
                 utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant?.closing!!)
-            restaurant_time.text = status?.get("msg")
+            restaurant_time.text = status["msg"]
 
-            when (status?.get("clr")) {
+            when (status["clr"]) {
                 "green" -> {
                     restaurant_work_status.background =
                         resources.getDrawable(R.drawable.background_time_green)

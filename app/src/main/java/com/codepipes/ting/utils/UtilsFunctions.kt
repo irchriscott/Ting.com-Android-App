@@ -94,7 +94,7 @@ class UtilsFunctions( private val context: Context ) {
     }
 
     @SuppressLint("SimpleDateFormat")
-    public fun statusWorkTime(open: String, close: String): MutableMap<String, String>?{
+    public fun statusWorkTime(open: String, close: String): MutableMap<String, String> {
         val today = Date()
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val td = sdf.format(today)
@@ -148,8 +148,12 @@ class UtilsFunctions( private val context: Context ) {
                     return response
                 }
             }
+        } else {
+            response["clr"] = "red"
+            response["msg"] = "Closed"
+            response["st"] = "closed"
+            return response
         }
-        return null
     }
 
     public fun decodePoly(encoded: String): List<LatLng> {

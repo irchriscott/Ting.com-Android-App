@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1033794072902",
+    "firebase_url": "https://tingdotcom-1560140214423.firebaseio.com",
+    "project_id": "tingdotcom-1560140214423",
+    "storage_bucket": "tingdotcom-1560140214423.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033794072902:android:83b875540a370ea901b547",
+        "android_client_info": {
+          "package_name": "com.codepipes.ting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033794072902-al55vd97nnuvd2pmqcei7engaiu7q79l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.codepipes.ting",
+            "certificate_hash": "36fc73e49f42f12c8e2450d8b823e0c38fcc191e"
+          }
+        },
+        {
+          "client_id": "1033794072902-m6f5acii7rkpatq0hav0dbq3mtlj4kin.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJHftZplYKOMqQRYzyNAzi59rQc-xbcvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033794072902-m6f5acii7rkpatq0hav0dbq3mtlj4kin.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1033794072902-espnuj5ort5627uv0mun7ih2lndv17lc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.codepipes.ting"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

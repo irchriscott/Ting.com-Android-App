@@ -1,12 +1,15 @@
 package com.codepipes.ting
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -47,10 +50,12 @@ class LogIn : AppCompatActivity() {
     private lateinit var mPasswordLogInInput: EditText
     private lateinit var mSubmitLogInFormButton: Button
 
-    lateinit var settings: Settings
-    lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var settings: Settings
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private val RC_SIGN_IN = 1
+    private val REQUEST_FINE_LOCATION = 2
+
     private lateinit var geocoder: Geocoder
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -61,7 +66,6 @@ class LogIn : AppCompatActivity() {
     private lateinit var mUtilFunctions: UtilsFunctions
 
     private lateinit var localData: LocalData
-    private lateinit var googleSignInTask: Task<GoogleSignInAccount>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,11 +109,19 @@ class LogIn : AppCompatActivity() {
         }
 
         mSignInWithGoogleButton.setOnClickListener{
-            mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
             if (mUtilFunctions.isConnectedToInternet() && mUtilFunctions.isConnected()) {
-                mGoogleSignInClient.signOut()
-                val signInIntent = mGoogleSignInClient.signInIntent
-                startActivityForResult(signInIntent, RC_SIGN_IN)
+                if(mUtilFunctions.checkLocationPermissions()) {
+                    mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                    mGoogleSignInClient.signOut()
+                    val signInIntent = mGoogleSignInClient.signInIntent
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this@LogIn,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        REQUEST_FINE_LOCATION
+                    )
+                }
             } else { TingToast(this@LogIn, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
         }
 
@@ -141,7 +153,7 @@ class LogIn : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
+                    if (mProgressOverlay.dialog != null) { mProgressOverlay.dismiss() }
                     TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
@@ -152,7 +164,7 @@ class LogIn : AppCompatActivity() {
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
                     runOnUiThread {
-                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
+                        if (mProgressOverlay.dialog != null) { mProgressOverlay.dismiss() }
                         if (serverResponse.status == 200){
                             val successDialog = SuccessOverlay()
                             val args: Bundle = Bundle()
@@ -189,7 +201,6 @@ class LogIn : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            this.googleSignInTask = task
             handleSignInResult(task)
         }
     }
@@ -197,10 +208,13 @@ class LogIn : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
-            mUtilFunctions.REQUEST_FINE_LOCATION -> {
+            REQUEST_FINE_LOCATION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    handleSignInResult(this.googleSignInTask)
-                }
+                    try { mProgressOverlay.show(fragmentManager, mProgressOverlay.tag) } catch (e: java.lang.Exception) {}
+                    mGoogleSignInClient.signOut()
+                    val signInIntent = mGoogleSignInClient.signInIntent
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                } else { TingToast(this@LogIn, "Please, Allow Location Services", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
             }
         }
     }
@@ -212,90 +226,99 @@ class LogIn : AppCompatActivity() {
             if (mUtilFunctions.checkLocationPermissions()) {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
                     if(it != null){
-                        val geocoder = Geocoder(this@LogIn, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        try {
+                            val geocoder = Geocoder(this@LogIn, Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
-                        if(!mProgressOverlay.dialog.isShowing) {  mProgressOverlay.show(fragmentManager, mProgressOverlay.tag) }
-                        val idToken = mUtilFunctions.getToken(512)
-                        val url = this.routes.submitGoogleSignUp
+                            val idToken = mUtilFunctions.getToken(512)
+                            val url = this.routes.submitGoogleSignUp
 
-                        val client = OkHttpClient()
+                            val client = OkHttpClient()
 
-                        val form = MultipartBody.Builder().setType(MultipartBody.FORM)
-                            .addFormDataPart("name", account?.displayName!!)
-                            .addFormDataPart("email", account.email!!)
-                            .addFormDataPart("country", addresses[0].countryName)
-                            .addFormDataPart("town", addresses[0].locality)
-                            .addFormDataPart("token", "${account.id}-$idToken")
-                            .addFormDataPart("address", addresses[0].getAddressLine(0))
-                            .addFormDataPart("longitude", it.longitude.toString())
-                            .addFormDataPart("latitude", it.latitude.toString())
-                            .addFormDataPart("type", UtilData().addressType[0])
-                            .build()
+                            val form = MultipartBody.Builder().setType(MultipartBody.FORM)
+                                .addFormDataPart("name", account?.displayName!!)
+                                .addFormDataPart("email", account.email!!)
+                                .addFormDataPart("country", addresses[0].countryName)
+                                .addFormDataPart("town", addresses[0].locality)
+                                .addFormDataPart("token", "${account.id}-$idToken")
+                                .addFormDataPart("address", addresses[0].getAddressLine(0))
+                                .addFormDataPart("longitude", it.longitude.toString())
+                                .addFormDataPart("latitude", it.latitude.toString())
+                                .addFormDataPart("type", UtilData().addressType[0])
+                                .build()
 
-                        val request = Request.Builder()
-                            .url(url)
-                            .post(form)
-                            .build()
+                            val request = Request.Builder()
+                                .url(url)
+                                .post(form)
+                                .build()
 
-                        client.newCall(request).enqueue(object : Callback {
-                            override fun onFailure(call: Call, e: IOException) {
-                                runOnUiThread {
-                                    if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
-                                    TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                }
-                            }
-
-                            override fun onResponse(call: Call, response: Response) {
-                                val responseBody = response.body()!!.string()
-                                val gson = Gson()
-                                try{
-                                    val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                            client.newCall(request).enqueue(object : Callback {
+                                override fun onFailure(call: Call, e: IOException) {
                                     runOnUiThread {
-                                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
-                                        if (serverResponse.status == 200){
-                                            val successDialog = SuccessOverlay()
-                                            val args: Bundle = Bundle()
-                                            args.putString("message", serverResponse.message)
-                                            args.putString("type", serverResponse.type)
-                                            successDialog.arguments = args
-                                            successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+                                        try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+                                        TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    }
+                                }
 
-                                            val onDialogClosed = object : SuccessDialogCloseListener {
-                                                override fun handleDialogClose(dialog: DialogInterface?) {
-                                                    if(serverResponse.user != null){
-                                                        userAuthentication.set(gson.toJson(serverResponse.user))
-                                                        localData.updateUser(serverResponse.user)
-                                                        startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                                    } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                                override fun onResponse(call: Call, response: Response) {
+                                    val responseBody = response.body()!!.string()
+                                    val gson = Gson()
+                                    try{
+                                        val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                                        runOnUiThread {
+                                            try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+                                            if (serverResponse.status == 200){
+                                                val successDialog = SuccessOverlay()
+                                                val args: Bundle = Bundle()
+                                                args.putString("message", serverResponse.message)
+                                                args.putString("type", serverResponse.type)
+                                                successDialog.arguments = args
+                                                successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+
+                                                val onDialogClosed = object : SuccessDialogCloseListener {
+                                                    override fun handleDialogClose(dialog: DialogInterface?) {
+                                                        if(serverResponse.user != null){
+                                                            userAuthentication.set(gson.toJson(serverResponse.user))
+                                                            localData.updateUser(serverResponse.user)
+                                                            startActivity(Intent(this@LogIn, TingDotCom::class.java))
+                                                        } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                                                    }
                                                 }
-                                            }
-                                            successDialog.dismissListener(onDialogClosed)
+                                                successDialog.dismissListener(onDialogClosed)
 
-                                        } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
-                                    }
-                                } catch (e: Exception){
-                                    runOnUiThread {
-                                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
-                                        TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                            } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
+                                        }
+                                    } catch (e: Exception){
+                                        runOnUiThread {
+                                            try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+                                            TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        }
                                     }
                                 }
+                            })
+                        } catch (e: java.lang.Exception) {
+                            runOnUiThread {
+                                try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+                                TingToast(this@LogIn, "Geolocation Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                             }
-
-                        })
+                        }
                     } else {
                         runOnUiThread {
-                            if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
-                            TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+                            TingToast(this@LogIn, "Cannot Access Your Location", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                         }
                     }
 
                 }.addOnFailureListener {
                     runOnUiThread {
+                        try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
                         TingToast(this@LogIn, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
-        } catch (e: ApiException) { TingToast(this@LogIn, "Google Sign In Failed", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+        } catch (e: ApiException) {
+            try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
+            TingToast(this@LogIn, "Google Sign In Failed", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+        }
     }
 }

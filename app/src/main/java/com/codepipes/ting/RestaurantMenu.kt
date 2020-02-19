@@ -414,9 +414,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                                 menu.menu.restaurant.opening,
                                 menu.menu.restaurant.closing
                             )
-                            menu_restaurant_time.text = statusTimer?.get("msg")
+                            menu_restaurant_time.text = statusTimer["msg"]
 
-                            when (statusTimer?.get("clr")) {
+                            when (statusTimer["clr"]) {
                                 "green" -> {
                                     menu_restaurant_work_status.background =
                                         resources.getDrawable(R.drawable.background_time_green)
@@ -510,8 +510,8 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             } else { menu_dish_foods_view.visibility = View.GONE }
         } else { menu_dish_foods_view.visibility = View.GONE }
 
-        if (menu.menu.promotions?.promotions != null) {
-            val promotions = menu.menu.promotions.promotions.filter { return@filter it.isOn && it.isOnToday }
+        if (!menu.menu.promotions?.promotions.isNullOrEmpty()) {
+            val promotions = menu.menu.promotions!!.promotions!!.filter { return@filter it.isOn && it.isOnToday }
             if (promotions.isNotEmpty()){
                 menu_promotions_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantMenu)
                 menu_promotions_recycler_view.adapter = PromotionRestaurantMenuAdapter(promotions as MutableList<MenuPromotion>)

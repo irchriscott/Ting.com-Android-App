@@ -406,9 +406,9 @@ class MenuPromotion : AppCompatActivity() {
 
                 val status =
                     utilsFunctions.statusWorkTime(promotion.restaurant.opening, promotion.restaurant.closing)
-                promotion_restaurant_time.text = status?.get("msg")
+                promotion_restaurant_time.text = status["msg"]
 
-                when (status?.get("clr")) {
+                when (status["clr"]) {
                     "green" -> {
                         promotion_restaurant_work_status.background =
                             resources.getDrawable(R.drawable.background_time_green)

@@ -1,5 +1,6 @@
 package com.codepipes.ting
 
+import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -15,7 +16,11 @@ import com.codepipes.ting.fragments.navigation.DiscoveryFragment
 import com.codepipes.ting.fragments.navigation.MomentsFragment
 import com.codepipes.ting.fragments.navigation.RestaurantsFragment
 import com.codepipes.ting.fragments.navigation.UserMenuFragment
+import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.services.PubnubService
+import com.codepipes.ting.services.PushNotificationService
 import com.livefront.bridge.Bridge
+import com.pusher.pushnotifications.PushNotifications
 import kotlin.system.exitProcess
 
 
@@ -24,6 +29,8 @@ class TingDotCom : AppCompatActivity() {
     private lateinit var mAppNameText: TextView
     private lateinit var mToolbar: Toolbar
     private lateinit var mNavigation: BottomNavigationView
+
+    private lateinit var userAuthentication: UserAuthentication
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -64,6 +71,15 @@ class TingDotCom : AppCompatActivity() {
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimaryDark)), 0, 4, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 4, spanText.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         mAppNameText.text = spanText
+
+        userAuthentication = UserAuthentication(this@TingDotCom)
+        val session = userAuthentication.get()!!
+
+        startService(Intent(applicationContext, PushNotificationService::class.java))
+        startService(Intent(applicationContext, PubnubService::class.java))
+
+        PushNotifications.start(applicationContext, "f47c28dd-63ae-49c0-9f30-88560b21e061")
+        PushNotifications.addDeviceInterest(session.channel)
     }
 
     private fun changeFragment(fragment: Fragment){

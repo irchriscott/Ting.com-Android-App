@@ -10,7 +10,7 @@ class Restaurant (
     val purposeId: Int,
     val purpose: String,
     val categories: RestaurantCategories,
-    private val logo: String,
+    val logo: String,
     val pin: String,
     val pinImg: String,
     val country: String,

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
+import com.codepipes.ting.models.SocketUser
 import com.codepipes.ting.models.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -33,6 +34,12 @@ class UserAuthentication(
 
     public fun isLoggedIn(): Boolean{
         return !this.sharedPreferences.getString(SESSION_SHARED_PREFERENCES_KEY, null).isNullOrEmpty()
+    }
+
+    public fun socketUser() : SocketUser? {
+        return if(this.get() != null) {
+            SocketUser(this.get()?.id, 3, this.get()?.name, this.get()?.email, "/tinguploads/${this.get()?.image}", this.get()?.channel)
+        } else { null }
     }
 
     public fun logOut(){

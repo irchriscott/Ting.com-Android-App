@@ -64,9 +64,9 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
         if(branch.isAvailable) {
 
             val status = utilsFunctions.statusWorkTime(branch.restaurant?.opening!!, branch.restaurant.closing)
-            holder.view.restaurant_time.text = status?.get("msg")
+            holder.view.restaurant_time.text = status["msg"]
 
-            when (status?.get("clr")) {
+            when (status["clr"]) {
                 "green" -> {
                     holder.view.restaurant_work_status.background =
                         holder.view.context.resources.getDrawable(R.drawable.background_time_green)

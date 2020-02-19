@@ -47,4 +47,7 @@ class Routes {
 
     //MENU
     var checkUserMenuReview: String         = "${END_POINT}usr/menu/reviews/check/"
+
+    //PLACEMENT & ORDERS
+    var requestRestaurantTable: String      = "${END_POINT}usr/po/table/request/"
 }

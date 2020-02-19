@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         package="com.codepipes.ting">
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -12,6 +13,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
             android:name=".TingDotComApp"
@@ -23,10 +25,27 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        <service
+                android:name=".services.PubnubService"
+                android:enabled="true"
+                android:exported="true"></service>
+        <service
+                android:name=".services.PushNotificationService"
+                android:enabled="true"
+                android:exported="true" />
+
+        <activity
+                android:name=".CurrentRestaurant"
+                android:parentActivityName=".RestaurantProfile"
+                android:theme="@style/AppTheme.WhiteActionBarDefault" />
+        <activity
+                android:name=".RestaurantScanner"
+                android:parentActivityName=".TingDotCom"
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".RestaurantSpecification"
                 android:parentActivityName=".RestaurantProfile"
-                android:theme="@style/AppTheme.WhiteActionBarDefault"/>
+                android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".TodayPromotions"
                 android:parentActivityName=".TingDotCom"
