@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+    <com.codepipes.ting.customclasses.RoundedCornerImageView
+            android:id="@+id/info_image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/default_restaurant"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    
+    <TextView
+            android:id="@+id/info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Hello World"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_image"
+            tools:ignore="HardcodedText"/>
+
+    <TextView
+            android:id="@+id/info_branch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="World Hello"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_name"
+            app:layout_constraintBottom_toBottomOf="@id/info_name"
+            tools:ignore="HardcodedText"/>
+
+    <ImageView
+            android:id="@+id/info_address_pin"
+            android:src="@drawable/ic_place_gray_24dp"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_marginTop="3dp"
+            android:alpha="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_branch"
+            tools:ignore="ContentDescription"/>
+
+    <TextView
+            android:id="@+id/info_address"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginStart="8dp"
+            android:text="Nana Hostel, Kampala, Uganda"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="13sp"
+            android:textColor="@color/colorGray"
+            app:layout_constraintTop_toBottomOf="@id/info_branch"
+            app:layout_constraintStart_toEndOf="@id/info_address_pin"
+            tools:ignore="HardcodedText,RtlSymmetry"/>
+
+    <View
+            android:id="@+id/info_separator"
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorVeryLightGray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_address"/>
+
+    <LinearLayout
+            android:id="@+id/info_mail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_separator" tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+                android:src="@drawable/ic_mail_gray_24dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="3dp"
+                android:alpha="0.6"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:id="@+id/info_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="8dp"
+                android:text="info@gmail.com"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="13sp"
+                android:textColor="@color/colorGray"
+                tools:ignore="HardcodedText,RtlSymmetry"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/info_phone_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_mail_view" tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+                android:src="@drawable/ic_phone_gray_24dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="3dp"
+                android:alpha="0.6"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:id="@+id/info_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="8dp"
+                android:text="0123456789"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="13sp"
+                android:textColor="@color/colorGray"
+                tools:ignore="HardcodedText,RtlSymmetry"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/info_time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/info_phone_view"
+            tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+                android:src="@drawable/ic_clock_gray_24dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="3dp"
+                android:alpha="0.6"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:id="@+id/info_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="8dp"
+                android:text="08AM - 10PM"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="13sp"
+                android:textColor="@color/colorGray"
+                tools:ignore="HardcodedText,RtlSymmetry"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

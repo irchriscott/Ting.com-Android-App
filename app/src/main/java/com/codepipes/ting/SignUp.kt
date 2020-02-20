@@ -45,9 +45,7 @@ class SignUp : AppCompatActivity() {
     override fun onBackPressed() {
         if (mViewPager.currentItem == 0) {
             super.onBackPressed()
-        } else {
-            mViewPager.currentItem = mViewPager.currentItem - 1
-        }
+        } else { mViewPager.currentItem = mViewPager.currentItem - 1 }
     }
 
 

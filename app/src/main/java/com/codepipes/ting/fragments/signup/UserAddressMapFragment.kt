@@ -21,6 +21,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.codepipes.ting.R
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -30,11 +32,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
+import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
+import com.livefront.bridge.Bridge
+import java.lang.Exception
 import java.util.*
 
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     private lateinit var mUseLocationBtn: Button
@@ -58,6 +64,8 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -108,7 +116,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -153,16 +161,21 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.isMyLocationEnabled = true
+        if(mUtilFunctions.checkLocationPermissions()){ mMap.isMyLocationEnabled = true }
+
         mMap.setOnMyLocationButtonClickListener {
             if(mUtilFunctions.checkLocationPermissions()){
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    mMap.clear()
-                    this.getLocation(it)
-                }.addOnFailureListener {
-                    activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                try {
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        mMap.clear()
+                        this.getLocation(it)
+                    }.addOnFailureListener {
+                        activity!!.runOnUiThread {
+                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
                     }
+                } catch (e: Exception){
+                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
             true
@@ -174,36 +187,48 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         }
 
         if(mUtilFunctions.checkLocationPermissions()){
-            if(signUpUserData["address"].isNullOrEmpty() && signUpUserData["latitude"].isNullOrEmpty() && signUpUserData["longitude"].isNullOrEmpty()){
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    mMap.clear()
-                    this.getLocation(it)
-                }.addOnFailureListener {
-                    activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+            try {
+                if(signUpUserData["address"].isNullOrEmpty() && signUpUserData["latitude"].isNullOrEmpty() && signUpUserData["longitude"].isNullOrEmpty()){
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        mMap.clear()
+                        this.getLocation(it)
+                    }.addOnFailureListener {
+                        activity!!.runOnUiThread {
+                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
                     }
+                } else {
+                    val addresses = geocoder.getFromLocation(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble(), 1)
+                    mMap.addMarker(MarkerOptions().position(LatLng(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble())).title(addresses[0].getAddressLine(0)))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble()), GOOGLE_MAPS_ZOOM))
                 }
-            } else {
-                val addresses = geocoder.getFromLocation(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble(), 1)
-                mMap.addMarker(MarkerOptions().position(LatLng(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble())).title(addresses[0].getAddressLine(0)))
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble()), GOOGLE_MAPS_ZOOM))
+            } catch (e: Exception){
+                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
             }
         }
 
         mMap.setOnMapClickListener {
             mMap.clear()
-            val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-            mMap.addMarker(MarkerOptions().position(it).title(addresses[0].getAddressLine(0)))
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, GOOGLE_MAPS_ZOOM))
-            this.setLocationVariable(addresses[0].getAddressLine(0), it.latitude, it.longitude, addresses[0].countryName, addresses[0].locality)
+            try {
+                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                mMap.addMarker(MarkerOptions().position(it).title(addresses[0].getAddressLine(0)))
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, GOOGLE_MAPS_ZOOM))
+                this.setLocationVariable(addresses[0].getAddressLine(0), it.latitude, it.longitude, addresses[0].countryName, addresses[0].locality)
+            } catch (e: Exception){
+                TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            }
         }
     }
 
     private fun getLocation(location: Location){
-        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-        mMap.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)).title(addresses[0].getAddressLine(0)))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM))
-        this.setLocationVariable(addresses[0].getAddressLine(0), location.latitude, location.longitude, addresses[0].countryName, addresses[0].locality)
+        try {
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            mMap.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)).title(addresses[0].getAddressLine(0)))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM))
+            this.setLocationVariable(addresses[0].getAddressLine(0), location.latitude, location.longitude, addresses[0].countryName, addresses[0].locality)
+        } catch (e: Exception){
+            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+        }
     }
 
     private fun setLocationVariable(address: String, latitude: Double, longitude: Double, country: String, town: String){
@@ -221,11 +246,22 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         val f = fragmentManager!!.findFragmentById(R.id.map)
-        fragmentManager!!.beginTransaction().remove(f).commit()
+        fragmentManager!!.beginTransaction().remove(f!!).commit()
     }
 
     fun dismissListener(closeListener: MapAddressChangedListener) {
         this.mMapChangedListener = closeListener
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

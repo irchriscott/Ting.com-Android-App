@@ -6,8 +6,7 @@ import android.view.MotionEvent
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 
-
-class LockableViewPager  : ViewPager {
+class LockableViewPager : ViewPager {
 
     var swipeLocked: Boolean = false
 
@@ -27,5 +26,4 @@ class LockableViewPager  : ViewPager {
     override fun canScrollHorizontally(direction: Int): Boolean {
         return swipeLocked && super.canScrollHorizontally(direction)
     }
-
 }

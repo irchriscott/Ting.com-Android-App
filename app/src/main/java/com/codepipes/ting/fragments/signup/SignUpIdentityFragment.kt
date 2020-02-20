@@ -16,13 +16,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.SuccessOverlay
+import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.models.ServerResponse
 import okhttp3.*
 import com.codepipes.ting.utils.Routes
@@ -30,6 +28,7 @@ import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.livefront.bridge.Bridge
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
@@ -57,6 +56,8 @@ class SignUpIdentityFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -101,22 +102,25 @@ class SignUpIdentityFragment : Fragment() {
         mAppNameText.text = spanText
 
         if(mUtilFunctions.checkLocationPermissions()){
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                val geocoder = Geocoder(activity, Locale.getDefault())
-                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                activity!!.runOnUiThread {
-                    signUpUserData["address"] = addresses[0].getAddressLine(0)
-                    signUpUserData["latitude"] = it.latitude.toString()
-                    signUpUserData["longitude"] = it.longitude.toString()
-                    signUpUserData["country"] = addresses[0].countryName
-                    signUpUserData["town"] = addresses[0].locality
-                    settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+            try {
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    val geocoder = Geocoder(activity, Locale.getDefault())
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    activity!!.runOnUiThread {
+                        signUpUserData["address"] = addresses[0].getAddressLine(0)
+                        signUpUserData["latitude"] = it.latitude.toString()
+                        signUpUserData["longitude"] = it.longitude.toString()
+                        signUpUserData["country"] = addresses[0].countryName
+                        signUpUserData["town"] = addresses[0].locality
+                        settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    }
+                }.addOnFailureListener {
+                    activity!!.runOnUiThread {
+                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    }
                 }
-            }.addOnFailureListener {
-                activity!!.runOnUiThread {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                    mProgressOverlay.dismiss()
-                }
+            } catch (e: Exception){
+                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -159,7 +163,7 @@ class SignUpIdentityFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -184,10 +188,21 @@ class SignUpIdentityFragment : Fragment() {
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        ErrorMessage(activity, "An Error Has Occurred").show()
+                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 }

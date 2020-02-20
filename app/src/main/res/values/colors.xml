@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#B56FE8</color>
     <color name="colorPrimaryDark">#908CED</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@color/colorWhite</color>
+    <color name="colorAccentMain">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorVeryLightGray">#DDDDDD</color>
     <color name="colorLightGray">#999999</color>
@@ -11,4 +12,16 @@
     <color name="colorTransparent">#00000000</color>
     <color name="colorGoogleRedOne">#D63F30</color>
     <color name="colorGoogleRedTwo">#B41606</color>
+    <color name="colorToastDefault">#9DDEFF</color>
+    <color name="colorToastSuccess">#A6EFB8</color>
+    <color name="colorToastWarning">#FFCFA5</color>
+    <color name="colorToastError">#FFaFB4</color>
+    <color name="colorPrimaryDarkTransparent">#33908CED</color>
+    <color name="colorPrimaryDarkTransparentDark">#99908CED</color>
+    <color name="colorYellowRate">#FFE623</color>
+
+    <color name="titleTextColor">@color/colorWhite</color>
+    <color name="titleTabColor">@color/colorVeryLightGray</color>
+    <color name="titleSelectedTabColor">@color/colorWhite</color>
+    <color name="fabColor">@color/colorPrimary</color>
 </resources>

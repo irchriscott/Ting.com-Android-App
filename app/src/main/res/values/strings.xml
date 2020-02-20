@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Ting.com</string>
+
     <!-- LOG IN -->
     <string name="login">Login</string>
     <string name="login_email">Email Address</string>
@@ -20,7 +21,7 @@
     <string name="signup_gender">Gender</string>
     <string name="signup_dob">Date Of Birth</string>
     <string name="signup_address_type">Set Address As</string>
-    <string name="signup_use_location">User This Location</string>
+    <string name="signup_use_location">Use This Location</string>
     <string name="signup_other_address_type">Enter Address Type</string>
     <string name="signup_other_address_type_other">Address Type</string>
     <string name="signup_confirm_password">Confirm Password</string>
@@ -29,12 +30,65 @@
     <!-- RESET PASSWORD -->
 
     <string name="reset_pwd_title">Reset Password</string>
-    <string name="reset_pwd_text">You will received an email message containing a link that you will use to reset your password. The link only lasts 24 hours</string>
+    <string name="reset_pwd_text">You will receive an email message containing a link that you will use to reset your
+        password. The link only lasts 24 hours
+    </string>
 
     <!-- GLOBAL -->
-
     <string name="global_submit">Submit</string>
+    <string name="global_ok">OK</string>
+    <string name="global_cancel">Cancel</string>
+    <string name="global_add">Add</string>
+    <string name="global_restaurants">Restaurants</string>
+    <string name="global_restaurant_sub">Discover Restaurants around and near your location</string>
+    <string name="global_show_more">Show More</string>
+    <string name="global_reviews">REVIEWS</string>
+    <string name="global_likes">LIKES</string>
+    <string name="global_about">ABOUT</string>
 
     <!-- GOOGLE APIS KEYS -->
     <string name="server_client_id">1033794072902-sumfcak8j137q01u255h912slil7v32v.apps.googleusercontent.com</string>
+
+    <!-- NAV BAR -->
+    <string name="nav_bar_discovery">Discovery</string>
+    <string name="nav_bar_restaurants">Restaurants</string>
+    <string name="nav_bar_moments">Moments</string>
+    <string name="nav_bar_user_menu">Menu</string>
+
+    <!-- USER PROFILE -->
+    <string name="user_profile_my_menu">My Menu</string>
+    <string name="user_profile_profile">Profile</string>
+    <string name="user_profile_moments">Moments</string>
+    <string name="user_profile_restaurants">Restaurants</string>
+    <string name="user_profile_orders">Orders</string>
+    <string name="user_profile_booking">Bookings</string>
+    <string name="user_profile_others">OTHER</string>
+    <string name="user_profile_settings">Settings</string>
+    <string name="user_profile_logout">Logout</string>
+    <string name="user_profile_edit">Edit Profile</string>
+
+    <!-- EDIT USER PROFILE -->
+    <string name="edit_user_profile_save">SAVE</string>
+    <string name="edit_user_profile_image">Change Profile Image</string>
+    <string name="edit_user_profile_select_image">Select Image</string>
+    <string name="edit_user_profile_login">Log In</string>
+    <string name="edit_user_profile_email">Edit Email</string>
+    <string name="edit_user_profile_email_old">Old Email Address</string>
+    <string name="edit_user_profile_email_new">New Email Address</string>
+    <string name="edit_user_profile_password">Edit Password</string>
+    <string name="edit_user_profile_password_old">Old Password</string>
+    <string name="edit_user_profile_password_new">New Password</string>
+    <string name="edit_user_profile_private">Private Information</string>
+    <string name="edit_user_profile_phone_number">Phone Number</string>
+    <string name="edit_user_profile_public">Public Information</string>
+    <string name="edit_user_profile_addresses">Addresses</string>
+
+    <!-- GLOBAL ERRORS -->
+    <string name="error_internet">No Internet Connection</string>
+    <string name="restaurant_specification">SPECIFICATIONS</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="restaurants_filter">Filter Restaurants</string>
+
 </resources>

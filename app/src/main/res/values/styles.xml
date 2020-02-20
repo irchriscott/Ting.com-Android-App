@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
-        <!--<item name="android:fontFamily">@font/poppins_regular</item>-->
-        <!--<item name="fontFamily">@font/poppins_regular</item>-->
         <item name="textAppearanceListItem">@style/TextAppearance.AppCompat.ItemList</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+    </style>
+
+    <style name="AppTheme.White" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="TextAppearance.AppCompat.ItemList">
@@ -22,12 +32,45 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+    </style>
+
+    <style name="AppTheme.DefaultActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccentMain</item>
+        <item name="android:datePickerStyle">@style/DatePickerAppTheme</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
     </style>
 
     <style name="AppTheme.WhiteActionBar" parent="AppTheme">
         <item name="android:background">@color/colorWhite</item>
         <item name="android:windowFullscreen">true</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.WhiteActionBarDefault" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        <item name="android:actionMenuTextAppearance">@style/AppTheme.ActionBar.Menu.TextStyle</item>
+
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="itemTextAppearance">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="AppTheme.CustomActionBar" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.ImagePicker" parent="AppTheme">
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="progress_dialog">
@@ -43,7 +86,11 @@
     <style name="DatePickerAppTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="android:headerBackground">@color/colorPrimary</item>
+        <item name="android:colorAccent" tools:ignore="NewApi">@color/colorPrimary</item>
+
     </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
@@ -52,12 +99,20 @@
     </style>
 
     <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <!--<item name="android:windowIsFloating">false</item>-->
         <item name="bottomSheetStyle">@style/BottomSheet</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <style name="BottomSheetElse" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/address_map_background</item>
+    </style>
+
+    <style name="BaseBottomSheetDialogElse" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetElse</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
     <style name="TransparentDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
@@ -71,5 +126,123 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="NavigationViewStyle">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@color/colorGray</item>
+    </style>
+
+    <style name="AppTheme.ActionBarStyle" parent="Base.Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+    </style>
+
+    <style name="AppTheme.ActionBarStyleDefault" parent="Base.Widget.AppCompat.ActionBar">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyleDefault</item>
+        <item name="actionOverflowButtonStyle">@style/DotsDarkTheme</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize" tools:ignore="SpUsage">18dp</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TitleTextStyleDefault" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.Menu.TextStyle" parent="Theme.AppCompat">
+        <item name="actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimary</item>
+        <item name="android:itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="itemTextAppearance">@font/poppins_semi_bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize" tools:ignore="SpUsage">16dp</item>
+    </style>
+
+    <style name="DotsDarkTheme" parent="@style/Widget.AppCompat.ActionButton.Overflow" >
+        <item name="android:tint">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.DialogStyle" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Base.Theme.AppCompat.Dialog" >
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    
+    <style name="AppTheme.SmallRating" parent="Base.Widget.AppCompat.RatingBar.Small">
+        <item name="colorControlNormal">@color/colorLightGray</item>
+        <item name="colorControlActivated">@color/colorYellowRate</item>
+    </style>
+
+    <style name="AppTheme.IndicatorRating" parent="Widget.AppCompat.RatingBar.Indicator">
+        <item name="colorControlNormal">@color/colorLightGray</item>
+        <item name="colorControlActivated">@color/colorYellowRate</item>
+    </style>
+
+    <style name="DialogAnimations" />
+
+    <style name="DialogAnimations.SmileWindow">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_top</item>
+    </style>
+
+    <style name="RateAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorPrimaryDarkTransparent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/RateAlertDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/RateAlertDialogButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/RateAlertDialogButtonStyle</item>
+    </style>
+
+    <style name="RateAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="RateDialogFadeAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <style name="ImageViewerDialog" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="ImageViewerDialog.NoStatusBar" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="ImageViewerDialog.Default" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
+    <style name="CheckBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/colorGray</item>
+    </style>
 
 </resources>

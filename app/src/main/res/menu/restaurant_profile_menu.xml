@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group>
+
+        <item
+                android:id="@+id/restaurant_profile_specification"
+                android:title="@string/restaurant_specification"
+                android:icon="@drawable/ic_restaurant_data"
+                />
+
+        <item
+                android:id="@+id/restaurant_profile_reviews"
+                android:title="@string/global_reviews"
+                android:icon="@drawable/ic_star_filled_gray"
+        />
+
+        <item
+                android:id="@+id/restaurant_profile_likes"
+                android:title="@string/global_likes"
+                android:icon="@drawable/ic_heart_filled_gray"
+        />
+
+        <item
+                android:id="@+id/restaurant_profile_about"
+                android:title="@string/global_about"
+                android:icon="@drawable/ic_info_filled_gray"
+        />
+    </group>
+
+</menu>

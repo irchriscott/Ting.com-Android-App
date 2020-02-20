@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/border_row">
+
+    <android.support.constraint.ConstraintLayout
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.codepipes.ting.customclasses.RoundedCornerImageView
+                android:id="@+id/review_image"
+                android:src="@drawable/default_user"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.constraint.ConstraintLayout
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/review_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                tools:ignore="RtlHardcoded">
+
+            <TextView
+                    android:id="@+id/review_user_name"
+                    android:text="Christian Scott"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textSize="14sp"
+                    android:paddingRight="64dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+            <RatingBar
+                    android:id="@+id/review_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:numStars="5"
+                    app:layout_constraintTop_toBottomOf="@id/review_user_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/review_user_name"
+                    style="@style/AppTheme.SmallRating"
+                    android:theme="@style/AppTheme.SmallRating"/>
+
+            <TextView
+                    android:id="@+id/review_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="This is a comment on a review"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp"
+                    android:paddingEnd="54dp"
+                    android:paddingRight="54dp"
+                    android:textColor="@color/colorGray"
+                    app:layout_constraintTop_toBottomOf="@id/review_rating"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+            <LinearLayout
+                    android:id="@+id/review_date_view"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/review_comment">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="2dp"
+                        android:background="@drawable/background_labeled_button"
+                        tools:ignore="UselessParent">
+
+                    <ImageView
+                            android:id="@+id/review_clock"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_clock_gray_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                    <TextView
+                            android:id="@+id/review_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="Thu 26th September 2019 at 06:00"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorGray"
+                            tools:ignore="HardcodedText"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

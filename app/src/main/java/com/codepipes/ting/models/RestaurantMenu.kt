@@ -5,7 +5,13 @@ class RestaurantMenu (
     val type: MenuType,
     val urls: MenuUrls,
     val url: String,
+    val restaurant: RestaurantAbout,
     val menu: Menu
+){}
+
+class RestaurantAbout (
+   val name: String,
+   val logo: String
 ){}
 
 class MenuType (
@@ -17,7 +23,11 @@ class MenuUrls (
     val url: String,
     val like: String,
     val loadReviews: String,
-    val addReview: String
+    val addReview: String,
+    val apiGet: String,
+    val apiLike: String,
+    val apiReviews: String,
+    val apiAddReview: String
 ){}
 
 class Menu (
@@ -26,6 +36,7 @@ class Menu (
     val branch: Branch?,
     val name: String,
     val category: FoodCategory?,
+    val cuisine: RestaurantCategory?,
     val dishTimeId: Int?,
     val dishTime: String?,
     val foodType: String?,
@@ -60,17 +71,28 @@ class MenuPromotions (
 
 class MenuReviews (
     val count: Int,
+    val average: Float,
+    val percents: List<Int>,
     val reviews: List<MenuReview>?
 ){}
 
 class MenuLikes (
     val count: Int,
-    val likes: List<MenuLike>?
+    val likes: List<Int>?
 ){}
 
 class MenuFoods (
     val count: Int,
-    val foods: List<Menu>?
+    val foods: List<DishFood>?
+){}
+
+class DishFood(
+   val id: Int,
+   val food: Menu,
+   val isCountable: Boolean,
+   val quantity: Int,
+   val createdAt: String,
+   val updatedAt: String
 ){}
 
 class MenuImage (

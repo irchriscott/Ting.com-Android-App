@@ -1,0 +1,120 @@
+private fun addFragment(v: View) {
+        val randomColor =
+            Color.argb(255, (Math.random() * 255).toInt(), (Math.random() * 255).toInt(), (Math.random() * 255).toInt())
+        val fragment = CircularRevealingFragment.newInstance(20, 20, randomColor)
+        fragmentManager!!.beginTransaction().add(com.codepipes.ting.R.id.fragment_container, fragment).commit()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onFragmentTouched(fragment: Fragment, x: Float, y: Float) {
+        if (fragment is CircularRevealingFragment) {
+            val theFragment = fragment
+
+            val unreveal = theFragment.prepareUnrevealAnimator(x, y)
+
+            unreveal.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+
+                override fun onAnimationEnd(animation: Animator) {
+                    // remove the fragment only when the animation finishes
+                    fragmentManager!!.beginTransaction().remove(theFragment).commit()
+                    //to prevent flashing the fragment before removing it, execute pending transactions inmediately
+                    fragmentManager!!.executePendingTransactions()
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+            unreveal.start()
+        }
+    }
+
+
+
+<com.codepipes.ting.ratings.RatingReviews
+                                            xmlns:bar="http://schemas.android.com/apk/res-auto"
+                                            android:id="@+id/menu_rating_percents"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="6dp"
+                                            app:layout_constraintStart_toEndOf="@id/menu_reviews_average"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            bar:max_value="100"
+                                            bar:animation="true"
+                                            bar:show_label="true"
+                                            bar:show_raters="false"
+                                            bar:spaces="4dp"
+                                            bar:text_color="@color/colorLightGray"
+                                            bar:text_size="6dp"
+                                            bar:rounded="true"
+                                            bar:width="8dp"/>
+
+
+                                           //menu_rating_percents.createRatingBars(100, BarLabels.STYPE5, resources.getColor(R.color.colorLightGray), menu.menu.reviews.percents.reversed().toIntArray())
+
+
+<ImageButton
+                                            android:id="@+id/menu_like_button"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            android:src="@drawable/ic_like_outlined_gray"
+                                            android:background="@drawable/background_like_button"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            tools:ignore="ContentDescription"/>
+
+                                            //menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_outlined_gray))
+                                            //menu_like_button.setImageDrawable(resources.getDrawable(R.drawable.ic_like_filled_gray))
+
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putString("promos", gson.toJson(promotions))
+//    }
+
+
+<RelativeLayout
+                        android:background="@drawable/background_banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+
+                    <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:paddingBottom="30dp">
+
+                        <TextView
+                                android:id="@+id/restaurants_text"
+                                android:text="@string/global_restaurants"
+                                android:textAllCaps="true"
+                                android:textColor="@color/colorWhite"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_thin"
+                                android:textSize="35sp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                                android:id="@+id/restaurants_sub_text"
+                                android:text="@string/global_restaurant_sub"
+                                android:textColor="@color/colorWhite"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppins_regular"
+                                android:layout_centerInParent="true"
+                                android:textAlignment="center"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/restaurants_text"/>
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </RelativeLayout>

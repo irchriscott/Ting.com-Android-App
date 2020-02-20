@@ -4,14 +4,18 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.codepipes.ting"
-        minSdkVersion 16
-        targetSdkVersion 26
+        minSdkVersion 19
+        //noinspection OldTargetApi
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,22 +28,36 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/INDEX.LIST'
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleDependency
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    //noinspection GradleDependency
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.pnikosis:materialish-progress:1.7'
     //noinspection GradleDependency
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
@@ -47,6 +65,40 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     //noinspection GradleDependency
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    //noinspection GradleDependency
+    annotationProcessor 'com.google.auto.value:auto-value:1.4'
+    compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.4'
+    annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.github.WrathChaos:MediaPickerLib:0.1.5'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation 'org.sufficientlysecure:html-textview:3.6'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    //noinspection GradleDependency
+    implementation 'com.stepstone.apprating:app-rating:2.3.0'
+    implementation 'com.github.varunest:sparkbutton:1.0.6'
+    //noinspection GradleDependency
+    implementation 'com.github.chrisbanes:PhotoView:2.1.0'
+    implementation 'com.facebook.shimmer:shimmer:0.4.0'
+    implementation 'com.github.livefront:bridge:v1.2.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.30.0'
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-analytics:16.0.9'
+    implementation 'com.pusher:pusher-java-client:2.0.2'
+    implementation 'com.pusher:push-notifications-android:1.6.2'
+    api 'frankiesardo:icepick:3.2.0'
+    compileOnly 'frankiesardo:icepick-processor:3.2.0'
+    annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

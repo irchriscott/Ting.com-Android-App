@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RestaurantLikes">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_likes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp">
+
+                <android.support.constraint.ConstraintLayout
+                        android:id="@+id/restaurant_reviews_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                            android:id="@+id/restaurant_likes_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="8dp"
+                            android:text="Likes"
+                            android:fontFamily="@font/poppins_medium"
+                            android:textAllCaps="true"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:ignore="HardcodedText"/>
+
+                    <View
+                            android:id="@+id/restaurant_separator_seventh"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/colorVeryLightGray"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/restaurant_likes_title"/>
+
+                    <include
+                            android:id="@+id/empty_data"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/restaurant_separator_seventh"
+                            layout="@layout/include_empty_data" />
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmerLoader"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/restaurant_separator_seventh"
+                            app:shimmer_auto_start="true"
+                            app:shimmer_base_alpha="0.6">
+
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                            <include layout="@layout/row_list_shimmer" />
+                            <include layout="@layout/row_list_shimmer" />
+                            <include layout="@layout/row_list_shimmer" />
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                            android:id="@+id/restaurant_likes_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toBottomOf="@id/restaurant_separator_seventh"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</FrameLayout>

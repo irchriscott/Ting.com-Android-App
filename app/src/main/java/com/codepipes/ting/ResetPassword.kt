@@ -47,9 +47,11 @@ class ResetPassword : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = ""
 
-        val upArrow = ContextCompat.getDrawable(this@ResetPassword, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@ResetPassword, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
-        supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        try {
+            val upArrow = ContextCompat.getDrawable(this@ResetPassword, R.drawable.abc_ic_ab_back_material)
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@ResetPassword, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            supportActionBar!!.setHomeAsUpIndicator(upArrow)
+        } catch (e: java.lang.Exception) {}
 
         mAppNameText = findViewById<TextView>(R.id.appNameText) as TextView
 
@@ -75,7 +77,7 @@ class ResetPassword : AppCompatActivity() {
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60 * 5, TimeUnit.SECONDS)
             .build()
 
         val form = MultipartBody.Builder().setType(MultipartBody.FORM)

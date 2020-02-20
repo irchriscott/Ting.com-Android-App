@@ -26,6 +26,8 @@ import android.widget.TextView
 import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.ErrorMessage
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -33,6 +35,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
+import com.livefront.bridge.Bridge
 import java.util.*
 
 
@@ -63,6 +66,8 @@ class SignUpAddressFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
     }
 
     @SuppressLint("MissingPermission")
@@ -119,7 +124,7 @@ class SignUpAddressFragment : Fragment() {
                     val otherAddressType = otherAddressInputLayout.findViewById<EditText>(R.id.otherAddressTypeInput) as EditText
 
                     otherAddressAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", DialogInterface.OnClickListener { _, _ ->
-                        if(!otherAddressType.text.toString().isEmpty()){
+                        if(otherAddressType.text.toString().isNotEmpty()){
                             mSignUpAddressTypeInput.setText(otherAddressType.text.toString())
                             this.inputOtherAddressType = otherAddressType.text.toString()
                             otherAddressAlertDialog.dismiss()
@@ -145,24 +150,26 @@ class SignUpAddressFragment : Fragment() {
             mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
 
             if(mUtilFunctions.checkLocationPermissions()){
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val geocoder = Geocoder(activity, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    activity!!.runOnUiThread {
-                        mSignUpAddressInput.setText(addresses[0].getAddressLine(0))
-                        signUpUserData["address"] = addresses[0].getAddressLine(0)
-                        signUpUserData["latitude"] = it.latitude.toString()
-                        signUpUserData["longitude"] = it.longitude.toString()
-                        signUpUserData["country"] = addresses[0].countryName
-                        signUpUserData["town"] = addresses[0].locality
-                        settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
-                        mProgressOverlay.dismiss()
+                try {
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        val geocoder = Geocoder(activity, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        activity!!.runOnUiThread {
+                            mSignUpAddressInput.setText(addresses[0].getAddressLine(0))
+                            signUpUserData["address"] = addresses[0].getAddressLine(0)
+                            signUpUserData["latitude"] = it.latitude.toString()
+                            signUpUserData["longitude"] = it.longitude.toString()
+                            signUpUserData["country"] = addresses[0].countryName
+                            signUpUserData["town"] = addresses[0].locality
+                            settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                        }
+                    }.addOnFailureListener {
+                        activity!!.runOnUiThread {
+                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        }
                     }
-                }.addOnFailureListener {
-                    activity!!.runOnUiThread {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                        mProgressOverlay.dismiss()
-                    }
+                } catch (e: Exception){
+                    TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
         } else { mSignUpAddressInput.setText(signUpUserData["address"]) }
@@ -183,17 +190,30 @@ class SignUpAddressFragment : Fragment() {
         }
 
         mNextSignUpBtn.setOnClickListener {
-            if(!mSignUpAddressInput.text.isNullOrEmpty() && !mSignUpAddressTypeInput.text.isNullOrEmpty()){
-                signUpUserData["address_type"] = this.selectedAddressType
-                signUpUserData["address_type_other"] = this.inputOtherAddressType
-                settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
-                mViewPager.currentItem = mViewPager.currentItem + 1
-            } else {
-                ErrorMessage(activity, "Fill All The Fields").show()
-            }
+            if (mUtilFunctions.isConnectedToInternet()) {
+                if (!mSignUpAddressInput.text.isNullOrEmpty() && !mSignUpAddressTypeInput.text.isNullOrEmpty()) {
+                    signUpUserData["address_type"] = this.selectedAddressType
+                    signUpUserData["address_type_other"] = this.inputOtherAddressType
+                    settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    mViewPager.currentItem = mViewPager.currentItem + 1
+                } else {
+                    ErrorMessage(activity, "Fill All The Fields").show()
+                }
+            } else { TingToast(context!!, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
         }
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Bridge.clear(this)
     }
 
     override fun onAttach(context: Context) {

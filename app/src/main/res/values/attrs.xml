@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RatingReviews">
+
+        <attr name="style" format="enum">
+            <enum name="style1" value="1" />
+            <enum name="style2" value="2" />
+        </attr>
+
+        <attr name="color" format="color" />
+        <attr name="rounded" format="boolean"/>
+        <attr name="gradient" format="integer" />
+        <attr name="width" format="dimension" />
+        <attr name="text_size" format="dimension" />
+        <attr name="text_color" format="color" />
+        <attr name="spaces" format="dimension" />
+        <attr name="max_value" format="integer" />
+        <attr name="show_label" format="boolean" />
+        <attr name="show_raters" format="boolean" />
+        <attr name="animation" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CarouselView">
+
+        <attr name="enableSnapping" format="boolean" />
+        <attr name="scaleOnScroll" format="boolean" />
+        <attr name="setAutoPlay" format="boolean" />
+        <attr name="setAutoPlayDelay" format="integer" />
+        <attr name="carouselOffset" format="enum">
+            <enum name="start" value="0"/>
+            <enum name="center" value="1"/>
+        </attr>
+        <attr name="indicatorAnimationType" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="fill" value="1"/>
+            <enum name="drop" value="2"/>
+            <enum name="swap" value="3"/>
+            <enum name="worm" value="4"/>
+            <enum name="color" value="5"/>
+            <enum name="scale" value="6"/>
+            <enum name="slide" value="7"/>
+            <enum name="thinWorm" value="8"/>
+            <enum name="scaleDown" value="9"/>
+        </attr>
+        <attr name="indicatorRadius" format="integer" />
+        <attr name="indicatorPadding" format="integer" />
+        <attr name="indicatorSelectedColor" format="reference" />
+        <attr name="indicatorUnselectedColor" format="reference" />
+        <attr name="size" format="integer" />
+        <attr name="spacing" format="integer" />
+        <attr name="resource" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PageIndicatorView">
+        <attr name="piv_orientation">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+
+        <attr name="piv_viewPager" format="reference" />
+        <attr name="piv_select" format="integer" />
+
+        <attr name="piv_count" format="integer" />
+        <attr name="piv_dynamicCount" format="boolean" />
+
+        <attr name="piv_radius" format="dimension" />
+        <attr name="piv_padding" format="dimension" />
+        <attr name="piv_strokeWidth" format="dimension" />
+        <attr name="piv_scaleFactor" format="float" />
+        <attr name="piv_autoVisibility" format="boolean" />
+
+        <attr name="piv_unselectedColor" format="color" />
+        <attr name="piv_selectedColor" format="color" />
+
+        <attr name="piv_fadeOnIdle" format="boolean" />
+        <attr name="piv_idleDuration" format="integer" />
+
+        <attr name="piv_interactiveAnimation" format="boolean" />
+        <attr name="piv_animationDuration" format="integer" />
+        <attr name="piv_animationType">
+            <enum name="none" value="0" />
+            <enum name="color" value="1" />
+            <enum name="scale" value="2" />
+            <enum name="worm" value="3" />
+            <enum name="slide" value="4" />
+            <enum name="fill" value="5" />
+            <enum name="thinWorm" value="6" />
+            <enum name="drop" value="7" />
+            <enum name="swap" value="8" />
+            <enum name="scale_down" value="9" />
+        </attr>
+        <attr name="piv_rtl_mode">
+            <enum name="on" value="0" />
+            <enum name="off" value="1" />
+            <enum name="auto" value="2" />
+        </attr>
+    </declare-styleable>
+
+
+    <declare-styleable name="ViewPagerIndicator">
+        <attr name="vpiCirclePageIndicatorStyle" format="reference" />
+    </declare-styleable>
+
+    <attr name="indicatorGravity">
+        <flag name="top" value="0x30" />
+        <flag name="bottom" value="0x50" />
+        <flag name="left" value="0x03" />
+        <flag name="right" value="0x05" />
+        <flag name="center_vertical" value="0x10" />
+        <flag name="center_horizontal" value="0x01" />
+        <flag name="center" value="0x11" />
+        <flag name="start" value="0x00800003" />
+        <flag name="end" value="0x00800005" />
+    </attr>
+
+    <attr name="indicatorOrientation">
+        <enum name="horizontal" value="0" />
+        <enum name="vertical" value="1" />
+    </attr>
+
+    <attr name="pageTransformer">
+        <enum name="flow" value="0" />
+        <enum name="depth" value="1" />
+        <enum name="zoom" value="2" />
+        <enum name="slide_over" value="3" />
+    </attr>
+
+    <attr name="centered" format="boolean" />
+    <attr name="strokeWidth" format="dimension" />
+    <attr name="slideInterval" format="integer" />
+    <attr name="pageTransformInterval" format="integer" />
+    <attr name="fillColor" format="color" />
+    <attr name="pageColor" format="color" />
+    <attr name="radius" format="dimension" />
+    <attr name="snap" format="boolean" />
+    <attr name="strokeColor" format="color" />
+    <attr name="autoPlay" format="boolean" />
+    <attr name="disableAutoPlayOnUserInteraction" format="boolean" />
+    <attr name="indicatorMarginHorizontal" format="dimension" />
+    <attr name="indicatorMarginVertical" format="dimension" />
+    <attr name="animateOnBoundary" format="boolean" />
+
+    <attr name="indicatorVisibility">
+        <enum name="visible" value="0" />
+        <enum name="invisible" value="4" />
+        <enum name="gone" value="8" />
+    </attr>
+
+    <declare-styleable name="CirclePageIndicator">
+        <attr name="centered" />
+        <attr name="fillColor" />
+        <attr name="pageColor" />
+        <attr name="android:orientation" />
+        <attr name="radius" />
+        <attr name="snap" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
+        <attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="SliderView">
+        <attr name="slideInterval" />
+        <attr name="indicatorGravity" />
+        <attr name="indicatorOrientation" />
+        <attr name="fillColor" />
+        <attr name="pageColor" />
+        <attr name="radius" />
+        <attr name="snap" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
+        <attr name="autoPlay" />
+        <attr name="disableAutoPlayOnUserInteraction" />
+        <attr name="indicatorMarginHorizontal" />
+        <attr name="indicatorMarginVertical" />
+        <attr name="pageTransformInterval" />
+        <attr name="pageTransformer" />
+        <attr name="animateOnBoundary" />
+        <attr name="indicatorVisibility" />
+    </declare-styleable>
+
+</resources>

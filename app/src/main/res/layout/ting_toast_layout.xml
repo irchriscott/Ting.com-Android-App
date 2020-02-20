@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/colorTransparent"
+        android:layout_width="wrap_content"
+        android:id="@+id/tingToastLayout"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_height="50dp">
+
+
+    <LinearLayout
+            android:id="@+id/toastContainer"
+            android:layout_width="wrap_content"
+            android:background="@color/colorWhite"
+            android:orientation="horizontal"
+            android:layout_height="50dp">
+        
+        <ImageView
+                android:id="@+id/toastIcon"
+                android:scaleType="fitXY"
+                android:alpha="0.5"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorTransparent"
+                tools:ignore="ContentDescription,RtlHardcoded"/>
+
+        <TextView
+                android:id="@+id/toastText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/colorTransparent"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/colorGray"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="15sp"
+                tools:ignore="RtlCompat"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

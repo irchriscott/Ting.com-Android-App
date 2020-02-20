@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/discovery_item_menu"
+          android:icon="@drawable/ic_discovery"
+          android:title="@string/nav_bar_discovery"
+          app:showAsAction="always"
+          tools:ignore="AlwaysShowAction"/>
+
+    <item android:id="@+id/restaurants_item_menu"
+          android:icon="@drawable/ic_restaurants"
+          android:title="@string/nav_bar_restaurants"
+          app:showAsAction="always"/>
+
+    <item android:id="@+id/user_menu_item_menu"
+          android:icon="@drawable/ic_user_menu"
+          android:title="@string/nav_bar_user_menu"
+          app:showAsAction="always"/>
+
+</menu>

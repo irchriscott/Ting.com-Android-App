@@ -21,17 +21,13 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
     ): Boolean {
         return if (swipeEnabled) {
             super.onInterceptTouchEvent(parent, child, event)
-        } else {
-            false
-        }
+        } else { false }
     }
 
     override fun onTouchEvent(parent: CoordinatorLayout, child: V, event: MotionEvent): Boolean {
         return if (swipeEnabled) {
             super.onTouchEvent(parent, child, event)
-        } else {
-            false
-        }
+        } else { false }
     }
 
     override fun onStartNestedScroll(
@@ -51,9 +47,7 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
                 axes,
                 type
             )
-        } else {
-            false
-        }
+        } else { false }
     }
 
     override fun onNestedPreScroll(
@@ -90,8 +84,6 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
     ): Boolean {
         return if (swipeEnabled) {
             super.onNestedPreFling(coordinatorLayout, child, target, velocityX, velocityY)
-        } else {
-            false
-        }
+        } else { false }
     }
 }

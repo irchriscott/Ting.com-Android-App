@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:background="@drawable/address_map_background"
+        tools:context=".fragments.restaurants.RestaurantFiltersFragment">
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                                android:id="@+id/filter_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Filter By Cuisines"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textAllCaps="true"
+                                android:textSize="16sp"
+                                tools:ignore="HardcodedText" />
+
+                        <View
+                                android:id="@+id/filter_separator"
+                                android:layout_width="match_parent"
+                                android:layout_height="0.5dp"
+                                android:layout_below="@id/filter_title"
+                                android:layout_marginTop="12dp"
+                                android:background="@color/colorVeryLightGray" />
+
+                        <LinearLayout
+                                android:id="@+id/filter_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/filter_separator"
+                                android:orientation="vertical" />
+
+                    <Button
+                            android:id="@+id/filter_restaurant_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="12dp"
+                            android:layout_below="@id/filter_list"
+                            android:text="@string/restaurants_filter"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="17sp"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:background="@drawable/button_login" />
+
+                </RelativeLayout>
+
+        </ScrollView>
+
+</FrameLayout>

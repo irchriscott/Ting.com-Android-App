@@ -1,32 +1,39 @@
 package com.codepipes.ting.models
 
+import com.codepipes.ting.utils.Routes
+
 class User (
     val id: Int,
-    val token: String,
+    val token: String?,
     val name: String,
     val username: String,
     val email: String,
     val image: String,
-    val pin: String,
+    private val pin: String,
+    val pinImg: String?,
     val phone: String,
     val dob: String?,
     val gender: String?,
     val country: String,
     val town: String,
+    val channel: String,
     val restaurants: UserRestaurants?,
     val reviews: UserRestaurantReviews?,
     val addresses: UserAddresses?,
     val urls: UserUrls,
     val createdAt: String,
     val updatedAt: String
-){}
+){
+    public fun imageURL(): String = "${Routes().UPLOAD_END_POINT}${this.image}"
+    public fun pinURL(): String = "${Routes().HOST_END_POINT}${this.pin}"
+}
 
 class Address (
     val id: Int,
-    val type: String,
-    val address: String,
-    val latitude: Double,
-    val longitude: Double,
+    var type: String,
+    var address: String,
+    var latitude: Double,
+    var longitude: Double,
     val createdAt: String,
     val updatedAt: String
 ){}
@@ -43,7 +50,13 @@ class UserAddresses (
 
 class UserUrls (
     val loadRestaurants: String,
-    val loadReservations: String
+    val loadReservations: String,
+    val apiGet: String,
+    val apiGetAuth: String,
+    val apiRestaurants: String,
+    val apiReservations: String,
+    val apiMoments: String,
+    val apiOrders: String
 ){}
 
 class UserRestaurantReviews (

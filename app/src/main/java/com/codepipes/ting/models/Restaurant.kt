@@ -1,5 +1,7 @@
 package com.codepipes.ting.models
 
+import com.codepipes.ting.utils.Routes
+
 class Restaurant (
     val id: Int,
     val token: String,
@@ -10,6 +12,7 @@ class Restaurant (
     val categories: RestaurantCategories,
     val logo: String,
     val pin: String,
+    val pinImg: String,
     val country: String,
     val town: String,
     val opening: String,
@@ -23,16 +26,20 @@ class Restaurant (
     val config: RestaurantConfig,
     val createdAt: String,
     val updatedAt: String
-){}
+){
+    public fun logoURL(): String = "${Routes().HOST_END_POINT}${this.logo}"
+}
 
 class RestaurantConfig (
     val id: Int,
     val currency: String,
     val tax: Double,
     val email: String,
-    val cancelLateBooking: Boolean,
-    val bookWithAdvance: Boolean,
     val phone: String,
+    val cancelLateBooking: Int,
+    val bookWithAdvance: Boolean,
+    val bookingAdvance: Double,
+    val bookingPaymentMode: String,
     val bookingCancelationRefund: Boolean,
     val bookingCancelationRefundPercent: Int,
     val daysBeforeReservation: Int,
@@ -42,7 +49,7 @@ class RestaurantConfig (
 
 class RestaurantCategories (
     val count: Int,
-    val categories: List<CategoryRestaurant>
+    val categories: List<RestaurantCategory>
 ){}
 
 class RestaurantBranches (
@@ -63,5 +70,5 @@ class RestaurantImages (
 
 class RestaurantFoodCategories (
     val count: Int,
-    val foodCategories: List<FoodCategory>
+    val categories: List<FoodCategory>
 ){}

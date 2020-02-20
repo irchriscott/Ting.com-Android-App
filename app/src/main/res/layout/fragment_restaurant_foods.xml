@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".fragments.restaurants.RestaurantFoodsFragment">
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/foods_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+    </android.support.v7.widget.RecyclerView>
+
+    <include
+            android:id="@+id/progress_loader"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            layout="@layout/include_progress_loader" />
+
+    <include
+            android:id="@+id/empty_data"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            layout="@layout/include_empty_data" />
+
+</FrameLayout>
