@@ -46,6 +46,10 @@ class SuccessOverlay : DialogFragment(){
         mCheckOverlayImage = view.findViewById(R.id.successOverlayImage) as ImageView
         mMessageOverlayText = view.findViewById(R.id.successOverlayText) as TextView
 
+        if (messageType == "info") {
+            mCheckOverlayImage.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_info_white_64dp))
+        } else { mCheckOverlayImage.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_check_circle_primary_64dp)) }
+
         mMessageOverlayText.text = mArgs.getString("message")
 
         val mPopInAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.pop_in)

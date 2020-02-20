@@ -19,5 +19,6 @@ class UtilData {
 
         public val SOCKET_RESPONSE_ERROR                = "response_error"
         public val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"
+        public val SOCKET_RESPONSE_TABLE_WAITER         = "response_resto_table_waiter"
     }
 }

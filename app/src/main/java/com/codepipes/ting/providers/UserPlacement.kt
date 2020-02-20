@@ -51,8 +51,17 @@ class UserPlacement (
     }
 
     public fun placeOut(){
-        this.sharedPreferencesEditor.remove(PLACEMENT_TEMP_TOKEN_SHARED_KEY)
-        this.sharedPreferencesEditor.remove(PLACEMENT_TOKEN_PREFERENCES_KEY)
-        this.sharedPreferencesEditor.remove(PLACEMENT_SHARED_PREFERENCES_KEY)
+        this.sharedPreferencesEditor.remove(PLACEMENT_TEMP_TOKEN_SHARED_KEY).apply {
+            apply()
+            commit()
+        }
+        this.sharedPreferencesEditor.remove(PLACEMENT_TOKEN_PREFERENCES_KEY).apply {
+            apply()
+            commit()
+        }
+        this.sharedPreferencesEditor.remove(PLACEMENT_SHARED_PREFERENCES_KEY).apply {
+            apply()
+            commit()
+        }
     }
 }

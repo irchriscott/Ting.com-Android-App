@@ -389,9 +389,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
                 val status =
                     utilsFunctions.statusWorkTime(menu.menu.restaurant.opening, menu.menu.restaurant.closing)
-                menu_restaurant_time.text = status?.get("msg")
+                menu_restaurant_time.text = status.get("msg")
 
-                when (status?.get("clr")) {
+                when (status.get("clr")) {
                     "green" -> {
                         menu_restaurant_work_status.background =
                             resources.getDrawable(R.drawable.background_time_green)

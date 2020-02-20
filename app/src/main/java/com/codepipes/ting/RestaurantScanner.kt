@@ -73,6 +73,8 @@ class RestaurantScanner : AppCompatActivity() {
         Bridge.restoreInstanceState(this, savedInstanceState)
         savedInstanceState?.clear()
 
+        RestaurantScanner.ACTIVITY_ID = 1
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         utilsFunctions = UtilsFunctions(this@RestaurantScanner)
@@ -109,30 +111,33 @@ class RestaurantScanner : AppCompatActivity() {
                 runOnUiThread {
                     progressOverlay.dismiss()
                     try {
-                        val response = pnMessageResult.message.asJsonObject
-                        when (response.get("type").asString) {
-                            UtilData.SOCKET_RESPONSE_RESTO_TABLE -> {
-                                val dataObject = response.getAsJsonObject("data")
-                                if(dataObject != null) {
-                                    userPlacement.setToken(dataObject.get("token").asString)
-                                    startActivity(Intent(this@RestaurantScanner, CurrentRestaurant::class.java))
-                                } else {
-                                    codeScanner.startPreview()
-                                    TingToast(this@RestaurantScanner, "Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+
+                        if(RestaurantScanner.ACTIVITY_ID == 1) {
+                            val response = pnMessageResult.message.asJsonObject
+                            when (response.get("type").asString) {
+                                UtilData.SOCKET_RESPONSE_RESTO_TABLE -> {
+                                    val dataObject = response.getAsJsonObject("data")
+                                    if(dataObject != null) {
+                                        userPlacement.setToken(dataObject.get("token").asString)
+                                        startActivity(Intent(this@RestaurantScanner, CurrentRestaurant::class.java))
+                                    } else {
+                                        codeScanner.startPreview()
+                                        TingToast(this@RestaurantScanner, "Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                                    }
                                 }
-                            }
-                            UtilData.SOCKET_RESPONSE_ERROR -> {
-                                codeScanner.startPreview()
-                                TingToast(this@RestaurantScanner, if(!response.get("message").isJsonNull){ response.get("message").asString } else { "An Error Occurred" }, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                            }
-                            UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
-                                userPlacement.placeOut()
-                                codeScanner.startPreview()
-                                TingToast(this@RestaurantScanner, "Placement Is Done. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
-                            }
-                            else -> {
-                                codeScanner.startPreview()
-                                TingToast(this@RestaurantScanner, "No Response. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                                UtilData.SOCKET_RESPONSE_ERROR -> {
+                                    codeScanner.startPreview()
+                                    TingToast(this@RestaurantScanner, if(!response.get("message").isJsonNull){ response.get("message").asString } else { "An Error Occurred" }, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                }
+                                UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
+                                    userPlacement.placeOut()
+                                    codeScanner.startPreview()
+                                    TingToast(this@RestaurantScanner, "Placement Is Done. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                                }
+                                else -> {
+                                    codeScanner.startPreview()
+                                    TingToast(this@RestaurantScanner, "No Response. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                                }
                             }
                         }
                     } catch (e: Exception) {
@@ -239,7 +244,7 @@ class RestaurantScanner : AppCompatActivity() {
                                                 }
                                             } else {
                                                 codeScanner.startPreview()
-                                                TingToast(this@RestaurantScanner, "The Restaurant Is Not Oppened Yet", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                                                TingToast(this@RestaurantScanner, "The Restaurant Is Not Opened Yet", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
                                             }
                                         }
                                     }
@@ -297,16 +302,28 @@ class RestaurantScanner : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        RestaurantScanner.ACTIVITY_ID = 0
         Bridge.clear(this)
     }
 
     override fun onResume() {
         super.onResume()
+        RestaurantScanner.ACTIVITY_ID = 1
         codeScanner.startPreview()
     }
 
     override fun onPause() {
         codeScanner.releaseResources()
+        RestaurantScanner.ACTIVITY_ID = 0
         super.onPause()
+    }
+
+    override fun onRestart() {
+        RestaurantScanner.ACTIVITY_ID = 1
+        super.onRestart()
+    }
+
+    companion object {
+        public var ACTIVITY_ID = 0
     }
 }

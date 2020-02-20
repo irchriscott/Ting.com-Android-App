@@ -43,6 +43,9 @@ class UserAuthentication(
     }
 
     public fun logOut(){
-        this.sharedPreferencesEditor.remove(SESSION_SHARED_PREFERENCES_KEY)
+        this.sharedPreferencesEditor.remove(SESSION_SHARED_PREFERENCES_KEY).apply {
+            apply()
+            commit()
+        }
     }
 }
