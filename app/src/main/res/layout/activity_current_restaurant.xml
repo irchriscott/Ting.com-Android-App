@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -7,4 +7,502 @@
         android:layout_height="match_parent"
         tools:context=".CurrentRestaurant">
 
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+                android:paddingRight="12dp"
+                android:paddingLeft="12dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_loader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:shimmer_base_alpha="0.6"
+                        app:shimmer_auto_start="true">
+
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="8dp"
+                            android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/default_restaurant"
+                                app:civ_border_color="@color/colorVeryLightGray"
+                                app:civ_border_width="3dp"/>
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="8dp"
+                                android:text="Restaurant Name"
+                                android:textAlignment="center"
+                                android:textSize="17sp"
+                                android:textColor="@color/colorVeryLightGray"
+                                android:background="@color/colorVeryLightGray"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                tools:ignore="HardcodedText" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="Bill No 78"
+                                android:textSize="25sp"
+                                android:layout_marginTop="5dp"
+                                android:textColor="@color/colorVeryLightGray"
+                                android:background="@color/colorVeryLightGray"
+                                android:fontFamily="@font/poppins_medium"
+                                tools:ignore="HardcodedText" />
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="8dp"
+                                    android:background="@drawable/background_labeled_button"
+                                    tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
+
+                                <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="24dp"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/default_user"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:layout_marginStart="5dp"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        tools:ignore="HardcodedText"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="2dp"
+                                    android:background="@drawable/background_labeled_button"
+                                    tools:ignore="RtlHardcoded">
+
+                                <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_people_gray_24dp"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:layout_width="20dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        tools:ignore="HardcodedText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <LinearLayout
+                        android:id="@+id/place_header_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="8dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/place_restaurant_image"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/default_restaurant"
+                                app:civ_border_color="@color/colorVeryLightGray"
+                                app:civ_border_width="3dp"/>
+
+                        <TextView
+                                android:id="@+id/place_restaurant_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="8dp"
+                                android:text="Restaurant Name"
+                                android:textAlignment="center"
+                                android:textSize="17sp"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:textColor="@color/colorGray"
+                                tools:ignore="HardcodedText" />
+
+                        <TextView
+                                android:id="@+id/place_table_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="Table No 726"
+                                android:textSize="15sp"
+                                android:fontFamily="@font/poppins_medium"
+                                tools:ignore="HardcodedText" />
+
+                        <TextView
+                                android:id="@+id/place_bill_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="Bill No 78"
+                                android:textSize="25sp"
+                                android:fontFamily="@font/poppins_medium"
+                                android:textColor="@color/colorGray"
+                                tools:ignore="HardcodedText" />
+
+                        <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                    android:id="@+id/place_waiter_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:paddingRight="8dp"
+                                    android:background="@drawable/background_labeled_button"
+                                    tools:ignore="RtlHardcoded,RtlSymmetry,UselessParent">
+
+                                <ImageView
+                                        android:id="@+id/place_waiter_image"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="24dp"
+                                        android:adjustViewBounds="true"
+                                        android:scaleType="fitCenter"
+                                        android:src="@drawable/default_user"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:id="@+id/place_waiter_name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:layout_marginStart="5dp"
+                                        android:text="Administrator"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/colorGray"
+                                        tools:ignore="HardcodedText"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                    android:id="@+id/place_people_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="8dp"
+                                    android:paddingLeft="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="2dp"
+                                    android:background="@drawable/background_labeled_button"
+                                    tools:ignore="RtlHardcoded">
+
+                                <ImageView
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_people_gray_24dp"
+                                        tools:ignore="ContentDescription"/>
+
+                                <TextView
+                                        android:id="@+id/place_people"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="2"
+                                        android:fontFamily="@font/poppins_medium"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/colorGray"
+                                        tools:ignore="HardcodedText"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                </LinearLayout>
+
+                <TableLayout
+                        android:layout_marginTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TableRow
+                            android:layout_height="match_parent">
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_foods"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_one"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                                <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                    <ImageView
+                                            android:layout_width="60dp"
+                                            android:layout_height="60dp"
+                                            android:layout_gravity="center_horizontal"
+                                            android:src="@drawable/ic_spoon_gray"
+                                            android:tint="@color/colorWhite" />
+
+                                    <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal"
+                                            android:layout_marginTop="12dp"
+                                            android:textColor="@color/colorWhite"
+                                            android:fontFamily="@font/poppins_semi_bold"
+                                            android:textSize="17sp"
+                                            android:textAllCaps="true"
+                                            android:text="Foods" />
+                                </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_drinks"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_two"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <ImageView
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/ic_glass_gray"
+                                        android:tint="@color/colorWhite" />
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="12dp"
+                                        android:textColor="@color/colorWhite"
+                                        android:fontFamily="@font/poppins_semi_bold"
+                                        android:textSize="17sp"
+                                        android:textAllCaps="true"
+                                        android:text="Drinks" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </TableRow>
+
+                    <TableRow
+                            android:layout_marginTop="12dp"
+                            android:layout_height="match_parent">
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_dishes"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_three"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                            <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:src="@drawable/ic_restaurants"
+                                    android:tint="@color/colorWhite" />
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:textColor="@color/colorWhite"
+                                    android:fontFamily="@font/poppins_semi_bold"
+                                    android:textSize="17sp"
+                                    android:textAllCaps="true"
+                                    android:text="Dishes" />
+
+                        </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_orders"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_four"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <ImageView
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/ic_orders"
+                                        android:tint="@color/colorWhite" />
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="12dp"
+                                        android:textColor="@color/colorWhite"
+                                        android:fontFamily="@font/poppins_semi_bold"
+                                        android:textSize="17sp"
+                                        android:textAllCaps="true"
+                                        android:text="Orders" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </TableRow>
+
+                    <TableRow
+                            android:layout_marginTop="12dp"
+                            android:layout_height="match_parent">
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_bill"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_five"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <ImageView
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/ic_bill"
+                                        android:tint="@color/colorWhite" />
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="12dp"
+                                        android:textColor="@color/colorWhite"
+                                        android:fontFamily="@font/poppins_semi_bold"
+                                        android:textSize="17sp"
+                                        android:textAllCaps="true"
+                                        android:text="Bill" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                                android:id="@+id/place_menu_request_waiter"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:paddingTop="30dp"
+                                android:paddingBottom="25dp"
+                                android:background="@drawable/background_menu_item_six"
+                                android:layout_weight="1"
+                                tools:ignore="ContentDescription,HardcodedText,RtlCompat,SpUsage">
+
+                            <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                <ImageView
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/ic_customer"
+                                        android:tint="@color/colorWhite" />
+
+                                <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="12dp"
+                                        android:textColor="@color/colorWhite"
+                                        android:fontFamily="@font/poppins_semi_bold"
+                                        android:textSize="17sp"
+                                        android:textAllCaps="true"
+                                        android:text="Request Waiter" />
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </TableRow>
+
+                </TableLayout>
+
+        </LinearLayout>
+
+</ScrollView>

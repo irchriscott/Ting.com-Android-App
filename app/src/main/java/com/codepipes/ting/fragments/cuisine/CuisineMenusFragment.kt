@@ -54,10 +54,8 @@ class CuisineMenusFragment : Fragment() {
         savedInstanceState?.clear()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val view =  inflater.inflate(R.layout.fragment_cuisine_menus, container, false)
         cuisine = Gson().fromJson(arguments?.getString("cuisine"), RestaurantCategory::class.java)
 

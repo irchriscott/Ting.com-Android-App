@@ -43,6 +43,8 @@ class UserPlacement (
         } else { null }
     }
 
+    public fun getToken() : String? = this.sharedPreferences.getString(PLACEMENT_TOKEN_PREFERENCES_KEY, null)
+
     public fun getTempToken() : String? = this.sharedPreferences.getString(PLACEMENT_TEMP_TOKEN_SHARED_KEY, null)
 
     public fun isPlacedIn(): Boolean{

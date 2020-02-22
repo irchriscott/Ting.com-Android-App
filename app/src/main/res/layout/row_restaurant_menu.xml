@@ -44,6 +44,7 @@
                     android:fontFamily="@font/poppins_semi_bold"
                     android:textSize="14sp"
                     android:paddingRight="94dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
@@ -119,6 +120,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:includeFontPadding="false"
                             android:textSize="12sp"
+                            android:textColor="@color/colorGray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="HardcodedText"/>
@@ -131,6 +133,7 @@
                             android:fontFamily="@font/poppins_medium"
                             android:textAllCaps="true"
                             android:textSize="25sp"
+                            android:textColor="@color/colorGray"
                             android:includeFontPadding="false"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/menu_quantity"
@@ -145,6 +148,7 @@
                             android:includeFontPadding="false"
                             android:paddingTop="14dp"
                             android:paddingBottom="4dp"
+                            android:textColor="@color/colorGray"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/menu_new_price"
                             app:layout_constraintBottom_toBottomOf="@id/menu_new_price"

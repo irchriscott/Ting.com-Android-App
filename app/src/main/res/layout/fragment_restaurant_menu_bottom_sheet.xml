@@ -231,6 +231,42 @@
             </LinearLayout>
 
             <View
+                    android:id="@+id/menu_separator_zero"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@color/colorVeryLightGray"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/menu_type_view"/>
+
+            <TextView
+                    android:id="@+id/menu_ingredients_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:text="Ingredients"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textAllCaps="true"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/menu_separator_zero"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText"/>
+
+            <org.sufficientlysecure.htmltextview.HtmlTextView
+                    android:id="@+id/menu_ingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="This will be an html text view and will hold a very long string"
+                    android:fontFamily="@font/poppins_regular"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/menu_ingredients_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText"/>
+
+            <View
                     android:id="@+id/menu_separator_first"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -238,7 +274,7 @@
                     android:background="@color/colorVeryLightGray"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/menu_type_view"/>
+                    app:layout_constraintTop_toBottomOf="@id/menu_ingredients"/>
 
 
             <RelativeLayout
@@ -307,6 +343,7 @@
                     app:layout_constraintTop_toBottomOf="@id/menu_price_view"/>
 
             <LinearLayout
+                    android:id="@+id/menu_data_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -403,6 +440,86 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                    android:id="@+id/menu_separator_third"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/colorVeryLightGray"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/menu_data_view"/>
+
+            <TextView
+                    android:id="@+id/menu_promotions_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:text="Today Promotion"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textAllCaps="true"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/menu_separator_third"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText"/>
+
+            <ImageView
+                    android:id="@+id/menu_promotion_reduction_icon"
+                    android:src="@drawable/ic_minus_outline_gray"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="6dp"
+                    android:alpha="0.6"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/menu_promotions_title"
+                    tools:ignore="ContentDescription"/>
+
+            <TextView
+                    android:id="@+id/menu_promotion_reduction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginStart="5dp"
+                    android:text="This is a description on a menu"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp"
+                    android:paddingEnd="26dp"
+                    android:textColor="@color/colorGray"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/menu_promotions_title"
+                    app:layout_constraintStart_toEndOf="@id/menu_promotion_reduction_icon"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+            <ImageView
+                    android:id="@+id/menu_promotion_supplement_icon"
+                    android:src="@drawable/ic_plus_outline_gray"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.6"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/menu_promotion_reduction"
+                    tools:ignore="ContentDescription"/>
+
+            <TextView
+                    android:id="@+id/menu_promotion_supplement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginStart="5dp"
+                    android:text="This is a description on a menu"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="12sp"
+                    android:paddingEnd="26dp"
+                    android:textColor="@color/colorGray"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/menu_promotion_reduction"
+                    app:layout_constraintStart_toEndOf="@id/menu_promotion_supplement_icon"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
         </android.support.constraint.ConstraintLayout>
 

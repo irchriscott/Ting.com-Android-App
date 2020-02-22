@@ -66,6 +66,7 @@ class Menu (
 
 class MenuPromotions (
     val count: Int,
+    val todayPromotion: PromotionDataString?,
     val promotions: List<MenuPromotion>?
 ){}
 

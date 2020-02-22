@@ -215,7 +215,7 @@ class RestaurantScanner : AppCompatActivity() {
                                                         if(userPlacement.getTempToken().isNullOrEmpty()) {
                                                             userPlacement.setTempToken(utilsFunctions.getToken((100 until 200).random()))
                                                         }
-                                                        val receiver = SocketUser(table.id, 1, "${table.branch.restaurant.name}, ${table.branch.name}", table.branch.email, table.branch.restaurant.logo, table.branch.channel)
+                                                        val receiver = SocketUser(table.branch.id, 1, "${table.branch.restaurant.name}, ${table.branch.name}", table.branch.email, table.branch.restaurant.logo, table.branch.channel)
                                                         val args = mapOf<String, String?>("table" to table.id.toString(), "token" to userPlacement.getTempToken())
                                                         val data = mapOf<String, String>("table" to table.number)
                                                         val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, 200, null, args, data)

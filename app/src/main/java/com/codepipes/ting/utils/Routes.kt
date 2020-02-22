@@ -46,8 +46,12 @@ class Routes {
     val discoverMenus: String               = "${END_POINT}usr/d/menus/discover/"
 
     //MENU
-    var checkUserMenuReview: String         = "${END_POINT}usr/menu/reviews/check/"
+    val checkUserMenuReview: String         = "${END_POINT}usr/menu/reviews/check/"
 
     //PLACEMENT & ORDERS
-    var requestRestaurantTable: String      = "${END_POINT}usr/po/table/request/"
+    val requestRestaurantTable: String      = "${END_POINT}usr/po/table/request/"
+    val getCurrentPlacement: String         = "${END_POINT}usr/po/placement/get/"
+    val updatePlacementPeople: String       = "${END_POINT}usr/po/placement/people/update/"
+    val restaurantMenusOrders: String       = "${END_POINT}usr/po/orders/branch/menus/"
+    val placeOrderMenu: String              = "${END_POINT}usr/po/orders/menu/place/"
 }

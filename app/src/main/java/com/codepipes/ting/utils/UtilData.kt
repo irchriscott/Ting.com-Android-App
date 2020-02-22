@@ -15,10 +15,11 @@ class UtilData {
         public val PUBNUB_PUBLISH_KEY                   = "pub-c-62f722d6-c307-4dd9-89dc-e598a9164424"
 
         public val SOCKET_REQUEST_RESTO_TABLE           = "request_resto_table"
-        public val SOCKET_RESPONSE_RESTO_TABLE          = "response_resto_table"
+        public val SOCKET_REQUEST_ASSIGN_WAITER         = "request_assign_waiter"
 
         public val SOCKET_RESPONSE_ERROR                = "response_error"
         public val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"
         public val SOCKET_RESPONSE_TABLE_WAITER         = "response_resto_table_waiter"
+        public val SOCKET_RESPONSE_RESTO_TABLE          = "response_resto_table"
     }
 }

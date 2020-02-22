@@ -43,6 +43,7 @@
                     android:fontFamily="@font/poppins_semi_bold"
                     android:textSize="14sp"
                     android:paddingRight="74dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
@@ -115,6 +116,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp"
                     android:paddingRight="86dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/restaurant_menus"
                     app:layout_constraintStart_toEndOf="@id/restaurant_cuisines_pin"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
@@ -140,6 +142,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp"
                     android:paddingRight="86dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/restaurant_cuisines"
                     app:layout_constraintStart_toEndOf="@id/restaurant_categories_pin"
                     tools:ignore="HardcodedText,RtlSymmetry"/>

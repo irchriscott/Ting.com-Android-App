@@ -6,12 +6,16 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.TextView
+import com.androidstudy.networkmanager.Monitor
+import com.androidstudy.networkmanager.Tovuti
 import com.codepipes.ting.fragments.navigation.DiscoveryFragment
 import com.codepipes.ting.fragments.navigation.MomentsFragment
 import com.codepipes.ting.fragments.navigation.RestaurantsFragment
@@ -31,6 +35,7 @@ class TingDotCom : AppCompatActivity() {
     private lateinit var mNavigation: BottomNavigationView
 
     private lateinit var userAuthentication: UserAuthentication
+    private lateinit var snackbar: Snackbar
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -75,11 +80,35 @@ class TingDotCom : AppCompatActivity() {
         userAuthentication = UserAuthentication(this@TingDotCom)
         val session = userAuthentication.get()!!
 
-        startService(Intent(applicationContext, PushNotificationService::class.java))
-        startService(Intent(applicationContext, PubnubService::class.java))
+        //startService(Intent(applicationContext, PushNotificationService::class.java))
+        //startService(Intent(applicationContext, PubnubService::class.java))
 
         PushNotifications.start(applicationContext, "f47c28dd-63ae-49c0-9f30-88560b21e061")
         PushNotifications.addDeviceInterest(session.channel)
+
+        snackbar = Snackbar.make(findViewById<View>(android.R.id.content), "Checking Connectivity...", Snackbar.LENGTH_INDEFINITE)
+        snackbar.show()
+
+        Tovuti.from(this).monitor { _, isConnected, isFast ->
+            runOnUiThread {
+                if(isConnected) {
+                    if(isFast) {
+                        snackbar.setText("Connected !")
+                        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorGreen))
+                    } else {
+                        snackbar.setText("Slow Connection !")
+                        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorOrange))
+                    }
+                    snackbar.duration = Snackbar.LENGTH_SHORT
+                    snackbar.show()
+                } else {
+                    snackbar.setText("No Internet Connection !")
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorRed))
+                    snackbar.duration = Snackbar.LENGTH_SHORT
+                    snackbar.show()
+                }
+            }
+        }
     }
 
     private fun changeFragment(fragment: Fragment){
@@ -103,10 +132,18 @@ class TingDotCom : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { outPersistentState?.clear() }
     }
 
+    override fun onPause() {
+        Tovuti.from(this).stop()
+        snackbar.dismiss()
+        super.onPause()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Bridge.clear(this)
         finishAffinity()
+        Tovuti.from(this).stop()
+        snackbar.dismiss()
         exitProcess(0)
     }
 }

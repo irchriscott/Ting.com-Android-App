@@ -101,6 +101,23 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
             view.menu_availability_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
         }
 
+        if (menu.menu.promotions?.todayPromotion != null) {
+            view.menu_separator_third.visibility = View.VISIBLE
+            view.menu_promotions_title.visibility = View.VISIBLE
+
+            if(menu.menu.promotions.todayPromotion.reduction != null) {
+                view.menu_promotion_reduction.visibility = View.VISIBLE
+                view.menu_promotion_reduction_icon.visibility = View.VISIBLE
+                view.menu_promotion_reduction.text = menu.menu.promotions.todayPromotion.reduction
+            }
+
+            if(menu.menu.promotions.todayPromotion.supplement != null) {
+                view.menu_promotion_supplement.visibility = View.VISIBLE
+                view.menu_promotion_supplement_icon.visibility = View.VISIBLE
+                view.menu_promotion_supplement.text = menu.menu.promotions.todayPromotion.supplement
+            }
+        }
+
         view.menu_image.setOnClickListener {
             val intent = Intent(activity!!, com.codepipes.ting.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)

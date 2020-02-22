@@ -38,13 +38,4 @@ class InfoDialog : DialogFragment() {
 
         return view
     }
-
-    override fun onStart() {
-        super.onStart()
-        if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
-        }
-    }
 }

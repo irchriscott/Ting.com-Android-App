@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.codepipes.ting.CurrentRestaurant
 import com.codepipes.ting.R
 import com.codepipes.ting.models.Menu
 import com.codepipes.ting.models.RestaurantMenu
@@ -29,13 +30,12 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
     }
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val view = inflater.inflate(R.layout.fragment_restaurant_menu_bottom_sheet, container, false)
         val myArgs = this.arguments
         val menu = Gson().fromJson(myArgs?.get("menu").toString(), Menu::class.java)
+        val fromOrder = myArgs?.getBoolean(CurrentRestaurant.MENU_FROM_ORDER_KEY)
 
         view.menu_name.text = menu.name
         view.menu_rating.rating = menu.reviews?.average!!.toFloat()
@@ -53,6 +53,14 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
         } else {
             view.menu_subcategory.visibility = View.GONE
             view.menu_cuisine_view.visibility = View.GONE
+        }
+
+        if(fromOrder == true) {
+            view.menu_separator_zero.visibility = View.VISIBLE
+            view.menu_ingredients_title.visibility = View.VISIBLE
+            view.menu_ingredients.visibility = View.VISIBLE
+
+            view.menu_ingredients.setHtml(menu.ingredients)
         }
 
         view.menu_new_price.text = "${menu.currency} ${NumberFormat.getNumberInstance().format(menu.price)}".toUpperCase()
@@ -99,6 +107,23 @@ class MenuBottomSheetFragment : BottomSheetDialogFragment(){
             view.menu_availability_text.text = "Not Available"
             view.menu_availability_view.background = view.context.resources.getDrawable(R.drawable.background_time_red)
             view.menu_availability_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
+        }
+
+        if (menu.promotions?.todayPromotion != null) {
+            view.menu_separator_third.visibility = View.VISIBLE
+            view.menu_promotions_title.visibility = View.VISIBLE
+
+            if(menu.promotions.todayPromotion.reduction != null) {
+                view.menu_promotion_reduction.visibility = View.VISIBLE
+                view.menu_promotion_reduction_icon.visibility = View.VISIBLE
+                view.menu_promotion_reduction.text = menu.promotions.todayPromotion.reduction
+            }
+
+            if(menu.promotions.todayPromotion.supplement != null) {
+                view.menu_promotion_supplement.visibility = View.VISIBLE
+                view.menu_promotion_supplement_icon.visibility = View.VISIBLE
+                view.menu_promotion_supplement.text = menu.promotions.todayPromotion.supplement
+            }
         }
 
         return view

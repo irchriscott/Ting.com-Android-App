@@ -55,6 +55,8 @@ class SuccessOverlay : DialogFragment(){
         val mPopInAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.pop_in)
         mCheckOverlayImage.startAnimation(mPopInAnimation)
 
+        view.setOnClickListener { mCloseListener.handleDialogClose(null) }
+
         return view
     }
 
@@ -71,9 +73,8 @@ class SuccessOverlay : DialogFragment(){
         this.mCloseListener = closeListener
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
+    override fun onDismiss(dialog: DialogInterface?) {
         mCloseListener.handleDialogClose(null)
-
+        super.onDismiss(dialog)
     }
 }
