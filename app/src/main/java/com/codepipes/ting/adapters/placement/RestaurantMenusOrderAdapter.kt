@@ -25,6 +25,7 @@ import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -47,6 +48,8 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
         val row = layoutInflater.inflate(R.layout.row_restaurant_menu_order, parent, false)
         userAuthentication = UserAuthentication(context)
         session = userAuthentication.get()!!
+        val userPlacement = UserPlacement(context)
+        placement = userPlacement.get()!!
         return RestaurantMenusOrderViewHolder(row)
     }
 
