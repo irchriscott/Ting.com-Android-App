@@ -80,8 +80,8 @@ class TingDotCom : AppCompatActivity() {
         userAuthentication = UserAuthentication(this@TingDotCom)
         val session = userAuthentication.get()!!
 
-        //startService(Intent(applicationContext, PushNotificationService::class.java))
-        //startService(Intent(applicationContext, PubnubService::class.java))
+        startService(Intent(applicationContext, PushNotificationService::class.java))
+        startService(Intent(applicationContext, PubnubService::class.java))
 
         PushNotifications.start(applicationContext, "f47c28dd-63ae-49c0-9f30-88560b21e061")
         PushNotifications.addDeviceInterest(session.channel)

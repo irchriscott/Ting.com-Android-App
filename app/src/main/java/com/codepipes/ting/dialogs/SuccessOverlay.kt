@@ -21,9 +21,6 @@ class SuccessOverlay : DialogFragment(){
     private lateinit var mCheckOverlayImage: ImageView
     private lateinit var mMessageOverlayText: TextView
 
-    private lateinit var message: String
-    private lateinit var messageType: String
-
     private lateinit var mCloseListener: SuccessDialogCloseListener
 
     override fun getTheme(): Int = R.style.TransparentDialog
@@ -38,8 +35,8 @@ class SuccessOverlay : DialogFragment(){
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val mArgs = arguments
-        message = mArgs.getString("message")
-        messageType = mArgs.getString("type")
+        val message = mArgs.getString("message")
+        val messageType = mArgs.getString("type")
 
         val view = inflater!!.inflate(R.layout.include_success_overlay, container, false)
 

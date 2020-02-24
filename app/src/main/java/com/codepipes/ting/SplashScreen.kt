@@ -56,6 +56,4 @@ class SplashScreen : AppCompatActivity() {
         super.onDestroy()
         handler?.removeCallbacks(runnable)
     }
-
-
 }

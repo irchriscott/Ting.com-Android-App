@@ -13,6 +13,7 @@ import com.codepipes.ting.CurrentRestaurant
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.cuisine.CuisineMenusAdapter
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
+import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
@@ -32,6 +33,8 @@ class RestaurantMenusOrderDialog : DialogFragment() {
     private lateinit var userAuthentication: UserAuthentication
     private lateinit var session: User
 
+    private lateinit var restaurantMenusOrderCloseListener: RestaurantMenusOrderCloseListener
+
     override fun getTheme(): Int = R.style.TransparentDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,7 +48,10 @@ class RestaurantMenusOrderDialog : DialogFragment() {
         val branchId = arguments!!.getInt(CurrentRestaurant.RESTO_BRANCH_KEY)
 
         view.restaurant_menus_type.text = when (menuType) { 1 -> { "Foods" } 2 -> { "Drinks" } 3 -> { "Dishes" } else -> { "Foods" } }
-        view.close_restaurant_menus.setOnClickListener { dialog.dismiss() }
+        view.close_restaurant_menus.setOnClickListener {
+            dialog.dismiss()
+            restaurantMenusOrderCloseListener.onClose()
+        }
 
         loadMenus(view, menuType, branchId)
 
@@ -192,5 +198,9 @@ class RestaurantMenusOrderDialog : DialogFragment() {
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
             dialog.window!!.setLayout(width, height)
         }
+    }
+
+    fun onDialogClose(listener: RestaurantMenusOrderCloseListener) {
+        this.restaurantMenusOrderCloseListener = listener
     }
 }

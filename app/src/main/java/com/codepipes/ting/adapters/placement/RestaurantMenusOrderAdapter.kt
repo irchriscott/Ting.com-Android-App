@@ -116,7 +116,7 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
             orderFormDialog.show(fragmentManager, orderFormDialog.tag)
             orderFormDialog.onSubmitOrder(object : SubmitOrderListener {
                 override fun onSubmitOrder(quantity: String, conditions: String) {
-                    submitOrder(if(quantity != ""){ quantity.toInt() } else { 1 }, conditions)
+                    submitOrder(if(quantity != ""){ quantity.toInt() } else { 1 }, conditions, menu.id)
                     orderFormDialog.dismiss()
                 }
             })
@@ -132,7 +132,7 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
         }
     }
 
-    private fun submitOrder(quantity: Int, conditions: String) {
+    private fun submitOrder(quantity: Int, conditions: String, menu: Int) {
 
         val url = Routes().placeOrderMenu
         val activity = context as Activity
@@ -147,6 +147,7 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
             .addFormDataPart("token", placement.token)
             .addFormDataPart("quantity", quantity.toString())
             .addFormDataPart("conditions", conditions)
+            .addFormDataPart("menu", menu.toString())
             .build()
 
         val request = Request.Builder()

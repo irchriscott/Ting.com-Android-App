@@ -109,9 +109,7 @@ class RestaurantScanner : AppCompatActivity() {
 
             override fun message(pubnub: PubNub, pnMessageResult: PNMessageResult) {
                 runOnUiThread {
-                    progressOverlay.dismiss()
                     try {
-
                         if(RestaurantScanner.ACTIVITY_ID == 1) {
                             val response = pnMessageResult.message.asJsonObject
                             when (response.get("type").asString) {
@@ -126,21 +124,25 @@ class RestaurantScanner : AppCompatActivity() {
                                     }
                                 }
                                 UtilData.SOCKET_RESPONSE_ERROR -> {
+                                    progressOverlay.dismiss()
                                     codeScanner.startPreview()
                                     TingToast(this@RestaurantScanner, if(!response.get("message").isJsonNull){ response.get("message").asString } else { "An Error Occurred" }, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                                 }
                                 UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
+                                    progressOverlay.dismiss()
                                     userPlacement.placeOut()
                                     codeScanner.startPreview()
                                     TingToast(this@RestaurantScanner, "Placement Is Done. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
                                 }
                                 else -> {
+                                    progressOverlay.dismiss()
                                     codeScanner.startPreview()
                                     TingToast(this@RestaurantScanner, "No Response. Try Again", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
                                 }
                             }
                         }
                     } catch (e: Exception) {
+                        progressOverlay.dismiss()
                         codeScanner.startPreview()
                         TingToast(this@RestaurantScanner, "An Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }

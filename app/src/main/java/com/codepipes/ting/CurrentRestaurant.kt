@@ -19,6 +19,7 @@ import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
 import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
+import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.*
@@ -292,6 +293,11 @@ class CurrentRestaurant : AppCompatActivity() {
         bundle.putInt(CurrentRestaurant.RESTO_BRANCH_KEY, branch)
         menusDialog.arguments = bundle
         menusDialog.show(supportFragmentManager, menusDialog.tag)
+        menusDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
+            override fun onClose() {
+                getPlacement(userPlacement.getToken()!!)
+            }
+        })
     }
 
     private fun getPlacement(token: String) {
