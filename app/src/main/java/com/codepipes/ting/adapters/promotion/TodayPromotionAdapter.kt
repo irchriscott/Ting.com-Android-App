@@ -3,20 +3,14 @@ package com.codepipes.ting.adapters.promotion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.adapters.menu.MenuImageListAdapter
-import com.codepipes.ting.models.MenuImage
 import com.codepipes.ting.models.MenuPromotion
-import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_today_promotion.view.*
 import java.text.NumberFormat
@@ -92,7 +86,7 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
         holder.view.promotion_interests.text = NumberFormat.getNumberInstance().format(promotion.interests.count)
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.MenuPromotion::class.java)
             intent.putExtra("promo", promotion.id)
             intent.putExtra("url", promotion.urls.apiGet)
             activity.startActivity(intent)

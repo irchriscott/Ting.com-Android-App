@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.codepipes.ting.Cuisine
+import com.codepipes.ting.activities.discovery.Cuisine
 import com.codepipes.ting.R
 import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.utils.Routes

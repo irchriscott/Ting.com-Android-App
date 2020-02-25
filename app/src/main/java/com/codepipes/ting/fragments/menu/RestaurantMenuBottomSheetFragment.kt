@@ -1,12 +1,9 @@
 package com.codepipes.ting.fragments.menu
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Paint
-import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -119,7 +116,7 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         view.menu_image.setOnClickListener {
-            val intent = Intent(activity!!, com.codepipes.ting.RestaurantMenu::class.java)
+            val intent = Intent(activity!!, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)
             intent.putExtra("url", menu.urls.apiGet)
             activity?.startActivity(intent)

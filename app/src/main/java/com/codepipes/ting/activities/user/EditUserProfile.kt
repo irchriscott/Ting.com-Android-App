@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.user
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,14 +19,13 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import com.codepipes.ting.R
 import com.codepipes.ting.adapters.user.UserAddressAdapter
 import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.dialogs.user.add.AddUserAddress
@@ -100,8 +99,12 @@ class EditUserProfile : AppCompatActivity() {
         supportActionBar!!.title = user.username.capitalize()
 
         try {
-            val upArrow = ContextCompat.getDrawable(this@EditUserProfile, R.drawable.abc_ic_ab_back_material)
-            upArrow!!.setColorFilter(ContextCompat.getColor(this@EditUserProfile, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            val upArrow = ContextCompat.getDrawable(this@EditUserProfile,
+                R.drawable.abc_ic_ab_back_material
+            )
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@EditUserProfile,
+                R.color.colorPrimary
+            ), PorterDuff.Mode.SRC_ATOP)
             supportActionBar!!.setHomeAsUpIndicator(upArrow)
         } catch (e: java.lang.Exception) {}
 

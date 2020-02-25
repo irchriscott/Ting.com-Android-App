@@ -5,15 +5,17 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.*
+import com.codepipes.ting.activities.discovery.TodayPromotions
+import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.activities.placement.RestaurantScanner
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 
 import com.codepipes.ting.adapters.cuisine.CuisineMenusAdapter
 import com.codepipes.ting.adapters.cuisine.CuisineRestaurantsAdapter
@@ -496,7 +498,7 @@ class DiscoveryFragment : Fragment() {
         }
 
         view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.MenuPromotion::class.java)
             intent.putExtra("promo", promotion.id)
             intent.putExtra("url", promotion.urls.apiGet)
             activity!!.startActivity(intent)
@@ -554,7 +556,7 @@ class DiscoveryFragment : Fragment() {
 
                                 view.menu_price.text = "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.price)}".toUpperCase()
                                 view.setOnClickListener {
-                                    val intent = Intent(context, com.codepipes.ting.RestaurantMenu::class.java)
+                                    val intent = Intent(context, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
                                     intent.putExtra("menu", menu.id)
                                     intent.putExtra("url", menu.urls.apiGet)
                                     activity?.startActivity(intent)

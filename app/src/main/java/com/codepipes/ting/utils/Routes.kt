@@ -6,6 +6,7 @@ class Routes {
     public val HOST_END_POINT: String       = "http://10.0.2.2:8000"
     private val END_POINT: String           = "${HOST_END_POINT}/api/v1/"
     public val UPLOAD_END_POINT: String     = "${HOST_END_POINT}/tinguploads/"
+    public val API_HOST_PREFIX: String      = "/api/v1/"
 
     //SIGN UP & AUTH ROUTES
     val checkEmailUsername: String          = "${END_POINT}usr/check/email-username/"
@@ -54,4 +55,5 @@ class Routes {
     val updatePlacementPeople: String       = "${END_POINT}usr/po/placement/people/update/"
     val restaurantMenusOrders: String       = "${END_POINT}usr/po/orders/branch/menus/"
     val placeOrderMenu: String              = "${END_POINT}usr/po/orders/menu/place/"
+    val placementOrdersMenu: String         = "${API_HOST_PREFIX}usr/po/orders/{placement}/all/"
 }

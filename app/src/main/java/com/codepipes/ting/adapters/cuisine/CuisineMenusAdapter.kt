@@ -98,7 +98,7 @@ class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : Rec
         }
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.RestaurantMenu::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)
             intent.putExtra("url", menu.urls.apiGet)
             holder.view.context.startActivity(intent)

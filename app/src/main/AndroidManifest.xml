@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-            android:name=".TingDotComApp"
+            android:name=".app.TingDotComApp"
             android:icon="@drawable/logo_rect"
             android:allowBackup="true"
             android:label="@string/app_name"
@@ -47,67 +47,67 @@
         </service>
 
         <activity
-                android:name=".CurrentRestaurant"
-                android:parentActivityName=".RestaurantProfile"
+                android:name=".activities.placement.CurrentRestaurant"
+                android:parentActivityName=".activities.restaurant.RestaurantProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantScanner"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.placement.RestaurantScanner"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name=".RestaurantSpecification"
-                android:parentActivityName=".RestaurantProfile"
+                android:name=".activities.restaurant.RestaurantSpecification"
+                android:parentActivityName=".activities.restaurant.RestaurantProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".TodayPromotions"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.discovery.TodayPromotions"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".Cuisine"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.discovery.Cuisine"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantAbout"
-                android:parentActivityName=".RestaurantProfile"
+                android:name=".activities.restaurant.RestaurantAbout"
+                android:parentActivityName=".activities.restaurant.RestaurantProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantReviews"
-                android:parentActivityName=".RestaurantProfile"
+                android:name=".activities.restaurant.RestaurantReviews"
+                android:parentActivityName=".activities.restaurant.RestaurantProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantLikes"
-                android:parentActivityName=".RestaurantProfile"
+                android:name=".activities.restaurant.RestaurantLikes"
+                android:parentActivityName=".activities.restaurant.RestaurantProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".MenuPromotion"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.menu.MenuPromotion"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantMenu"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.menu.RestaurantMenu"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".RestaurantProfile"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.restaurant.RestaurantProfile"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
-                android:name=".EditUserProfile"
-                android:parentActivityName=".UserProfile"
+                android:name=".activities.user.EditUserProfile"
+                android:parentActivityName=".activities.user.UserProfile"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
-                android:name=".UserProfile"
-                android:parentActivityName=".TingDotCom"
+                android:name=".activities.user.UserProfile"
+                android:parentActivityName=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
-                android:name=".LogIn"
+                android:name=".activities.base.LogIn"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".ResetPassword"
-                android:parentActivityName=".LogIn"
+                android:name=".activities.base.ResetPassword"
+                android:parentActivityName=".activities.base.LogIn"
                 android:theme="@style/AppTheme.WhiteActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -122,11 +122,11 @@
                 android:value="@string/google_maps_key" />
 
         <activity
-                android:name=".SignUp"
-                android:parentActivityName=".LogIn"
+                android:name=".activities.base.SignUp"
+                android:parentActivityName=".activities.base.LogIn"
                 android:theme="@style/AppTheme.WhiteActionBar" />
         <activity
-                android:name=".SplashScreen"
+                android:name=".activities.base.SplashScreen"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -135,7 +135,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".TingDotCom"
+                android:name=".activities.base.TingDotCom"
                 android:theme="@style/AppTheme.DefaultActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

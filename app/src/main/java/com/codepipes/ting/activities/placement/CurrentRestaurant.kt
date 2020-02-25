@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.placement
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -10,9 +10,10 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.codepipes.ting.R
+import com.codepipes.ting.activities.base.TingDotCom
 import com.codepipes.ting.dialogs.InfoDialog
 import com.codepipes.ting.dialogs.SuccessOverlay
 import com.codepipes.ting.dialogs.TingToast
@@ -28,7 +29,6 @@ import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilData
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
@@ -75,8 +75,12 @@ class CurrentRestaurant : AppCompatActivity() {
         supportActionBar!!.title = ""
 
         try {
-            val upArrow = ContextCompat.getDrawable(this@CurrentRestaurant, R.drawable.abc_ic_ab_back_material)
-            upArrow!!.setColorFilter(ContextCompat.getColor(this@CurrentRestaurant, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            val upArrow = ContextCompat.getDrawable(this@CurrentRestaurant,
+                R.drawable.abc_ic_ab_back_material
+            )
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@CurrentRestaurant,
+                R.color.colorPrimary
+            ), PorterDuff.Mode.SRC_ATOP)
             supportActionBar!!.setHomeAsUpIndicator(upArrow)
         } catch (e: Exception) {}
 
@@ -289,8 +293,8 @@ class CurrentRestaurant : AppCompatActivity() {
     private fun showMenusDialog(type: Int, branch: Int) {
         val menusDialog = RestaurantMenusOrderDialog()
         val bundle = Bundle()
-        bundle.putInt(CurrentRestaurant.MENU_TYPE_KEY, type)
-        bundle.putInt(CurrentRestaurant.RESTO_BRANCH_KEY, branch)
+        bundle.putInt(MENU_TYPE_KEY, type)
+        bundle.putInt(RESTO_BRANCH_KEY, branch)
         menusDialog.arguments = bundle
         menusDialog.show(supportFragmentManager, menusDialog.tag)
         menusDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {

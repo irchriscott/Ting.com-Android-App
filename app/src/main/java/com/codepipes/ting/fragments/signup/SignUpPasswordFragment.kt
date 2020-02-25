@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.TingDotCom
+import com.codepipes.ting.activities.base.TingDotCom
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
 import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
-import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes

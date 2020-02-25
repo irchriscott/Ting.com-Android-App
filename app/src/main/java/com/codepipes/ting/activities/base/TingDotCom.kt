@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.base
 
 import android.content.Intent
 import android.os.Build
@@ -14,10 +14,9 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
-import com.androidstudy.networkmanager.Monitor
 import com.androidstudy.networkmanager.Tovuti
+import com.codepipes.ting.R
 import com.codepipes.ting.fragments.navigation.DiscoveryFragment
-import com.codepipes.ting.fragments.navigation.MomentsFragment
 import com.codepipes.ting.fragments.navigation.RestaurantsFragment
 import com.codepipes.ting.fragments.navigation.UserMenuFragment
 import com.codepipes.ting.providers.UserAuthentication

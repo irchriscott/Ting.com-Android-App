@@ -1,17 +1,15 @@
 package com.codepipes.ting.fragments.menu
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.codepipes.ting.CurrentRestaurant
+import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.R
 import com.codepipes.ting.models.Menu
-import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.livefront.bridge.Bridge

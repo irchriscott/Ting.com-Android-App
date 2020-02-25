@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.base
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +10,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import com.codepipes.ting.R
 import com.codepipes.ting.providers.UserAuthentication
 
 
@@ -43,7 +44,9 @@ class SplashScreen : AppCompatActivity() {
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 4, spanText.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         mAppNameText.text = spanText
 
-        mAnimation = AnimationUtils.loadAnimation(this@SplashScreen, R.anim.fade_in)
+        mAnimation = AnimationUtils.loadAnimation(this@SplashScreen,
+            R.anim.fade_in
+        )
         mAppNameText.startAnimation(mAnimation)
 
         handler = Handler()

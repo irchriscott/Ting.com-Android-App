@@ -9,12 +9,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.codepipes.ting.CurrentRestaurant
+import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.R
-import com.codepipes.ting.adapters.cuisine.CuisineMenusAdapter
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
-import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication

@@ -178,7 +178,7 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
         holder.view.promotion_interests.text = NumberFormat.getNumberInstance().format(promotion.interests.count)
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.MenuPromotion::class.java)
             intent.putExtra("promo", promotion.id)
             intent.putExtra("url", promotion.urls.apiGet)
             activity.startActivity(intent)

@@ -1,21 +1,19 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.placement
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Geocoder
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
@@ -32,7 +30,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.google.maps.android.SphericalUtil
 import com.livefront.bridge.Bridge
 import com.pubnub.api.PNConfiguration
@@ -52,7 +49,6 @@ import kotlinx.android.synthetic.main.activity_restaurant_scanner.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class RestaurantScanner : AppCompatActivity() {
@@ -73,7 +69,7 @@ class RestaurantScanner : AppCompatActivity() {
         Bridge.restoreInstanceState(this, savedInstanceState)
         savedInstanceState?.clear()
 
-        RestaurantScanner.ACTIVITY_ID = 1
+        ACTIVITY_ID = 1
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -110,7 +106,7 @@ class RestaurantScanner : AppCompatActivity() {
             override fun message(pubnub: PubNub, pnMessageResult: PNMessageResult) {
                 runOnUiThread {
                     try {
-                        if(RestaurantScanner.ACTIVITY_ID == 1) {
+                        if(ACTIVITY_ID == 1) {
                             val response = pnMessageResult.message.asJsonObject
                             when (response.get("type").asString) {
                                 UtilData.SOCKET_RESPONSE_RESTO_TABLE -> {
@@ -304,24 +300,24 @@ class RestaurantScanner : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        RestaurantScanner.ACTIVITY_ID = 0
+        ACTIVITY_ID = 0
         Bridge.clear(this)
     }
 
     override fun onResume() {
         super.onResume()
-        RestaurantScanner.ACTIVITY_ID = 1
+        ACTIVITY_ID = 1
         codeScanner.startPreview()
     }
 
     override fun onPause() {
         codeScanner.releaseResources()
-        RestaurantScanner.ACTIVITY_ID = 0
+        ACTIVITY_ID = 0
         super.onPause()
     }
 
     override fun onRestart() {
-        RestaurantScanner.ACTIVITY_ID = 1
+        ACTIVITY_ID = 1
         super.onRestart()
     }
 

@@ -1,0 +1,91 @@
+package com.codepipes.ting.providers
+
+import android.annotation.SuppressLint
+import android.content.Context
+import com.codepipes.ting.models.Order
+import com.codepipes.ting.utils.Routes
+import com.codepipes.ting.utils.UtilsFunctions
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.Retrofit
+import javax.xml.datatype.DatatypeConstants.SECONDS
+import okhttp3.OkHttpClient
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import com.google.gson.Gson
+import io.reactivex.Observable
+import okhttp3.Cache
+import okhttp3.Interceptor
+import java.util.concurrent.TimeUnit
+
+
+class TingClient (val context: Context) {
+
+    private val userAuthentication = UserAuthentication(context)
+    private val session = userAuthentication.get()!!
+    private val utilsFunctions = UtilsFunctions(context)
+
+    private lateinit var tingService: TingService
+
+    init { this.initClient() }
+
+    private fun initClient() {
+
+        val gson = Gson()
+
+        val cacheSize = 10 * 1024 * 1024
+        val cache = Cache(context.applicationContext.cacheDir, cacheSize.toLong())
+
+
+        val interceptor = Interceptor { chain ->
+            var request = chain.request()
+            if (!utilsFunctions.isConnectedToInternet()) {
+                if (request.header("No-Authentication") == null) {
+                    val maxStale = 60 * 60 * 24 * 28
+                    request = request
+                        .newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=$maxStale")
+                        .addHeader("Authorization", session.token!!)
+                        .build()
+                }
+            } else {
+                if (request.header("No-Authentication") == null) {
+                    request = request
+                        .newBuilder()
+                        .header("Cache-Control", "public, max-age=" + 60)
+                        .addHeader("Authorization", session.token!!)
+                        .build()
+                }
+            }
+            chain.proceed(request)
+        }
+
+        val client = OkHttpClient.Builder()
+            .cache(cache)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .addInterceptor(interceptor)
+            .addNetworkInterceptor(ResponseCacheInterceptor())
+            .addInterceptor(OfflineResponseCacheInterceptor(context))
+            .build()
+
+        val retrofit = Retrofit.Builder()
+            .client(client)
+            .baseUrl(Routes().HOST_END_POINT)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+
+        tingService = retrofit.create(TingService::class.java)
+    }
+
+    public fun getOrdersMenuPlacement(token: String) : Observable<MutableList<Order>> {
+        return tingService.getOrdersMenuPlacement(token)
+    }
+
+    companion object {
+        public fun getInstance(context: Context): TingClient = TingClient(context)
+    }
+}

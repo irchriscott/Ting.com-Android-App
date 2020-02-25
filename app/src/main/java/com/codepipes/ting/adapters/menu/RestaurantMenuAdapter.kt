@@ -4,17 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Paint
-import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.fragments.menu.MenuBottomSheetFragment
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_restaurant_menu.view.*
 import java.text.NumberFormat
@@ -105,7 +102,7 @@ class RestaurantMenuAdapter (private val menus: MutableList<RestaurantMenu>, val
         }
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.RestaurantMenu::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)
             intent.putExtra("url", menu.urls.apiGet)
             holder.view.context.startActivity(intent)

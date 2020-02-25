@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.base
 
 import android.annotation.SuppressLint
 import android.support.v4.app.FragmentManager
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.ContextCompat
+import com.codepipes.ting.R
 import com.codepipes.ting.customclasses.LockableViewPager
 import com.codepipes.ting.fragments.signup.SignUpAboutFragment
 import com.codepipes.ting.fragments.signup.SignUpAddressFragment
@@ -29,8 +30,12 @@ class SignUp : AppCompatActivity() {
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = ""
 
-        val upArrow = ContextCompat.getDrawable(this@SignUp, R.drawable.abc_ic_ab_back_material)
-        upArrow!!.setColorFilter(ContextCompat.getColor(this@SignUp, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+        val upArrow = ContextCompat.getDrawable(this@SignUp,
+            R.drawable.abc_ic_ab_back_material
+        )
+        upArrow!!.setColorFilter(ContextCompat.getColor(this@SignUp,
+            R.color.colorPrimary
+        ), PorterDuff.Mode.SRC_ATOP)
         supportActionBar!!.setHomeAsUpIndicator(upArrow)
 
         mViewPager = findViewById<LockableViewPager>(R.id.pager) as LockableViewPager

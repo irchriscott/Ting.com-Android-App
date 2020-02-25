@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.RestaurantProfile
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.utils.UtilsFunctions

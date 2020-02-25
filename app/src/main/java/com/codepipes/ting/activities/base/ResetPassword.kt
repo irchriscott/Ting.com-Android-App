@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.base
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.ErrorMessage
 import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.dialogs.SuccessOverlay
@@ -48,8 +49,12 @@ class ResetPassword : AppCompatActivity() {
         supportActionBar!!.title = ""
 
         try {
-            val upArrow = ContextCompat.getDrawable(this@ResetPassword, R.drawable.abc_ic_ab_back_material)
-            upArrow!!.setColorFilter(ContextCompat.getColor(this@ResetPassword, R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
+            val upArrow = ContextCompat.getDrawable(this@ResetPassword,
+                R.drawable.abc_ic_ab_back_material
+            )
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@ResetPassword,
+                R.color.colorPrimary
+            ), PorterDuff.Mode.SRC_ATOP)
             supportActionBar!!.setHomeAsUpIndicator(upArrow)
         } catch (e: java.lang.Exception) {}
 

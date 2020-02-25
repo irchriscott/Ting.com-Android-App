@@ -1,8 +1,7 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.base
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,12 +12,11 @@ import android.support.v4.app.ActivityCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.widget.*
+import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
-import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
@@ -37,7 +35,6 @@ import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class LogIn : AppCompatActivity() {
 

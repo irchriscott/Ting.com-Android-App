@@ -1,4 +1,4 @@
-package com.codepipes.ting
+package com.codepipes.ting.activities.user
 
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
@@ -28,6 +28,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.PersistableBundle
 import android.view.View
+import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.providers.LocalData
@@ -37,7 +38,6 @@ import kotlinx.android.synthetic.main.activity_user_profile.*
 import okhttp3.*
 import java.io.IOException
 import java.lang.Exception
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 
@@ -83,8 +83,12 @@ class UserProfile : AppCompatActivity() {
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.colorPrimaryDark)))
 
         try {
-            val upArrow = ContextCompat.getDrawable(this@UserProfile, R.drawable.abc_ic_ab_back_material)
-            upArrow!!.setColorFilter(ContextCompat.getColor(this@UserProfile, R.color.colorWhite), PorterDuff.Mode.SRC_ATOP)
+            val upArrow = ContextCompat.getDrawable(this@UserProfile,
+                R.drawable.abc_ic_ab_back_material
+            )
+            upArrow!!.setColorFilter(ContextCompat.getColor(this@UserProfile,
+                R.color.colorWhite
+            ), PorterDuff.Mode.SRC_ATOP)
             supportActionBar!!.setHomeAsUpIndicator(upArrow)
         } catch (e: Exception) {}
 
@@ -130,9 +134,13 @@ class UserProfile : AppCompatActivity() {
         mUserTabLayout = findViewById<TabLayout>(R.id.userTabLayout) as TabLayout
         mUserViewPager = findViewById<ViewPager>(R.id.userViewPager) as ViewPager
 
-        val adapter = UserProfileViewPagerAdapter(supportFragmentManager)
+        val adapter = UserProfileViewPagerAdapter(
+            supportFragmentManager
+        )
         adapter.addFragment(UserMoments.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_moments))
-        adapter.addFragment(UserRestaurants.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_restaurants))
+        adapter.addFragment(UserRestaurants.newInstance(Gson().toJson(user)), resources.getString(
+            R.string.user_profile_restaurants
+        ))
         adapter.addFragment(UserAbout.newInstance(Gson().toJson(user)), resources.getString(R.string.user_profile_profile))
 
         mUserViewPager.adapter = adapter

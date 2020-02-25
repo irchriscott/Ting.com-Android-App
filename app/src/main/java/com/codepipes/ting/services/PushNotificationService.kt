@@ -9,23 +9,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
-import com.pusher.client.channel.PusherEvent
-import com.pusher.client.channel.SubscriptionEventListener
-import com.pusher.pushnotifications.PushNotifications.subscribe
+import android.util.Log
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
-import android.support.v4.content.ContextCompat.getSystemService
-import android.util.Log
 import com.codepipes.ting.R
 import com.codepipes.ting.providers.UserAuthentication
 import com.google.gson.JsonParser
 import com.pusher.client.connection.ConnectionEventListener
-import android.support.v4.content.ContextCompat.getSystemService
-import com.codepipes.ting.CurrentRestaurant
-import com.codepipes.ting.RestaurantScanner
-import com.codepipes.ting.TingDotCom
+import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.activities.placement.RestaurantScanner
+import com.codepipes.ting.activities.base.TingDotCom
 import com.codepipes.ting.providers.UserPlacement
 import com.squareup.picasso.Picasso
 import java.lang.Exception
@@ -84,8 +79,7 @@ class PushNotificationService : Service() {
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
 
-                    if(data.has("image")) {
-
+                    if(data.has("image") && data.get("image").asString != null) {
                         builder
                             .setLargeIcon(Picasso.get().load(data["image"].asString).get())
                             .setStyle(NotificationCompat.BigPictureStyle()
