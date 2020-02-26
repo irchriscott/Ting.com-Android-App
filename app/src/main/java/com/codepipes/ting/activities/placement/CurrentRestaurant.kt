@@ -18,6 +18,7 @@ import com.codepipes.ting.dialogs.InfoDialog
 import com.codepipes.ting.dialogs.SuccessOverlay
 import com.codepipes.ting.dialogs.TingToast
 import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.placement.PlacementOrdersDialog
 import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
 import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
@@ -287,6 +288,15 @@ class CurrentRestaurant : AppCompatActivity() {
             place_menu_foods.setOnClickListener { showMenusDialog(1, placement.table.branch?.id ?: 0) }
             place_menu_drinks.setOnClickListener { showMenusDialog(2, placement.table.branch?.id ?: 0) }
             place_menu_dishes.setOnClickListener { showMenusDialog(3, placement.table.branch?.id ?: 0) }
+            place_menu_orders.setOnClickListener {
+                val ordersDialog = PlacementOrdersDialog()
+                ordersDialog.show(supportFragmentManager, ordersDialog.tag)
+                ordersDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
+                    override fun onClose() {
+                        getPlacement(userPlacement.getToken()!!)
+                    }
+                })
+            }
         }
     }
 

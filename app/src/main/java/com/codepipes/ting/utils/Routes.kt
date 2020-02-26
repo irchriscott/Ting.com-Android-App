@@ -55,5 +55,5 @@ class Routes {
     val updatePlacementPeople: String       = "${END_POINT}usr/po/placement/people/update/"
     val restaurantMenusOrders: String       = "${END_POINT}usr/po/orders/branch/menus/"
     val placeOrderMenu: String              = "${END_POINT}usr/po/orders/menu/place/"
-    val placementOrdersMenu: String         = "${API_HOST_PREFIX}usr/po/orders/{placement}/all/"
+    val placementOrdersMenu: String         = "${END_POINT}usr/po/placement/orders/all/"
 }

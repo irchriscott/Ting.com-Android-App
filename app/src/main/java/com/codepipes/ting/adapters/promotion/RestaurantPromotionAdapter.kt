@@ -17,10 +17,14 @@ import com.codepipes.ting.fragments.menu.RestaurantMenuBottomSheetFragment
 import com.codepipes.ting.models.MenuImage
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.row_restaurant_promotion.view.*
 import java.text.NumberFormat
 
@@ -45,119 +49,170 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
         utilsFunctions = UtilsFunctions(holder.view.context)
         val activity = holder.view.context as Activity
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
+        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}")
+            .into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
-        holder.view.promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
+        holder.view.promotion_menu_type_on_text.text =
+            "Promotion On ${promotion.promotionItem.type.name}"
         holder.view.promotion_time.text = promotion.period
 
-        if(promotion.isOn && promotion.isOnToday){
-            holder.view.promotion_status.background = activity.resources.getDrawable(R.drawable.background_time_green)
+        if (promotion.isOn && promotion.isOnToday) {
+            holder.view.promotion_status.background =
+                activity.resources.getDrawable(R.drawable.background_time_green)
             holder.view.promotion_status_icon.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_check_white_48dp))
             holder.view.promotion_status_text.text = "Is On Today"
         } else {
-            holder.view.promotion_status.background = activity.resources.getDrawable(R.drawable.background_time_red)
+            holder.view.promotion_status.background =
+                activity.resources.getDrawable(R.drawable.background_time_red)
             holder.view.promotion_status_icon.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_close_white_24dp))
             holder.view.promotion_status_text.text = "Is Off Today"
         }
 
-        when(promotion.promotionItem.type.id){
-            0 -> {
-                if(promotion.menus.menus != null){
-                    val menus = promotion.menus.menus
-                    if (menus.isNotEmpty()){
-                        val layoutManager = LinearLayoutManager(holder.view.context)
-                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        if (promotion.menus.count > 10000){
+            when (promotion.promotionItem.type.id) {
+                0 -> {
+                    if (promotion.menus.menus != null) {
+                        val menus = promotion.menus.menus
+                        if (menus.isNotEmpty()) {
+                            val layoutManager = LinearLayoutManager(holder.view.context)
+                            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-                        holder.view.promotion_data_recycler_view.layoutManager = layoutManager
-                        holder.view.promotion_data_recycler_view.adapter =
-                            RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                            holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                            holder.view.promotion_data_recycler_view.adapter =
+                                RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                        } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
                     } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                holder.view.promotion_menu_on.visibility = View.GONE
-            }
-            1 -> {
-                if(promotion.menus.menus != null){
-                    val menus = promotion.menus.menus
-                    if (menus.isNotEmpty()){
-                        val layoutManager = LinearLayoutManager(holder.view.context)
-                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    holder.view.promotion_menu_on.visibility = View.GONE
+                }
+                1 -> {
+                    if (promotion.menus.menus != null) {
+                        val menus = promotion.menus.menus
+                        if (menus.isNotEmpty()) {
+                            val layoutManager = LinearLayoutManager(holder.view.context)
+                            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-                        holder.view.promotion_data_recycler_view.layoutManager = layoutManager
-                        holder.view.promotion_data_recycler_view.adapter =
-                            RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                            holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                            holder.view.promotion_data_recycler_view.adapter =
+                                RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                        } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
                     } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                holder.view.promotion_menu_on.visibility = View.GONE
-            }
-            2 -> {
-                if(promotion.menus.menus != null){
-                    val menus = promotion.menus.menus
-                    if (menus.isNotEmpty()){
-                        val layoutManager = LinearLayoutManager(holder.view.context)
-                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    holder.view.promotion_menu_on.visibility = View.GONE
+                }
+                2 -> {
+                    if (promotion.menus.menus != null) {
+                        val menus = promotion.menus.menus
+                        if (menus.isNotEmpty()) {
+                            val layoutManager = LinearLayoutManager(holder.view.context)
+                            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-                        holder.view.promotion_data_recycler_view.layoutManager = layoutManager
-                        holder.view.promotion_data_recycler_view.adapter =
-                            RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                            holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                            holder.view.promotion_data_recycler_view.adapter =
+                                RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                        } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
                     } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                holder.view.promotion_menu_on.visibility = View.GONE
-            }
-            3 -> {
-                if(promotion.menus.menus != null){
-                    val menus = promotion.menus.menus
-                    if (menus.isNotEmpty()){
-                        val layoutManager = LinearLayoutManager(holder.view.context)
-                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                    holder.view.promotion_menu_on.visibility = View.GONE
+                }
+                3 -> {
+                    if (promotion.menus.menus != null) {
+                        val menus = promotion.menus.menus
+                        if (menus.isNotEmpty()) {
+                            val layoutManager = LinearLayoutManager(holder.view.context)
+                            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-                        holder.view.promotion_data_recycler_view.layoutManager = layoutManager
-                        holder.view.promotion_data_recycler_view.adapter =
-                            RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                            holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                            holder.view.promotion_data_recycler_view.adapter =
+                                RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                        } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
                     } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                holder.view.promotion_menu_on.visibility = View.GONE
+                    holder.view.promotion_menu_on.visibility = View.GONE
+                }
+                4 -> {
+                    val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
+                    val image = promotion.promotionItem.menu.menu.images.images[index]
+                    Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
+                    holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
+
+                    val layoutManager = LinearLayoutManager(holder.view.context)
+                    layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+
+                    holder.view.promotion_data_recycler_view.setOnClickListener {
+                        val restaurantMenuFragment = RestaurantMenuBottomSheetFragment()
+                        val bundle = Bundle()
+                        bundle.putString("menu", Gson().toJson(promotion.promotionItem.menu))
+                        restaurantMenuFragment.arguments = bundle
+                        restaurantMenuFragment.show(fragmentManager, restaurantMenuFragment.tag)
+                    }
+
+                    holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                    holder.view.promotion_data_recycler_view.adapter =
+                        MenuImageListAdapter(promotion.promotionItem.menu.menu.images.images.shuffled() as MutableList<MenuImage>)
+                }
+                5 -> {
+                    if (promotion.menus.menus != null) {
+                        val menus = promotion.menus.menus
+                        if (menus.isNotEmpty()) {
+                            val layoutManager = LinearLayoutManager(holder.view.context)
+                            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+
+                            holder.view.promotion_data_recycler_view.layoutManager = layoutManager
+                            holder.view.promotion_data_recycler_view.adapter =
+                                RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                        } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
+                    } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
+
+                    holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
+                    Picasso.get()
+                        .load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}")
+                        .into(holder.view.promotion_menu_on_image)
+                }
+                else -> {
+                    holder.view.promotion_data_recycler_view.visibility = View.GONE
+                    holder.view.promotion_menu_on.visibility = View.GONE
+                }
             }
-            4 -> {
+        }
+
+        when {
+            listOf<Int>(0, 1, 2, 3).contains(promotion.promotionItem.type.id) -> holder.view.promotion_menu_on.visibility = View.GONE
+            promotion.promotionItem.type.id == 4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
                 Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
+            }
+            promotion.promotionItem.type.id == 5 -> {
+                holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
+                Picasso.get()
+                    .load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}")
+                    .into(holder.view.promotion_menu_on_image)
+            }
+        }
 
-                val layoutManager = LinearLayoutManager(holder.view.context)
-                layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        TingClient.getInstance(holder.view.context)
+            .getPromotionPromotedMenus(promotion.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableObserver<MutableList<RestaurantMenu>>() {
 
-                holder.view.promotion_data_recycler_view.setOnClickListener {
-                    val restaurantMenuFragment = RestaurantMenuBottomSheetFragment()
-                    val bundle =  Bundle()
-                    bundle.putString("menu", Gson().toJson(promotion.promotionItem.menu))
-                    restaurantMenuFragment.arguments = bundle
-                    restaurantMenuFragment.show(fragmentManager, restaurantMenuFragment.tag)
+                override fun onComplete() {
+                    holder.view.promotion_menus_shimmer.visibility = View.GONE
                 }
 
-                holder.view.promotion_data_recycler_view.layoutManager = layoutManager
-                holder.view.promotion_data_recycler_view.adapter = MenuImageListAdapter(promotion.promotionItem.menu.menu.images.images.shuffled() as MutableList<MenuImage>)
-            }
-            5 -> {
-                if(promotion.menus.menus != null){
-                    val menus = promotion.menus.menus
-                    if (menus.isNotEmpty()){
+                override fun onNext(menus: MutableList<RestaurantMenu>) {
+                    if(!menus.isNullOrEmpty()) {
                         val layoutManager = LinearLayoutManager(holder.view.context)
                         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
-
+                        holder.view.promotion_data_recycler_view.visibility = View.VISIBLE
                         holder.view.promotion_data_recycler_view.layoutManager = layoutManager
                         holder.view.promotion_data_recycler_view.adapter =
                             RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
                     } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
-                } else { holder.view.promotion_data_recycler_view.visibility = View.GONE }
+                }
 
-                holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
-                Picasso.get().load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}").into(holder.view.promotion_menu_on_image)
-            }
-            else -> {
-                holder.view.promotion_data_recycler_view.visibility = View.GONE
-                holder.view.promotion_menu_on.visibility = View.GONE
-            }
-        }
+                override fun onError(error: Throwable) {
+                    holder.view.promotion_data_recycler_view.visibility = View.GONE
+                }
+            })
 
         if (promotion.reduction.hasReduction){
             holder.view.promotion_reduction.text = "Order this menu and get ${promotion.reduction.amount} ${promotion.reduction.reductionType} reduction"

@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
-import kotlinx.android.synthetic.main.fragment_restaurant_promotions.*
 import kotlinx.android.synthetic.main.fragment_restaurant_promotions.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
@@ -65,9 +64,11 @@ class RestaurantPromotionsFragment : Fragment() {
             promotions.sortBy { it.isOnToday && it.isOn }
             showPromotions(promotions.reversed().toMutableList(), view)
         } else {
-            promotions = branch.promotions?.promotions!! as MutableList<MenuPromotion>
-            promotions.sortBy { it.isOnToday && it.isOn }
-            showPromotions(promotions.reversed().toMutableList(), view)
+            if(!branch.promotions?.promotions.isNullOrEmpty()) {
+                promotions = branch.promotions?.promotions!! as MutableList<MenuPromotion>
+                promotions.sortBy { it.isOnToday && it.isOn }
+                showPromotions(promotions.reversed().toMutableList(), view)
+            }
         }
 
         promotionsTimer.scheduleAtFixedRate(object : TimerTask() {
@@ -84,12 +85,14 @@ class RestaurantPromotionsFragment : Fragment() {
             view.promotions_recycler_view.visibility = View.VISIBLE
             view.progress_loader.visibility = View.GONE
             view.empty_data.visibility = View.GONE
+            view.shimmer_loader.visibility = View.GONE
             promotions.sortBy { it.isOnToday && it.isOn }
             view.promotions_recycler_view.layoutManager = LinearLayoutManager(context)
             view.promotions_recycler_view.adapter = RestaurantPromotionAdapter(promotions.reversed().toMutableList(), fragmentManager!!)
         } else {
             view.promotions_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE
+            view.shimmer_loader.visibility = View.GONE
             view.empty_data.visibility = View.VISIBLE
             view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
             view.empty_data.empty_text.text = "No Promotion To Show"

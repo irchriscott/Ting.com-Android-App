@@ -1,5 +1,8 @@
 package com.codepipes.ting.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 class Bill (
     val id: Int,
     val number: String,
@@ -23,4 +26,19 @@ class BillOrders(
 ) {}
 
 
-class Order () {}
+class Order (
+    val id: Int,
+    val menu: RestaurantMenu,
+    val token: String,
+    val quantity: Int,
+    val price: Double,
+    val currency: String,
+    val conditions: String?,
+    val isAccepted: Boolean,
+    val isDeclined: Boolean,
+    val reasons: String?,
+    val hasPromotion: Boolean,
+    val promotion: PromotionDataString?,
+    val createdAt: String,
+    val updatedAt: String
+) {}

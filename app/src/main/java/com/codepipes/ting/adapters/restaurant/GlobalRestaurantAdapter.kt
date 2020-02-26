@@ -15,9 +15,13 @@ import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.row_restaurant.view.*
 import java.text.NumberFormat
 import java.util.*
@@ -66,14 +70,31 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
             activity.startActivity(intent)
         }
 
-        if(!branch.menus.menus.isNullOrEmpty()) {
-            val layoutManager = LinearLayoutManager(holder.view.context)
-            layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        TingClient.getInstance(holder.view.context)
+            .getRestaurantTopMenus(branch.id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : DisposableObserver<MutableList<RestaurantMenu>>() {
 
-            holder.view.restaurant_menus.layoutManager = layoutManager
-            holder.view.restaurant_menus.adapter =
-                RestaurantListMenuAdapter(branch.menus.menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
-        } else { holder.view.restaurant_menus.visibility = View.GONE }
+                override fun onComplete() {
+                    holder.view.restaurant_menus_shimmer.visibility = View.GONE
+                }
+
+                override fun onNext(menus: MutableList<RestaurantMenu>) {
+                    if(!menus.isNullOrEmpty()) {
+                        val layoutManager = LinearLayoutManager(holder.view.context)
+                        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
+                        holder.view.restaurant_menus.visibility = View.VISIBLE
+                        holder.view.restaurant_menus.layoutManager = layoutManager
+                        holder.view.restaurant_menus.adapter =
+                            RestaurantListMenuAdapter(menus.shuffled() as MutableList<RestaurantMenu>, fragmentManager)
+                    } else { holder.view.restaurant_menus.visibility = View.GONE }
+                }
+
+                override fun onError(error: Throwable) {
+                    holder.view.restaurant_menus.visibility = View.GONE
+                }
+            })
 
         if (branch.categories.count > 0) {
             holder.view.restaurant_cuisines.text = branch.categories.categories.shuffled().joinToString(", ") { it.name }

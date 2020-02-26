@@ -62,9 +62,11 @@ class RestaurantDrinksFragment : Fragment() {
             drinks.filter { it.type.id == 2 }.sortedByDescending { it.menu.reviews?.average }
             showMenuDrinks(drinks.toMutableList(), view)
         } else {
-            drinks = branch.menus.menus!! as MutableList<RestaurantMenu>
-            drinks.filter { it.type.id == 2 }.sortedByDescending { it.menu.reviews?.average }
-            showMenuDrinks(drinks.toMutableList(), view)
+            if(!branch.menus.menus.isNullOrEmpty()) {
+                drinks = branch.menus.menus!! as MutableList<RestaurantMenu>
+                drinks.filter { it.type.id == 2 }.sortedByDescending { it.menu.reviews?.average }
+                showMenuDrinks(drinks.toMutableList(), view)
+            }
         }
 
         drinksTimer.scheduleAtFixedRate(object : TimerTask() {
@@ -81,12 +83,14 @@ class RestaurantDrinksFragment : Fragment() {
             view.drinks_recycler_view.visibility = View.VISIBLE
             view.progress_loader.visibility = View.GONE
             view.empty_data.visibility = View.GONE
+            view.shimmer_loader.visibility = View.GONE
             _drinks.filter { it.type.id == 1 }.sortedByDescending { it.menu.reviews?.average }
             view.drinks_recycler_view.layoutManager = LinearLayoutManager(context)
             view.drinks_recycler_view.adapter = RestaurantMenuAdapter(_drinks.toMutableList(), fragmentManager!!)
         } else {
             view.drinks_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE
+            view.shimmer_loader.visibility = View.GONE
             view.empty_data.visibility = View.VISIBLE
             view.empty_data.empty_image.setImageResource(R.drawable.ic_glass_gray)
             view.empty_data.empty_text.text = "No Menu Drink To Show"

@@ -5,22 +5,28 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.adapters.placement.PlacementOrdersMenuAdapter
+import com.codepipes.ting.dialogs.TingToast
+import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.models.Order
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_restaurant_menus_order.view.*
+import kotlinx.android.synthetic.main.include_empty_data.view.*
+
 
 class PlacementOrdersDialog : DialogFragment() {
 
@@ -48,21 +54,46 @@ class PlacementOrdersDialog : DialogFragment() {
         }
 
         TingClient.getInstance(context!!)
-            .getOrdersMenuPlacement(placement!!)
+            .getOrdersMenuPlacement(placement!!, session.token!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : DisposableObserver<MutableList<Order>>(){
 
-                override fun onComplete() {
-
-                }
+                override fun onComplete() {}
 
                 override fun onNext(orders: MutableList<Order>) {
+                    view.shimmer_loader.stopShimmer()
+                    view.shimmer_loader.visibility = View.GONE
 
+                    if(!orders.isNullOrEmpty()) {
+
+                        view.restaurant_menus.visibility = View.VISIBLE
+                        view.empty_data.visibility = View.GONE
+
+                        view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
+                        view.restaurant_menus.adapter = PlacementOrdersMenuAdapter(orders)
+                    } else {
+                        view.restaurant_menus.visibility = View.GONE
+                        view.empty_data.visibility = View.VISIBLE
+
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
+                        view.empty_data.empty_image.alpha = 0.6f
+                        view.empty_data.empty_text.text = "No Order To Show"
+                    }
                 }
 
                 override fun onError(error: Throwable) {
+                    view.shimmer_loader.stopShimmer()
+                    view.shimmer_loader.visibility = View.GONE
 
+                    view.restaurant_menus.visibility = View.GONE
+                    view.empty_data.visibility = View.VISIBLE
+
+                    view.empty_data.empty_image.setImageResource(R.drawable.ic_warning_exclamation_gray)
+                    view.empty_data.empty_image.alpha = 0.6f
+                    view.empty_data.empty_text.text = "An Error Occurred"
+
+                    TingToast(context!!, error.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             })
 

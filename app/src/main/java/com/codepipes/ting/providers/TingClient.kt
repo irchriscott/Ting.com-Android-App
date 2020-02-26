@@ -3,6 +3,7 @@ package com.codepipes.ting.providers
 import android.annotation.SuppressLint
 import android.content.Context
 import com.codepipes.ting.models.Order
+import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,9 +11,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.Retrofit
 import javax.xml.datatype.DatatypeConstants.SECONDS
 import okhttp3.OkHttpClient
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
-import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -31,8 +29,6 @@ class TingClient (val context: Context) {
 
     private fun initClient() {
 
-        val gson = Gson()
-
         val cacheSize = 10 * 1024 * 1024
         val cache = Cache(context.applicationContext.cacheDir, cacheSize.toLong())
 
@@ -45,7 +41,7 @@ class TingClient (val context: Context) {
                     request = request
                         .newBuilder()
                         .header("Cache-Control", "public, only-if-cached, max-stale=$maxStale")
-                        .addHeader("Authorization", session.token!!)
+                        .header("Authorization", session.token!!)
                         .build()
                 }
             } else {
@@ -53,7 +49,7 @@ class TingClient (val context: Context) {
                     request = request
                         .newBuilder()
                         .header("Cache-Control", "public, max-age=" + 60)
-                        .addHeader("Authorization", session.token!!)
+                        .header("Authorization", session.token!!)
                         .build()
                 }
             }
@@ -75,14 +71,22 @@ class TingClient (val context: Context) {
             .client(client)
             .baseUrl(Routes().HOST_END_POINT)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         tingService = retrofit.create(TingService::class.java)
     }
 
-    public fun getOrdersMenuPlacement(token: String) : Observable<MutableList<Order>> {
-        return tingService.getOrdersMenuPlacement(token)
+    public fun getRestaurantTopMenus(branch: Int) : Observable<MutableList<RestaurantMenu>> {
+        return tingService.getRestaurantTopMenus(branch)
+    }
+
+    public fun getPromotionPromotedMenus(promo: Int) : Observable<MutableList<RestaurantMenu>> {
+        return tingService.getPromotionPromotedMenus(promo)
+    }
+
+    public fun getOrdersMenuPlacement(token: String, authorization: String) : Observable<MutableList<Order>> {
+        return tingService.getOrdersMenuPlacement(token, authorization)
     }
 
     companion object {
