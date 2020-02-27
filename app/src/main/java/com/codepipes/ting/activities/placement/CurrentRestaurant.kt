@@ -240,8 +240,8 @@ class CurrentRestaurant : AppCompatActivity() {
                             runOnUiThread {
                                 val receiver = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
                                 val args = mapOf<String, String?>("table" to placement.table.id.toString(), "token" to userPlacement.getTempToken())
-                                val data = mapOf<String, String>("table" to placement.table.number)
-                                val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, data)
+                                val responseData = mapOf<String, String>("table" to placement.table.number)
+                                val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, responseData)
                                 pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
                                     .async(object : PNCallback<PNPublishResult>() {
                                         override fun onResponse(result: PNPublishResult?, status: PNStatus) {
