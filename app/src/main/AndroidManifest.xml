@@ -17,10 +17,10 @@
 
     <application
             android:name=".app.TingDotComApp"
-            android:icon="@drawable/logo_rect"
+            android:icon="@mipmap/ic_launcher"
             android:allowBackup="true"
             android:label="@string/app_name"
-            android:roundIcon="@drawable/logo_round"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
