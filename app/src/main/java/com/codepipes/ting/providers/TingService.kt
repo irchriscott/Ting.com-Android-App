@@ -4,12 +4,10 @@ package com.codepipes.ting.providers
 import com.codepipes.ting.models.Order
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.Route
+import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.utils.Routes
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 public interface TingService {
 
@@ -39,4 +37,21 @@ public interface TingService {
         @Query("query") query: String,
         @Header("Authorization") authorization: String
     ) : Observable<MutableList<Order>>
+
+
+    @FormUrlEncoded
+    @POST("api/v1/usr/po/placement/order/{order}/re/place/")
+    public fun rePlaceOrderPlacement(
+        @Path("order") order: Int,
+        @Field("quantity") quantity: Int,
+        @Field("conditions") conditions: String
+    ) : Observable<ServerResponse>
+
+
+    @FormUrlEncoded
+    @POST("api/v1/usr/po/placement/order/{order}/cancel/")
+    public fun cancelOrderPlacement(
+        @Path("order") order: Int,
+        @Field("order") orderId: Int
+    ) : Observable<ServerResponse>
 }

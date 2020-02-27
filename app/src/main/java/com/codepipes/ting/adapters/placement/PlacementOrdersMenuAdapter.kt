@@ -53,7 +53,7 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>, privat
                 ordersMenuEventsListener.onNotify(order.id)
             }
             holder.view.menu_cancel_order_button.setOnClickListener {
-                ordersMenuEventsListener.onCancel(order.id)
+                ordersMenuEventsListener.onCancel(order.id, position)
             }
         } else {
             if (order.isAccepted) {

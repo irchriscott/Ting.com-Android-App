@@ -10,10 +10,15 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.view.menu.MenuBuilder
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
+import com.codepipes.ting.activities.restaurant.RestaurantAbout
+import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.messages.InfoDialog
 import com.codepipes.ting.dialogs.messages.SuccessOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
@@ -21,6 +26,7 @@ import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.dialogs.placement.PlacementOrdersDialog
 import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
 import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
+import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
@@ -222,22 +228,35 @@ class CurrentRestaurant : AppCompatActivity() {
             } else {
                 place_waiter_name.text = "Request Waiter"
                 place_waiter_view.setOnClickListener {
-                    val receiver = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
-                    val args = mapOf<String, String?>("table" to placement.table.id.toString(), "token" to userPlacement.getTempToken())
-                    val data = mapOf<String, String>("table" to placement.table.number)
-                    val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, data)
-                    pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
-                        .async(object : PNCallback<PNPublishResult>() {
-                            override fun onResponse(result: PNPublishResult?, status: PNStatus) {
-                                if (status.isError || status.statusCode != 200) {
-                                    TingToast(
-                                        this@CurrentRestaurant,
-                                        "Connection Error Occurred",
-                                        TingToastType.ERROR
-                                    ).showToast(Toast.LENGTH_LONG)
-                                }
+                    val actionSheet = ActionSheet(this@CurrentRestaurant, mutableListOf("Request Waiter For Your Table"))
+                        .setTitle("Request Waiter")
+                        .setColorData(resources!!.getColor(R.color.colorGray))
+                        .setColorTitleCancel(resources!!.getColor(R.color.colorGoogleRedTwo))
+                        .setColorSelected(resources!!.getColor(R.color.colorPrimary))
+                        .setCancelTitle("Cancel")
+
+                    actionSheet.create(object : ActionSheetCallBack {
+                        override fun data(data: String, position: Int) {
+                            runOnUiThread {
+                                val receiver = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
+                                val args = mapOf<String, String?>("table" to placement.table.id.toString(), "token" to userPlacement.getTempToken())
+                                val data = mapOf<String, String>("table" to placement.table.number)
+                                val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, data)
+                                pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
+                                    .async(object : PNCallback<PNPublishResult>() {
+                                        override fun onResponse(result: PNPublishResult?, status: PNStatus) {
+                                            if (status.isError || status.statusCode != 200) {
+                                                TingToast(
+                                                    this@CurrentRestaurant,
+                                                    "Connection Error Occurred",
+                                                    TingToastType.ERROR
+                                                ).showToast(Toast.LENGTH_LONG)
+                                            }
+                                        }
+                                    })
                             }
-                        })
+                        }
+                    })
                 }
             }
             place_people.text = "${placement.people}"
@@ -407,6 +426,28 @@ class CurrentRestaurant : AppCompatActivity() {
 
     override fun onBackPressed() {
         startActivity(Intent(this@CurrentRestaurant, TingDotCom::class.java))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.placement_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.placement_restaurant_info -> {
+                val intent = Intent(this@CurrentRestaurant, RestaurantAbout::class.java)
+                intent.putExtra("resto", userPlacement.get()?.id)
+                intent.putExtra("apiGet", userPlacement.get()?.table?.branch?.urls?.apiGet)
+                startActivity(intent)
+                return true
+            }
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

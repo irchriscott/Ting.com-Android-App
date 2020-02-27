@@ -1,4 +1,4 @@
-package com.codepipes.ting.adapters
+package com.codepipes.ting.adapters.others
 
 
 import android.graphics.Color

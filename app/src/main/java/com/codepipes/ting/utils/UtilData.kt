@@ -16,6 +16,9 @@ class UtilData {
 
         public val SOCKET_REQUEST_RESTO_TABLE           = "request_resto_table"
         public val SOCKET_REQUEST_ASSIGN_WAITER         = "request_assign_waiter"
+        public val SOCKET_REQUEST_NOTIFY_ORDER          = "request_notify_order"
+        public val SOCKET_REQUEST_W_NOTIFY_ORDER        = "request_w_notify_order"
+
 
         public val SOCKET_RESPONSE_ERROR                = "response_error"
         public val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"

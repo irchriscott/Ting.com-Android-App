@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.codepipes.ting.models.Order
 import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import retrofit2.converter.gson.GsonConverterFactory
@@ -91,6 +92,14 @@ class TingClient (val context: Context) {
 
     public fun getOrdersMenuPlacement(token: String, query: String, authorization: String) : Observable<MutableList<Order>> {
         return tingService.getOrdersMenuPlacement(token, query, authorization)
+    }
+
+    public fun rePlaceOrderPlacement(order: Int, quantity: Int, conditions: String) : Observable<ServerResponse> {
+        return tingService.rePlaceOrderPlacement(order, quantity, conditions)
+    }
+
+    public fun cancelOrderPlacement(order: Int) : Observable<ServerResponse> {
+        return tingService.cancelOrderPlacement(order, order)
     }
 
     companion object {

@@ -86,7 +86,6 @@ class TingDotCom : AppCompatActivity() {
         PushNotifications.addDeviceInterest(session.channel)
 
         snackbar = Snackbar.make(findViewById<View>(android.R.id.content), "Checking Connectivity...", Snackbar.LENGTH_INDEFINITE)
-        snackbar.show()
 
         Tovuti.from(this).monitor { _, isConnected, isFast ->
             runOnUiThread {
@@ -99,12 +98,10 @@ class TingDotCom : AppCompatActivity() {
                         snackbar.view.setBackgroundColor(resources.getColor(R.color.colorOrange))
                     }
                     snackbar.duration = Snackbar.LENGTH_SHORT
-                    snackbar.show()
                 } else {
                     snackbar.setText("No Internet Connection !")
                     snackbar.view.setBackgroundColor(resources.getColor(R.color.colorRed))
                     snackbar.duration = Snackbar.LENGTH_SHORT
-                    snackbar.show()
                 }
             }
         }
