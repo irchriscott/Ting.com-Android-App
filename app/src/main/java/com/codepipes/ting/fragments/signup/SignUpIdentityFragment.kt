@@ -1,13 +1,9 @@
 package com.codepipes.ting.fragments.signup
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.location.Geocoder
-import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
@@ -20,7 +16,10 @@ import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.ServerResponse
 import okhttp3.*
 import com.codepipes.ting.utils.Routes
@@ -44,7 +43,8 @@ class SignUpIdentityFragment : Fragment() {
     lateinit var mSignUpEmailInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
     private val routes: Routes = Routes()
 
     private lateinit var settings: Settings
@@ -116,11 +116,19 @@ class SignUpIdentityFragment : Fragment() {
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            it.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             } catch (e: Exception){
-                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    e.message!!,
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -163,7 +171,11 @@ class SignUpIdentityFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -175,7 +187,10 @@ class SignUpIdentityFragment : Fragment() {
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status != 200){
-                            ErrorMessage(activity, "Fill All The Fields").show()
+                            ErrorMessage(
+                                activity,
+                                "Fill All The Fields"
+                            ).show()
                         } else {
                             signUpUserData["name"] = mSignUpNameInput.text.toString()
                             signUpUserData["username"] = mSignUpUsernameInput.text.toString()
@@ -188,7 +203,11 @@ class SignUpIdentityFragment : Fragment() {
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

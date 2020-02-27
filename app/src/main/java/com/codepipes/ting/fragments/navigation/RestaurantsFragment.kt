@@ -21,9 +21,9 @@ import android.widget.Toast
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
 import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.RestaurantFiltersFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.FilterRestaurantsClickListener
@@ -87,7 +87,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val TIMER_PERIOD = 10000.toLong()
 
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -250,7 +251,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                 mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    "No Restaurant To Show",
+                    TingToastType.DEFAULT
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -260,7 +265,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         val query = view.search_restaurant_input.text.toString()
 
-        view.filter_distance.setOnClickListener { TingToast(context!!, "Not Available For Now", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
+        view.filter_distance.setOnClickListener { TingToast(
+            context!!,
+            "Not Available For Now",
+            TingToastType.DEFAULT
+        ).showToast(Toast.LENGTH_LONG) }
         view.filter_availability.setOnClickListener { showFilters(AVAILABILITY_KEY, query) }
         view.filter_cuisines.setOnClickListener { showFilters(CUISINES_KEY, query) }
         view.filter_services.setOnClickListener { showFilters(SERVICES_KEY, query) }
@@ -346,9 +355,17 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     restaurants.sortBy { b -> b.dist }
                     mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
                     mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
-                    TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        context!!,
+                        it.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
-            } catch (e: Exception){ TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+            } catch (e: Exception){ TingToast(
+                context!!,
+                e.message!!.capitalize(),
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
     }
 
@@ -415,7 +432,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                         mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                         mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                        TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            "No Restaurant To Show",
+                            TingToastType.DEFAULT
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -575,9 +596,17 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                             mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                             mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                            TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                "No Restaurant To Show",
+                                TingToastType.DEFAULT
+                            ).showToast(Toast.LENGTH_LONG)
                         }
-                    } catch (e: Exception) { TingToast(context!!, e.localizedMessage,TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    } catch (e: Exception) { TingToast(
+                        context!!,
+                        e.localizedMessage,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

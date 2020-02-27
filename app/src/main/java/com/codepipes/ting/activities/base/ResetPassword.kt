@@ -16,9 +16,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.SuccessOverlay
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.SuccessOverlay
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.utils.Routes
@@ -35,7 +35,8 @@ class ResetPassword : AppCompatActivity() {
     lateinit var mResetPasswordEmailInput: EditText
     lateinit var mResetPasswordBtn: Button
 
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
     private val routes: Routes = Routes()
 
     @SuppressLint("PrivateResource")
@@ -72,7 +73,10 @@ class ResetPassword : AppCompatActivity() {
             if(!mResetPasswordEmailInput.text.isNullOrEmpty()){
                 mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
                 this.submitResetPassword()
-            } else { ErrorMessage(this@ResetPassword, "Enter Your Email Address").show() }
+            } else { ErrorMessage(
+                this@ResetPassword,
+                "Enter Your Email Address"
+            ).show() }
         }
     }
 
@@ -124,12 +128,18 @@ class ResetPassword : AppCompatActivity() {
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(this@ResetPassword, serverResponse.message).show() }
+                        } else { ErrorMessage(
+                            this@ResetPassword,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch (e: Exception){
                     runOnUiThread {
                         mProgressOverlay.dismiss()
-                        ErrorMessage(this@ResetPassword, "An Error Has Occurred").show()
+                        ErrorMessage(
+                            this@ResetPassword,
+                            "An Error Has Occurred"
+                        ).show()
                     }
                 }
             }

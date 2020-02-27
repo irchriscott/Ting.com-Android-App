@@ -1,6 +1,7 @@
 package com.codepipes.ting.dialogs.placement
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,22 +10,31 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
-import com.codepipes.ting.utils.Routes
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding2.widget.TextViewTextChangeEvent
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_restaurant_menus_order.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
-import okhttp3.*
-import java.io.IOException
-import java.lang.Exception
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Function
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
+
 
 class RestaurantMenusOrderDialog : DialogFragment() {
 
@@ -33,8 +43,12 @@ class RestaurantMenusOrderDialog : DialogFragment() {
 
     private lateinit var restaurantMenusOrderCloseListener: RestaurantMenusOrderCloseListener
 
+    private val disposable = CompositeDisposable()
+    private val publishSubject = PublishSubject.create<String>()
+
     override fun getTheme(): Int = R.style.TransparentDialog
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_restaurant_menus_order, null, false)
@@ -51,49 +65,27 @@ class RestaurantMenusOrderDialog : DialogFragment() {
             restaurantMenusOrderCloseListener.onClose()
         }
 
-        loadMenus(view, menuType, branchId)
+        val restaurantMenusObserver = object : DisposableObserver<MutableList<RestaurantMenu>>() {
 
-        return view
-    }
+            override fun onComplete() {}
 
-    @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun loadMenus(view: View, type: Int, branch: Int) {
-        val url = Routes().restaurantMenusOrders
+            override fun onNext(menus: MutableList<RestaurantMenu>) {
 
-        class MenuOrdersInterceptor : Interceptor {
-            override fun intercept(chain: Interceptor.Chain): Response {
-                val httpUrl = chain.request().url().newBuilder()
-                    .addQueryParameter("branch", branch.toString())
-                    .addQueryParameter("type", type.toString())
-                    .build()
-                val request = chain.request().newBuilder()
-                    .header("Authorization", session.token!!)
-                    .url(httpUrl)
-                    .build()
-                return chain.proceed(request)
-            }
-        }
+                view.shimmer_loader.visibility = View.GONE
 
-        val client = OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS)
-            .addInterceptor(MenuOrdersInterceptor())
-            .build()
+                if (menus.size > 0) {
 
-        val request = Request.Builder().url(url).get().build()
+                    view.restaurant_menus.visibility = View.VISIBLE
+                    view.empty_data.visibility = View.GONE
 
-        client.newCall(request).enqueue(object : Callback {
-
-            override fun onFailure(call: Call, e: IOException) {
-                activity?.runOnUiThread {
-                    view.shimmer_loader.stopShimmer()
-                    view.shimmer_loader.visibility = View.GONE
+                    view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
+                    view.restaurant_menus.adapter = RestaurantMenusOrderAdapter(menus, fragmentManager!!, context!!)
+                } else {
 
                     view.restaurant_menus.visibility = View.GONE
                     view.empty_data.visibility = View.VISIBLE
 
-                    when (type) {
+                    when (menuType) {
                         1 -> {
                             view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
                             view.empty_data.empty_text.text = "No Food To Show"
@@ -114,79 +106,67 @@ class RestaurantMenusOrderDialog : DialogFragment() {
                 }
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
-                try {
-                    val menus = Gson().fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
-                    activity?.runOnUiThread {
-                        if (menus.size > 0) {
+            override fun onError(error: Throwable) {
 
-                            view.shimmer_loader.stopShimmer()
-                            view.shimmer_loader.visibility = View.GONE
+                view.shimmer_loader.visibility = View.GONE
+                view.restaurant_menus.visibility = View.GONE
+                view.empty_data.visibility = View.VISIBLE
 
-                            view.restaurant_menus.visibility = View.VISIBLE
-                            view.empty_data.visibility = View.GONE
-
-                            view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
-                            view.restaurant_menus.adapter = RestaurantMenusOrderAdapter(menus, fragmentManager!!, context!!)
-                        } else {
-                            view.shimmer_loader.stopShimmer()
-                            view.shimmer_loader.visibility = View.GONE
-
-                            view.restaurant_menus.visibility = View.GONE
-                            view.empty_data.visibility = View.VISIBLE
-
-                            when (type) {
-                                1 -> {
-                                    view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
-                                    view.empty_data.empty_text.text = "No Food To Show"
-                                }
-                                2 -> {
-                                    view.empty_data.empty_image.setImageResource(R.drawable.ic_glass_gray)
-                                    view.empty_data.empty_text.text = "No Drink To Show"
-                                }
-                                3 -> {
-                                    view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
-                                    view.empty_data.empty_text.text = "No Dish To Show"
-                                }
-                                else -> {
-                                    view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
-                                    view.empty_data.empty_text.text = "No Food To Show"
-                                }
-                            }
-                        }
+                when (menuType) {
+                    1 -> {
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
+                        view.empty_data.empty_text.text = "No Food To Show"
                     }
-                } catch (e: Exception) {
-                    activity?.runOnUiThread {
-
-                        view.shimmer_loader.stopShimmer()
-                        view.shimmer_loader.visibility = View.GONE
-
-                        view.restaurant_menus.visibility = View.GONE
-                        view.empty_data.visibility = View.VISIBLE
-
-                        when (type) {
-                            1 -> {
-                                view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
-                                view.empty_data.empty_text.text = "No Food To Show"
-                            }
-                            2 -> {
-                                view.empty_data.empty_image.setImageResource(R.drawable.ic_glass_gray)
-                                view.empty_data.empty_text.text = "No Drink To Show"
-                            }
-                            3 -> {
-                                view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
-                                view.empty_data.empty_text.text = "No Dish To Show"
-                            }
-                            else -> {
-                                view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
-                                view.empty_data.empty_text.text = "No Food To Show"
-                            }
-                        }
+                    2 -> {
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_glass_gray)
+                        view.empty_data.empty_text.text = "No Drink To Show"
+                    }
+                    3 -> {
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                        view.empty_data.empty_text.text = "No Dish To Show"
+                    }
+                    else -> {
+                        view.empty_data.empty_image.setImageResource(R.drawable.ic_spoon_gray)
+                        view.empty_data.empty_text.text = "No Food To Show"
                     }
                 }
+
+                TingToast(context!!, error.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
             }
-        })
+        }
+
+        val searchMenusWatcher = object : DisposableObserver<TextViewTextChangeEvent>() {
+            override fun onComplete() {}
+
+            override fun onNext(event: TextViewTextChangeEvent) {
+                publishSubject.onNext(event.text().toString())
+            }
+
+            override fun onError(error: Throwable) {}
+        }
+
+        disposable.add(publishSubject.debounce(300, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap(Function<String, Observable<MutableList<RestaurantMenu>>> {
+                return@Function TingClient.getInstance(context!!)
+                    .getRestaurantMenusPlacement(branchId, menuType, it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+
+            }).subscribeWith(restaurantMenusObserver))
+
+        disposable.add(RxTextView.textChangeEvents(view.restaurant_menus_filter)
+            .skipInitialValue()
+            .debounce(300, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(searchMenusWatcher))
+
+        disposable.add(restaurantMenusObserver)
+
+        publishSubject.onNext("")
+
+        return view
     }
 
     override fun onStart() {
@@ -196,6 +176,16 @@ class RestaurantMenusOrderDialog : DialogFragment() {
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
             dialog.window!!.setLayout(width, height)
         }
+    }
+
+    override fun onDestroy() {
+        disposable.clear()
+        super.onDestroy()
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        disposable.clear()
+        super.onDismiss(dialog)
     }
 
     fun onDialogClose(listener: RestaurantMenusOrderCloseListener) {

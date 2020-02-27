@@ -20,7 +20,7 @@ import com.codepipes.ting.activities.base.TingDotCom
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.providers.LocalData
@@ -42,7 +42,8 @@ class SignUpPasswordFragment : Fragment() {
     lateinit var mSignUpConfirmPasswordInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
     private val routes: Routes = Routes()
 
     private lateinit var settings: Settings
@@ -95,8 +96,14 @@ class SignUpPasswordFragment : Fragment() {
                 if(mSignUpPasswordInput.text.toString() == mSignUpConfirmPasswordInput.text.toString()){
                     mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
                     this.submitSignUp()
-                } else { ErrorMessage(activity, "Passwords Didn't Match").show() }
-            } else { ErrorMessage(activity, "Passwords Cannot Be Empty").show() }
+                } else { ErrorMessage(
+                    activity,
+                    "Passwords Didn't Match"
+                ).show() }
+            } else { ErrorMessage(
+                activity,
+                "Passwords Cannot Be Empty"
+            ).show() }
         }
 
         return view
@@ -135,7 +142,11 @@ class SignUpPasswordFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        context!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -161,17 +172,27 @@ class SignUpPasswordFragment : Fragment() {
                                         settings.removeSettingFromSharedPreferences("signup_data")
                                         localData.updateUser(serverResponse.user)
                                         startActivity(Intent(activity, TingDotCom::class.java))
-                                    } else { ErrorMessage(activity, "Unable To Fetch User Data").show() }
+                                    } else { ErrorMessage(
+                                        activity,
+                                        "Unable To Fetch User Data"
+                                    ).show() }
                                 }
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(activity, serverResponse.message).show() }
+                        } else { ErrorMessage(
+                            activity,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch(e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(context!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

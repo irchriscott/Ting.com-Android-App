@@ -1,18 +1,23 @@
 package com.codepipes.ting.adapters.placement
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
+import com.codepipes.ting.dialogs.placement.OrderFormDialog
+import com.codepipes.ting.interfaces.PlacementOrdersMenuEventsListener
+import com.codepipes.ting.interfaces.SubmitOrderListener
 import com.codepipes.ting.models.Order
 import com.codepipes.ting.utils.Routes
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_placement_order_menu.view.*
 import java.text.NumberFormat
 
-class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>) : RecyclerView.Adapter<PlacementOrdersMenuViewHolder>() {
+class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>, private val fragmentManager: FragmentManager, private val ordersMenuEventsListener: PlacementOrdersMenuEventsListener) : RecyclerView.Adapter<PlacementOrdersMenuViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): PlacementOrdersMenuViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -42,8 +47,14 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>) : Recy
                 "${order.currency} ${NumberFormat.getNumberInstance().format(order.price)}".toUpperCase()
 
         if (!order.isDeclined && !order.isAccepted) {
-            holder.view.menu_reorder_button.text = "Notify Order".toUpperCase()
-            holder.view.menu_reorder_button.setOnClickListener {  }
+            holder.view.menu_reorder_button.visibility = View.GONE
+            holder.view.menu_order_pending_view.visibility = View.VISIBLE
+            holder.view.menu_notify_order_button.setOnClickListener {
+                ordersMenuEventsListener.onNotify(order.id)
+            }
+            holder.view.menu_cancel_order_button.setOnClickListener {
+                ordersMenuEventsListener.onCancel(order.id)
+            }
         } else {
             if (order.isAccepted) {
                 holder.view.menu_reorder_button.visibility = View.GONE
@@ -55,7 +66,20 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>) : Recy
                 holder.view.menu_order_status_text.text = "Declined"
                 holder.view.menu_order_status_view.background = holder.view.context.resources.getDrawable(R.drawable.background_time_red)
                 holder.view.menu_order_status_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
-                holder.view.menu_reorder_button.setOnClickListener {  }
+                holder.view.menu_reorder_button.setOnClickListener {
+                    val orderFormDialog = OrderFormDialog()
+                    val bundle = Bundle()
+                    bundle.putString("quantity", order.quantity.toString())
+                    bundle.putString("conditions", order.conditions)
+                    orderFormDialog.arguments = bundle
+                    orderFormDialog.show(fragmentManager, orderFormDialog.tag)
+                    orderFormDialog.onSubmitOrder(object : SubmitOrderListener {
+                        override fun onSubmitOrder(quantity: String, conditions: String) {
+                            ordersMenuEventsListener.onReorder(order.id, if(quantity != ""){ quantity.toInt() } else { 1 }, conditions)
+                            orderFormDialog.dismiss()
+                        }
+                    })
+                }
             }
         }
 

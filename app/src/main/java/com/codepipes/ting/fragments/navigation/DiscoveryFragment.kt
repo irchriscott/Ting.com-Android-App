@@ -22,8 +22,8 @@ import com.codepipes.ting.adapters.cuisine.CuisineRestaurantsAdapter
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.carouselview.enums.IndicatorAnimationType
 import com.codepipes.ting.carouselview.enums.OffsetType
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.*
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
@@ -372,7 +372,11 @@ class DiscoveryFragment : Fragment() {
                                 hideIndicator(true)
                                 show()
                             }
-                            TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     } catch (e: Exception) {
                         restaurantsTimer.cancel()
@@ -637,13 +641,21 @@ class DiscoveryFragment : Fragment() {
                                 view.top_restaurants.visibility = View.VISIBLE
                                 view.top_restaurants.layoutManager = LinearLayoutManager(context)
                                 view.top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
-                                TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                TingToast(
+                                    context!!,
+                                    it.message!!.capitalize(),
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
                             }
                         } catch (e: Exception){
                             topRestaurantTimer.cancel()
                             topRestaurantsTimerTask.cancel()
                             view.top_restaurants_view.visibility = View.GONE
-                            TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                e.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 }

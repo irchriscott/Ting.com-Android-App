@@ -13,8 +13,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.dialogs.placement.OrderFormDialog
 import com.codepipes.ting.fragments.menu.MenuBottomSheetFragment
 import com.codepipes.ting.interfaces.SubmitOrderListener
@@ -157,7 +157,11 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
         client.newCall(request).enqueue(object : Callback {
 
             override fun onFailure(call: Call, e: IOException) {
-                activity.runOnUiThread { TingToast(context, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                activity.runOnUiThread { TingToast(
+                    context,
+                    e.localizedMessage,
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG) }
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -166,9 +170,21 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
                     try {
                         val serverResponse = Gson().fromJson(dataString, ServerResponse::class.java)
                         if (serverResponse.type == "success") {
-                            TingToast(context, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { TingToast(context, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
-                    } catch (e: Exception) { TingToast(context, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(
+                                context,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(
+                            context,
+                            serverResponse.message,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG) }
+                    } catch (e: Exception) { TingToast(
+                        context,
+                        e.localizedMessage,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

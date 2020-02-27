@@ -29,8 +29,8 @@ import android.os.Build
 import android.os.PersistableBundle
 import android.view.View
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.utils.Routes
 import com.livefront.bridge.Bridge
@@ -166,7 +166,11 @@ class UserProfile : AppCompatActivity() {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@UserProfile, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@UserProfile,
+                        e.message!!.capitalize(),
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 

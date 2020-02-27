@@ -85,8 +85,12 @@ class TingClient (val context: Context) {
         return tingService.getPromotionPromotedMenus(promo)
     }
 
-    public fun getOrdersMenuPlacement(token: String, authorization: String) : Observable<MutableList<Order>> {
-        return tingService.getOrdersMenuPlacement(token, authorization)
+    public fun getRestaurantMenusPlacement(branch: Int, type: Int, query: String) : Observable<MutableList<RestaurantMenu>> {
+        return tingService.getRestaurantMenusPlacement(branch, type, query)
+    }
+
+    public fun getOrdersMenuPlacement(token: String, query: String, authorization: String) : Observable<MutableList<Order>> {
+        return tingService.getOrdersMenuPlacement(token, query, authorization)
     }
 
     companion object {

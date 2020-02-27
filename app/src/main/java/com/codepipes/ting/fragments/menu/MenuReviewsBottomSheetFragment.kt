@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.menu.MenuReviewsAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.MenuReview
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
@@ -63,7 +63,11 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -80,7 +84,11 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
                     }
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

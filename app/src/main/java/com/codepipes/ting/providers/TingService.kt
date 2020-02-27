@@ -25,9 +25,18 @@ public interface TingService {
     ) : Observable<MutableList<RestaurantMenu>>
 
 
+    @GET("api/v1/usr/po/orders/branch/menus/")
+    public fun getRestaurantMenusPlacement(
+        @Query("branch") branch: Int,
+        @Query("type") type: Int,
+        @Query("query") query: String
+    ) : Observable<MutableList<RestaurantMenu>>
+
+
     @GET("api/v1/usr/po/placement/orders/all/")
     public fun getOrdersMenuPlacement(
         @Query("token") token : String,
+        @Query("query") query: String,
         @Header("Authorization") authorization: String
     ) : Observable<MutableList<Order>>
 }

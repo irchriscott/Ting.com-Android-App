@@ -15,8 +15,8 @@ import com.codepipes.ting.R
 import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.adapters.menu.PromotionMenusListAdapter
 import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.models.*
@@ -161,7 +161,11 @@ class MenuPromotion : AppCompatActivity() {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        TingToast(this@MenuPromotion, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@MenuPromotion,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -244,7 +248,11 @@ class MenuPromotion : AppCompatActivity() {
                                         promotion.branch.dist = dist
                                         promotion.branch.fromLocation = from
                                         runOnUiThread { promotion_restaurant_distance.text = "${dist.toString()} Km" }
-                                        TingToast(this@MenuPromotion, it.message!!, TingToastType.ERROR).showToast(
+                                        TingToast(
+                                            this@MenuPromotion,
+                                            it.message!!,
+                                            TingToastType.ERROR
+                                        ).showToast(
                                             Toast.LENGTH_LONG
                                         )
                                     }
@@ -559,7 +567,11 @@ class MenuPromotion : AppCompatActivity() {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@MenuPromotion, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@MenuPromotion,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -577,11 +589,23 @@ class MenuPromotion : AppCompatActivity() {
                                 promotion_interest_button.playAnimation()
                                 promotion_interest_button.isChecked = true
                             }
-                            TingToast(this@MenuPromotion, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { TingToast(this@MenuPromotion, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(
+                                this@MenuPromotion,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(
+                            this@MenuPromotion,
+                            serverResponse.message,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG) }
                     }
                 } catch (e: Exception){
-                    runOnUiThread { TingToast(this@MenuPromotion, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    runOnUiThread { TingToast(
+                        this@MenuPromotion,
+                        "An Error Has Occurred",
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

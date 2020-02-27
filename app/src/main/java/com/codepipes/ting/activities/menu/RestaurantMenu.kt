@@ -22,8 +22,8 @@ import com.codepipes.ting.adapters.menu.MenuReviewsAdapter
 import com.codepipes.ting.adapters.promotion.PromotionRestaurantMenuAdapter
 import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.customclasses.XAxisValueFormatter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.menu.MenuReviewsBottomSheetFragment
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.imageviewer.StfalconImageViewer
@@ -177,7 +177,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        TingToast(this@RestaurantMenu, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@RestaurantMenu,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -260,7 +264,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                                         menu.menu.branch.dist = dist
                                         menu.menu.branch.fromLocation = from
                                         runOnUiThread { menu_restaurant_distance.text = "${dist.toString()} Km" }
-                                        TingToast(this@RestaurantMenu, it.message!!, TingToastType.ERROR).showToast(
+                                        TingToast(
+                                            this@RestaurantMenu,
+                                            it.message!!,
+                                            TingToastType.ERROR
+                                        ).showToast(
                                             Toast.LENGTH_LONG
                                         )
                                     }
@@ -651,7 +659,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@RestaurantMenu, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@RestaurantMenu,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -669,11 +681,23 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                                 menu_like_button.playAnimation()
                                 menu_like_button.isChecked = true
                             }
-                            TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(
+                                this@RestaurantMenu,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(
+                            this@RestaurantMenu,
+                            serverResponse.message,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG) }
                     }
                 } catch (e: Exception){
-                    runOnUiThread { TingToast(this@RestaurantMenu, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    runOnUiThread { TingToast(
+                        this@RestaurantMenu,
+                        "An Error Has Occurred",
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })
@@ -795,7 +819,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@RestaurantMenu, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@RestaurantMenu,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -806,11 +834,23 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     runOnUiThread {
                         getRestaurantMenu(menu.urls.apiGet)
                         if (serverResponse.status == 200){
-                            TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { TingToast(this@RestaurantMenu, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(
+                                this@RestaurantMenu,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(
+                            this@RestaurantMenu,
+                            serverResponse.message,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG) }
                     }
                 } catch (e: Exception){
-                    runOnUiThread { TingToast(this@RestaurantMenu, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    runOnUiThread { TingToast(
+                        this@RestaurantMenu,
+                        "An Error Has Occurred",
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

@@ -1,9 +1,7 @@
-package com.codepipes.ting.dialogs
+package com.codepipes.ting.dialogs.messages
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
-import android.support.constraint.ConstraintLayout
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView

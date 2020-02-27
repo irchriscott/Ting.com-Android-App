@@ -23,8 +23,8 @@ import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.customclasses.RestaurantInfoWindowMap
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.RetrofitGoogleMapsRoute
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.MapPin
@@ -260,11 +260,19 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         if(it != null) { this.getLocation(it) }
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
-                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: java.lang.Exception){
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }
@@ -300,12 +308,20 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
                             fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
-                            TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: Exception){
                     fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }
@@ -319,7 +335,11 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             if (mapCenter.latitude != 0.0 && mapCenter.longitude != 0.0) { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, GOOGLE_MAPS_ZOOM)) } else { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM)) }
             LatLng(location.latitude, location.longitude)
         } catch (e: Exception){
-            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+            TingToast(
+                context!!,
+                activity!!.resources.getString(R.string.error_internet),
+                TingToastType.ERROR
+            ).showToast(
                 Toast.LENGTH_LONG)
             LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
         }
@@ -491,7 +511,11 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
                 override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
                     activity?.runOnUiThread {
-                        TingToast(context!!, t.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            t.message!!.capitalize(),
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
 
@@ -541,12 +565,20 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         }
                     } catch (e: java.lang.Exception) {
                         activity?.runOnUiThread {
-                            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                activity!!.resources.getString(R.string.error_internet),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 }
             })
-        } else { TingToast(context!!, "An Error Has occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+        } else { TingToast(
+            context!!,
+            "An Error Has occurred",
+            TingToastType.ERROR
+        ).showToast(Toast.LENGTH_LONG) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

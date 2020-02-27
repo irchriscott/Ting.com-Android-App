@@ -8,12 +8,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.menu.RestaurantMenuAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
@@ -24,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_restaurant_foods.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
-import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 

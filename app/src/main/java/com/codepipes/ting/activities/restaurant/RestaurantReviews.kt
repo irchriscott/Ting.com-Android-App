@@ -16,8 +16,8 @@ import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.restaurant.RestaurantReviewsAdapter
 import com.codepipes.ting.customclasses.XAxisValueFormatter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantReview
 import com.codepipes.ting.models.ServerResponse
@@ -218,7 +218,11 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@RestaurantReviews, e.message!!.capitalize(), TingToastType.ERROR).showToast(
+                    TingToast(
+                        this@RestaurantReviews,
+                        e.message!!.capitalize(),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }
@@ -390,7 +394,11 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    TingToast(this@RestaurantReviews, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@RestaurantReviews,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -401,11 +409,23 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                     runOnUiThread {
                         loadRestaurant(branchId, true)
                         if (serverResponse.status == 200){
-                            TingToast(this@RestaurantReviews, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { TingToast(this@RestaurantReviews, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(
+                                this@RestaurantReviews,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { TingToast(
+                            this@RestaurantReviews,
+                            serverResponse.message,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG) }
                     }
                 } catch (e: Exception){
-                    runOnUiThread { TingToast(this@RestaurantReviews, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    runOnUiThread { TingToast(
+                        this@RestaurantReviews,
+                        "An Error Has Occurred",
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

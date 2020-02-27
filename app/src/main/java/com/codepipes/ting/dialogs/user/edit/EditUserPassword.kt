@@ -12,10 +12,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
@@ -64,7 +64,11 @@ class EditUserPassword : DialogFragment() {
         mUpdatePasswordButton.setOnClickListener {
             if(!mPasswordOldInput.text.isNullOrEmpty() && !mPasswordNewInput.text.isNullOrEmpty() && !mPasswordConfirmInput.text.isNullOrEmpty()){
                 this.updateUserPassword()
-            } else { TingToast(activity!!, "Fill All Fields !!!", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+            } else { TingToast(
+                activity!!,
+                "Fill All Fields !!!",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
 
         return view
@@ -106,7 +110,11 @@ class EditUserPassword : DialogFragment() {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -119,14 +127,25 @@ class EditUserPassword : DialogFragment() {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status == 200){
                             userAuthentication.set(gson.toJson(serverResponse.user))
-                            TingToast(activity!!, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                activity!!,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
                             dialog.dismiss()
-                        } else { ErrorMessage(activity!!, serverResponse.message).show() }
+                        } else { ErrorMessage(
+                            activity!!,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

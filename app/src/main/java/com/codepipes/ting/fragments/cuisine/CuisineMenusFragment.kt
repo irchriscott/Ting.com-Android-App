@@ -9,13 +9,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.cuisine.CuisineMenusAdapter
-import com.codepipes.ting.adapters.menu.RestaurantMenuAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
-import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
@@ -23,7 +18,6 @@ import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge

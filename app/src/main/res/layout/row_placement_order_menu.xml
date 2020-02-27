@@ -27,6 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         <android.support.constraint.ConstraintLayout
+                android:id="@+id/menu_container_view"
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_width="wrap_content"
@@ -310,6 +311,44 @@
                     tools:ignore="HardcodedText" />
 
         </android.support.constraint.ConstraintLayout>
+
+        <LinearLayout
+                android:id="@+id/menu_order_pending_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/menu_container_view">
+
+            <Button
+                    android:id="@+id/menu_notify_order_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:text="Notify Order"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/background_primary_gradient"
+                    tools:ignore="HardcodedText" />
+
+            <Button
+                    android:id="@+id/menu_cancel_order_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="4dp"
+                    android:text="Cancel"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/background_red_gradient"
+                    tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
 
     </android.support.constraint.ConstraintLayout>
 

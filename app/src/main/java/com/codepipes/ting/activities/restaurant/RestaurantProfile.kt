@@ -29,8 +29,8 @@ import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.*
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.providers.LocalData
@@ -264,7 +264,11 @@ class RestaurantProfile : AppCompatActivity() {
                                     branch.dist = dist
                                     branch.fromLocation = from
                                     runOnUiThread { restaurant_distance.text = "${dist.toString()} Km" }
-                                    TingToast(this@RestaurantProfile, it.message!!, TingToastType.ERROR).showToast(
+                                    TingToast(
+                                        this@RestaurantProfile,
+                                        it.message!!,
+                                        TingToastType.ERROR
+                                    ).showToast(
                                         Toast.LENGTH_LONG
                                     )
                                 }

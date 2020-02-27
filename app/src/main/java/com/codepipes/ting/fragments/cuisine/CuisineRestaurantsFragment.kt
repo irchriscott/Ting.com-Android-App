@@ -12,12 +12,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.cuisine.CuisineRestaurantsAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
-import com.codepipes.ting.fragments.restaurants.RestaurantDishesFragment
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantCategory
-import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
@@ -164,9 +162,17 @@ class CuisineRestaurantsFragment : Fragment() {
                                         }
                                         view.cuisine_restaurants.layoutManager = LinearLayoutManager(context)
                                         view.cuisine_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
-                                        TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        TingToast(
+                                            context!!,
+                                            it.message!!.capitalize(),
+                                            TingToastType.ERROR
+                                        ).showToast(Toast.LENGTH_LONG)
                                     }
-                                } catch (e: Exception){ TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                } catch (e: Exception){ TingToast(
+                                    context!!,
+                                    e.message!!.capitalize(),
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG) }
                             }
                         } else {
                             view.shimmer_loader.stopShimmer()

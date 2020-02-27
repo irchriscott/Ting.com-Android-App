@@ -27,6 +27,8 @@ class OrderFormDialog : DialogFragment() {
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_order_form, null, false)
+        view.dialog_quantity_input.setText(arguments?.getString("quantity"))
+        view.dialog_conditions_input.setText(arguments?.getString("conditions"))
         view.dialog_success.setOnClickListener {
             onSubmitOrderListener.onSubmitOrder(view.dialog_quantity_input.text.toString(), view.dialog_conditions_input.text.toString())
         }

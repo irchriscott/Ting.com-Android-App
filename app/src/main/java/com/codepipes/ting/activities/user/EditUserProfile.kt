@@ -27,7 +27,10 @@ import android.widget.ImageButton
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.user.UserAddressAdapter
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.dialogs.user.add.AddUserAddress
 import com.codepipes.ting.dialogs.user.edit.EditUserEmailAddress
 import com.codepipes.ting.dialogs.user.edit.EditUserPassword
@@ -76,7 +79,8 @@ class EditUserProfile : AppCompatActivity() {
 
     private val REQUEST_CODE_IMAGE_PICKER: Int = 1
 
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
     private val routes: Routes = Routes()
 
     private lateinit var utilsFunctions: UtilsFunctions
@@ -262,7 +266,11 @@ class EditUserProfile : AppCompatActivity() {
                 runOnUiThread {
                     mProgressOverlay.dismiss()
                     Picasso.get().load(user.imageURL()).into(mProfileImageView)
-                    TingToast(this@EditUserProfile, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@EditUserProfile,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -275,14 +283,25 @@ class EditUserProfile : AppCompatActivity() {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status == 200){
                             userAuthentication.set(gson.toJson(serverResponse.user))
-                            TingToast(this@EditUserProfile, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                        } else { ErrorMessage(this@EditUserProfile, serverResponse.message).show() }
+                            TingToast(
+                                this@EditUserProfile,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(Toast.LENGTH_LONG)
+                        } else { ErrorMessage(
+                            this@EditUserProfile,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch (e: Exception){
                     runOnUiThread {
                         Picasso.get().load(user.imageURL()).into(mProfileImageView)
                         mProgressOverlay.dismiss()
-                        TingToast(this@EditUserProfile, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@EditUserProfile,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
 
@@ -331,7 +350,11 @@ class EditUserProfile : AppCompatActivity() {
                                 runOnUiThread {
                                     mProgressOverlay.dismiss()
                                     Picasso.get().load(user.imageURL()).into(mProfileImageView)
-                                    TingToast(this@EditUserProfile, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    TingToast(
+                                        this@EditUserProfile,
+                                        e.message!!,
+                                        TingToastType.ERROR
+                                    ).showToast(Toast.LENGTH_LONG)
                                 }
                             }
 
@@ -344,14 +367,25 @@ class EditUserProfile : AppCompatActivity() {
                                         mProgressOverlay.dismiss()
                                         if (serverResponse.status == 200){
                                             userAuthentication.set(gson.toJson(serverResponse.user))
-                                            TingToast(this@EditUserProfile, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
-                                        } else { ErrorMessage(this@EditUserProfile, serverResponse.message).show() }
+                                            TingToast(
+                                                this@EditUserProfile,
+                                                serverResponse.message,
+                                                TingToastType.SUCCESS
+                                            ).showToast(Toast.LENGTH_LONG)
+                                        } else { ErrorMessage(
+                                            this@EditUserProfile,
+                                            serverResponse.message
+                                        ).show() }
                                     }
                                 } catch (e: Exception){
                                     runOnUiThread {
                                         Picasso.get().load(user.imageURL()).into(mProfileImageView)
                                         mProgressOverlay.dismiss()
-                                        TingToast(this@EditUserProfile, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        TingToast(
+                                            this@EditUserProfile,
+                                            "An Error Has Occurred",
+                                            TingToastType.ERROR
+                                        ).showToast(Toast.LENGTH_LONG)
                                     }
                                 }
 
@@ -359,9 +393,17 @@ class EditUserProfile : AppCompatActivity() {
                         })
 
                     } catch (e: FileNotFoundException) {
-                        TingToast(this@EditUserProfile, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@EditUserProfile,
+                            e.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
-                } else { TingToast(this@EditUserProfile, "No Image Selected", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
+                } else { TingToast(
+                    this@EditUserProfile,
+                    "No Image Selected",
+                    TingToastType.DEFAULT
+                ).showToast(Toast.LENGTH_LONG) }
             }
         }
     }

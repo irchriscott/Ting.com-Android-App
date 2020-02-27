@@ -1,4 +1,4 @@
-package com.codepipes.ting.dialogs
+package com.codepipes.ting.dialogs.messages
 
 import android.app.DialogFragment
 import android.graphics.Color

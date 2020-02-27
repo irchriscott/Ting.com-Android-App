@@ -14,7 +14,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.*
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.providers.LocalData
@@ -56,7 +56,8 @@ class LogIn : AppCompatActivity() {
     private lateinit var geocoder: Geocoder
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
     private val routes: Routes = Routes()
 
     private lateinit var userAuthentication: UserAuthentication
@@ -79,7 +80,11 @@ class LogIn : AppCompatActivity() {
         mPasswordLogInInput = findViewById<EditText>(R.id.loginPasswordInput) as EditText
         mSubmitLogInFormButton = findViewById<Button>(R.id.submitLoginButton) as Button
 
-        if (!mUtilFunctions.isConnectedToInternet() && !mUtilFunctions.isConnected()) { TingToast(this@LogIn, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+        if (!mUtilFunctions.isConnectedToInternet() && !mUtilFunctions.isConnected()) { TingToast(
+            this@LogIn,
+            "You are not connected to the internet",
+            TingToastType.ERROR
+        ).showToast(Toast.LENGTH_LONG) }
 
         settings = Settings(this@LogIn)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -119,12 +124,20 @@ class LogIn : AppCompatActivity() {
                         REQUEST_FINE_LOCATION
                     )
                 }
-            } else { TingToast(this@LogIn, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+            } else { TingToast(
+                this@LogIn,
+                "You are not connected to the internet",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
 
         mNavigateSignUpBtn.setOnClickListener {
             if(mUtilFunctions.isConnectedToInternet() && mUtilFunctions.isConnected()){ startActivity(Intent(this@LogIn, SignUp::class.java)) }
-            else { TingToast(this@LogIn, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+            else { TingToast(
+                this@LogIn,
+                "You are not connected to the internet",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
 
         mNavigateResetPasswordBtn.setOnClickListener {
@@ -151,7 +164,11 @@ class LogIn : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     if (mProgressOverlay.dialog != null) { mProgressOverlay.dismiss() }
-                    TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        this@LogIn,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -176,17 +193,27 @@ class LogIn : AppCompatActivity() {
                                         userAuthentication.set(gson.toJson(serverResponse.user))
                                         localData.updateUser(serverResponse.user)
                                         startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                    } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                                    } else { ErrorMessage(
+                                        this@LogIn,
+                                        "Unable To Fetch User Data"
+                                    ).show() }
                                 }
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
+                        } else { ErrorMessage(
+                            this@LogIn,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch (e: Exception){
                     runOnUiThread {
                         if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
-                        TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@LogIn,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -211,7 +238,11 @@ class LogIn : AppCompatActivity() {
                     mGoogleSignInClient.signOut()
                     val signInIntent = mGoogleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
-                } else { TingToast(this@LogIn, "Please, Allow Location Services", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
+                } else { TingToast(
+                    this@LogIn,
+                    "Please, Allow Location Services",
+                    TingToastType.DEFAULT
+                ).showToast(Toast.LENGTH_LONG) }
             }
         }
     }
@@ -253,7 +284,11 @@ class LogIn : AppCompatActivity() {
                                 override fun onFailure(call: Call, e: IOException) {
                                     runOnUiThread {
                                         try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-                                        TingToast(this@LogIn, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        TingToast(
+                                            this@LogIn,
+                                            e.message!!,
+                                            TingToastType.ERROR
+                                        ).showToast(Toast.LENGTH_LONG)
                                     }
                                 }
 
@@ -265,7 +300,8 @@ class LogIn : AppCompatActivity() {
                                         runOnUiThread {
                                             try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
                                             if (serverResponse.status == 200){
-                                                val successDialog = SuccessOverlay()
+                                                val successDialog =
+                                                    SuccessOverlay()
                                                 val args: Bundle = Bundle()
                                                 args.putString("message", serverResponse.message)
                                                 args.putString("type", serverResponse.type)
@@ -278,17 +314,27 @@ class LogIn : AppCompatActivity() {
                                                             userAuthentication.set(gson.toJson(serverResponse.user))
                                                             localData.updateUser(serverResponse.user)
                                                             startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                                        } else { ErrorMessage(this@LogIn, "Unable To Fetch User Data").show() }
+                                                        } else { ErrorMessage(
+                                                            this@LogIn,
+                                                            "Unable To Fetch User Data"
+                                                        ).show() }
                                                     }
                                                 }
                                                 successDialog.dismissListener(onDialogClosed)
 
-                                            } else { ErrorMessage(this@LogIn, serverResponse.message).show() }
+                                            } else { ErrorMessage(
+                                                this@LogIn,
+                                                serverResponse.message
+                                            ).show() }
                                         }
                                     } catch (e: Exception){
                                         runOnUiThread {
                                             try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-                                            TingToast(this@LogIn, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                            TingToast(
+                                                this@LogIn,
+                                                "An Error Has Occurred",
+                                                TingToastType.ERROR
+                                            ).showToast(Toast.LENGTH_LONG)
                                         }
                                     }
                                 }
@@ -296,26 +342,42 @@ class LogIn : AppCompatActivity() {
                         } catch (e: java.lang.Exception) {
                             runOnUiThread {
                                 try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-                                TingToast(this@LogIn, "Geolocation Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                TingToast(
+                                    this@LogIn,
+                                    "Geolocation Error Occurred",
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
                             }
                         }
                     } else {
                         runOnUiThread {
                             try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-                            TingToast(this@LogIn, "Cannot Access Your Location", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                this@LogIn,
+                                "Cannot Access Your Location",
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
 
                 }.addOnFailureListener {
                     runOnUiThread {
                         try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-                        TingToast(this@LogIn, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            this@LogIn,
+                            it.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
         } catch (e: ApiException) {
             try { mProgressOverlay.dismiss() } catch (e: java.lang.Exception) {}
-            TingToast(this@LogIn, "Google Sign In Failed", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            TingToast(
+                this@LogIn,
+                "Google Sign In Failed",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG)
         }
     }
 }

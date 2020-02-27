@@ -1,4 +1,4 @@
-package com.codepipes.ting.dialogs
+package com.codepipes.ting.dialogs.messages
 
 import android.content.Context
 import android.content.DialogInterface

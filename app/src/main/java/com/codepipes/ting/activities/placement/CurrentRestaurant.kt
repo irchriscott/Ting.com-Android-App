@@ -14,10 +14,10 @@ import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
-import com.codepipes.ting.dialogs.InfoDialog
-import com.codepipes.ting.dialogs.SuccessOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.InfoDialog
+import com.codepipes.ting.dialogs.messages.SuccessOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.dialogs.placement.PlacementOrdersDialog
 import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
 import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
@@ -120,12 +120,21 @@ class CurrentRestaurant : AppCompatActivity() {
                             val response = pnMessageResult.message.asJsonObject
                             when (response.get("type").asString) {
                                 UtilData.SOCKET_RESPONSE_ERROR -> {
-                                    TingToast(this@CurrentRestaurant, if(!response.get("message").isJsonNull){ response.get("message").asString } else { "An Error Occurred" }, TingToastType.ERROR).showToast(
+                                    TingToast(
+                                        this@CurrentRestaurant,
+                                        if (!response.get("message").isJsonNull) {
+                                            response.get("message").asString
+                                        } else {
+                                            "An Error Occurred"
+                                        },
+                                        TingToastType.ERROR
+                                    ).showToast(
                                         Toast.LENGTH_LONG)
                                 }
                                 UtilData.SOCKET_RESPONSE_TABLE_WAITER -> {
                                     val waiter = response.get("data").asJsonObject.get("waiter").asJsonObject
-                                    val infoDialog = InfoDialog()
+                                    val infoDialog =
+                                        InfoDialog()
 
                                     val bundle = Bundle()
                                     bundle.putString("title", waiter.get("name").asString)
@@ -138,7 +147,8 @@ class CurrentRestaurant : AppCompatActivity() {
                                     getPlacement(userPlacement.getToken()!!)
                                 }
                                 UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
-                                    val successOverlay = SuccessOverlay()
+                                    val successOverlay =
+                                        SuccessOverlay()
                                     val bundle = Bundle()
                                     bundle.putString("message", "Placement Terminated")
                                     bundle.putString("type", "info")
@@ -156,7 +166,11 @@ class CurrentRestaurant : AppCompatActivity() {
                             }
                         }
                     } catch (e: Exception) {
-                        TingToast(this@CurrentRestaurant, "An Error Occurred", TingToastType.ERROR).showToast(
+                        TingToast(
+                            this@CurrentRestaurant,
+                            "An Error Occurred",
+                            TingToastType.ERROR
+                        ).showToast(
                             Toast.LENGTH_LONG)
                     }
                 }
@@ -174,7 +188,11 @@ class CurrentRestaurant : AppCompatActivity() {
                 getPlacement(placement.token)
             } else { getPlacement(userPlacement.getTempToken()!!) }
         } else {
-            TingToast(this@CurrentRestaurant, "You're Not Placed In", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            TingToast(
+                this@CurrentRestaurant,
+                "You're Not Placed In",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG)
             startActivity(Intent(this@CurrentRestaurant, RestaurantScanner::class.java))
         }
     }
@@ -212,7 +230,11 @@ class CurrentRestaurant : AppCompatActivity() {
                         .async(object : PNCallback<PNPublishResult>() {
                             override fun onResponse(result: PNPublishResult?, status: PNStatus) {
                                 if (status.isError || status.statusCode != 200) {
-                                    TingToast(this@CurrentRestaurant, "Connection Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    TingToast(
+                                        this@CurrentRestaurant,
+                                        "Connection Error Occurred",
+                                        TingToastType.ERROR
+                                    ).showToast(Toast.LENGTH_LONG)
                                 }
                             }
                         })
@@ -357,7 +379,8 @@ class CurrentRestaurant : AppCompatActivity() {
                     } catch (e: Exception) {
                         try {
                             val serverResponse = Gson().fromJson(dataString, ServerResponse::class.java)
-                            val successOverlay = SuccessOverlay()
+                            val successOverlay =
+                                SuccessOverlay()
                             val bundle = Bundle()
                             bundle.putString("message", serverResponse.message)
                             bundle.putString("type", serverResponse.type)
