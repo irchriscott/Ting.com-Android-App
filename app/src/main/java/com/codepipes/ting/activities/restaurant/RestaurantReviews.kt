@@ -274,16 +274,16 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                             restaurant_reviews_recycler_view.adapter = restaurantReviewsAdapter
                             ViewCompat.setNestedScrollingEnabled(restaurant_reviews_recycler_view, false)
 
-                            scroll_view.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+                            var pageNum = 1
 
-                                var pageNum = 1
+                            scroll_view.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
                                 if (view?.getChildAt(view.childCount - 1) != null) {
                                     if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
 
                                         val visibleItemCount = linearLayoutManager.childCount
                                         val totalItemCount = linearLayoutManager.itemCount
-                                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+                                        val pastVisibleItems = linearLayoutManager.findLastVisibleItemPosition()
 
                                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
 

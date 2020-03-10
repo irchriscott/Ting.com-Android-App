@@ -254,20 +254,20 @@ class PlacementOrdersDialog : DialogFragment() {
                 }
             })
 
-            view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
+            view.restaurant_menus.layoutManager = linearLayoutManager
             view.restaurant_menus.adapter = placementOrdersMenuAdapter
             ViewCompat.setNestedScrollingEnabled(view.restaurant_menus, false)
 
-            view.scroll_view.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+            var pageNum = 1
 
-                var pageNum = 1
+            view.scroll_view.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
                 if (v?.getChildAt(v.childCount - 1) != null) {
                     if ((scrollY >= (v.getChildAt(v.childCount - 1)!!.measuredHeight - v.measuredHeight)) && scrollY > oldScrollY) {
 
                         val visibleItemCount = linearLayoutManager.childCount
                         val totalItemCount = linearLayoutManager.itemCount
-                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+                        val pastVisibleItems = linearLayoutManager.findLastVisibleItemPosition()
 
                         if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
 

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,19 +88,19 @@ class RestaurantMenusOrderDialog : DialogFragment() {
                     val linearLayoutManager = LinearLayoutManager(activity)
                     val restaurantMenusOrderAdapter = RestaurantMenusOrderAdapter(menus, fragmentManager!!, context!!)
 
-                    view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
+                    view.restaurant_menus.layoutManager = linearLayoutManager
                     view.restaurant_menus.adapter = restaurantMenusOrderAdapter
 
-                    view.scroll_view.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+                    var pageNum = 1
 
-                        var pageNum = 1
+                    view.scroll_view.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
                         if (v?.getChildAt(v.childCount - 1) != null) {
                             if ((scrollY >= (v.getChildAt(v.childCount - 1)!!.measuredHeight - v.measuredHeight)) && scrollY > oldScrollY) {
 
                                 val visibleItemCount = linearLayoutManager.childCount
                                 val totalItemCount = linearLayoutManager.itemCount
-                                val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+                                val pastVisibleItems = linearLayoutManager.findLastVisibleItemPosition()
 
                                 if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
 

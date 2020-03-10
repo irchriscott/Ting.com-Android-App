@@ -372,18 +372,17 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     ).showToast(Toast.LENGTH_LONG)
                 }
 
+                var pageNum = 1
                 ViewCompat.setNestedScrollingEnabled(mRestaurantsRecyclerView, false)
 
                 mScrollView.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
-
-                    var pageNum = 1
 
                     if(view?.getChildAt(view.childCount - 1) != null) {
                         if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
 
                             val visibleItemCount = linearLayoutManager.childCount
                             val totalItemCount = linearLayoutManager.itemCount
-                            val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+                            val pastVisibleItems = linearLayoutManager.findLastVisibleItemPosition()
 
                             if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
 
