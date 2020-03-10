@@ -58,7 +58,6 @@ class LogIn : AppCompatActivity() {
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
-    private val routes: Routes = Routes()
 
     private lateinit var userAuthentication: UserAuthentication
     private lateinit var mUtilFunctions: UtilsFunctions
@@ -146,8 +145,8 @@ class LogIn : AppCompatActivity() {
     }
 
     private fun authenticateUser(){
-        val url = this.routes.authLoginUser
 
+        val url = Routes.authLoginUser
         val client = OkHttpClient()
 
         val form = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -259,7 +258,7 @@ class LogIn : AppCompatActivity() {
                             val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 
                             val idToken = mUtilFunctions.getToken(512)
-                            val url = this.routes.submitGoogleSignUp
+                            val url = Routes.submitGoogleSignUp
 
                             val client = OkHttpClient()
 

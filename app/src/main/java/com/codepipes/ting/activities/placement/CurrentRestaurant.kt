@@ -215,7 +215,7 @@ class CurrentRestaurant : AppCompatActivity() {
             place_bill_number.text = if(placement.bill != null) { "Bill No ${placement.bill.number}" } else { "Bill No -" }
             if(placement.waiter != null) {
                 place_waiter_name.text = placement.waiter.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${placement.waiter.image}").into(place_waiter_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${placement.waiter.image}").into(place_waiter_image)
                 place_waiter_view.setOnClickListener {
                     val infoDialog = InfoDialog()
                     val bundle = Bundle()
@@ -271,7 +271,7 @@ class CurrentRestaurant : AppCompatActivity() {
                     override fun onSubmit(people: String) {
 
                         placementPeopleDialog.dismiss()
-                        val url = Routes().updatePlacementPeople
+                        val url = Routes.updatePlacementPeople
 
                         val client = OkHttpClient.Builder()
                             .readTimeout(60, TimeUnit.SECONDS)
@@ -370,7 +370,7 @@ class CurrentRestaurant : AppCompatActivity() {
             }
         }
 
-        val url = Routes().getCurrentPlacement
+        val url = Routes.getCurrentPlacement
 
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)

@@ -35,7 +35,7 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>, privat
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.menu_image)
 
         holder.view.menu_name.text = menu.menu.name
         holder.view.menu_rating.rating = menu.menu.reviews?.average!!.toFloat()
@@ -100,6 +100,12 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>, privat
                 holder.view.menu_promotion_supplement.text = order.promotion.supplement
             }
         } else { holder.view.menu_order_has_promotion_text.text = "NO" }
+    }
+
+    public fun addItems(ordersOthers : MutableList<Order>) {
+        val lastPosition = orders.size
+        orders.addAll(ordersOthers)
+        notifyItemRangeInserted(lastPosition, ordersOthers.size)
     }
 }
 

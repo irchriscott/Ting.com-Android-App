@@ -42,13 +42,13 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
 
         if(menu.type.id != 2){
             view.menu_subcategory_name.text = menu.menu.category?.name
             view.menu_cuisine_name.text = menu.menu.cuisine?.name
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(view.menu_subcategory_image)
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(view.menu_cuisine_image)
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(view.menu_subcategory_image)
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}").into(view.menu_cuisine_image)
         } else {
             view.menu_subcategory.visibility = View.GONE
             view.menu_cuisine_view.visibility = View.GONE

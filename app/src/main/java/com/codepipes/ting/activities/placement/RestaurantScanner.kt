@@ -190,7 +190,7 @@ class RestaurantScanner : AppCompatActivity() {
 
         codeScanner.decodeCallback = DecodeCallback { result ->
 
-            val stringURL = "${Routes().requestRestaurantTable}?table=${result.text}"
+            val stringURL = "${Routes.requestRestaurantTable}?table=${result.text}"
 
             val client = OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)

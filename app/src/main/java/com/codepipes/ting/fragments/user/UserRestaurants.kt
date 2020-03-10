@@ -63,8 +63,8 @@ class UserRestaurants : Fragment() {
         }
 
         if(user.id == session.id){
-            this.loadUser("${Routes().HOST_END_POINT}${user.urls.apiGetAuth}", view, session.token!!)
-        } else { this.loadUser("${Routes().HOST_END_POINT}${user.urls.apiGet}", view, session.token!!) }
+            this.loadUser("${Routes.HOST_END_POINT}${user.urls.apiGetAuth}", view, session.token!!)
+        } else { this.loadUser("${Routes.HOST_END_POINT}${user.urls.apiGet}", view, session.token!!) }
 
         return view
     }

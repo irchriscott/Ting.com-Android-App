@@ -32,7 +32,6 @@ class TodayPromotions : AppCompatActivity() {
     private lateinit var userAuthentication: UserAuthentication
 
     private lateinit var gson: Gson
-    private lateinit var routes: Routes
 
     private lateinit var promotionsTimer: Timer
     private val TIMER_PERIOD = 6000.toLong()
@@ -64,7 +63,6 @@ class TodayPromotions : AppCompatActivity() {
         session = userAuthentication.get()!!
 
         gson = Gson()
-        routes = Routes()
 
         shimmer_loader.startShimmer()
 
@@ -85,7 +83,7 @@ class TodayPromotions : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun loadTodayPromotions() {
-        val url = routes.discoverTodayPromosAll
+        val url = Routes.discoverTodayPromosAll
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

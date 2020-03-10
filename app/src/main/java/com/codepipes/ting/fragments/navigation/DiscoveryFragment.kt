@@ -64,7 +64,6 @@ class DiscoveryFragment : Fragment() {
     private lateinit var mUtilFunctions: UtilsFunctions
 
     private lateinit var gson: Gson
-    private lateinit var routes: Routes
 
     private lateinit var restaurantsTimer: Timer
     private lateinit var cuisinesTimer: Timer
@@ -125,7 +124,6 @@ class DiscoveryFragment : Fragment() {
         }
 
         gson = Gson()
-        routes = Routes()
 
         restaurantsTimer = Timer()
         cuisinesTimer = Timer()
@@ -271,7 +269,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverRestaurants(view: View) {
-        val url = routes.discoverRestaurants
+        val url = Routes.discoverRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -388,7 +386,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun getCuisines() {
-        val url = routes.cuisinesGlobal
+        val url = Routes.cuisinesGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -428,7 +426,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverTodayPromotions(view: View) {
-        val url = routes.discoverTodayPromosRand
+        val url = Routes.discoverTodayPromosRand
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -479,11 +477,11 @@ class DiscoveryFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun inflateDiscoveredPromotion(promotion: MenuPromotion) : View {
         val view = layoutInflater.inflate(R.layout.row_discover_promotion, null)
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
         view.promotion_title.text = promotion.occasionEvent
-        when {
-            promotion.promotionItem.type.id == 5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
-            promotion.promotionItem.type.id == 4 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.menu?.menu?.name}"
+        when (promotion.promotionItem.type.id) {
+            5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
+            4 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.menu?.menu?.name}"
             else -> view.promotion_type.text = promotion.promotionItem.type.name
         }
         if (promotion.reduction.hasReduction){
@@ -513,7 +511,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverMenus(view: View) {
-        val url = routes.discoverMenus
+        val url = Routes.discoverMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -556,7 +554,7 @@ class DiscoveryFragment : Fragment() {
 
                                 val index = (0 until menu.menu.images.count - 1).random()
                                 val image = menu.menu.images.images[index]
-                                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view.menu_image)
+                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
 
                                 view.menu_price.text = "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.price)}".toUpperCase()
                                 view.setOnClickListener {
@@ -582,7 +580,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale")
     private fun getDiscoverTopRestaurants(view: View) {
-        val url = routes.discoverTopRestaurants
+        val url = Routes.discoverTopRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -664,7 +662,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun getDiscoverTopMenus(view: View) {
-        val url = routes.discoverTopMenus
+        val url = Routes.discoverTopMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -691,7 +689,7 @@ class DiscoveryFragment : Fragment() {
                         view.top_menus_shimmer.visibility = View.GONE
                         view.top_menus.visibility = View.VISIBLE
                         view.top_menus.layoutManager = LinearLayoutManager(context)
-                        view.top_menus.adapter = CuisineMenusAdapter(menus)
+                        view.top_menus.adapter = CuisineMenusAdapter(menus.toMutableSet())
                     } catch (e: Exception) { view.top_menus_view.visibility = View.GONE }
                 }
             }

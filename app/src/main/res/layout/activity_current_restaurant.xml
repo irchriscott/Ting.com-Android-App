@@ -503,6 +503,18 @@
 
                 </TableLayout>
 
+                <Button
+                        android:id="@+id/place_end_placement"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/background_red_gradient"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:textSize="17sp"
+                        android:text="End Placement"
+                        tools:ignore="HardcodedText" />
+
         </LinearLayout>
 
 </ScrollView>

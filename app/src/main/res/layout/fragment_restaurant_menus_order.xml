@@ -49,7 +49,8 @@
                 android:drawablePadding="8dp"
                 tools:ignore="Autofill,HardcodedText" />
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
+                android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="48dp"
@@ -95,7 +96,7 @@
 
             </RelativeLayout>
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
         <TextView
                 android:id="@+id/close_restaurant_menus"

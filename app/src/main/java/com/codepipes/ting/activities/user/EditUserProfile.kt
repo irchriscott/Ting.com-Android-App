@@ -81,7 +81,6 @@ class EditUserProfile : AppCompatActivity() {
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
-    private val routes: Routes = Routes()
 
     private lateinit var utilsFunctions: UtilsFunctions
 
@@ -237,7 +236,7 @@ class EditUserProfile : AppCompatActivity() {
     }
 
     private fun updateUserProfile(){
-        val url = routes.updateProfileIdentity
+        val url = Routes.updateProfileIdentity
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -323,7 +322,7 @@ class EditUserProfile : AppCompatActivity() {
 
                         mProfileImageView.setImageBitmap(imageBitmap)
 
-                        val url = routes.updateProfileImage
+                        val url = Routes.updateProfileImage
                         val client = OkHttpClient.Builder()
                             .connectTimeout(60, TimeUnit.SECONDS)
                             .readTimeout(60, TimeUnit.SECONDS)

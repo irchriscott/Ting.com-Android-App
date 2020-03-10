@@ -124,7 +124,7 @@ class MenuPromotion : AppCompatActivity() {
     }
 
     private fun getMenuPromotion(url: String){
-        val stringURL = "${Routes().HOST_END_POINT}$url"
+        val stringURL = "${Routes.HOST_END_POINT}$url"
 
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -288,7 +288,7 @@ class MenuPromotion : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(promotion_poster_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(promotion_poster_image)
         promotion_title.text = promotion.occasionEvent
         promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
         promotion_time.text = promotion.period
@@ -366,7 +366,7 @@ class MenuPromotion : AppCompatActivity() {
             4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
-                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(promotion_menu_on_image)
                 promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
 
                 val menus = mutableListOf<RestaurantMenu>()
@@ -387,7 +387,7 @@ class MenuPromotion : AppCompatActivity() {
                 } else { promotion_menus_view.visibility = View.GONE }
 
                 promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
-                Picasso.get().load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}").into(promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}").into(promotion_menu_on_image)
             }
             else -> {
                 promotion_menus_view.visibility = View.GONE
@@ -543,7 +543,7 @@ class MenuPromotion : AppCompatActivity() {
         }
 
         promotion_interest_button.setOnClickListener {
-            this.interestPromotion("${Routes().HOST_END_POINT}${promotion.urls.apiInterest}", session.token!!, promotion.id)
+            this.interestPromotion("${Routes.HOST_END_POINT}${promotion.urls.apiInterest}", session.token!!, promotion.id)
         }
     }
 

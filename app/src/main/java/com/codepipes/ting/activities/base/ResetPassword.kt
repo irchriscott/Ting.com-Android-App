@@ -37,7 +37,6 @@ class ResetPassword : AppCompatActivity() {
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
-    private val routes: Routes = Routes()
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +80,8 @@ class ResetPassword : AppCompatActivity() {
     }
 
     private fun submitResetPassword(){
-        val url = this.routes.authResetPassword
+
+        val url = Routes.authResetPassword
 
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)

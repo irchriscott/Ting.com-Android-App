@@ -62,25 +62,15 @@
                     style="@style/AppTheme.SmallRating"
                     android:theme="@style/AppTheme.SmallRating"/>
 
-            <View
-                    android:id="@+id/menu_separator_first"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/colorVeryLightGray"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/menu_rating"/>
-
 
             <RelativeLayout
                     android:id="@+id/menu_price_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="6dp"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/menu_separator_first">
+                    app:layout_constraintTop_toBottomOf="@id/menu_rating">
 
                 <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"

@@ -135,9 +135,9 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
                     activity.runOnUiThread {
 
                         val statusTimer = utilsFunctions.statusWorkTime(branch.restaurant.opening, branch.restaurant.closing)
-                        holder.view.restaurant_time.text = statusTimer?.get("msg")
+                        holder.view.restaurant_time.text = statusTimer["msg"]
 
-                        when (statusTimer?.get("clr")) {
+                        when (statusTimer["clr"]) {
                             "green" -> {
                                 holder.view.restaurant_work_status.background =
                                     holder.view.context.resources.getDrawable(R.drawable.background_time_green)
@@ -189,6 +189,12 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
             mapFragment.arguments = args
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
+    }
+
+    public fun addItems(restosOthers : MutableList<Branch>) {
+        val lastPosition = restaurants.size
+        restaurants.addAll(restosOthers)
+        notifyItemRangeInserted(lastPosition, restosOthers.size)
     }
 }
 

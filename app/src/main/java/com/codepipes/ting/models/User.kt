@@ -24,8 +24,8 @@ class User (
     val createdAt: String,
     val updatedAt: String
 ){
-    public fun imageURL(): String = "${Routes().UPLOAD_END_POINT}${this.image}"
-    public fun pinURL(): String = "${Routes().HOST_END_POINT}${this.pin}"
+    public fun imageURL(): String = "${Routes.UPLOAD_END_POINT}${this.image}"
+    public fun pinURL(): String = "${Routes.HOST_END_POINT}${this.pin}"
 }
 
 class Address (

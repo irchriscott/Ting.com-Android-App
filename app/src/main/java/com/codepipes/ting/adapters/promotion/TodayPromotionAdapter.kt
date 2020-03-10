@@ -35,7 +35,7 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
         utilsFunctions = UtilsFunctions(holder.view.context)
         val activity = holder.view.context as Activity
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
         holder.view.promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
         holder.view.promotion_time.text = promotion.period
@@ -54,12 +54,12 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
             4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
-                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
             }
             5 -> {
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
-                Picasso.get().load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}").into(holder.view.promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}").into(holder.view.promotion_menu_on_image)
             }
             else -> { holder.view.promotion_menu_on.visibility = View.GONE }
         }

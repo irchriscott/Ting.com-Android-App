@@ -61,7 +61,7 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.menu_image)
 
         holder.view.menu_name.text = menu.menu.name
         holder.view.menu_rating.rating = menu.menu.reviews?.average!!.toFloat()
@@ -81,9 +81,9 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
             1 -> {
                 holder.view.menu_type_name.text = menu.menu.foodType
                 holder.view.menu_category_name.text = menu.menu.category?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
                 holder.view.menu_cuisine_name.text = menu.menu.cuisine?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} pieces / packs"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
@@ -99,10 +99,10 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
             3 -> {
                 holder.view.menu_type_image.setImageDrawable(holder.view.context.resources.getDrawable(R.drawable.ic_clock_gray_24dp))
                 holder.view.menu_category_name.text = menu.menu.category?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
                 holder.view.menu_type_name.text = menu.menu.dishTime
                 holder.view.menu_cuisine_name.text = menu.menu.cuisine?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}").into(holder.view.menu_cuisine_image)
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} plates / packs"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
@@ -130,9 +130,15 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
         }
     }
 
+    public fun addItems(menusOthers : MutableList<RestaurantMenu>) {
+        val lastPosition = menus.size
+        menus.addAll(menusOthers)
+        notifyItemRangeInserted(lastPosition, menusOthers.size)
+    }
+
     private fun submitOrder(quantity: Int, conditions: String, menu: Int) {
 
-        val url = Routes().placeOrderMenu
+        val url = Routes.placeOrderMenu
         val activity = context as Activity
 
         val client = OkHttpClient.Builder()

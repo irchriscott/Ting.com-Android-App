@@ -34,6 +34,12 @@ class RestaurantLikesAdapter (private val likes: MutableList<UserRestaurant>) : 
         holder.view.like_address.text = "${like.user.town}, ${like.user.country}"
         holder.view.like_date.text = utilsFunctions.timeAgo(like.createdAt)
     }
+
+    public fun addItems(likesOthers : MutableList<UserRestaurant>) {
+        val lastPosition = likes.size
+        likes.addAll(likesOthers)
+        notifyItemRangeInserted(lastPosition, likesOthers.size)
+    }
 }
 
 class RestaurantLikesViewHolder(val view: View, val like: UserRestaurant? = null) : RecyclerView.ViewHolder(view){}

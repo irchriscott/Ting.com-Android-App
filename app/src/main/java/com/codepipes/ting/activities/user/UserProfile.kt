@@ -105,8 +105,8 @@ class UserProfile : AppCompatActivity() {
             this.setupUser(user)
 
             if(userId == session.id){
-                this.loadUser("${Routes().HOST_END_POINT}${authUrl}", false, session.token!!)
-            } else { this.loadUser("${Routes().HOST_END_POINT}${url}", false, session.token!!) }
+                this.loadUser("${Routes.HOST_END_POINT}${authUrl}", false, session.token!!)
+            } else { this.loadUser("${Routes.HOST_END_POINT}${url}", false, session.token!!) }
 
         } else {
             shimmerLoader.startShimmer()
@@ -114,8 +114,8 @@ class UserProfile : AppCompatActivity() {
             userProfileData.visibility = View.GONE
 
             if(userId == session.id){
-                this.loadUser("${Routes().HOST_END_POINT}${authUrl}", true, session.token!!)
-            } else { this.loadUser("${Routes().HOST_END_POINT}${url}", true, session.token!!) }
+                this.loadUser("${Routes.HOST_END_POINT}${authUrl}", true, session.token!!)
+            } else { this.loadUser("${Routes.HOST_END_POINT}${url}", true, session.token!!) }
         }
     }
 

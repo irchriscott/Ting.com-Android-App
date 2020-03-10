@@ -75,7 +75,7 @@ class EditUserPassword : DialogFragment() {
     }
 
     private fun updateUserPassword(){
-        val url = Routes().updateProfilePassword
+        val url = Routes.updateProfilePassword
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

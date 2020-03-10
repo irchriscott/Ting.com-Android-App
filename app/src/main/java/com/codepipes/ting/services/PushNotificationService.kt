@@ -45,11 +45,7 @@ class PushNotificationService : Service() {
 
             try {
 
-                pusher.connect(object : ConnectionEventListener {
-                    override fun onConnectionStateChange(change: ConnectionStateChange) { }
-                    override fun onError(message: String, code: String, e: Exception) { }
-                }, ConnectionState.ALL)
-
+                pusher.connect()
                 val channel = pusher.subscribe(user.channel)
 
                 channel.bind(user.channel) { event ->

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,9 @@ import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.utils.Routes
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxbinding2.widget.TextViewTextChangeEvent
 import io.reactivex.Observable
@@ -32,6 +36,8 @@ import kotlinx.android.synthetic.main.include_empty_data.view.*
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function
+import okhttp3.Interceptor
+import java.lang.Exception
 import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
@@ -48,7 +54,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
 
     override fun getTheme(): Int = R.style.TransparentDialog
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_restaurant_menus_order, null, false)
@@ -78,8 +84,57 @@ class RestaurantMenusOrderDialog : DialogFragment() {
                     view.restaurant_menus.visibility = View.VISIBLE
                     view.empty_data.visibility = View.GONE
 
+                    val linearLayoutManager = LinearLayoutManager(activity)
+                    val restaurantMenusOrderAdapter = RestaurantMenusOrderAdapter(menus, fragmentManager!!, context!!)
+
                     view.restaurant_menus.layoutManager = LinearLayoutManager(activity)
-                    view.restaurant_menus.adapter = RestaurantMenusOrderAdapter(menus, fragmentManager!!, context!!)
+                    view.restaurant_menus.adapter = restaurantMenusOrderAdapter
+
+                    view.scroll_view.setOnScrollChangeListener { v: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+
+                        var pageNum = 1
+
+                        if (v?.getChildAt(v.childCount - 1) != null) {
+                            if ((scrollY >= (v.getChildAt(v.childCount - 1)!!.measuredHeight - v.measuredHeight)) && scrollY > oldScrollY) {
+
+                                val visibleItemCount = linearLayoutManager.childCount
+                                val totalItemCount = linearLayoutManager.itemCount
+                                val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                                if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+
+                                    pageNum++
+
+                                    val interceptor = Interceptor {
+                                        val url = it.request().url().newBuilder()
+                                            .addQueryParameter("branch", branchId.toString())
+                                            .addQueryParameter("query", view.restaurant_menus_filter.text.toString())
+                                            .addQueryParameter("type", menuType.toString())
+                                            .addQueryParameter("page", pageNum.toString())
+                                            .build()
+                                        val request = it.request().newBuilder()
+                                            .header("Authorization", session.token!!)
+                                            .url(url)
+                                            .build()
+                                        it.proceed(request)
+                                    }
+
+                                    val url = Routes.restaurantMenusOrders
+
+                                    TingClient.getRequest(url, interceptor, session.token) { _, isSuccess, result ->
+                                        if(isSuccess) {
+                                            activity?.runOnUiThread {
+                                                try {
+                                                    val menusPage = Gson().fromJson<MutableList<RestaurantMenu>>(result, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
+                                                    restaurantMenusOrderAdapter.addItems(menusPage)
+                                                } catch (e: Exception){}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
 
                     view.restaurant_menus.visibility = View.GONE

@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.codepipes.ting.R
@@ -15,6 +17,7 @@ import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.User
 import com.codepipes.ting.models.UserRestaurant
 import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
@@ -80,9 +83,9 @@ class RestaurantLikes : AppCompatActivity() {
         if(branch != null) { restaurant_likes_title.text = "${branch.likes?.count} Likes".toUpperCase() }
 
         likesTimer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() { loadRestaurantLikes("${Routes().HOST_END_POINT}$url") }
+            override fun run() { loadRestaurantLikes("${Routes.HOST_END_POINT}$url") }
         }, TIMER_PERIOD, TIMER_PERIOD)
-        this.loadRestaurantLikes("${Routes().HOST_END_POINT}$url")
+        this.loadRestaurantLikes("${Routes.HOST_END_POINT}$url")
 
         refresh_likes.setColorSchemeColors(resources.getColor(R.color.colorPrimary), resources.getColor(
             R.color.colorAccentMain
@@ -94,18 +97,51 @@ class RestaurantLikes : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showLikes(_likes: MutableList<UserRestaurant>, _branch: Branch){
+    private fun showLikes(_likes: MutableList<UserRestaurant>, url: String){
 
         shimmerLoader.stopShimmer()
         shimmerLoader.visibility = View.GONE
 
-        restaurant_likes_title.text = "${NumberFormat.getNumberInstance().format(_branch.likes?.count)} LIKES"
-
         if(_likes.isNotEmpty()){
+
+            val linearLayoutManager = LinearLayoutManager(this@RestaurantLikes)
+            val restaurantLikesAdapter = RestaurantLikesAdapter(_likes)
+
             restaurant_likes_recycler_view.visibility = View.VISIBLE
             empty_data.visibility = View.GONE
             restaurant_likes_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantLikes)
-            restaurant_likes_recycler_view.adapter = RestaurantLikesAdapter(_likes)
+            restaurant_likes_recycler_view.adapter = restaurantLikesAdapter
+            ViewCompat.setNestedScrollingEnabled(restaurant_likes_recycler_view, false)
+
+            scroll_view.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+
+                var pageNum = 1
+
+                if (view?.getChildAt(view.childCount - 1) != null) {
+                    if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
+
+                        val visibleItemCount = linearLayoutManager.childCount
+                        val totalItemCount = linearLayoutManager.itemCount
+                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+
+                            pageNum++
+
+                            TingClient.getRequest("$url?page=$pageNum", null, session.token) { _, isSuccess, result ->
+                                if(isSuccess) {
+                                    runOnUiThread {
+                                        try {
+                                            val likes = Gson().fromJson<MutableList<UserRestaurant>>(result, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
+                                            restaurantLikesAdapter.addItems(likes)
+                                        } catch (e: Exception){}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             restaurant_likes_recycler_view.visibility = View.GONE
             empty_data.visibility = View.VISIBLE
@@ -131,26 +167,10 @@ class RestaurantLikes : AppCompatActivity() {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                val likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
-                runOnUiThread {
-                    likesTimer.cancel()
-                    shimmerLoader.stopShimmer()
-                    shimmerLoader.visibility = View.GONE
-
-                    restaurant_likes_title.text = "${likes.size} Likes".toUpperCase()
-
-                    if(likes.isNotEmpty()){
-                        restaurant_likes_recycler_view.visibility = View.VISIBLE
-                        empty_data.visibility = View.GONE
-                        restaurant_likes_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantLikes)
-                        restaurant_likes_recycler_view.adapter = RestaurantLikesAdapter(likes)
-                    } else {
-                        restaurant_likes_recycler_view.visibility = View.GONE
-                        empty_data.visibility = View.VISIBLE
-                        empty_data.empty_text.text = "No Like For This Restaurant"
-                        empty_data.empty_image.setImageDrawable(resources.getDrawable(R.drawable.ic_heart_filled_gray))
-                    }
-                }
+                try {
+                    val likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
+                    runOnUiThread { showLikes(likes, url) }
+                } catch (e: Exception) {}
             }
         })
     }

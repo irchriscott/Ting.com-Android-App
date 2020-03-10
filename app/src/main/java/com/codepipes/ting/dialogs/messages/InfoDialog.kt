@@ -31,7 +31,7 @@ class InfoDialog : DialogFragment() {
         val title = arguments?.getString("title")
         val message = arguments?.getString("message")
 
-        if(image != null) { Picasso.get().load("${Routes().HOST_END_POINT}$image").into(view.dialog_image) }
+        if(image != null) { Picasso.get().load("${Routes.HOST_END_POINT}$image").into(view.dialog_image) }
         view.dialog_title.text = title
         if(message != null) { view.dialog_text.text = message } else { view.dialog_text.visibility = View.GONE }
         view.dialog_close.setOnClickListener { dialog.dismiss() }

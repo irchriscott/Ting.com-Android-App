@@ -17,11 +17,10 @@ import okhttp3.Request
 @SuppressLint("StaticFieldLeak")
 class APILoadGlobalRestaurants(val context: Context) : AsyncTask<Void, Void, MutableList<Branch>?>() {
 
-    private val routes: Routes = Routes()
     private val gson: Gson = Gson()
 
     override fun doInBackground(vararg params: Void?): MutableList<Branch>? {
-        val url = routes.restaurantsGlobal
+        val url = Routes.restaurantsGlobal
         val client = OkHttpClient()
 
         val request = Request.Builder().url(url).get().build()

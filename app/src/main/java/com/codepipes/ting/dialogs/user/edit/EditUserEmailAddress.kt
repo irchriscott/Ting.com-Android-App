@@ -75,7 +75,7 @@ class EditUserEmailAddress : DialogFragment(){
     }
 
     private fun updateUserEmail(){
-        val url = Routes().updateProfileEmail
+        val url = Routes.updateProfileEmail
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

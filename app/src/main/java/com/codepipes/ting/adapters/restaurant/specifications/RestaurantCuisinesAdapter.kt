@@ -20,7 +20,7 @@ class RestaurantCuisinesAdapter (private val cuisines: List<RestaurantCategory>)
     override fun getItemCount(): Int  = cuisines.size
 
     override fun onBindViewHolder(holder: RestaurantCuisinesViewHolder, position: Int) {
-        Picasso.get().load("${Routes().HOST_END_POINT}${cuisines[position].image}").into(holder.view.specification_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${cuisines[position].image}").into(holder.view.specification_image)
         holder.view.specification_title.text = cuisines[position].name
     }
 }

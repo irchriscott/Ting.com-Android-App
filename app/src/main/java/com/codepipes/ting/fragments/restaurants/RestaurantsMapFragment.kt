@@ -186,9 +186,9 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                                 branch.restaurant?.opening!!,
                                 branch.restaurant?.closing!!
                             )
-                            view.restaurant_time.text = status?.get("msg")
+                            view.restaurant_time.text = status["msg"]
 
-                            when (status?.get("clr")) {
+                            when (status["clr"]) {
                                 "green" -> {
                                     view.restaurant_work_status.background =
                                         view.context.resources.getDrawable(R.drawable.background_time_green)
@@ -346,7 +346,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     private fun requestUserMapPin() {
-        val url = "${Routes().userMapPin}${session.id}/"
+        val url = "${Routes.userMapPin}${session.id}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -385,7 +385,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     private fun requestRestaurantMapPin(restoId: Int) {
-        val url = "${Routes().restaurantMapPin}${restoId}/"
+        val url = "${Routes.restaurantMapPin}${restoId}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

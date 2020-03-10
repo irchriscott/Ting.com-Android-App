@@ -112,7 +112,7 @@ class RestaurantAbout : AppCompatActivity() {
 
     @SuppressLint("DefaultLocale")
     private fun loadRestaurant(id: Int){
-        val url = "${Routes().restaurantGet}$id/"
+        val url = "${Routes.restaurantGet}$id/"
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

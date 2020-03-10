@@ -79,7 +79,7 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
                     override fun data(data: String, position: Int) {
                         when(position){
                             0 -> {
-                                val url = "${Routes().deleteUserAddress}${address.id}/"
+                                val url = "${Routes.deleteUserAddress}${address.id}/"
                                 val client = OkHttpClient()
 
                                 val request = Request.Builder()

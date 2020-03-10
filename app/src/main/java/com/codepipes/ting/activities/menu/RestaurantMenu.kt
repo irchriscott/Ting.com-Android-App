@@ -141,7 +141,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
     private fun getRestaurantMenu(url: String){
 
-        val stringURL = "${Routes().HOST_END_POINT}$url"
+        val stringURL = "${Routes.HOST_END_POINT}$url"
 
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -306,11 +306,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(menu_image)
 
         menu_image.setOnClickListener {
             StfalconImageViewer.Builder<MenuImage>(this@RestaurantMenu, menu.menu.images.images) { view, image ->
-                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view)
             }.show(true)
         }
 
@@ -325,9 +325,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
         if (menu.type.id != 2) {
             menu_subcategory_name.text = menu.menu.category?.name
             menu_cuisine_name.text = menu.menu.cuisine?.name
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}")
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}")
                 .into(menu_subcategory_image)
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}")
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}")
                 .into(menu_cuisine_image)
         } else {
             menu_subcategory.visibility = View.GONE
@@ -544,7 +544,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             menu_like_button.isChecked = false
         }
 
-        menu_like_button.setOnClickListener { this.likeMenuToggle("${Routes().HOST_END_POINT}${menu.urls.apiLike}", session.token!!, menu.id) }
+        menu_like_button.setOnClickListener { this.likeMenuToggle("${Routes.HOST_END_POINT}${menu.urls.apiLike}", session.token!!, menu.id) }
 
         menu_reviews_average.text = menu.menu.reviews.average.toString()
 
@@ -745,7 +745,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     .setCancelable(false)
                     .setCanceledOnTouchOutside(false)
 
-                val url = Routes().checkUserMenuReview
+                val url = Routes.checkUserMenuReview
                 val client = OkHttpClient.Builder()
                     .readTimeout(60, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)
@@ -811,7 +811,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         val request = Request.Builder()
             .header("Authorization", session.token!!)
-            .url("${Routes().HOST_END_POINT}${menu.urls.apiAddReview}")
+            .url("${Routes.HOST_END_POINT}${menu.urls.apiAddReview}")
             .post(requestBody)
             .build()
 

@@ -45,7 +45,6 @@ class SignUpIdentityFragment : Fragment() {
     lateinit var mViewPager: LockableViewPager
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
-    private val routes: Routes = Routes()
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -149,7 +148,7 @@ class SignUpIdentityFragment : Fragment() {
     }
 
     private fun checkEmailUsername(){
-        val url = this.routes.checkEmailUsername
+        val url = Routes.checkEmailUsername
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

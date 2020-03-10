@@ -153,7 +153,7 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
     }
 
     private fun requestUserMapPin() {
-        val url = "${Routes().userMapPin}${user.id}/"
+        val url = "${Routes.userMapPin}${user.id}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -329,7 +329,7 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
     }
 
     private fun addUserAddress(){
-        val url = Routes().addUserAddress
+        val url = Routes.addUserAddress
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

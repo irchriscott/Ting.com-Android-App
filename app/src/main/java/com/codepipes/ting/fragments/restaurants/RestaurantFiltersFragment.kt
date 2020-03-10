@@ -33,7 +33,6 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
     private lateinit var mLocalData: LocalData
     private var filterType = RestaurantsFragment.AVAILABILITY_KEY
     private lateinit var filters: List<Filter>
-    private lateinit var routes: Routes
 
     private lateinit var selectedFilters: MutableList<Int>
     private lateinit var mFilterRestaurantsClickListener: FilterRestaurantsClickListener
@@ -53,7 +52,6 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_restaurant_filters, container, false)
 
-        routes = Routes()
         mLocalData = LocalData(context!!)
         val type = arguments!!.getString(RestaurantsFragment.FILTER_KEY)
         if(type != null) { filterType = type }
@@ -117,7 +115,7 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
     }
 
     private fun getFilters(view: View) {
-        val url = routes.restaurantFilters
+        val url = Routes.restaurantFilters
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

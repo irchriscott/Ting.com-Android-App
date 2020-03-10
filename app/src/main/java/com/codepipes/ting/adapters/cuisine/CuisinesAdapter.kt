@@ -25,7 +25,7 @@ class CuisinesAdapter(private val cuisines: MutableList<RestaurantCategory>) : R
 
     override fun onBindViewHolder(holder: CuisinesAdapterViewHolder, position: Int) {
         val cuisine = cuisines[position]
-        Picasso.get().load("${Routes().HOST_END_POINT}${cuisine.image}").into(holder.view.cuisine_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${cuisine.image}").into(holder.view.cuisine_image)
         holder.view.cuisine_name.text = cuisine.name
         holder.cuisine = cuisine
         holder.view.setOnClickListener {

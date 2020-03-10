@@ -11,18 +11,18 @@ class UtilData {
     public val toastErrorImage          = "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAeFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVyEiIAAAAJ3RSTlMA3BsB98QV8uSyWVUFz7+kcWMM2LuZioBpTUVBNcq2qaibj4d1azLZZYABAAACZElEQVRYw7WX25KCMAyGAxUoFDkpiohnV97/DXeGBtoOUprZ2dyo1K82fxKbwJJVp+KQZ7so2mX5oThVQLKwjDe9YZu4DF3ptAn6rxY0qQPOEq9fNC9ha3y77a22ba24v+9Xbe8v8x03dPOC2/NdvB6xeSreLfGJpnx0TyotKqLm2s7Jd/WO6ivXNp0tCy02R/aFz5VQ5wUPlUL5fIfj5KIlVGU0nWHm/5QtoTVMWY8mzIVu1K9O7XH2JiU/xnOOT39gnUfj+lFHddx4tFjL3/H8jjzaFCy2Rf0c/fdQyQszI8BDR973IyMSKa4krjxAiW/lkRvMP+bKK9WbYS1ASQg8dKjaUGlYPwRe/WoIkz8tiQchH5QAEMv6T0k8MD4mUyWr4E7jAWqZ+xWcMIYkXvlwggJ3IvFK+wIOcpXAo8n8P0COAaXyKH4OsjBuZB4ew0IGu+H1SebhNazsQBbWm8yj+hFuUJB5eMsN0IUXmYendAFFfJB5uEkRMYwxmcd6zDGRtmQePEykAgubymMRFmMxCSIPCRbTuFNN5OGORTjmNGc0Po0m8Uv0gcCry6xUhR2QeLii9tofbEfhz/qvNti+OfPqNm2Mq6105FUMvdT4GPmufMiV8PqBMkc+DdT1bjYYbjzU/ew23VP4n3mLAz4n8Jtv/Ui3ceTT2mzz5o1mZt0gnBpmsdjqRqVlmplcPdqa7X23kL9brdm2t/uBYDPn2+tyu48mtIGD10JTuUrukVrbCFiwDzcHrPjxKt7PW+AZQyT/WESO+1WL7f3o+WLHL2dYMSZsg6dg/z360ofvP4//v1NPzgs28WlWAAAAAElFTkSuQmCC"
 
     companion object {
-        public val PUBNUB_SUBSCRIBE_KEY                 = "sub-c-6597d23e-1b1d-11ea-b79a-866798696d74"
-        public val PUBNUB_PUBLISH_KEY                   = "pub-c-62f722d6-c307-4dd9-89dc-e598a9164424"
+        public const val PUBNUB_SUBSCRIBE_KEY                 = "sub-c-6597d23e-1b1d-11ea-b79a-866798696d74"
+        public const val PUBNUB_PUBLISH_KEY                   = "pub-c-62f722d6-c307-4dd9-89dc-e598a9164424"
 
-        public val SOCKET_REQUEST_RESTO_TABLE           = "request_resto_table"
-        public val SOCKET_REQUEST_ASSIGN_WAITER         = "request_assign_waiter"
-        public val SOCKET_REQUEST_NOTIFY_ORDER          = "request_notify_order"
-        public val SOCKET_REQUEST_W_NOTIFY_ORDER        = "request_w_notify_order"
+        public const val SOCKET_REQUEST_RESTO_TABLE           = "request_resto_table"
+        public const val SOCKET_REQUEST_ASSIGN_WAITER         = "request_assign_waiter"
+        public const val SOCKET_REQUEST_NOTIFY_ORDER          = "request_notify_order"
+        public const val SOCKET_REQUEST_W_NOTIFY_ORDER        = "request_w_notify_order"
 
 
-        public val SOCKET_RESPONSE_ERROR                = "response_error"
-        public val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"
-        public val SOCKET_RESPONSE_TABLE_WAITER         = "response_resto_table_waiter"
-        public val SOCKET_RESPONSE_RESTO_TABLE          = "response_resto_table"
+        public const val SOCKET_RESPONSE_ERROR                = "response_error"
+        public const val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"
+        public const val SOCKET_RESPONSE_TABLE_WAITER         = "response_resto_table_waiter"
+        public const val SOCKET_RESPONSE_RESTO_TABLE          = "response_resto_table"
     }
 }

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -23,6 +25,7 @@ import com.codepipes.ting.models.RestaurantReview
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
@@ -100,16 +103,16 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             this.showReviews(reviews, branch)
             this.loadRestaurant(branch.id, false)
             reviewsTimer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() { loadRestaurantReviews("${Routes().HOST_END_POINT}${branch.urls.apiReviews}") }
+                override fun run() { loadRestaurantReviews("${Routes.HOST_END_POINT}${branch.urls.apiReviews}") }
             }, TIMER_PERIOD, TIMER_PERIOD)
-            this.loadRestaurantReviews("${Routes().HOST_END_POINT}${branch.urls.apiReviews}")
+            this.loadRestaurantReviews("${Routes.HOST_END_POINT}${branch.urls.apiReviews}")
         } else {
             reviews = mutableListOf()
             this.loadRestaurant(branchId, true)
             reviewsTimer.scheduleAtFixedRate(object : TimerTask() {
-                override fun run() { loadRestaurantReviews("${Routes().HOST_END_POINT}$url") }
+                override fun run() { loadRestaurantReviews("${Routes.HOST_END_POINT}$url") }
             }, TIMER_PERIOD, TIMER_PERIOD)
-            this.loadRestaurantReviews("${Routes().HOST_END_POINT}$url")
+            this.loadRestaurantReviews("${Routes.HOST_END_POINT}$url")
         }
 
         refresh_reviews.setColorSchemeColors(resources.getColor(R.color.colorPrimary), resources.getColor(
@@ -206,7 +209,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
     @SuppressLint("NewApi", "DefaultLocale")
     private fun loadRestaurant(id: Int, load: Boolean){
-        val url = "${Routes().restaurantGet}$id/"
+        val url = "${Routes.restaurantGet}$id/"
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -255,23 +258,60 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                reviews = Gson().fromJson<MutableList<RestaurantReview>>(dataString, object : TypeToken<MutableList<RestaurantReview>>(){}.type)
-                runOnUiThread {
-                    reviewsTimer.cancel()
-                    shimmerLoader.stopShimmer()
-                    shimmerLoader.visibility = View.GONE
-                    if(reviews.isNotEmpty()){
-                        restaurant_reviews_recycler_view.visibility = View.VISIBLE
-                        empty_data.visibility = View.GONE
-                        restaurant_reviews_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantReviews)
-                        restaurant_reviews_recycler_view.adapter = RestaurantReviewsAdapter(reviews)
-                    } else {
-                        restaurant_reviews_recycler_view.visibility = View.GONE
-                        empty_data.visibility = View.VISIBLE
-                        empty_data.empty_text.text = "No Review For This Restaurant"
-                        empty_data.empty_image.setImageDrawable(resources.getDrawable(R.drawable.ic_comments_gray))
+                try {
+                    reviews = Gson().fromJson<MutableList<RestaurantReview>>(dataString, object : TypeToken<MutableList<RestaurantReview>>(){}.type)
+                    runOnUiThread {
+                        reviewsTimer.cancel()
+                        shimmerLoader.stopShimmer()
+                        shimmerLoader.visibility = View.GONE
+                        if(reviews.isNotEmpty()){
+                            restaurant_reviews_recycler_view.visibility = View.VISIBLE
+                            empty_data.visibility = View.GONE
+
+                            val linearLayoutManager = LinearLayoutManager(this@RestaurantReviews)
+                            val restaurantReviewsAdapter = RestaurantReviewsAdapter(reviews)
+                            restaurant_reviews_recycler_view.layoutManager = linearLayoutManager
+                            restaurant_reviews_recycler_view.adapter = restaurantReviewsAdapter
+                            ViewCompat.setNestedScrollingEnabled(restaurant_reviews_recycler_view, false)
+
+                            scroll_view.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+
+                                var pageNum = 1
+
+                                if (view?.getChildAt(view.childCount - 1) != null) {
+                                    if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
+
+                                        val visibleItemCount = linearLayoutManager.childCount
+                                        val totalItemCount = linearLayoutManager.itemCount
+                                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+
+                                            pageNum++
+
+                                            TingClient.getRequest("$url?page=$pageNum", null, session.token) { _, isSuccess, result ->
+                                                if(isSuccess) {
+                                                    runOnUiThread {
+                                                        try {
+                                                            val reviews = Gson().fromJson<MutableList<RestaurantReview>>(result, object : TypeToken<MutableList<RestaurantReview>>(){}.type)
+                                                            restaurantReviewsAdapter.addItems(reviews)
+                                                        } catch (e: Exception){}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        } else {
+                            restaurant_reviews_recycler_view.visibility = View.GONE
+                            empty_data.visibility = View.VISIBLE
+                            empty_data.empty_text.text = "No Review For This Restaurant"
+                            empty_data.empty_image.setImageDrawable(resources.getDrawable(R.drawable.ic_comments_gray))
+                        }
                     }
-                }
+                } catch (e: java.lang.Exception){}
             }
         })
     }
@@ -320,7 +360,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                     .setCancelable(false)
                     .setCanceledOnTouchOutside(false)
 
-                val url = Routes().checkUserRestaurantReview
+                val url = Routes.checkUserRestaurantReview
                 val client = OkHttpClient.Builder()
                     .readTimeout(60, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)
@@ -386,7 +426,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
         val request = Request.Builder()
             .header("Authorization", session.token!!)
-            .url("${Routes().HOST_END_POINT}${branch.urls.apiAddReview}")
+            .url("${Routes.HOST_END_POINT}${branch.urls.apiAddReview}")
             .post(requestBody)
             .build()
 

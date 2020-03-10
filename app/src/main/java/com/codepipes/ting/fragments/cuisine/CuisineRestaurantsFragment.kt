@@ -6,11 +6,13 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.R
+import com.codepipes.ting.abstracts.EndlessScrollEventListener
 import com.codepipes.ting.adapters.cuisine.CuisineRestaurantsAdapter
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
@@ -18,6 +20,7 @@ import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
@@ -89,36 +92,13 @@ class CuisineRestaurantsFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun loadRestaurants(view: View) {
-        val url = "${Routes().cuisineRestaurants}${cuisine.id}/"
-        val client = OkHttpClient.Builder()
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(60 * 5, TimeUnit.SECONDS).build()
+        val url = "${Routes.cuisineRestaurants}${cuisine.id}/"
 
-        val request = Request.Builder().url(url).get().build()
-
-        client.newCall(request).enqueue(object : Callback {
-
-            override fun onFailure(call: Call, e: IOException) {
-                activity?.runOnUiThread {
-                    view.shimmer_loader.stopShimmer()
-                    view.shimmer_loader.visibility = View.GONE
-
-                    view.cuisine_restaurants.visibility = View.GONE
-                    view.empty_data.visibility = View.VISIBLE
-
-                    view.refresh_cuisine_restaurants.isRefreshing = false
-
-                    view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
-                    view.empty_data.empty_text.text = "No Restaurant To Show"
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
-                try {
-                    activity?.runOnUiThread {
-                        val branches = Gson().fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+        TingClient.getRequest(url, null, session.token) { _, isSuccess, result ->
+            activity?.runOnUiThread {
+                if(isSuccess) {
+                    try {
+                        val branches = Gson().fromJson<MutableList<Branch>>(result, object : TypeToken<MutableList<Branch>>(){}.type)
                         cuisineRestaurantsTimer.cancel()
                         if (branches.size > 0) {
                             view.shimmer_loader.stopShimmer()
@@ -128,6 +108,9 @@ class CuisineRestaurantsFragment : Fragment() {
                             view.empty_data.visibility = View.GONE
 
                             view.refresh_cuisine_restaurants.isRefreshing = false
+
+                            val linearLayoutManager = LinearLayoutManager(context)
+                            var cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
 
                             if(mUtilFunctions.checkLocationPermissions()){
                                 try {
@@ -150,8 +133,9 @@ class CuisineRestaurantsFragment : Fragment() {
                                             }
                                         }
                                         branches.sortBy { b -> b.dist }
-                                        view.cuisine_restaurants.layoutManager = LinearLayoutManager(context)
-                                        view.cuisine_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        view.cuisine_restaurants.layoutManager = linearLayoutManager
+                                        view.cuisine_restaurants.adapter = cuisineRestaurantsAdapter
                                     }.addOnFailureListener {
                                         val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                                         branches.forEach { b ->
@@ -160,14 +144,70 @@ class CuisineRestaurantsFragment : Fragment() {
                                             b.dist = dist
                                             b.fromLocation = from
                                         }
-                                        view.cuisine_restaurants.layoutManager = LinearLayoutManager(context)
-                                        view.cuisine_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        view.cuisine_restaurants.layoutManager = linearLayoutManager
+                                        view.cuisine_restaurants.adapter = cuisineRestaurantsAdapter
                                         TingToast(
                                             context!!,
                                             it.message!!.capitalize(),
                                             TingToastType.ERROR
                                         ).showToast(Toast.LENGTH_LONG)
                                     }
+
+                                    val endlessScrollEventListener = object : EndlessScrollEventListener(linearLayoutManager) {
+                                        override fun onLoadMore(pageNum: Int, recyclerView: RecyclerView?) {
+                                            val urlPage = "${Routes.cuisineRestaurants}${cuisine.id}/?page=${pageNum + 1}"
+                                            TingClient.getRequest(urlPage, null, session.token) { _, isSuccess, result ->
+                                                activity?.runOnUiThread {
+                                                    if (isSuccess) {
+                                                        try {
+                                                            val restosResultPage =
+                                                                Gson().fromJson<MutableList<Branch>>(
+                                                                    result,
+                                                                    object :
+                                                                        TypeToken<MutableList<Branch>>() {}.type
+                                                                )
+                                                            try {
+                                                                fusedLocationClient.lastLocation.addOnSuccessListener {
+                                                                    if(it != null){
+                                                                        val from = LatLng(it.latitude, it.longitude)
+                                                                        restosResultPage.forEach { b ->
+                                                                            val to = LatLng(b.latitude, b.longitude)
+                                                                            val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                            b.dist = dist
+                                                                            b.fromLocation = from
+                                                                        }
+                                                                    } else {
+                                                                        val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                                        restosResultPage.forEach { b ->
+                                                                            val to = LatLng(b.latitude, b.longitude)
+                                                                            val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                            b.dist = dist
+                                                                            b.fromLocation = from
+                                                                        }
+                                                                    }
+                                                                    restosResultPage.sortBy { b -> b.dist }
+                                                                    cuisineRestaurantsAdapter.addItems(restosResultPage)
+                                                                }.addOnFailureListener {
+                                                                    val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                                    restosResultPage.forEach { b ->
+                                                                        val to = LatLng(b.latitude, b.longitude)
+                                                                        val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                        b.dist = dist
+                                                                        b.fromLocation = from
+                                                                    }
+                                                                    restosResultPage.sortBy { b -> b.dist }
+                                                                    cuisineRestaurantsAdapter.addItems(restosResultPage)
+                                                                }
+                                                            } catch (e: Exception) {}
+
+                                                        } catch (e: Exception) { }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
                                 } catch (e: Exception){ TingToast(
                                     context!!,
                                     e.message!!.capitalize(),
@@ -186,9 +226,7 @@ class CuisineRestaurantsFragment : Fragment() {
                             view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                             view.empty_data.empty_text.text = "No Restaurant To Show"
                         }
-                    }
-                } catch (e: Exception) {
-                    activity?.runOnUiThread {
+                    } catch (e: Exception) {
                         cuisineRestaurantsTimer.cancel()
 
                         view.shimmer_loader.stopShimmer()
@@ -202,9 +240,22 @@ class CuisineRestaurantsFragment : Fragment() {
                         view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                         view.empty_data.empty_text.text = "No Restaurant To Show"
                     }
+                } else {
+                    cuisineRestaurantsTimer.cancel()
+
+                    view.shimmer_loader.stopShimmer()
+                    view.shimmer_loader.visibility = View.GONE
+
+                    view.cuisine_restaurants.visibility = View.GONE
+                    view.empty_data.visibility = View.VISIBLE
+
+                    view.refresh_cuisine_restaurants.isRefreshing = false
+
+                    view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                    view.empty_data.empty_text.text = "No Restaurant To Show"
                 }
             }
-        })
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

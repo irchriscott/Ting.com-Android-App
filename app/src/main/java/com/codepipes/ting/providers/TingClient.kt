@@ -11,10 +11,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.Retrofit
 import javax.xml.datatype.DatatypeConstants.SECONDS
-import okhttp3.OkHttpClient
 import io.reactivex.Observable
-import okhttp3.Cache
-import okhttp3.Interceptor
+import okhttp3.*
+import java.io.IOException
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
@@ -32,7 +32,6 @@ class TingClient (val context: Context) {
 
         val cacheSize = 10 * 1024 * 1024
         val cache = Cache(context.applicationContext.cacheDir, cacheSize.toLong())
-
 
         val interceptor = Interceptor { chain ->
             var request = chain.request()
@@ -58,7 +57,6 @@ class TingClient (val context: Context) {
         }
 
         val client = OkHttpClient.Builder()
-            .cache(cache)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -70,7 +68,7 @@ class TingClient (val context: Context) {
 
         val retrofit = Retrofit.Builder()
             .client(client)
-            .baseUrl(Routes().HOST_END_POINT)
+            .baseUrl(Routes.HOST_END_POINT)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -103,6 +101,66 @@ class TingClient (val context: Context) {
     }
 
     companion object {
+
         public fun getInstance(context: Context): TingClient = TingClient(context)
+
+        public fun getRequest(url: String, interceptor: Interceptor?, auth: String?, requestResponse: (status: Int, isSuccess: Boolean, result: String) -> Unit) {
+            val clientBuilder = OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60 * 5, TimeUnit.SECONDS)
+
+            if (interceptor != null) { clientBuilder.addInterceptor(interceptor) }
+            val client = clientBuilder.build()
+
+            val requestBuilder = Request.Builder().url(url).get()
+            if (auth != null) { requestBuilder.header("Authorization", auth) }
+            val request = requestBuilder.build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    requestResponse.invoke(700, false, e.message!!)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val dataString = response.body()!!.string()
+                    requestResponse.invoke(response.code(), true, dataString)
+                }
+            })
+        }
+
+        public fun postRequest(url: String, formData: HashMap<String, String>?, interceptor: Interceptor?, auth: String?, requestResponse: (status: Int, isSuccess: Boolean, result: String) -> Unit) {
+            val clientBuilder = OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .callTimeout(60 * 5, TimeUnit.SECONDS)
+
+            if (interceptor != null) { clientBuilder.addInterceptor(interceptor) }
+            val client = clientBuilder.build()
+
+            val formBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+
+            if (formData != null) {
+                for ((k, v) in formData) {
+                    formBuilder.addFormDataPart(k, v)
+                }
+            }
+
+            val form = formBuilder.build()
+            val requestBuilder = Request.Builder().url(url).post(form)
+            if (auth != null) { requestBuilder.header("Authorization", auth) }
+            val request = requestBuilder.build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    requestResponse.invoke(700, false, e.message!!)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val dataString = response.body()!!.string()
+                    requestResponse.invoke(response.code(), true, dataString)
+                }
+            })
+        }
     }
 }

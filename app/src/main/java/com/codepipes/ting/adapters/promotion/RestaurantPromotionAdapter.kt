@@ -49,7 +49,7 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
         utilsFunctions = UtilsFunctions(holder.view.context)
         val activity = holder.view.context as Activity
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}")
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}")
             .into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
         holder.view.promotion_menu_type_on_text.text =
@@ -129,7 +129,7 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
                 4 -> {
                     val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                     val image = promotion.promotionItem.menu.menu.images.images[index]
-                    Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
+                    Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
                     holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
 
                     val layoutManager = LinearLayoutManager(holder.view.context)
@@ -162,7 +162,7 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
 
                     holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
                     Picasso.get()
-                        .load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}")
+                        .load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}")
                         .into(holder.view.promotion_menu_on_image)
                 }
                 else -> {
@@ -177,13 +177,13 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
             promotion.promotionItem.type.id == 4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
-                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
             }
             promotion.promotionItem.type.id == 5 -> {
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
                 Picasso.get()
-                    .load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}")
+                    .load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}")
                     .into(holder.view.promotion_menu_on_image)
             }
         }
@@ -238,6 +238,12 @@ class RestaurantPromotionAdapter (private val promotions: MutableList<MenuPromot
             intent.putExtra("url", promotion.urls.apiGet)
             activity.startActivity(intent)
         }
+    }
+
+    public fun addItems(promosOthers : MutableList<MenuPromotion>) {
+        val lastPosition = promotions.size
+        promotions.addAll(promosOthers)
+        notifyItemRangeInserted(lastPosition, promosOthers.size)
     }
 }
 
