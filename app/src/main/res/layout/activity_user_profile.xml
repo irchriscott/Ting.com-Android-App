@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorTransparent"
                 android:fitsSystemWindows="true"
-                android:theme="@style/AppTheme.White">
+                android:theme="@style/AppTheme.White"
+                app:layout_behavior=".customclasses.FlingBehavior">
 
             <android.support.design.widget.CollapsingToolbarLayout
                     android:id="@+id/userCollapsingToolbar"
@@ -153,7 +154,7 @@
                                 android:layout_below="@id/userProfileName"
                                 android:layout_centerHorizontal="true"
                                 android:includeFontPadding="false"
-                                android:textSize="15sp"
+                                android:textSize="13sp"
                                 android:fontFamily="@font/poppins_regular"
                                 tools:ignore="HardcodedText"/>
 

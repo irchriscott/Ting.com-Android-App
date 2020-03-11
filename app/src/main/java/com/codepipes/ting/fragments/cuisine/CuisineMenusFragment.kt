@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -110,6 +111,8 @@ class CuisineMenusFragment : Fragment() {
                             val cuisinesMenusAdapter = CuisineMenusAdapter(menus.distinctBy { it.id }.toMutableSet())
                             view.cuisine_menus.layoutManager = linearLayoutManager
                             view.cuisine_menus.adapter = cuisinesMenusAdapter
+
+                            ViewCompat.setNestedScrollingEnabled(view.cuisine_menus, false)
 
                             val endlessScrollEventListener = object: EndlessScrollEventListener(linearLayoutManager) {
                                 override fun onLoadMore(pageNum: Int, recyclerView: RecyclerView?) {

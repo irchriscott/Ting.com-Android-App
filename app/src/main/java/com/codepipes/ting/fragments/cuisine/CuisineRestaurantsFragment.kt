@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -154,6 +155,8 @@ class CuisineRestaurantsFragment : Fragment() {
                                         ).showToast(Toast.LENGTH_LONG)
                                     }
 
+                                    ViewCompat.setNestedScrollingEnabled(view.cuisine_restaurants, false)
+
                                     val endlessScrollEventListener = object : EndlessScrollEventListener(linearLayoutManager) {
                                         override fun onLoadMore(pageNum: Int, recyclerView: RecyclerView?) {
                                             val urlPage = "${Routes.cuisineRestaurants}${cuisine.id}/?page=${pageNum + 1}"
@@ -207,6 +210,8 @@ class CuisineRestaurantsFragment : Fragment() {
                                             }
                                         }
                                     }
+
+                                    view.cuisine_restaurants.addOnScrollListener(endlessScrollEventListener)
 
                                 } catch (e: Exception){ TingToast(
                                     context!!,

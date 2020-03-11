@@ -485,8 +485,8 @@ class CurrentRestaurant : AppCompatActivity() {
     }
 
     companion object {
-        public val MENU_TYPE_KEY        = "menu_type"
-        public val RESTO_BRANCH_KEY     = "resto_branch"
-        public val MENU_FROM_ORDER_KEY  = "from_order"
+        public const val MENU_TYPE_KEY          = "menu_type"
+        public const val RESTO_BRANCH_KEY       = "resto_branch"
+        public const val MENU_FROM_ORDER_KEY    = "from_order"
     }
 }

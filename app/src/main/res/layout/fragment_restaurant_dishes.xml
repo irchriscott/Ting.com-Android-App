@@ -10,8 +10,8 @@
             android:id="@+id/dishes_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone">
-    </android.support.v7.widget.RecyclerView>
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_loader"

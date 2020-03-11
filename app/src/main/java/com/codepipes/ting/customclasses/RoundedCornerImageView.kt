@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.widget.ImageView
@@ -31,7 +29,6 @@ class RoundedCornerImageView : ImageView {
 
     private fun init() {
         path = Path()
-
     }
 
     @SuppressLint("DrawAllocation")

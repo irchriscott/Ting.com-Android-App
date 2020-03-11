@@ -4,6 +4,7 @@ package com.codepipes.ting.fragments.restaurants
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -111,7 +112,7 @@ class RestaurantPromotionsFragment : Fragment() {
                     }
                 }
             }
-
+            //view.promotions_recycler_view.addOnScrollListener(endlessScrollEventListener)
         } else {
             view.promotions_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE

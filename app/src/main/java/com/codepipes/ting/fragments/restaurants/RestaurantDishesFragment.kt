@@ -4,6 +4,7 @@ package com.codepipes.ting.fragments.restaurants
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -84,10 +85,10 @@ class RestaurantDishesFragment : Fragment() {
             view.progress_loader.visibility = View.GONE
             view.empty_data.visibility = View.GONE
             view.shimmer_loader.visibility = View.GONE
-            _dishes.filter { it.type.id == 1 }.sortedByDescending { it.menu.reviews?.average }
+            _dishes.filter { it.type.id == 3 }.sortedByDescending { it.menu.reviews?.average }
 
             val restaurantMenuAdapter = RestaurantMenuAdapter(_dishes.toMutableList(), fragmentManager!!)
-            view.dishes_recycler_view.layoutManager = LinearLayoutManager(context)
+            view.dishes_recycler_view.layoutManager = linearLayoutManager
             view.dishes_recycler_view.adapter = restaurantMenuAdapter
 
             val endlessScrollEventListener = object : EndlessScrollEventListener(linearLayoutManager) {
@@ -108,7 +109,7 @@ class RestaurantDishesFragment : Fragment() {
                     }
                 }
             }
-            view.dishes_recycler_view.addOnScrollListener(endlessScrollEventListener)
+            //view.dishes_recycler_view.addOnScrollListener(endlessScrollEventListener)
         } else {
             view.dishes_recycler_view.visibility = View.GONE
             view.progress_loader.visibility = View.GONE
