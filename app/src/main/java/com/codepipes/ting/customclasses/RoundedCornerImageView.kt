@@ -16,18 +16,18 @@ class RoundedCornerImageView : ImageView {
     private var rect: RectF? = null
 
     constructor(context: Context) : super(context) {
-        init()
+        init(null, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
+        init(attrs, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        init()
+        init(attrs, defStyle)
     }
 
-    private fun init() {
+    private fun init(attrs: AttributeSet?, defStyle: Int) {
         path = Path()
     }
 

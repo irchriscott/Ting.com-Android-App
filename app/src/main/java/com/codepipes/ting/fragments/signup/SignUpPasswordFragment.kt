@@ -95,14 +95,34 @@ class SignUpPasswordFragment : Fragment() {
                 if(mSignUpPasswordInput.text.toString() == mSignUpConfirmPasswordInput.text.toString()){
                     mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
                     this.submitSignUp()
-                } else { ErrorMessage(
-                    activity,
-                    "Passwords Didn't Match"
-                ).show() }
-            } else { ErrorMessage(
-                activity,
-                "Passwords Cannot Be Empty"
-            ).show() }
+                } else {
+                    val successOverlay = SuccessOverlay()
+                    val bundle = Bundle()
+                    bundle.putString("message", "Passwords Didn't Match")
+                    bundle.putString("type", "error")
+                    successOverlay.arguments = bundle
+                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.dismissListener(object :
+                        SuccessDialogCloseListener {
+                        override fun handleDialogClose(dialog: DialogInterface?) {
+                            successOverlay.dismiss()
+                        }
+                    })
+                }
+            } else {
+                val successOverlay = SuccessOverlay()
+                val bundle = Bundle()
+                bundle.putString("message", "Passwords Cannot Be Empty")
+                bundle.putString("type", "error")
+                successOverlay.arguments = bundle
+                successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                successOverlay.dismissListener(object :
+                    SuccessDialogCloseListener {
+                    override fun handleDialogClose(dialog: DialogInterface?) {
+                        successOverlay.dismiss()
+                    }
+                })
+            }
         }
 
         return view
@@ -171,18 +191,38 @@ class SignUpPasswordFragment : Fragment() {
                                         settings.removeSettingFromSharedPreferences("signup_data")
                                         localData.updateUser(serverResponse.user)
                                         startActivity(Intent(activity, TingDotCom::class.java))
-                                    } else { ErrorMessage(
-                                        activity,
-                                        "Unable To Fetch User Data"
-                                    ).show() }
+                                    } else {
+                                        val successOverlay = SuccessOverlay()
+                                        val bundle = Bundle()
+                                        bundle.putString("message", "Unable To Fetch User Data")
+                                        bundle.putString("type", "error")
+                                        successOverlay.arguments = bundle
+                                        successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                                        successOverlay.dismissListener(object :
+                                            SuccessDialogCloseListener {
+                                            override fun handleDialogClose(dialog: DialogInterface?) {
+                                                successOverlay.dismiss()
+                                            }
+                                        })
+                                    }
                                 }
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(
-                            activity,
-                            serverResponse.message
-                        ).show() }
+                        } else {
+                            val successOverlay = SuccessOverlay()
+                            val bundle = Bundle()
+                            bundle.putString("message", serverResponse.message)
+                            bundle.putString("type", "error")
+                            successOverlay.arguments = bundle
+                            successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object :
+                                SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    successOverlay.dismiss()
+                                }
+                            })
+                        }
                     }
                 } catch(e: Exception){
                     activity!!.runOnUiThread {

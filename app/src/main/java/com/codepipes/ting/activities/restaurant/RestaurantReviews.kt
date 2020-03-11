@@ -99,8 +99,8 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
         if(localData.getRestaurant(branchId) != null){
             branch = localData.getRestaurant(branchId)!!
-            reviews = branch.reviews?.reviews!!.toMutableList()
-            this.showReviews(reviews, branch)
+            reviews = mutableListOf()
+            this.showReviews(branch)
             this.loadRestaurant(branch.id, false)
             reviewsTimer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() { loadRestaurantReviews("${Routes.HOST_END_POINT}${branch.urls.apiReviews}") }
@@ -125,7 +125,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showReviews(_reviews: MutableList<RestaurantReview>, _branch: Branch){
+    private fun showReviews(_branch: Branch){
 
         shimmerLoader.stopShimmer()
         shimmerLoader.visibility = View.GONE
@@ -193,18 +193,6 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
         data.barWidth = 0.9f
         ratingChart.data = data
         ratingChart.invalidate()
-
-        if(_reviews.isNotEmpty()){
-            restaurant_reviews_recycler_view.visibility = View.VISIBLE
-            empty_data.visibility = View.GONE
-            restaurant_reviews_recycler_view.layoutManager = LinearLayoutManager(this@RestaurantReviews)
-            restaurant_reviews_recycler_view.adapter = RestaurantReviewsAdapter(_reviews)
-        } else {
-            restaurant_reviews_recycler_view.visibility = View.GONE
-            empty_data.visibility = View.VISIBLE
-            empty_data.empty_text.text = "No Review For This Restaurant"
-            empty_data.empty_image.setImageDrawable(resources.getDrawable(R.drawable.ic_comments_gray))
-        }
     }
 
     @SuppressLint("NewApi", "DefaultLocale")
@@ -232,11 +220,13 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                branch = Gson().fromJson(dataString, Branch::class.java)
-                runOnUiThread {
-                    localData.updateRestaurant(branch)
-                    if(load){ showReviews(branch.reviews?.reviews!!.toMutableList(), branch) }
-                }
+                try {
+                    branch = Gson().fromJson(dataString, Branch::class.java)
+                    runOnUiThread {
+                        localData.updateRestaurant(branch)
+                        showReviews(branch)
+                    }
+                } catch (e: Exception){}
             }
         })
     }

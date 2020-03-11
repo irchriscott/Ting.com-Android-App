@@ -2,6 +2,7 @@ package com.codepipes.ting.fragments.signup
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.location.Geocoder
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -16,10 +17,8 @@ import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.messages.ErrorMessage
-import com.codepipes.ting.dialogs.messages.ProgressOverlay
-import com.codepipes.ting.dialogs.messages.TingToast
-import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.messages.*
+import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import okhttp3.*
 import com.codepipes.ting.utils.Routes
@@ -36,13 +35,13 @@ import java.util.concurrent.TimeUnit
 
 class SignUpIdentityFragment : Fragment() {
 
-    lateinit var mAppNameText: TextView
-    lateinit var mNextSignUpBtn: Button
-    lateinit var mSignUpNameInput: EditText
-    lateinit var mSignUpUsernameInput: EditText
-    lateinit var mSignUpEmailInput: EditText
+    private lateinit var mAppNameText: TextView
+    private lateinit var mNextSignUpBtn: Button
+    private lateinit var mSignUpNameInput: EditText
+    private lateinit var mSignUpUsernameInput: EditText
+    private lateinit var mSignUpEmailInput: EditText
 
-    lateinit var mViewPager: LockableViewPager
+    private lateinit var mViewPager: LockableViewPager
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
 
@@ -186,10 +185,18 @@ class SignUpIdentityFragment : Fragment() {
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status != 200){
-                            ErrorMessage(
-                                activity,
-                                "Fill All The Fields"
-                            ).show()
+                            val successOverlay = SuccessOverlay()
+                            val bundle = Bundle()
+                            bundle.putString("message", "Fill All The Fields")
+                            bundle.putString("type", "error")
+                            successOverlay.arguments = bundle
+                            successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object :
+                                SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    successOverlay.dismiss()
+                                }
+                            })
                         } else {
                             signUpUserData["name"] = mSignUpNameInput.text.toString()
                             signUpUserData["username"] = mSignUpUsernameInput.text.toString()

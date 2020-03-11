@@ -28,6 +28,7 @@
                 android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:background="@color/colorTransparent"
+                android:tint="@color/colorWhite"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

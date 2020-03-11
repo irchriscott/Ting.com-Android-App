@@ -16,14 +16,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.messages.ErrorMessage
-import com.codepipes.ting.dialogs.messages.TingToast
-import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.messages.*
+import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilData
@@ -136,10 +134,18 @@ class SignUpAboutFragment : Fragment() {
                     settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
                     mViewPager.currentItem = mViewPager.currentItem + 1
                 } else {
-                    ErrorMessage(
-                        activity,
-                        "Fill All The Fields"
-                    ).show()
+                    val successOverlay = SuccessOverlay()
+                    val bundle = Bundle()
+                    bundle.putString("message", "Fill All The Fields")
+                    bundle.putString("type", "error")
+                    successOverlay.arguments = bundle
+                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.dismissListener(object :
+                        SuccessDialogCloseListener {
+                        override fun handleDialogClose(dialog: DialogInterface?) {
+                            successOverlay.dismiss()
+                        }
+                    })
                 }
             } else { TingToast(
                 context!!,

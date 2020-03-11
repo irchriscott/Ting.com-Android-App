@@ -81,6 +81,18 @@ class RestaurantLikes : AppCompatActivity() {
 
         val branch = localData.getRestaurant(branchId)
         if(branch != null) { restaurant_likes_title.text = "${branch.likes?.count} Likes".toUpperCase() }
+        else {
+            TingClient.getRequest("${Routes.HOST_END_POINT}$apiGet", null, session.token) {_, isSuccess, result ->
+                if(isSuccess){
+                    runOnUiThread {
+                        try {
+                            val branchElse = Gson().fromJson(result, Branch::class.java)
+                            restaurant_likes_title.text = "${branchElse.likes?.count} Likes".toUpperCase()
+                        } catch (e: Exception) {}
+                    }
+                }
+            }
+        }
 
         likesTimer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() { loadRestaurantLikes("${Routes.HOST_END_POINT}$url") }

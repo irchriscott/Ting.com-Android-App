@@ -192,18 +192,38 @@ class LogIn : AppCompatActivity() {
                                         userAuthentication.set(gson.toJson(serverResponse.user))
                                         localData.updateUser(serverResponse.user)
                                         startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                    } else { ErrorMessage(
-                                        this@LogIn,
-                                        "Unable To Fetch User Data"
-                                    ).show() }
+                                    } else {
+                                        val successOverlay = SuccessOverlay()
+                                        val bundle = Bundle()
+                                        bundle.putString("message", "Unable To Fetch User Data")
+                                        bundle.putString("type", "error")
+                                        successOverlay.arguments = bundle
+                                        successOverlay.show(fragmentManager, successOverlay.tag)
+                                        successOverlay.dismissListener(object :
+                                            SuccessDialogCloseListener {
+                                            override fun handleDialogClose(dialog: DialogInterface?) {
+                                                successOverlay.dismiss()
+                                            }
+                                        })
+                                    }
                                 }
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(
-                            this@LogIn,
-                            serverResponse.message
-                        ).show() }
+                        } else {
+                            val successOverlay = SuccessOverlay()
+                            val bundle = Bundle()
+                            bundle.putString("message", serverResponse.message)
+                            bundle.putString("type", "error")
+                            successOverlay.arguments = bundle
+                            successOverlay.show(fragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object :
+                                SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    successOverlay.dismiss()
+                                }
+                            })
+                        }
                     }
                 } catch (e: Exception){
                     runOnUiThread {
@@ -313,18 +333,36 @@ class LogIn : AppCompatActivity() {
                                                             userAuthentication.set(gson.toJson(serverResponse.user))
                                                             localData.updateUser(serverResponse.user)
                                                             startActivity(Intent(this@LogIn, TingDotCom::class.java))
-                                                        } else { ErrorMessage(
-                                                            this@LogIn,
-                                                            "Unable To Fetch User Data"
-                                                        ).show() }
+                                                        } else {
+                                                            val successOverlay = SuccessOverlay()
+                                                            val bundle = Bundle()
+                                                            bundle.putString("message", "Unable To Fetch User Data")
+                                                            bundle.putString("type", "error")
+                                                            successOverlay.arguments = bundle
+                                                            successOverlay.show(fragmentManager, successOverlay.tag)
+                                                            successOverlay.dismissListener(object : SuccessDialogCloseListener {
+                                                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                                                    successOverlay.dismiss()
+                                                                }
+                                                            })
+                                                        }
                                                     }
                                                 }
                                                 successDialog.dismissListener(onDialogClosed)
 
-                                            } else { ErrorMessage(
-                                                this@LogIn,
-                                                serverResponse.message
-                                            ).show() }
+                                            } else {
+                                                val successOverlay = SuccessOverlay()
+                                                val bundle = Bundle()
+                                                bundle.putString("message", serverResponse.message)
+                                                bundle.putString("type", "error")
+                                                successOverlay.arguments = bundle
+                                                successOverlay.show(fragmentManager, successOverlay.tag)
+                                                successOverlay.dismissListener(object : SuccessDialogCloseListener {
+                                                    override fun handleDialogClose(dialog: DialogInterface?) {
+                                                        successOverlay.dismiss()
+                                                    }
+                                                })
+                                            }
                                         }
                                     } catch (e: Exception){
                                         runOnUiThread {
