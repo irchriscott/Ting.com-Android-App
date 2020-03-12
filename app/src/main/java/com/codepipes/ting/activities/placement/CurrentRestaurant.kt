@@ -23,6 +23,7 @@ import com.codepipes.ting.dialogs.messages.InfoDialog
 import com.codepipes.ting.dialogs.messages.SuccessOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.placement.PlacementBillDialog
 import com.codepipes.ting.dialogs.placement.PlacementOrdersDialog
 import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
 import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
@@ -333,7 +334,15 @@ class CurrentRestaurant : AppCompatActivity() {
                 val ordersDialog = PlacementOrdersDialog()
                 ordersDialog.show(supportFragmentManager, ordersDialog.tag)
                 ordersDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
+                    override fun onClose() { getPlacement(userPlacement.getToken()!!) }
+                })
+            }
+            place_menu_bill.setOnClickListener {
+                val placementBillDialog = PlacementBillDialog()
+                placementBillDialog.show(supportFragmentManager, placementBillDialog.tag)
+                placementBillDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
                     override fun onClose() {
+                        placementBillDialog.dismiss()
                         getPlacement(userPlacement.getToken()!!)
                     }
                 })

@@ -65,7 +65,7 @@ class PlacementOrdersDialog : DialogFragment() {
 
     override fun getTheme(): Int = R.style.TransparentDialog
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_restaurant_menus_order, null, false)
@@ -286,9 +286,7 @@ class PlacementOrdersDialog : DialogFragment() {
                                 it.proceed(request)
                             }
 
-                            val url = Routes.placementOrdersMenu
-
-                            TingClient.getRequest(url, interceptor, session.token) { _, isSuccess, result ->
+                            TingClient.getRequest(Routes.placementOrdersMenu, interceptor, session.token) { _, isSuccess, result ->
                                 if(isSuccess) {
                                     activity?.runOnUiThread {
                                         try {

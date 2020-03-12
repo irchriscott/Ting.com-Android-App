@@ -5,6 +5,7 @@
     <color name="colorAccent">@color/colorWhite</color>
     <color name="colorAccentMain">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorShadeGray">#33999999</color>
     <color name="colorVeryLightGray">#DDDDDD</color>
     <color name="colorLightGray">#999999</color>
     <color name="colorGray">#666666</color>
@@ -27,4 +28,10 @@
     <color name="titleTabColor">@color/colorVeryLightGray</color>
     <color name="titleSelectedTabColor">@color/colorWhite</color>
     <color name="fabColor">@color/colorPrimary</color>
+
+    <color name="table_view_default_separator_color">#E7E7E7</color>
+    <color name="table_view_default_unselected_background_color">#ffffff</color>
+    <color name="table_view_default_selected_background_color">#DDDDDD</color>
+    <color name="table_view_default_shadow_background_color">#f2f2f2</color>
+
 </resources>

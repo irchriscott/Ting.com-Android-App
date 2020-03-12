@@ -22,7 +22,7 @@ class Bill (
 
 class BillOrders(
     val count: Int,
-    val orders: List<Order>?
+    val orders: List<OrderData>?
 ) {}
 
 
@@ -42,3 +42,24 @@ class Order (
     val createdAt: String,
     val updatedAt: String
 ) {}
+
+
+class OrderData (
+    val id: Int,
+    val menu: String,
+    val token: String,
+    val quantity: Int,
+    val price: Double,
+    val currency: String,
+    val conditions: String?,
+    val isAccepted: Boolean,
+    val isDeclined: Boolean,
+    val reasons: String?,
+    val hasPromotion: Boolean,
+    val promotion: PromotionDataString?,
+    val createdAt: String,
+    val updatedAt: String
+) {
+    val total: Double
+        get() = quantity * price
+}

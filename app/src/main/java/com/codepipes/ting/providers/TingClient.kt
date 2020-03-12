@@ -2,6 +2,7 @@ package com.codepipes.ting.providers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.codepipes.ting.models.Bill
 import com.codepipes.ting.models.Order
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.models.ServerResponse
@@ -98,6 +99,10 @@ class TingClient (val context: Context) {
 
     public fun cancelOrderPlacement(order: Int) : Observable<ServerResponse> {
         return tingService.cancelOrderPlacement(order, order)
+    }
+
+    public fun getPlacementBill(token: String) : Observable<Bill> {
+        return tingService.getPlacementBill(token)
     }
 
     companion object {
