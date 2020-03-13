@@ -59,5 +59,8 @@ class Routes {
         const val placeOrderMenu: String                = "${END_POINT}usr/po/orders/menu/place/"
         const val placementOrdersMenu: String           = "${END_POINT}usr/po/placement/orders/all/"
         const val placementGetBill: String              = "${END_POINT}usr/po/placement/bill/"
+        const val placementUpdateBillTips: String       = "${END_POINT}usr/po/placement/bill/tips/update/"
+        const val placementBillComplete: String         = "${END_POINT}usr/po/placement/bill/complete/"
+        const val placementBillRequest: String          = "${END_POINT}usr/po/placement/bill/request/"
     }
 }

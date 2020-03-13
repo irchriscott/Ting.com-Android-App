@@ -1,23 +1,24 @@
-package com.codepipes.ting.dialogs.placement
+package com.codepipes.ting.dialogs.messages
 
 import android.annotation.SuppressLint
 import android.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
+import com.codepipes.ting.utils.Routes
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_placement_people.view.*
+import kotlinx.android.synthetic.main.fragment_confirm_dialog.view.*
 
-class PlacementPeopleDialog : DialogFragment() {
+class ConfirmDialog : DialogFragment() {
 
-    private lateinit var submitPeoplePlacementListener: SubmitPeoplePlacementListener
+    private lateinit var confirmDialogListener: ConfirmDialogListener
 
     override fun getTheme(): Int = R.style.TransparentDialog
 
@@ -30,20 +31,20 @@ class PlacementPeopleDialog : DialogFragment() {
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val view = inflater.inflate(R.layout.fragment_placement_people, null, false)
+        val view = inflater.inflate(R.layout.fragment_confirm_dialog, null, false)
 
-        val people = arguments.getString(CurrentRestaurant.PEOPLE_VALUE_KEY)
-        val title = arguments.getString(CurrentRestaurant.PEOPLE_TITLE_KEY)
+        val title = arguments?.getString(CurrentRestaurant.CONFIRM_TITLE_KEY)
+        val message = arguments?.getString(CurrentRestaurant.CONFIRM_MESSAGE_KEY)
 
         view.dialog_title.text = title
-        view.dialog_input.setText(people ?: "1")
-        view.dialog_success.setOnClickListener { submitPeoplePlacementListener.onSubmit(view.dialog_input.text.toString()?:"1") }
-        view.dialog_close.setOnClickListener { dialog.dismiss() }
+        if(message != null) { view.dialog_text.text = message } else { view.dialog_text.visibility = View.GONE }
+        view.dialog_yes.setOnClickListener { confirmDialogListener.onAccept() }
+        view.dialog_cancel.setOnClickListener { confirmDialogListener.onCancel() }
 
         return view
     }
 
-    fun onSubmitPeople(listener: SubmitPeoplePlacementListener) {
-        this.submitPeoplePlacementListener = listener
+    public fun onDialogListener(listener: ConfirmDialogListener) {
+        this.confirmDialogListener = listener
     }
 }

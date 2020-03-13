@@ -264,7 +264,8 @@ class CurrentRestaurant : AppCompatActivity() {
             place_people_view.setOnClickListener {
                 val placementPeopleDialog = PlacementPeopleDialog()
                 val bundle =  Bundle()
-                bundle.putString("people", placement.people.toString())
+                bundle.putString(PEOPLE_VALUE_KEY, placement.people.toString())
+                bundle.putString(PEOPLE_TITLE_KEY, "How Many Are You ?")
                 placementPeopleDialog.arguments = bundle
                 placementPeopleDialog.show(fragmentManager, placementPeopleDialog.tag)
                 placementPeopleDialog.onSubmitPeople(object : SubmitPeoplePlacementListener {
@@ -339,7 +340,7 @@ class CurrentRestaurant : AppCompatActivity() {
             }
             place_menu_bill.setOnClickListener {
                 val placementBillDialog = PlacementBillDialog()
-                placementBillDialog.show(supportFragmentManager, placementBillDialog.tag)
+                placementBillDialog.show(fragmentManager, placementBillDialog.tag)
                 placementBillDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
                     override fun onClose() {
                         placementBillDialog.dismiss()
@@ -497,5 +498,11 @@ class CurrentRestaurant : AppCompatActivity() {
         public const val MENU_TYPE_KEY          = "menu_type"
         public const val RESTO_BRANCH_KEY       = "resto_branch"
         public const val MENU_FROM_ORDER_KEY    = "from_order"
+
+        public const val PEOPLE_VALUE_KEY       = "value"
+        public const val PEOPLE_TITLE_KEY       = "title"
+
+        public const val CONFIRM_TITLE_KEY      = "title"
+        public const val CONFIRM_MESSAGE_KEY    = "message"
     }
 }

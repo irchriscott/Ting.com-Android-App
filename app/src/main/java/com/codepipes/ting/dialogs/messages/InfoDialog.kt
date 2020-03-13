@@ -1,5 +1,6 @@
 package com.codepipes.ting.dialogs.messages
 
+import android.annotation.SuppressLint
 import android.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -21,6 +22,7 @@ class InfoDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

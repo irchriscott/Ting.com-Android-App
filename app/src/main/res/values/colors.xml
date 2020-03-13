@@ -23,6 +23,7 @@
     <color name="colorGreen">#21BA45</color>
     <color name="colorRed">#DB2828</color>
     <color name="colorOrange">#F2711C</color>
+    <color name="colorWarningOrange">#FFB14A</color>
 
     <color name="titleTextColor">@color/colorWhite</color>
     <color name="titleTabColor">@color/colorVeryLightGray</color>

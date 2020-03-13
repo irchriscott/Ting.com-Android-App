@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+    <android.support.constraint.ConstraintLayout
+            android:padding="20dp"
+            android:background="@drawable/background_dialog_rounded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="17dp"
+                android:text="Some Item Name"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/colorGray"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="HardcodedText,SpUsage" />
+
+        <ImageView
+                android:id="@+id/dialog_image"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="18dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_exclamation_white"
+                android:tint="@color/colorWarningOrange"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialog_title"
+                tools:ignore="ContentDescription" />
+
+        <TextView
+                android:id="@+id/dialog_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="13sp"
+                android:text="This text is for the dialog"
+                android:textColor="@color/colorGray"
+                app:layout_constraintTop_toBottomOf="@id/dialog_image"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="HardcodedText" />
+
+        <TableLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialog_text">
+
+            <TableRow
+                    android:layout_height="match_parent"
+                    tools:ignore="UselessParent">
+
+                <Button
+                        android:id="@+id/dialog_cancel"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_red_gradient"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Cancel"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="14dp"
+                        tools:ignore="ButtonStyle,HardcodedText,RtlHardcoded,SpUsage" />
+
+                <Button
+                        android:id="@+id/dialog_yes"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:textColor="@color/colorWhite"
+                        android:text="Yes"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:background="@drawable/background_primary_gradient"
+                        tools:ignore="ButtonStyle,HardcodedText,RtlHardcoded,SpUsage" />
+
+            </TableRow>
+
+        </TableLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</RelativeLayout>

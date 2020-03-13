@@ -7,14 +7,18 @@ class Bill (
     val id: Int,
     val number: String,
     val token: String,
-    val amount: Double?,
-    val discount: Double?,
+    val amount: Double,
+    val discount: Double,
+    val tips: Double,
+    val extrasTotal: Double,
+    val total: Double,
     val currency: String,
     val isRequested: Boolean,
     val isPaid: Boolean,
     val isComplete: Boolean,
     val paidBy: Int?,
     val orders: BillOrders?,
+    val extras: MutableList<BillExtra>,
     val createdAt: String,
     val updatedAt: String
 ) {}
@@ -63,3 +67,13 @@ class OrderData (
     val total: Double
         get() = quantity * price
 }
+
+class BillExtra(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val quantity: Int,
+    val total: Double,
+    val createdAt: String,
+    val updatedAt: String
+) {}

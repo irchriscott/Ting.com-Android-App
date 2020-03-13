@@ -1,16 +1,13 @@
 package com.codepipes.ting.adapters.placement.bill
 
 import android.annotation.SuppressLint
-import android.view.Gravity
 import com.codepipes.ting.adapters.tableview.models.CellModel
 import com.codepipes.ting.adapters.tableview.models.ColumnHeaderModel
 import com.codepipes.ting.adapters.tableview.models.RowHeaderModel
-import com.codepipes.ting.models.Bill
-import com.codepipes.ting.models.OrderData
+import com.codepipes.ting.models.BillExtra
 import java.text.NumberFormat
 
-
-class BillOrdersTableViewModel {
+class BillExtrasTableViewModel  {
 
     var columnHeaderModeList: List<ColumnHeaderModel>? = null
         private set
@@ -21,33 +18,31 @@ class BillOrdersTableViewModel {
 
     private fun createColumnHeaderModelList(): List<ColumnHeaderModel> {
 
-        val list: MutableList<ColumnHeaderModel> = ArrayList()
+        val list: MutableList<ColumnHeaderModel> = arrayListOf<ColumnHeaderModel>()
 
-        list.add(ColumnHeaderModel("No"))
-        list.add(ColumnHeaderModel("Menu"))
+        list.add(ColumnHeaderModel("ID"))
+        list.add(ColumnHeaderModel("Name"))
         list.add(ColumnHeaderModel("Price"))
         list.add(ColumnHeaderModel("Quantity"))
         list.add(ColumnHeaderModel("Total"))
-        list.add(ColumnHeaderModel("Has Promotion"))
 
         return list
     }
 
     @SuppressLint("DefaultLocale")
-    private fun createCellModelList(orders: List<OrderData>): List<List<CellModel>> {
+    private fun createCellModelList(extras: List<BillExtra>, currency: String): List<List<CellModel>> {
 
         val lists: MutableList<List<CellModel>> = ArrayList()
 
-        for (i in orders.indices) {
-            val order = orders[i]
+        for (i in extras.indices) {
+            val extra = extras[i]
             val list: MutableList<CellModel> = ArrayList()
 
-            list.add(CellModel("1-order-$i", "${i + 1}"))
-            list.add(CellModel("2-order-$i", order.menu))
-            list.add(CellModel("3-order-$i", "${order.currency} ${NumberFormat.getNumberInstance().format(order.price)}".toUpperCase()))
-            list.add(CellModel("4-order-$i", order.quantity.toString()))
-            list.add(CellModel("5-order-$i", "${order.currency} ${NumberFormat.getNumberInstance().format(order.total)}".toUpperCase()))
-            list.add(CellModel("6-order-$i", if(order.hasPromotion){ "YES" } else { "NO" }))
+            list.add(CellModel("1-extra-$i", "${i + 1}"))
+            list.add(CellModel("2-extra-$i", extra.name))
+            list.add(CellModel("3-extra-$i", "$currency ${NumberFormat.getNumberInstance().format(extra.price)}".toUpperCase()))
+            list.add(CellModel("4-extra-$i", extra.quantity.toString()))
+            list.add(CellModel("5-extra-$i", "$currency ${NumberFormat.getNumberInstance().format(extra.total)}".toUpperCase()))
 
             lists.add(list)
         }
@@ -60,9 +55,9 @@ class BillOrdersTableViewModel {
         return list
     }
 
-    fun generateListForTableView(orders: List<OrderData>) {
+    fun generateListForTableView(extras: List<BillExtra>, currency: String) {
         columnHeaderModeList = createColumnHeaderModelList()
-        cellModelList = createCellModelList(orders)
-        rowHeaderModelList = createRowHeaderList(orders.size)
+        cellModelList = createCellModelList(extras, currency)
+        rowHeaderModelList = createRowHeaderList(extras.size)
     }
 }
