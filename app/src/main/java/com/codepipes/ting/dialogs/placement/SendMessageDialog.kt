@@ -10,11 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.interfaces.SubmitOrderListener
-import com.codepipes.ting.utils.Routes
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_order_form.view.*
+import kotlinx.android.synthetic.main.fragment_send_message_form.view.*
 
-class OrderFormDialog : DialogFragment() {
+class SendMessageDialog : DialogFragment() {
 
     private lateinit var onSubmitOrderListener: SubmitOrderListener
 
@@ -28,11 +26,9 @@ class OrderFormDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val view = inflater.inflate(R.layout.fragment_order_form, null, false)
-        view.dialog_quantity_input.setText(arguments?.getString("quantity"))
-        view.dialog_conditions_input.setText(arguments?.getString("conditions"))
-        view.dialog_success.setOnClickListener {
-            onSubmitOrderListener.onSubmitOrder(view.dialog_quantity_input.text.toString(), view.dialog_conditions_input.text.toString())
+        val view = inflater.inflate(R.layout.fragment_send_message_form, null, false)
+        view.dialog_send.setOnClickListener {
+            onSubmitOrderListener.onSubmitOrder("", view.dialog_message_input.text.toString())
         }
         view.dialog_close.setOnClickListener { dialog.dismiss() }
 

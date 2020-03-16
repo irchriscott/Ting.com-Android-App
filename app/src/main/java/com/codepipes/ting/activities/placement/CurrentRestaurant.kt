@@ -23,15 +23,10 @@ import com.codepipes.ting.dialogs.messages.InfoDialog
 import com.codepipes.ting.dialogs.messages.SuccessOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
-import com.codepipes.ting.dialogs.placement.PlacementBillDialog
-import com.codepipes.ting.dialogs.placement.PlacementOrdersDialog
-import com.codepipes.ting.dialogs.placement.PlacementPeopleDialog
-import com.codepipes.ting.dialogs.placement.RestaurantMenusOrderDialog
-import com.codepipes.ting.interfaces.ActionSheetCallBack
-import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
-import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
-import com.codepipes.ting.interfaces.SuccessDialogCloseListener
+import com.codepipes.ting.dialogs.placement.*
+import com.codepipes.ting.interfaces.*
 import com.codepipes.ting.models.*
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
@@ -275,43 +270,24 @@ class CurrentRestaurant : AppCompatActivity() {
                         placementPeopleDialog.dismiss()
                         val url = Routes.updatePlacementPeople
 
-                        val client = OkHttpClient.Builder()
-                            .readTimeout(60, TimeUnit.SECONDS)
-                            .writeTimeout(60, TimeUnit.SECONDS)
-                            .callTimeout(60 * 5, TimeUnit.SECONDS)
-                            .build()
+                        val data = hashMapOf<String, String>()
+                        data["token"] = placement.token
+                        data["people"] = people
 
-                        val form = MultipartBody.Builder().setType(MultipartBody.FORM)
-                            .addFormDataPart("token", placement.token)
-                            .addFormDataPart("people", people)
-                            .build()
-
-                        val request = Request.Builder()
-                            .header("Authorization", session.token!!)
-                            .url(url)
-                            .post(form)
-                            .build()
-
-                        client.newCall(request).enqueue(object : Callback {
-
-                            override fun onFailure(call: Call, e: IOException) {
-                                runOnUiThread {}
-                            }
-
-                            override fun onResponse(call: Call, response: Response) {
-                                val dataString = response.body()!!.string()
-                                runOnUiThread {
+                        TingClient.postRequest(url, data, null, session.token) { _, isSuccess, result ->
+                            runOnUiThread {
+                                if(isSuccess) {
                                     try {
-                                        val placementData = Gson().fromJson(dataString, Placement::class.java)
+                                        val placementData = Gson().fromJson(result, Placement::class.java)
                                         userPlacement.setToken(placementData.token)
-                                        userPlacement.set(dataString)
+                                        userPlacement.set(result)
                                         loadPlacement(placementData)
                                         val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), "People Updated !!!", Snackbar.LENGTH_LONG).setAction("OK", null)
                                         snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary))
                                         snackbar.show()
                                     } catch (e: Exception) {
                                         try {
-                                            val serverResponse = Gson().fromJson(dataString, ServerResponse::class.java)
+                                            val serverResponse = Gson().fromJson(result, ServerResponse::class.java)
                                             val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), serverResponse.message, Snackbar.LENGTH_LONG).setAction("OK", null)
                                             snackbar.view.setBackgroundColor(resources.getColor(R.color.colorGoogleRedOne))
                                             snackbar.show()
@@ -321,9 +297,9 @@ class CurrentRestaurant : AppCompatActivity() {
                                             snackbar.show()
                                         }
                                     }
-                                }
+                                } else { TingToast(this@CurrentRestaurant, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                             }
-                        })
+                        }
                     }
                 })
             }
@@ -348,6 +324,34 @@ class CurrentRestaurant : AppCompatActivity() {
                     }
                 })
             }
+            place_menu_request_waiter.setOnClickListener {
+                val sendMessageDialog = SendMessageDialog()
+                sendMessageDialog.show(supportFragmentManager, sendMessageDialog.tag)
+                sendMessageDialog.onSubmitOrder(object : SubmitOrderListener {
+                    override fun onSubmitOrder(quantity: String, conditions: String) {
+                        sendMessageDialog.dismiss()
+                        if(conditions.replace("\\s".toRegex(), "") != "") {
+                            val data = hashMapOf<String, String>()
+                            data["token"] = placement.token
+                            data["message"] = conditions
+                            TingClient.postRequest(Routes.placementRequestWaiter, data, null, session.token) { _, isSuccess, result ->
+                                runOnUiThread {
+                                    if (isSuccess) {
+                                        try {
+                                            val serverResponse = Gson().fromJson(result, ServerResponse::class.java)
+                                            TingToast(this@CurrentRestaurant, serverResponse.message,
+                                                    if(serverResponse.type == "success") {
+                                                        TingToastType.SUCCESS
+                                                    } else { TingToastType.ERROR }
+                                                ).showToast(Toast.LENGTH_LONG)
+                                        } catch (e: Exception) { TingToast(this@CurrentRestaurant, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                    } else { TingToast(this@CurrentRestaurant, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)}
+                                }
+                            }
+                        } else { TingToast(this@CurrentRestaurant, "Message Cannot Be Empty", TingToastType.WARNING).showToast(Toast.LENGTH_LONG) }
+                    }
+                })
+            }
         }
     }
 
@@ -359,9 +363,7 @@ class CurrentRestaurant : AppCompatActivity() {
         menusDialog.arguments = bundle
         menusDialog.show(supportFragmentManager, menusDialog.tag)
         menusDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
-            override fun onClose() {
-                getPlacement(userPlacement.getToken()!!)
-            }
+            override fun onClose() { getPlacement(userPlacement.getToken()!!) }
         })
     }
 
