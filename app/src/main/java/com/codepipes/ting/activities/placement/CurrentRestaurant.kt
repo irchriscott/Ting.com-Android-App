@@ -288,14 +288,8 @@ class CurrentRestaurant : AppCompatActivity() {
                                     } catch (e: Exception) {
                                         try {
                                             val serverResponse = Gson().fromJson(result, ServerResponse::class.java)
-                                            val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), serverResponse.message, Snackbar.LENGTH_LONG).setAction("OK", null)
-                                            snackbar.view.setBackgroundColor(resources.getColor(R.color.colorGoogleRedOne))
-                                            snackbar.show()
-                                        } catch (e: Exception) {
-                                            val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), e.message!!, Snackbar.LENGTH_LONG).setAction("OK", null)
-                                            snackbar.view.setBackgroundColor(resources.getColor(R.color.colorGoogleRedOne))
-                                            snackbar.show()
-                                        }
+                                            TingToast(this@CurrentRestaurant, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                                        } catch (e: Exception) { TingToast(this@CurrentRestaurant, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                                     }
                                 } else { TingToast(this@CurrentRestaurant, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                             }

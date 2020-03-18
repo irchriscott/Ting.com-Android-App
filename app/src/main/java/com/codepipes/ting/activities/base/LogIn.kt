@@ -162,7 +162,7 @@ class LogIn : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    if (mProgressOverlay.dialog != null) { mProgressOverlay.dismiss() }
+                    mProgressOverlay.dismiss()
                     TingToast(
                         this@LogIn,
                         e.message!!,
@@ -227,7 +227,7 @@ class LogIn : AppCompatActivity() {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        if (mProgressOverlay.dialog.isShowing) { mProgressOverlay.dismiss() }
+                        mProgressOverlay.dismiss()
                         TingToast(
                             this@LogIn,
                             "An Error Has Occurred",
