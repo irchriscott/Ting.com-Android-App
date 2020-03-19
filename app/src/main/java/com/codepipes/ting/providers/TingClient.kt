@@ -124,7 +124,7 @@ class TingClient (val context: Context) {
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    requestResponse.invoke(700, false, e.message!!)
+                    requestResponse.invoke(700, false, e.localizedMessage)
                 }
 
                 override fun onResponse(call: Call, response: Response) {

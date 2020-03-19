@@ -19,14 +19,12 @@ import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
 import com.codepipes.ting.activities.restaurant.RestaurantAbout
 import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.dialogs.messages.InfoDialog
-import com.codepipes.ting.dialogs.messages.SuccessOverlay
-import com.codepipes.ting.dialogs.messages.TingToast
-import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.dialogs.placement.*
 import com.codepipes.ting.interfaces.*
 import com.codepipes.ting.models.*
 import com.codepipes.ting.providers.TingClient
+import com.codepipes.ting.providers.TingService
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
@@ -135,8 +133,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                 }
                                 UtilData.SOCKET_RESPONSE_TABLE_WAITER -> {
                                     val waiter = response.get("data").asJsonObject.get("waiter").asJsonObject
-                                    val infoDialog =
-                                        InfoDialog()
+                                    val infoDialog = InfoDialog()
 
                                     val bundle = Bundle()
                                     bundle.putString("title", waiter.get("name").asString)
@@ -149,8 +146,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                     getPlacement(userPlacement.getToken()!!)
                                 }
                                 UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
-                                    val successOverlay =
-                                        SuccessOverlay()
+                                    val successOverlay = SuccessOverlay()
                                     val bundle = Bundle()
                                     bundle.putString("message", "Placement Terminated")
                                     bundle.putString("type", "info")
@@ -163,6 +159,18 @@ class CurrentRestaurant : AppCompatActivity() {
                                             startActivity(Intent(this@CurrentRestaurant, TingDotCom::class.java))
                                         }
                                     })
+                                }
+                                UtilData.SOCKET_RESPONSE_RESTO_BILL_PAID -> {
+                                    val infoDialog = InfoDialog()
+
+                                    val bundle = Bundle()
+                                    bundle.putString("title", "Bill Marked As Paid")
+                                    bundle.putString("message", "Bill has been terminated successfully and marked as paid !!!")
+
+                                    infoDialog.arguments = bundle
+                                    infoDialog.show(this@CurrentRestaurant.fragmentManager, infoDialog.tag)
+
+                                    getPlacement(userPlacement.getToken()!!)
                                 }
                                 else -> { }
                             }
@@ -209,6 +217,7 @@ class CurrentRestaurant : AppCompatActivity() {
             place_restaurant_name.text = "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}"
             place_table_number.text = "Table No ${placement.table.number}"
             place_bill_number.text = if(placement.bill != null) { "Bill No ${placement.bill.number}" } else { "Bill No -" }
+
             if(placement.waiter != null) {
                 place_waiter_name.text = placement.waiter.name
                 Picasso.get().load("${Routes.HOST_END_POINT}${placement.waiter.image}").into(place_waiter_image)
@@ -255,6 +264,7 @@ class CurrentRestaurant : AppCompatActivity() {
                     })
                 }
             }
+
             place_people.text = "${placement.people}"
             place_people_view.setOnClickListener {
                 val placementPeopleDialog = PlacementPeopleDialog()
@@ -301,6 +311,7 @@ class CurrentRestaurant : AppCompatActivity() {
             place_menu_foods.setOnClickListener { showMenusDialog(1, placement.table.branch?.id ?: 0) }
             place_menu_drinks.setOnClickListener { showMenusDialog(2, placement.table.branch?.id ?: 0) }
             place_menu_dishes.setOnClickListener { showMenusDialog(3, placement.table.branch?.id ?: 0) }
+
             place_menu_orders.setOnClickListener {
                 val ordersDialog = PlacementOrdersDialog()
                 ordersDialog.show(supportFragmentManager, ordersDialog.tag)
@@ -308,6 +319,7 @@ class CurrentRestaurant : AppCompatActivity() {
                     override fun onClose() { getPlacement(userPlacement.getToken()!!) }
                 })
             }
+
             place_menu_bill.setOnClickListener {
                 val placementBillDialog = PlacementBillDialog()
                 placementBillDialog.show(fragmentManager, placementBillDialog.tag)
@@ -318,6 +330,7 @@ class CurrentRestaurant : AppCompatActivity() {
                     }
                 })
             }
+
             place_menu_request_waiter.setOnClickListener {
                 val sendMessageDialog = SendMessageDialog()
                 sendMessageDialog.show(supportFragmentManager, sendMessageDialog.tag)
@@ -344,6 +357,62 @@ class CurrentRestaurant : AppCompatActivity() {
                             }
                         } else { TingToast(this@CurrentRestaurant, "Message Cannot Be Empty", TingToastType.WARNING).showToast(Toast.LENGTH_LONG) }
                     }
+                })
+            }
+
+            place_end_placement.setOnClickListener {
+                val interceptor = Interceptor {
+                    val url = it.request().url().newBuilder()
+                        .addQueryParameter("token", placement.token)
+                        .build()
+                    val request = it.request().newBuilder()
+                        .header("Authorization", session.token!!)
+                        .url(url)
+                        .build()
+                    it.proceed(request)
+                }
+
+                val confirmDialog = ConfirmDialog()
+                val bundle = Bundle()
+                bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Terminate Placement")
+                bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Do you really want to terminate this placement ?")
+                confirmDialog.arguments = bundle
+                confirmDialog.show(fragmentManager, confirmDialog.tag)
+
+                val progressOverlay = ProgressOverlay()
+
+                confirmDialog.onDialogListener(object : ConfirmDialogListener {
+                    override fun onAccept() {
+                        confirmDialog.dismiss()
+                        progressOverlay.show(fragmentManager, progressOverlay.tag)
+                        TingClient.getRequest(Routes.placementTerminate, interceptor, session.token) { _, isSuccess, result ->
+                            runOnUiThread {
+                                progressOverlay.dismiss()
+                                if(isSuccess) {
+                                    try {
+                                        val serverResponse = Gson().fromJson(result, ServerResponse::class.java)
+                                        if(serverResponse.type == "success") {
+                                            val successOverlay = SuccessOverlay()
+                                            val args = Bundle()
+                                            args.putString("message", "Placement Terminated")
+                                            args.putString("type", "info")
+                                            successOverlay.arguments = args
+                                            successOverlay.show(fragmentManager, successOverlay.tag)
+                                            successOverlay.dismissListener(object : SuccessDialogCloseListener {
+                                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                                    userPlacement.placeOut()
+                                                    successOverlay.dismiss()
+                                                    startActivity(Intent(this@CurrentRestaurant, TingDotCom::class.java))
+                                                }
+                                            })
+                                        } else { TingToast(this@CurrentRestaurant, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                    } catch (e: Exception) { TingToast(this@CurrentRestaurant, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                } else { TingToast(this@CurrentRestaurant, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            }
+                        }
+                    }
+
+                    override fun onCancel() { confirmDialog.dismiss() }
                 })
             }
         }

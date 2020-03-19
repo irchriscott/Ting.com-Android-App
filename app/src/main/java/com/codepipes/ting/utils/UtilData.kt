@@ -24,5 +24,6 @@ class UtilData {
         public const val SOCKET_RESPONSE_PLACEMENT_DONE       = "response_resto_placement_done"
         public const val SOCKET_RESPONSE_TABLE_WAITER         = "response_resto_table_waiter"
         public const val SOCKET_RESPONSE_RESTO_TABLE          = "response_resto_table"
+        public const val SOCKET_RESPONSE_RESTO_BILL_PAID      = "response_resto_bill_paid"
     }
 }
