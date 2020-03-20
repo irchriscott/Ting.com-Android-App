@@ -87,9 +87,11 @@ class PushNotificationService : Service() {
                     }
 
                     if(data.has("text")) {
-                        builder.setStyle(NotificationCompat.BigTextStyle()
-                            .bigText(data["text"].asString)
-                        )
+                        if (data["text"].asString.replace("\\s", "") != "") {
+                            builder.setStyle(NotificationCompat.BigTextStyle()
+                                .bigText(data["text"].asString)
+                            )
+                        }
                     }
 
                     if(data.has("navigate")) {
