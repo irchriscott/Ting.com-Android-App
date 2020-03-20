@@ -24,6 +24,12 @@
         />
 
         <item
+                android:id="@+id/restaurant_profile_book"
+                android:title="@string/global_book"
+                android:icon="@drawable/ic_bookings_gray"
+                />
+
+        <item
                 android:id="@+id/restaurant_profile_about"
                 android:title="@string/global_about"
                 android:icon="@drawable/ic_info_round"

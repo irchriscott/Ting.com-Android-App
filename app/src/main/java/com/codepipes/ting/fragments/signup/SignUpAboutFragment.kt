@@ -88,7 +88,7 @@ class SignUpAboutFragment : Fragment() {
         mAppNameText.text = spanText
 
         val genders = utilData.genders
-        if(!signUpUserData.isEmpty() && !signUpUserData.isNullOrEmpty()){
+        if(signUpUserData.isNotEmpty() && !signUpUserData.isNullOrEmpty()){
             if(!signUpUserData["dob"].isNullOrEmpty()){
                 mSignUpGenderInput.setText(signUpUserData["gender"])
                 mSignUpDobInput.setText(signUpUserData["dob"])

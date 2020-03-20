@@ -34,6 +34,8 @@ class Routes {
         const val restaurantFilters: String             = "${END_POINT}usr/g/restaurants/filters/"
         const val restaurantsSearchFiltered: String     = "${END_POINT}usr/g/restaurants/search/filter/"
         const val checkUserRestaurantReview: String     = "${END_POINT}usr/g/restaurants/reviews/check/"
+        const val restaurantTableLocation: String       = "${END_POINT}usr/g/restaurants/tables/locations/"
+        const val restaurantBook: String                = "${END_POINT}usr/g/restaurants/book/"
 
         //CUISINES
         const val cuisinesGlobal: String                = "${END_POINT}usr/g/cuisines/all/"

@@ -29,11 +29,16 @@ import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.restaurant.BookReservationDialog
 import com.codepipes.ting.fragments.restaurants.*
 import com.codepipes.ting.interfaces.ActionSheetCallBack
+import com.codepipes.ting.interfaces.SubmitReservationListener
+import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -71,7 +76,6 @@ class RestaurantProfile : AppCompatActivity() {
     private var selectedLongitude: Double = 0.0
 
     private lateinit var restaurantTimer: Timer
-    private val TIMER_PERIOD = 10000.toLong()
 
     @SuppressLint("SetTextI18n", "PrivateResource", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -326,9 +330,9 @@ class RestaurantProfile : AppCompatActivity() {
                             branch.restaurant?.opening!!,
                             branch.restaurant?.closing!!
                         )
-                        restaurant_time.text = statusTimer?.get("msg")
+                        restaurant_time.text = statusTimer.get("msg")
 
-                        when (statusTimer?.get("clr")) {
+                        when (statusTimer.get("clr")) {
                             "green" -> {
                                 restaurant_work_status.background =
                                     resources.getDrawable(R.drawable.background_time_green)
@@ -452,6 +456,44 @@ class RestaurantProfile : AppCompatActivity() {
                 startActivity(intent)
                 return true
             }
+            R.id.restaurant_profile_book -> {
+
+                val progressOverlay = ProgressOverlay()
+
+                val bookReservationDialog = BookReservationDialog()
+                val bundle = Bundle()
+                bundle.putInt(RestaurantProfile.BRANCH_ID_KEY, intent.getIntExtra("resto", 0))
+                bookReservationDialog.arguments = bundle
+                bookReservationDialog.show(supportFragmentManager, bookReservationDialog.tag)
+                bookReservationDialog.submitReservation(object : SubmitReservationListener {
+                    override fun onSubmitReservation(people: String, date: String, time: String, table: Int) {
+                        if(people != "" && date != "" && time != "") {
+                            val form = hashMapOf<String, String>()
+                            form["people"] = people
+                            form["date"] = date
+                            form["time"] = time
+                            form["location"] = table.toString()
+                            form["branch"] = branch.id.toString()
+                            progressOverlay.show(fragmentManager, progressOverlay.tag)
+                            TingClient.postRequest(Routes.restaurantBook, form, null, session.token) { _, isSuccess, result ->
+                                runOnUiThread {
+                                    progressOverlay.dismiss()
+                                    if(isSuccess) {
+                                        try {
+                                            val serverResponse = Gson().fromJson(result, ServerResponse::class.java)
+                                            if(serverResponse.type == "success") {
+                                                bookReservationDialog.dismiss()
+                                                TingToast(this@RestaurantProfile, serverResponse.message, TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                                            } else { TingToast(this@RestaurantProfile, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                        } catch (e: java.lang.Exception) { TingToast(this@RestaurantProfile, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                    } else { TingToast(this@RestaurantProfile, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                }
+                            }
+                        } else { TingToast(this@RestaurantProfile, "Fill All Fields", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    }
+                })
+                return true
+            }
             R.id.restaurant_profile_about -> {
                 val intent = Intent(this@RestaurantProfile, RestaurantAbout::class.java)
                 intent.putExtra("resto", branch.id)
@@ -512,5 +554,10 @@ class RestaurantProfile : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    companion object {
+        private const val TIMER_PERIOD  = 10000.toLong()
+        public const val BRANCH_ID_KEY        = "branchId"
     }
 }
