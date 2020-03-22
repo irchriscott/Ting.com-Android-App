@@ -3,14 +3,12 @@ package com.codepipes.ting.fragments.signup
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +16,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.codepipes.ting.dialogs.ProgressOverlay
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.*
+import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilData
@@ -92,7 +88,7 @@ class SignUpAboutFragment : Fragment() {
         mAppNameText.text = spanText
 
         val genders = utilData.genders
-        if(!signUpUserData.isEmpty() && !signUpUserData.isNullOrEmpty()){
+        if(signUpUserData.isNotEmpty() && !signUpUserData.isNullOrEmpty()){
             if(!signUpUserData["dob"].isNullOrEmpty()){
                 mSignUpGenderInput.setText(signUpUserData["gender"])
                 mSignUpDobInput.setText(signUpUserData["dob"])
@@ -138,9 +134,24 @@ class SignUpAboutFragment : Fragment() {
                     settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
                     mViewPager.currentItem = mViewPager.currentItem + 1
                 } else {
-                    ErrorMessage(activity, "Fill All The Fields").show()
+                    val successOverlay = SuccessOverlay()
+                    val bundle = Bundle()
+                    bundle.putString("message", "Fill All The Fields")
+                    bundle.putString("type", "error")
+                    successOverlay.arguments = bundle
+                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.dismissListener(object :
+                        SuccessDialogCloseListener {
+                        override fun handleDialogClose(dialog: DialogInterface?) {
+                            successOverlay.dismiss()
+                        }
+                    })
                 }
-            } else { TingToast(context!!, "You are not connected to the internet", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+            } else { TingToast(
+                context!!,
+                "You are not connected to the internet",
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
 
         return view

@@ -55,7 +55,7 @@
                             android:textColor="@color/colorWhite"
                             android:textSize="17sp"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:background="@drawable/button_login" />
+                            android:background="@drawable/background_primary_gradient" />
 
                 </RelativeLayout>
 

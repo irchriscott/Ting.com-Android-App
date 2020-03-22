@@ -34,7 +34,7 @@ class RestaurantListMenuAdapter(private val menus: MutableList<RestaurantMenu>, 
         val imageView = holder.view.findViewById<RoundedCornerImageView>(R.id.restaurant_menu_image) as RoundedCornerImageView
         imageView.radius = 10.0F
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(imageView)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(imageView)
         imageView.setOnClickListener {
             val restaurantMenuFragment = RestaurantMenuBottomSheetFragment()
             val bundle =  Bundle()

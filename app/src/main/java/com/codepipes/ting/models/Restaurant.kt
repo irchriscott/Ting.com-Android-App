@@ -27,7 +27,7 @@ class Restaurant (
     val createdAt: String,
     val updatedAt: String
 ){
-    public fun logoURL(): String = "${Routes().HOST_END_POINT}${this.logo}"
+    public fun logoURL(): String = "${Routes.HOST_END_POINT}${this.logo}"
 }
 
 class RestaurantConfig (

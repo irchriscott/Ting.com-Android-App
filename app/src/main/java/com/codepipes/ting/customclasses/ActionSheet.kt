@@ -11,10 +11,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
 import com.codepipes.ting.R
-import com.codepipes.ting.adapters.ActionSheetRecyclerViewAdapter
+import com.codepipes.ting.adapters.others.ActionSheetRecyclerViewAdapter
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.ActionSheetOnClickListener
-import java.util.*
 
 
 class ActionSheet(var context: Context, var data: MutableList<String>) {
@@ -25,7 +24,11 @@ class ActionSheet(var context: Context, var data: MutableList<String>) {
     lateinit var title : TextView
     private lateinit var cancle : TextView
     private lateinit var myRecyclerView: RecyclerView
-    private val actionSheetRecyclerViewAdapter by lazy { ActionSheetRecyclerViewAdapter(data) }
+    private val actionSheetRecyclerViewAdapter by lazy {
+        ActionSheetRecyclerViewAdapter(
+            data
+        )
+    }
 
     fun setColorTitle(title: Int): ActionSheet {
         mData.colorTitle = title

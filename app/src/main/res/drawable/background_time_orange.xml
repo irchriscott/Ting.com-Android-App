@@ -8,6 +8,6 @@
             android:bottomLeftRadius="3dp"/>
 
     <gradient
-            android:startColor="#F2711C"
-            android:endColor="#F2711C"/>
+            android:startColor="@color/colorOrange"
+            android:endColor="@color/colorOrange"/>
 </shape>

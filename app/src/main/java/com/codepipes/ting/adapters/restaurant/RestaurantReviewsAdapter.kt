@@ -32,6 +32,12 @@ class RestaurantReviewsAdapter (private val reviews: MutableList<RestaurantRevie
         holder.view.review_comment.text = review.comment
         holder.view.review_date.text = utilsFunctions.timeAgo(review.updatedAt)
     }
+
+    public fun addItems(reviewsOthers : MutableList<RestaurantReview>) {
+        val lastPosition = reviews.size
+        reviews.addAll(reviewsOthers)
+        notifyItemRangeInserted(lastPosition, reviewsOthers.size)
+    }
 }
 
 class RestaurantReviewsViewHolder(val view: View, val review: RestaurantReview? = null) : RecyclerView.ViewHolder(view){}

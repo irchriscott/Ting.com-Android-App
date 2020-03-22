@@ -11,21 +11,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.user.UserRestaurantsAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
-import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.User
 import com.codepipes.ting.models.UserRestaurant
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.fragment_user_restaurants.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.*
 import java.io.IOException
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 
@@ -66,8 +63,8 @@ class UserRestaurants : Fragment() {
         }
 
         if(user.id == session.id){
-            this.loadUser("${Routes().HOST_END_POINT}${user.urls.apiGetAuth}", view, session.token!!)
-        } else { this.loadUser("${Routes().HOST_END_POINT}${user.urls.apiGet}", view, session.token!!) }
+            this.loadUser("${Routes.HOST_END_POINT}${user.urls.apiGetAuth}", view, session.token!!)
+        } else { this.loadUser("${Routes.HOST_END_POINT}${user.urls.apiGet}", view, session.token!!) }
 
         return view
     }
@@ -86,7 +83,11 @@ class UserRestaurants : Fragment() {
             view.empty_data.visibility = View.VISIBLE
             view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
             view.empty_data.empty_text.text = "No Restaurant To Show"
-            TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+            TingToast(
+                context!!,
+                "No Restaurant To Show",
+                TingToastType.DEFAULT
+            ).showToast(Toast.LENGTH_LONG)
         }
     }
 
@@ -113,7 +114,11 @@ class UserRestaurants : Fragment() {
                     view.empty_data.visibility = View.VISIBLE
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
                     view.empty_data.empty_text.text = "No Restaurant To Show"
-                    TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(
+                    TingToast(
+                        context!!,
+                        e.message!!.capitalize(),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }

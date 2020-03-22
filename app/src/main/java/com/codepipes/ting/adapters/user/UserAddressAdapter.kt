@@ -13,10 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.dialogs.user.edit.EditUserAddress
 import com.codepipes.ting.models.Address
 import com.codepipes.ting.models.ServerResponse
@@ -79,7 +79,7 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
                     override fun data(data: String, position: Int) {
                         when(position){
                             0 -> {
-                                val url = "${Routes().deleteUserAddress}${address.id}/"
+                                val url = "${Routes.deleteUserAddress}${address.id}/"
                                 val client = OkHttpClient()
 
                                 val request = Request.Builder()
@@ -94,7 +94,11 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
 
                                     override fun onFailure(call: Call, e: IOException) {
                                         activity.runOnUiThread {
-                                            TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                            TingToast(
+                                                activity,
+                                                e.message!!,
+                                                TingToastType.ERROR
+                                            ).showToast(Toast.LENGTH_LONG)
                                         }
                                     }
 
@@ -110,14 +114,25 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
                                                     notifyItemRemoved(position)
                                                     notifyItemRangeRemoved(position, addressesList.size)
                                                     userAuthentication.set(gson.toJson(serverResponse.user))
-                                                    TingToast(activity, serverResponse.message, TingToastType.SUCCESS).showToast(
+                                                    TingToast(
+                                                        activity,
+                                                        serverResponse.message,
+                                                        TingToastType.SUCCESS
+                                                    ).showToast(
                                                         Toast.LENGTH_LONG)
-                                                } else { ErrorMessage(activity, serverResponse.message).show() }
+                                                } else { ErrorMessage(
+                                                    activity,
+                                                    serverResponse.message
+                                                ).show() }
                                             }
                                         } catch (e: Exception){
                                             activity.runOnUiThread {
                                                 mProgressOverlay.dismiss()
-                                                TingToast(activity, "An Error Has Occurred", TingToastType.ERROR).showToast(
+                                                TingToast(
+                                                    activity,
+                                                    "An Error Has Occurred",
+                                                    TingToastType.ERROR
+                                                ).showToast(
                                                     Toast.LENGTH_LONG)
                                             }
                                         }

@@ -1,12 +1,9 @@
 package com.codepipes.ting.fragments.menu
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Paint
-import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.design.widget.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,13 +42,13 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
 
         if(menu.type.id != 2){
             view.menu_subcategory_name.text = menu.menu.category?.name
             view.menu_cuisine_name.text = menu.menu.cuisine?.name
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(view.menu_subcategory_image)
-            Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.cuisine?.image}").into(view.menu_cuisine_image)
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(view.menu_subcategory_image)
+            Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}").into(view.menu_cuisine_image)
         } else {
             view.menu_subcategory.visibility = View.GONE
             view.menu_cuisine_view.visibility = View.GONE
@@ -101,8 +98,25 @@ class RestaurantMenuBottomSheetFragment : BottomSheetDialogFragment() {
             view.menu_availability_icon.setImageDrawable(view.context.resources.getDrawable(R.drawable.ic_close_white_24dp))
         }
 
+        if (menu.menu.promotions?.todayPromotion != null) {
+            view.menu_separator_third.visibility = View.VISIBLE
+            view.menu_promotions_title.visibility = View.VISIBLE
+
+            if(menu.menu.promotions.todayPromotion.reduction != null) {
+                view.menu_promotion_reduction.visibility = View.VISIBLE
+                view.menu_promotion_reduction_icon.visibility = View.VISIBLE
+                view.menu_promotion_reduction.text = menu.menu.promotions.todayPromotion.reduction
+            }
+
+            if(menu.menu.promotions.todayPromotion.supplement != null) {
+                view.menu_promotion_supplement.visibility = View.VISIBLE
+                view.menu_promotion_supplement_icon.visibility = View.VISIBLE
+                view.menu_promotion_supplement.text = menu.menu.promotions.todayPromotion.supplement
+            }
+        }
+
         view.menu_image.setOnClickListener {
-            val intent = Intent(activity!!, com.codepipes.ting.RestaurantMenu::class.java)
+            val intent = Intent(activity!!, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)
             intent.putExtra("url", menu.urls.apiGet)
             activity?.startActivity(intent)

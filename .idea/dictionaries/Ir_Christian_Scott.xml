@@ -4,7 +4,11 @@
       <w>abcdefghijklmnopqrstuvwxyz</w>
       <w>cancelation</w>
       <w>cancle</w>
+      <w>checkmark</w>
+      <w>clearable</w>
+      <w>colorpicker</w>
       <w>contxt</w>
+      <w>customclasses</w>
       <w>dlat</w>
       <w>dlng</w>
       <w>geocoder</w>
@@ -12,12 +16,18 @@
       <w>linebottom</w>
       <w>msgs</w>
       <w>navbar</w>
+      <w>popwin</w>
       <w>pubnub</w>
+      <w>rects</w>
       <w>recyclerview</w>
       <w>resto</w>
       <w>restos</w>
+      <w>seekbar</w>
       <w>signup</w>
+      <w>simpledialogfragment</w>
+      <w>snackbar</w>
       <w>stfalcon</w>
+      <w>textview</w>
       <w>urlc</w>
     </words>
   </dictionary>

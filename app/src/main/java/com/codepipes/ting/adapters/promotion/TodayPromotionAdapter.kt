@@ -3,20 +3,14 @@ package com.codepipes.ting.adapters.promotion
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.adapters.menu.MenuImageListAdapter
-import com.codepipes.ting.models.MenuImage
 import com.codepipes.ting.models.MenuPromotion
-import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_today_promotion.view.*
 import java.text.NumberFormat
@@ -41,7 +35,7 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
         utilsFunctions = UtilsFunctions(holder.view.context)
         val activity = holder.view.context as Activity
 
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
         holder.view.promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
         holder.view.promotion_time.text = promotion.period
@@ -60,12 +54,12 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
             4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
-                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.promotion_menu_on_image)
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
             }
             5 -> {
                 holder.view.promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
-                Picasso.get().load("${Routes().HOST_END_POINT}${promotion.promotionItem.category?.image}").into(holder.view.promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}").into(holder.view.promotion_menu_on_image)
             }
             else -> { holder.view.promotion_menu_on.visibility = View.GONE }
         }
@@ -92,7 +86,7 @@ class TodayPromotionAdapter (private val promotions: MutableList<MenuPromotion>)
         holder.view.promotion_interests.text = NumberFormat.getNumberInstance().format(promotion.interests.count)
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.MenuPromotion::class.java)
             intent.putExtra("promo", promotion.id)
             intent.putExtra("url", promotion.urls.apiGet)
             activity.startActivity(intent)

@@ -4,16 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.R
+import com.codepipes.ting.abstracts.EndlessScrollEventListener
 import com.codepipes.ting.adapters.menu.MenuReviewsAdapter
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.MenuReview
 import com.codepipes.ting.models.RestaurantMenu
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -36,10 +39,7 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         gson = Gson()
 
@@ -48,7 +48,7 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
 
         val menu = gson.fromJson(myArgs?.getString("menu")!!, RestaurantMenu::class.java)
 
-        val url = "${Routes().HOST_END_POINT}${menu.urls.apiReviews}"
+        val url = "${Routes.HOST_END_POINT}${menu.urls.apiReviews}"
 
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -63,7 +63,11 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -75,12 +79,33 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
                     activity!!.runOnUiThread {
                         view.progress_loader.visibility = View.GONE
                         view.menu_reviews_recycler_view.visibility = View.VISIBLE
+
+                        val linearLayoutManager = LinearLayoutManager(activity)
+                        val menuReviewsAdapter = MenuReviewsAdapter(reviews)
+
                         view.menu_reviews_recycler_view.layoutManager = LinearLayoutManager(activity)
-                        view.menu_reviews_recycler_view.adapter = MenuReviewsAdapter(reviews)
+                        view.menu_reviews_recycler_view.adapter = menuReviewsAdapter
+
+                        view.menu_reviews_recycler_view.addOnScrollListener(object : EndlessScrollEventListener(linearLayoutManager){
+                            override fun onLoadMore(pageNum: Int, recyclerView: RecyclerView?) {
+                                TingClient.getRequest("$url?page=${pageNum + 1}", null, null) { _, isSuccess, result ->
+                                    if (isSuccess) {
+                                        try {
+                                            val reviewsPage = gson.fromJson<MutableList<MenuReview>>(result, object : TypeToken<MutableList<MenuReview>>(){}.type)
+                                            menuReviewsAdapter.addItems(reviewsPage)
+                                        } catch (e: java.lang.Exception) {}
+                                    }
+                                }
+                            }
+                        })
                     }
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

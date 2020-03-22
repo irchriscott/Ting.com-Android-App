@@ -6,6 +6,7 @@ class Placement (
     val table: RestaurantTable,
     val booking: Booking?,
     val waiter: Administrator?,
+    val bill: Bill?,
     val token: String,
     val people: Int,
     val isDone: Boolean,

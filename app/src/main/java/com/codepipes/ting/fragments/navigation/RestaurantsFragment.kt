@@ -14,16 +14,19 @@ import android.app.Activity
 import android.location.Geocoder
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.support.v4.view.ViewCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.ScrollView
 import android.widget.Toast
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
 import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.RestaurantFiltersFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.FilterRestaurantsClickListener
@@ -32,6 +35,7 @@ import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.APILoadGlobalRestaurants
 import com.codepipes.ting.providers.LocalData
+import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
@@ -50,6 +54,7 @@ import java.lang.Exception
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -59,10 +64,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mProgressLoader: View
     private lateinit var mEmptyDataView: View
     private lateinit var mRefreshRestaurant: SwipeRefreshLayout
+    private lateinit var mScrollView: NestedScrollView
 
     private lateinit var activity: Activity
-
-    private val routes: Routes = Routes()
     private val gson: Gson = Gson()
 
     private var isAsync: Boolean = false
@@ -87,7 +91,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val TIMER_PERIOD = 10000.toLong()
 
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -199,7 +204,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 override fun data(data: String, position: Int) {
                     if(!restaurants.isNullOrEmpty()){
-                        if(position == 0){ showRestaurantWithCurrentAddress() }
+                        if(position == 0){ showRestaurantWithCurrentAddress(1) }
                         else {
                             val address = session.addresses?.addresses!![position - 1]
                             val from = LatLng(address.latitude, address.longitude)
@@ -226,6 +231,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mProgressLoader = view.findViewById<View>(R.id.progress_loader) as View
         mEmptyDataView = view.findViewById<View>(R.id.empty_data) as View
         mRefreshRestaurant = view.findViewById<SwipeRefreshLayout>(R.id.refresh_restaurants) as SwipeRefreshLayout
+        mScrollView = view.findViewById<NestedScrollView>(R.id.scroll_view) as NestedScrollView
 
         mRefreshRestaurant.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
         mRefreshRestaurant.setOnRefreshListener(this)
@@ -250,7 +256,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                 mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    "No Restaurant To Show",
+                    TingToastType.DEFAULT
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -260,7 +270,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         val query = view.search_restaurant_input.text.toString()
 
-        view.filter_distance.setOnClickListener { TingToast(context!!, "Not Available For Now", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
+        view.filter_distance.setOnClickListener { TingToast(
+            context!!,
+            "Not Available For Now",
+            TingToastType.DEFAULT
+        ).showToast(Toast.LENGTH_LONG) }
         view.filter_availability.setOnClickListener { showFilters(AVAILABILITY_KEY, query) }
         view.filter_cuisines.setOnClickListener { showFilters(CUISINES_KEY, query) }
         view.filter_services.setOnClickListener { showFilters(SERVICES_KEY, query) }
@@ -298,13 +312,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showRestaurantWithCurrentAddress() {
+    private fun showRestaurantWithCurrentAddress(typeLoad: Int) {
 
         mRestaurantsRecyclerView.visibility = View.VISIBLE
         mProgressLoader.visibility = View.GONE
         mEmptyDataView.visibility = View.GONE
 
         if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
+
+        val linearLayoutManager = LinearLayoutManager(context)
+        var globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
 
         if(mUtilFunctions.checkLocationPermissions()){
             try {
@@ -331,8 +348,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         }
                     }
                     restaurants.sortBy { b -> b.dist }
-                    mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
-                    mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                    mRestaurantsRecyclerView.layoutManager = linearLayoutManager
+                    mRestaurantsRecyclerView.adapter = globalRestaurantAdapter
                 }.addOnFailureListener {
                     val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                     selectedLatitude = session.addresses!!.addresses[0].latitude
@@ -344,11 +362,148 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         b.fromLocation = from
                     }
                     restaurants.sortBy { b -> b.dist }
-                    mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
-                    mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants,fragmentManager!!)
-                    TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                    mRestaurantsRecyclerView.layoutManager = linearLayoutManager
+                    mRestaurantsRecyclerView.adapter = globalRestaurantAdapter
+                    TingToast(
+                        context!!,
+                        it.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
-            } catch (e: Exception){ TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+
+                var pageNum = 1
+                ViewCompat.setNestedScrollingEnabled(mRestaurantsRecyclerView, false)
+
+                mScrollView.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+
+                    if(view?.getChildAt(view.childCount - 1) != null) {
+                        if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
+
+                            val visibleItemCount = linearLayoutManager.childCount
+                            val totalItemCount = linearLayoutManager.itemCount
+                            val pastVisibleItems = linearLayoutManager.findLastVisibleItemPosition()
+
+                            if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+
+                                pageNum++
+
+                                if (typeLoad == 1) {
+                                    TingClient.getRequest("${Routes.restaurantsGlobal}?page=$pageNum", LocationInterceptor(), session.token) { _, isSuccess, result ->
+                                        activity.runOnUiThread {
+                                            if(isSuccess){
+                                                try {
+                                                    val restosResultPage =
+                                                        Gson().fromJson<MutableList<Branch>>(
+                                                            result,
+                                                            object :
+                                                                TypeToken<MutableList<Branch>>() {}.type
+                                                        )
+                                                    try {
+                                                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                                                            if(it != null){
+                                                                val from = LatLng(it.latitude, it.longitude)
+                                                                restosResultPage.forEach { b ->
+                                                                    val to = LatLng(b.latitude, b.longitude)
+                                                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                    b.dist = dist
+                                                                    b.fromLocation = from
+                                                                }
+                                                            } else {
+                                                                val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                                restosResultPage.forEach { b ->
+                                                                    val to = LatLng(b.latitude, b.longitude)
+                                                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                    b.dist = dist
+                                                                    b.fromLocation = from
+                                                                }
+                                                            }
+                                                            restosResultPage.sortBy { b -> b.dist }
+                                                            globalRestaurantAdapter.addItems(restosResultPage)
+                                                        }.addOnFailureListener {
+                                                            val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                            restosResultPage.forEach { b ->
+                                                                val to = LatLng(b.latitude, b.longitude)
+                                                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                b.dist = dist
+                                                                b.fromLocation = from
+                                                            }
+                                                            restosResultPage.sortBy { b -> b.dist }
+                                                            globalRestaurantAdapter.addItems(restosResultPage)
+                                                        }
+                                                    } catch (e: Exception) {}
+
+                                                } catch (e: Exception) { }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    val formData = HashMap<String, String>()
+                                    formData["country"] = country
+                                    formData["town"] = town
+                                    formData["query"] = search_restaurant_input.text.toString()
+                                    formData["filters"] = gson.toJson(mLocalData.getParametersFilters())
+                                    formData["page"] = pageNum.toString()
+
+                                    TingClient.postRequest(Routes.restaurantsSearchFiltered, formData, null, session.token) { _, isSuccess, result ->
+                                        activity.runOnUiThread {
+                                            if(isSuccess){
+                                                try {
+                                                    val restosResultPage =
+                                                        Gson().fromJson<MutableList<Branch>>(
+                                                            result,
+                                                            object :
+                                                                TypeToken<MutableList<Branch>>() {}.type
+                                                        )
+                                                    try {
+                                                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                                                            if(it != null){
+                                                                val from = LatLng(it.latitude, it.longitude)
+                                                                restosResultPage.forEach { b ->
+                                                                    val to = LatLng(b.latitude, b.longitude)
+                                                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                    b.dist = dist
+                                                                    b.fromLocation = from
+                                                                }
+                                                            } else {
+                                                                val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                                restosResultPage.forEach { b ->
+                                                                    val to = LatLng(b.latitude, b.longitude)
+                                                                    val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                    b.dist = dist
+                                                                    b.fromLocation = from
+                                                                }
+                                                            }
+                                                            restosResultPage.sortBy { b -> b.dist }
+                                                            globalRestaurantAdapter.addItems(restosResultPage)
+                                                        }.addOnFailureListener {
+                                                            val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
+                                                            restosResultPage.forEach { b ->
+                                                                val to = LatLng(b.latitude, b.longitude)
+                                                                val dist = mUtilFunctions.calculateDistance(from, to)
+                                                                b.dist = dist
+                                                                b.fromLocation = from
+                                                            }
+                                                            restosResultPage.sortBy { b -> b.dist }
+                                                            globalRestaurantAdapter.addItems(restosResultPage)
+                                                        }
+                                                    } catch (e: Exception) {}
+
+                                                } catch (e: Exception) { }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            } catch (e: Exception){ TingToast(
+                context!!,
+                e.message!!.capitalize(),
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG) }
         }
     }
 
@@ -368,7 +523,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
     private fun getRestaurants(){
-        val url = routes.restaurantsGlobal
+        val url = Routes.restaurantsGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -399,31 +554,36 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onResponse(call: Call, response: Response) {
                 val dataString = response.body()!!.string()
-                restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+                try {
+                    restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
+                    activity.runOnUiThread {
+                        restaurantsTimer.cancel()
+                        mRefreshRestaurant.isRefreshing = false
+                        mLocalData.saveRestaurants(dataString)
 
-                activity.runOnUiThread {
-                    restaurantsTimer.cancel()
-                    mRefreshRestaurant.isRefreshing = false
-                    mLocalData.saveRestaurants(dataString)
+                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(1) }
+                        else {
+                            mRestaurantsRecyclerView.visibility = View.GONE
+                            mProgressLoader.visibility = View.GONE
+                            mEmptyDataView.visibility = View.VISIBLE
 
-                    if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress() }
-                    else {
-                        mRestaurantsRecyclerView.visibility = View.GONE
-                        mProgressLoader.visibility = View.GONE
-                        mEmptyDataView.visibility = View.VISIBLE
-
-                        if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
-                        mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                        mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                        TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                            if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
+                            mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
+                            mEmptyDataView.empty_text.text = "No Restaurant To Show"
+                            TingToast(
+                                context!!,
+                                "No Restaurant To Show",
+                                TingToastType.DEFAULT
+                            ).showToast(Toast.LENGTH_LONG)
+                        }
                     }
-                }
+                } catch (e: Exception) {}
             }
         })
     }
 
     private fun getCuisines() {
-        val url = routes.cuisinesGlobal
+        val url = Routes.cuisinesGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -460,7 +620,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun getFilters() {
-        val url = routes.restaurantFilters
+        val url = Routes.restaurantFilters
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -520,7 +680,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     @SuppressLint("SetTextI18n")
     private fun searchFilterRestaurants(filters: String, query: String) {
-        val url = routes.restaurantsSearchFiltered
+        val url = Routes.restaurantsSearchFiltered
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -566,7 +726,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     try {
                         filteredRestaurantTimer.cancel()
                         restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
-                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress() }
+                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(2) }
                         else {
                             mRestaurantsRecyclerView.visibility = View.GONE
                             mProgressLoader.visibility = View.GONE
@@ -575,9 +735,17 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
                             mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
                             mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                            TingToast(context!!, "No Restaurant To Show", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                "No Restaurant To Show",
+                                TingToastType.DEFAULT
+                            ).showToast(Toast.LENGTH_LONG)
                         }
-                    } catch (e: Exception) { TingToast(context!!, e.localizedMessage,TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                    } catch (e: Exception) { TingToast(
+                        context!!,
+                        e.localizedMessage,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG) }
                 }
             }
         })

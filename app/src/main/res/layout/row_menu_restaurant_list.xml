@@ -11,7 +11,7 @@
     <com.codepipes.ting.customclasses.RoundedCornerImageView
             android:id="@+id/restaurant_menu_image"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/default_meal"

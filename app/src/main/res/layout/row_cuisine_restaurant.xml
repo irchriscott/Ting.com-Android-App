@@ -43,6 +43,7 @@
                     android:fontFamily="@font/poppins_semi_bold"
                     android:textSize="14sp"
                     android:paddingRight="94dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
@@ -80,6 +81,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:textSize="12sp"
                     android:paddingRight="106dp"
+                    android:textColor="@color/colorGray"
                     app:layout_constraintTop_toBottomOf="@id/restaurant_rating"
                     app:layout_constraintStart_toEndOf="@id/restaurant_address_pin"
                     tools:ignore="HardcodedText,RtlSymmetry"/>

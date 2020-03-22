@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         android:animateLayoutChanges="true"
-        tools:context=".SplashScreen">
+        tools:context=".activities.base.SplashScreen">
 
 
         <RelativeLayout

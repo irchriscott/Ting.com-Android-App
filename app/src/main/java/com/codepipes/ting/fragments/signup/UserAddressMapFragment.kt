@@ -1,19 +1,15 @@
 package com.codepipes.ting.fragments.signup
 
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.design.widget.CoordinatorLayout
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +17,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -32,7 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
-import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
 import com.livefront.bridge.Bridge
@@ -116,7 +111,11 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            it.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }
@@ -171,11 +170,19 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                         this.getLocation(it)
                     }.addOnFailureListener {
                         activity!!.runOnUiThread {
-                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: Exception){
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
             true
@@ -194,7 +201,11 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                         this.getLocation(it)
                     }.addOnFailureListener {
                         activity!!.runOnUiThread {
-                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } else {
@@ -203,7 +214,11 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(signUpUserData["latitude"]!!.toDouble(), signUpUserData["longitude"]!!.toDouble()), GOOGLE_MAPS_ZOOM))
                 }
             } catch (e: Exception){
-                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    e.message!!,
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -215,7 +230,11 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, GOOGLE_MAPS_ZOOM))
                 this.setLocationVariable(addresses[0].getAddressLine(0), it.latitude, it.longitude, addresses[0].countryName, addresses[0].locality)
             } catch (e: Exception){
-                TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    activity!!.resources.getString(R.string.error_internet),
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
     }
@@ -227,7 +246,11 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM))
             this.setLocationVariable(addresses[0].getAddressLine(0), location.latitude, location.longitude, addresses[0].countryName, addresses[0].locality)
         } catch (e: Exception){
-            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            TingToast(
+                context!!,
+                activity!!.resources.getString(R.string.error_internet),
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG)
         }
     }
 

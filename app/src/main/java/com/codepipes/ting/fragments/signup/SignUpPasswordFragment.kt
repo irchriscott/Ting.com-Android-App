@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.TingDotCom
+import com.codepipes.ting.activities.base.TingDotCom
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
-import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
@@ -44,8 +42,8 @@ class SignUpPasswordFragment : Fragment() {
     lateinit var mSignUpConfirmPasswordInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
-    private val routes: Routes = Routes()
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -97,15 +95,41 @@ class SignUpPasswordFragment : Fragment() {
                 if(mSignUpPasswordInput.text.toString() == mSignUpConfirmPasswordInput.text.toString()){
                     mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
                     this.submitSignUp()
-                } else { ErrorMessage(activity, "Passwords Didn't Match").show() }
-            } else { ErrorMessage(activity, "Passwords Cannot Be Empty").show() }
+                } else {
+                    val successOverlay = SuccessOverlay()
+                    val bundle = Bundle()
+                    bundle.putString("message", "Passwords Didn't Match")
+                    bundle.putString("type", "error")
+                    successOverlay.arguments = bundle
+                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.dismissListener(object :
+                        SuccessDialogCloseListener {
+                        override fun handleDialogClose(dialog: DialogInterface?) {
+                            successOverlay.dismiss()
+                        }
+                    })
+                }
+            } else {
+                val successOverlay = SuccessOverlay()
+                val bundle = Bundle()
+                bundle.putString("message", "Passwords Cannot Be Empty")
+                bundle.putString("type", "error")
+                successOverlay.arguments = bundle
+                successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                successOverlay.dismissListener(object :
+                    SuccessDialogCloseListener {
+                    override fun handleDialogClose(dialog: DialogInterface?) {
+                        successOverlay.dismiss()
+                    }
+                })
+            }
         }
 
         return view
     }
 
     private fun submitSignUp(){
-        val url = this.routes.submitEmailSignUp
+        val url = Routes.submitEmailSignUp
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -137,7 +161,11 @@ class SignUpPasswordFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        context!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -163,17 +191,47 @@ class SignUpPasswordFragment : Fragment() {
                                         settings.removeSettingFromSharedPreferences("signup_data")
                                         localData.updateUser(serverResponse.user)
                                         startActivity(Intent(activity, TingDotCom::class.java))
-                                    } else { ErrorMessage(activity, "Unable To Fetch User Data").show() }
+                                    } else {
+                                        val successOverlay = SuccessOverlay()
+                                        val bundle = Bundle()
+                                        bundle.putString("message", "Unable To Fetch User Data")
+                                        bundle.putString("type", "error")
+                                        successOverlay.arguments = bundle
+                                        successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                                        successOverlay.dismissListener(object :
+                                            SuccessDialogCloseListener {
+                                            override fun handleDialogClose(dialog: DialogInterface?) {
+                                                successOverlay.dismiss()
+                                            }
+                                        })
+                                    }
                                 }
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(activity, serverResponse.message).show() }
+                        } else {
+                            val successOverlay = SuccessOverlay()
+                            val bundle = Bundle()
+                            bundle.putString("message", serverResponse.message)
+                            bundle.putString("type", "error")
+                            successOverlay.arguments = bundle
+                            successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object :
+                                SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    successOverlay.dismiss()
+                                }
+                            })
+                        }
                     }
                 } catch(e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(context!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

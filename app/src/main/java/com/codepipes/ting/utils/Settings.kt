@@ -17,7 +17,7 @@ class Settings(
         this.sharedPreferencesEditor.commit()
     }
 
-    public fun getSettingFromSharedPreferences(key: String) : String?{
+    public fun getSettingFromSharedPreferences(key: String) : String? {
         return this.sharedPreferences.getString(key, null)
     }
 

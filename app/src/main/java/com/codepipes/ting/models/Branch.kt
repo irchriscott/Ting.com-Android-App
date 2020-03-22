@@ -115,3 +115,13 @@ class BranchUrls (
 	val apiAddLike: String
 ){}
 
+class TableLocation(
+    val id: Int,
+    val name: String
+) {}
+
+class BranchTableLocations(
+    val locations: List<TableLocation>,
+    val tables: List<Int>
+) {}
+

@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.RestaurantProfile
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.utils.UtilsFunctions
@@ -86,9 +86,9 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
                     activity.runOnUiThread {
 
                         val statusTimer = utilsFunctions.statusWorkTime(branch.restaurant.opening, branch.restaurant.closing)
-                        holder.view.restaurant_time.text = statusTimer?.get("msg")
+                        holder.view.restaurant_time.text = statusTimer["msg"]
 
-                        when (statusTimer?.get("clr")) {
+                        when (statusTimer["clr"]) {
                             "green" -> {
                                 holder.view.restaurant_work_status.background =
                                     holder.view.context.resources.getDrawable(R.drawable.background_time_green)
@@ -140,6 +140,12 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
             mapFragment.arguments = args
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
+    }
+
+    public fun addItems(restosOthers : MutableList<Branch>) {
+        val lastPosition = branches.size
+        branches.addAll(restosOthers)
+        notifyItemRangeInserted(lastPosition, restosOthers.size)
     }
 }
 

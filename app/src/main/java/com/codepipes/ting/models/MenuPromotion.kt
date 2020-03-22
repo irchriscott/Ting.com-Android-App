@@ -70,3 +70,11 @@ class PromotionMenus(
     val count: Int,
     val menus: List<RestaurantMenu>?
 ){}
+
+class PromotionDataString(
+    val id: Int,
+    val occasionEvent: String,
+    val posterImage: String,
+    val supplement: String?,
+    val reduction: String?
+) {}

@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.RestaurantProfile
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.models.UserRestaurant
 import com.codepipes.ting.utils.UtilsFunctions
 import com.squareup.picasso.Picasso

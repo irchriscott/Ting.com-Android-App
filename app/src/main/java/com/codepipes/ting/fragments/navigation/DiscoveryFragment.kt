@@ -5,23 +5,25 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.codepipes.ting.*
+import com.codepipes.ting.activities.discovery.TodayPromotions
+import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.activities.placement.RestaurantScanner
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 
 import com.codepipes.ting.adapters.cuisine.CuisineMenusAdapter
 import com.codepipes.ting.adapters.cuisine.CuisineRestaurantsAdapter
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.carouselview.enums.IndicatorAnimationType
 import com.codepipes.ting.carouselview.enums.OffsetType
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.*
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.RestaurantMenu
@@ -62,7 +64,6 @@ class DiscoveryFragment : Fragment() {
     private lateinit var mUtilFunctions: UtilsFunctions
 
     private lateinit var gson: Gson
-    private lateinit var routes: Routes
 
     private lateinit var restaurantsTimer: Timer
     private lateinit var cuisinesTimer: Timer
@@ -123,7 +124,6 @@ class DiscoveryFragment : Fragment() {
         }
 
         gson = Gson()
-        routes = Routes()
 
         restaurantsTimer = Timer()
         cuisinesTimer = Timer()
@@ -269,7 +269,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverRestaurants(view: View) {
-        val url = routes.discoverRestaurants
+        val url = Routes.discoverRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -370,7 +370,11 @@ class DiscoveryFragment : Fragment() {
                                 hideIndicator(true)
                                 show()
                             }
-                            TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     } catch (e: Exception) {
                         restaurantsTimer.cancel()
@@ -382,7 +386,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun getCuisines() {
-        val url = routes.cuisinesGlobal
+        val url = Routes.cuisinesGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -422,7 +426,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverTodayPromotions(view: View) {
-        val url = routes.discoverTodayPromosRand
+        val url = Routes.discoverTodayPromosRand
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -473,11 +477,11 @@ class DiscoveryFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun inflateDiscoveredPromotion(promotion: MenuPromotion) : View {
         val view = layoutInflater.inflate(R.layout.row_discover_promotion, null)
-        Picasso.get().load("${Routes().HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
         view.promotion_title.text = promotion.occasionEvent
-        when {
-            promotion.promotionItem.type.id == 5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
-            promotion.promotionItem.type.id == 4 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.menu?.menu?.name}"
+        when (promotion.promotionItem.type.id) {
+            5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
+            4 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.menu?.menu?.name}"
             else -> view.promotion_type.text = promotion.promotionItem.type.name
         }
         if (promotion.reduction.hasReduction){
@@ -496,7 +500,7 @@ class DiscoveryFragment : Fragment() {
         }
 
         view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.MenuPromotion::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.MenuPromotion::class.java)
             intent.putExtra("promo", promotion.id)
             intent.putExtra("url", promotion.urls.apiGet)
             activity!!.startActivity(intent)
@@ -507,7 +511,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun getDiscoverMenus(view: View) {
-        val url = routes.discoverMenus
+        val url = Routes.discoverMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -550,11 +554,11 @@ class DiscoveryFragment : Fragment() {
 
                                 val index = (0 until menu.menu.images.count - 1).random()
                                 val image = menu.menu.images.images[index]
-                                Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(view.menu_image)
+                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
 
                                 view.menu_price.text = "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.price)}".toUpperCase()
                                 view.setOnClickListener {
-                                    val intent = Intent(context, com.codepipes.ting.RestaurantMenu::class.java)
+                                    val intent = Intent(context, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
                                     intent.putExtra("menu", menu.id)
                                     intent.putExtra("url", menu.urls.apiGet)
                                     activity?.startActivity(intent)
@@ -576,7 +580,7 @@ class DiscoveryFragment : Fragment() {
 
     @SuppressLint("DefaultLocale")
     private fun getDiscoverTopRestaurants(view: View) {
-        val url = routes.discoverTopRestaurants
+        val url = Routes.discoverTopRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -635,13 +639,21 @@ class DiscoveryFragment : Fragment() {
                                 view.top_restaurants.visibility = View.VISIBLE
                                 view.top_restaurants.layoutManager = LinearLayoutManager(context)
                                 view.top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
-                                TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                TingToast(
+                                    context!!,
+                                    it.message!!.capitalize(),
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
                             }
                         } catch (e: Exception){
                             topRestaurantTimer.cancel()
                             topRestaurantsTimerTask.cancel()
                             view.top_restaurants_view.visibility = View.GONE
-                            TingToast(context!!, e.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                e.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 }
@@ -650,7 +662,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     private fun getDiscoverTopMenus(view: View) {
-        val url = routes.discoverTopMenus
+        val url = Routes.discoverTopMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -677,7 +689,7 @@ class DiscoveryFragment : Fragment() {
                         view.top_menus_shimmer.visibility = View.GONE
                         view.top_menus.visibility = View.VISIBLE
                         view.top_menus.layoutManager = LinearLayoutManager(context)
-                        view.top_menus.adapter = CuisineMenusAdapter(menus)
+                        view.top_menus.adapter = CuisineMenusAdapter(menus.toMutableSet())
                     } catch (e: Exception) { view.top_menus_view.visibility = View.GONE }
                 }
             }

@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.row_cuisine_menu.view.*
 import java.text.NumberFormat
 
 
-class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : RecyclerView.Adapter<CuisineMenusViewHolder>() {
+class CuisineMenusAdapter (private val menus: MutableSet<RestaurantMenu>) : RecyclerView.Adapter<CuisineMenusViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): CuisineMenusViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -28,14 +28,14 @@ class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : Rec
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
     override fun onBindViewHolder(holder: CuisineMenusViewHolder, position: Int) {
-        val menu = menus[position]
+        val menu = menus.toMutableList()[position]
         val activity = holder.view.context as Activity
 
         holder.menu = menu
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes().HOST_END_POINT}${image.image}").into(holder.view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.menu_image)
 
         holder.view.menu_name.text = menu.menu.name
         holder.view.menu_rating.rating = menu.menu.reviews?.average!!.toFloat()
@@ -51,13 +51,13 @@ class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : Rec
         } else { holder.view.menu_old_price.visibility = View.GONE }
 
         holder.view.restaurant_name.text = menu.restaurant.name
-        Picasso.get().load("${Routes().HOST_END_POINT}${menu.restaurant.logo}").into(holder.view.restaurant_logo)
+        Picasso.get().load("${Routes.HOST_END_POINT}${menu.restaurant.logo}").into(holder.view.restaurant_logo)
 
         when (menu.type.id) {
             1 -> {
                 holder.view.menu_type_name.text = menu.menu.foodType
                 holder.view.menu_category_name.text = menu.menu.category?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} pieces / packs"
                 } else { holder.view.menu_quantity.visibility = View.GONE }
@@ -72,7 +72,7 @@ class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : Rec
             3 -> {
                 holder.view.menu_type_image.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_clock_gray_24dp))
                 holder.view.menu_category_name.text = menu.menu.category?.name
-                Picasso.get().load("${Routes().HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}").into(holder.view.menu_category_image)
                 holder.view.menu_type_name.text = menu.menu.dishTime
                 if (menu.menu.isCountable) {
                     holder.view.menu_quantity.text = "${menu.menu.quantity} plates / packs"
@@ -98,11 +98,17 @@ class CuisineMenusAdapter (private val menus: MutableList<RestaurantMenu>) : Rec
         }
 
         holder.view.setOnClickListener {
-            val intent = Intent(activity, com.codepipes.ting.RestaurantMenu::class.java)
+            val intent = Intent(activity, com.codepipes.ting.activities.menu.RestaurantMenu::class.java)
             intent.putExtra("menu", menu.id)
             intent.putExtra("url", menu.urls.apiGet)
             holder.view.context.startActivity(intent)
         }
+    }
+
+    public fun addItems(menusOthers : MutableList<RestaurantMenu>) {
+        val lastPosition = menus.size
+        menus.addAll(menusOthers)
+        notifyItemRangeInserted(lastPosition, menusOthers.size)
     }
 }
 

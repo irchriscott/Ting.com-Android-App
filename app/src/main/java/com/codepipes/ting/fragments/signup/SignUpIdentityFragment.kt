@@ -1,13 +1,10 @@
 package com.codepipes.ting.fragments.signup
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.location.Geocoder
-import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
@@ -20,7 +17,8 @@ import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.codepipes.ting.customclasses.LockableViewPager
-import com.codepipes.ting.dialogs.*
+import com.codepipes.ting.dialogs.messages.*
+import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import okhttp3.*
 import com.codepipes.ting.utils.Routes
@@ -37,15 +35,15 @@ import java.util.concurrent.TimeUnit
 
 class SignUpIdentityFragment : Fragment() {
 
-    lateinit var mAppNameText: TextView
-    lateinit var mNextSignUpBtn: Button
-    lateinit var mSignUpNameInput: EditText
-    lateinit var mSignUpUsernameInput: EditText
-    lateinit var mSignUpEmailInput: EditText
+    private lateinit var mAppNameText: TextView
+    private lateinit var mNextSignUpBtn: Button
+    private lateinit var mSignUpNameInput: EditText
+    private lateinit var mSignUpUsernameInput: EditText
+    private lateinit var mSignUpEmailInput: EditText
 
-    lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay = ProgressOverlay()
-    private val routes: Routes = Routes()
+    private lateinit var mViewPager: LockableViewPager
+    private val mProgressOverlay: ProgressOverlay =
+        ProgressOverlay()
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -116,11 +114,19 @@ class SignUpIdentityFragment : Fragment() {
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {
-                        TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            it.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             } catch (e: Exception){
-                TingToast(context!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    e.message!!,
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -141,7 +147,7 @@ class SignUpIdentityFragment : Fragment() {
     }
 
     private fun checkEmailUsername(){
-        val url = this.routes.checkEmailUsername
+        val url = Routes.checkEmailUsername
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -163,7 +169,11 @@ class SignUpIdentityFragment : Fragment() {
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
                     mProgressOverlay.dismiss()
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -175,7 +185,18 @@ class SignUpIdentityFragment : Fragment() {
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status != 200){
-                            ErrorMessage(activity, "Fill All The Fields").show()
+                            val successOverlay = SuccessOverlay()
+                            val bundle = Bundle()
+                            bundle.putString("message", "Fill All The Fields")
+                            bundle.putString("type", "error")
+                            successOverlay.arguments = bundle
+                            successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object :
+                                SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    successOverlay.dismiss()
+                                }
+                            })
                         } else {
                             signUpUserData["name"] = mSignUpNameInput.text.toString()
                             signUpUserData["username"] = mSignUpUsernameInput.text.toString()
@@ -188,7 +209,11 @@ class SignUpIdentityFragment : Fragment() {
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
             }

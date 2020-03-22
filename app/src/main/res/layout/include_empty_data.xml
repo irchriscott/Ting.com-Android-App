@@ -7,7 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="60dp"
-        android:paddingBottom="60dp">
+        android:paddingBottom="60dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
 
     <ImageView
             android:id="@+id/empty_image"
@@ -29,6 +31,8 @@
             android:textColor="@color/colorLightGray"
             android:fontFamily="@font/poppins_bold"
             android:textSize="22sp"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
             app:layout_constraintTop_toBottomOf="@id/empty_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

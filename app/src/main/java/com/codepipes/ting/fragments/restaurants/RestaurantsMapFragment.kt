@@ -3,9 +3,7 @@ package com.codepipes.ting.fragments.restaurants
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.AssetManager
@@ -18,19 +16,16 @@ import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentContainer
-import android.util.Log
 import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
-import com.codepipes.ting.RestaurantProfile
+import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.customclasses.RestaurantInfoWindowMap
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.RetrofitGoogleMapsRoute
-import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.MapPin
 import com.codepipes.ting.models.PolylineMapRoute
@@ -191,9 +186,9 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                                 branch.restaurant?.opening!!,
                                 branch.restaurant?.closing!!
                             )
-                            view.restaurant_time.text = status?.get("msg")
+                            view.restaurant_time.text = status["msg"]
 
-                            when (status?.get("clr")) {
+                            when (status["clr"]) {
                                 "green" -> {
                                     view.restaurant_work_status.background =
                                         view.context.resources.getDrawable(R.drawable.background_time_green)
@@ -265,11 +260,19 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         if(it != null) { this.getLocation(it) }
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
-                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: java.lang.Exception){
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }
@@ -305,12 +308,20 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                     }.addOnFailureListener {
                         activity?.runOnUiThread {
                             fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
-                            TingToast(context!!, it.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!.capitalize(),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: Exception){
                     fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(
                         Toast.LENGTH_LONG)
                 }
             }
@@ -324,14 +335,18 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             if (mapCenter.latitude != 0.0 && mapCenter.longitude != 0.0) { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, GOOGLE_MAPS_ZOOM)) } else { mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM)) }
             LatLng(location.latitude, location.longitude)
         } catch (e: Exception){
-            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(
+            TingToast(
+                context!!,
+                activity!!.resources.getString(R.string.error_internet),
+                TingToastType.ERROR
+            ).showToast(
                 Toast.LENGTH_LONG)
             LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
         }
     }
 
     private fun requestUserMapPin() {
-        val url = "${Routes().userMapPin}${session.id}/"
+        val url = "${Routes.userMapPin}${session.id}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -370,7 +385,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     private fun requestRestaurantMapPin(restoId: Int) {
-        val url = "${Routes().restaurantMapPin}${restoId}/"
+        val url = "${Routes.restaurantMapPin}${restoId}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -496,7 +511,11 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
                 override fun onFailure(call: Call<PolylineMapRoute>, t: Throwable) {
                     activity?.runOnUiThread {
-                        TingToast(context!!, t.message!!.capitalize(), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(
+                            context!!,
+                            t.message!!.capitalize(),
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
 
@@ -546,12 +565,20 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         }
                     } catch (e: java.lang.Exception) {
                         activity?.runOnUiThread {
-                            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                activity!!.resources.getString(R.string.error_internet),
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 }
             })
-        } else { TingToast(context!!, "An Error Has occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+        } else { TingToast(
+            context!!,
+            "An Error Has occurred",
+            TingToastType.ERROR
+        ).showToast(Toast.LENGTH_LONG) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

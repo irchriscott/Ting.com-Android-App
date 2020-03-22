@@ -6,14 +6,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="12dp"
-        tools:context=".RestaurantReviews">
+        tools:context=".activities.restaurant.RestaurantReviews">
 
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh_reviews"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
+                    android:id="@+id/scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -139,7 +140,7 @@
 
                     </RelativeLayout>
 
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

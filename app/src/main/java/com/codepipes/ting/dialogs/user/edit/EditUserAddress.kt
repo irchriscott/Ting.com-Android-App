@@ -16,10 +16,10 @@ import android.widget.EditText
 import android.widget.Toast
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.ErrorMessage
-import com.codepipes.ting.dialogs.ProgressOverlay
-import com.codepipes.ting.dialogs.TingToast
-import com.codepipes.ting.dialogs.TingToastType
+import com.codepipes.ting.dialogs.messages.ErrorMessage
+import com.codepipes.ting.dialogs.messages.ProgressOverlay
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.MapAddressChangedListener
 import com.codepipes.ting.models.MapPin
 import com.codepipes.ting.models.ServerResponse
@@ -36,7 +36,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_user_address_map.view.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
 import okhttp3.*
@@ -117,7 +116,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     private fun requestUserMapPin() {
-        val url = "${Routes().userMapPin}${user.id}/"
+        val url = "${Routes.userMapPin}${user.id}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -195,11 +194,19 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
                         this.getLocation(it)
                     }.addOnFailureListener {
                         activity!!.runOnUiThread {
-                            TingToast(context!!, it.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            TingToast(
+                                context!!,
+                                it.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
                         }
                     }
                 } catch (e: Exception){
-                    TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        context!!,
+                        activity!!.resources.getString(R.string.error_internet),
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
             true
@@ -216,7 +223,11 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(LatLng(address.latitude, address.longitude)).title(addresses[0].getAddressLine(0)).icon(mapPin))
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(address.latitude, address.longitude), GOOGLE_MAPS_ZOOM))
             } catch (e: Exception){
-                TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    activity!!.resources.getString(R.string.error_internet),
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
 
@@ -228,7 +239,11 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(it, GOOGLE_MAPS_ZOOM))
                 this.setLocationVariable(addresses[0].getAddressLine(0), it.latitude, it.longitude, addresses[0].countryName, addresses[0].locality)
             } catch(e: Exception){
-                TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                TingToast(
+                    context!!,
+                    activity!!.resources.getString(R.string.error_internet),
+                    TingToastType.ERROR
+                ).showToast(Toast.LENGTH_LONG)
             }
         }
     }
@@ -240,7 +255,11 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAPS_ZOOM))
             this.setLocationVariable(addresses[0].getAddressLine(0), location.latitude, location.longitude, addresses[0].countryName, addresses[0].locality)
         } catch (e: Exception){
-            TingToast(context!!, activity!!.resources.getString(R.string.error_internet), TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            TingToast(
+                context!!,
+                activity!!.resources.getString(R.string.error_internet),
+                TingToastType.ERROR
+            ).showToast(Toast.LENGTH_LONG)
         }
     }
 
@@ -254,7 +273,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
     }
 
     private fun updateUserAddress(){
-        val url = "${Routes().updateUserAddress}${address.id}/"
+        val url = "${Routes.updateUserAddress}${address.id}/"
         val client = OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
@@ -281,7 +300,11 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity!!.runOnUiThread {
-                    TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(
+                        activity!!,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
                 }
             }
 
@@ -295,14 +318,25 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
                         if (serverResponse.status == 200){
                             dialog.dismiss()
                             userAuthentication.set(gson.toJson(serverResponse.user))
-                            TingToast(activity!!, serverResponse.message, TingToastType.SUCCESS).showToast(
+                            TingToast(
+                                activity!!,
+                                serverResponse.message,
+                                TingToastType.SUCCESS
+                            ).showToast(
                                 Toast.LENGTH_LONG)
-                        } else { ErrorMessage(activity, serverResponse.message).show() }
+                        } else { ErrorMessage(
+                            activity,
+                            serverResponse.message
+                        ).show() }
                     }
                 } catch (e: Exception){
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
-                        TingToast(activity!!, "An Error Has Occurred", TingToastType.ERROR).showToast(
+                        TingToast(
+                            activity!!,
+                            "An Error Has Occurred",
+                            TingToastType.ERROR
+                        ).showToast(
                             Toast.LENGTH_LONG)
                     }
                 }

@@ -33,8 +33,6 @@ import kotlin.math.round
 
 class UtilsFunctions( private val context: Context ) {
 
-    public val REQUEST_FINE_LOCATION = 2
-
     public fun getToken(length: Int): String{
         val chars: String = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         var result: String = ""
@@ -216,5 +214,9 @@ class UtilsFunctions( private val context: Context ) {
         val time = sdf.parse(date).time
         val now = System.currentTimeMillis() - Date().timezoneOffset
         return DateUtils.getRelativeTimeSpanString(time , now, DateUtils.MINUTE_IN_MILLIS).toString()
+    }
+
+    companion object {
+        private const val REQUEST_FINE_LOCATION = 2
     }
 }
