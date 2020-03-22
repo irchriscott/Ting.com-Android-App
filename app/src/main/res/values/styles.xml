@@ -245,4 +245,64 @@
         <item name="android:textColorSecondary">@color/colorGray</item>
     </style>
 
+    <!-- IMAGE EDITOR -->
+
+    <style name="ImageEditorPopwinAnimStyle">
+        <item name="android:windowEnterAnimation">@anim/image_editor_menu_show</item>
+        <item name="android:windowExitAnimation">@anim/image_editor_menu_hide</item>
+    </style>
+
+    <style name="ImageEditorIconStyle">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="ImageEditorSettingIconStyle">
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">@dimen/spacing_small</item>
+    </style>
+
+    <style name="ImageEditorOptionStyle">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginLeft">2dp</item>
+        <item name="android:layout_marginRight">2dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="ImageEditorOptionTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/text_sticker_size</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="ImageEditorEditTextStyle">
+        <item name="android:singleLine">true</item>
+        <item name="colorControlNormal">#FFFFFF</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="OverflowText">
+        <item name="android:textColor">@color/simpledialogfragment_error_color</item>
+    </style>
+
+    <style name="SimpleDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert"/>
+
+    <style name="ImageDialogTheme" parent="SimpleDialogTheme">
+        <item name="android:windowMinWidthMinor">@null</item>
+        <item name="android:windowMinWidthMajor">@null</item>
+    </style>
+
 </resources>

@@ -5,6 +5,7 @@
     <color name="colorAccent">@color/colorWhite</color>
     <color name="colorAccentMain">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorShadeGray">#33999999</color>
     <color name="colorVeryLightGray">#DDDDDD</color>
     <color name="colorLightGray">#999999</color>
@@ -34,5 +35,40 @@
     <color name="table_view_default_unselected_background_color">#ffffff</color>
     <color name="table_view_default_selected_background_color">#DDDDDD</color>
     <color name="table_view_default_shadow_background_color">#f2f2f2</color>
+
+    <color name="material_colorpicker_red">#F44336</color>
+    <color name="material_colorpicker_green">#4CAF50</color>
+    <color name="material_colorpicker_blue">#2196F3</color>
+    <color name="material_colorpicker_grey">#B3B3B3</color>
+    <color name="hint_foreground_material_light">#00000000</color>
+    <color name="text_color">#BEC2C4</color>
+    <color name="text_color_gray_3">#A6A5A5</color>
+
+    <color name="kelly_1">#F2F3F4</color>
+    <color name="kelly_2">#1D1D1D</color>
+    <color name="kelly_3">#EBCE2B</color>
+    <color name="kelly_4">#702C8C</color>
+    <color name="kelly_5">#DB6917</color>
+    <color name="kelly_6">#96CDE6</color>
+    <color name="kelly_7">#BA1C30</color>
+    <color name="kelly_8">#C0BD7F</color>
+    <color name="kelly_9">#7F7D80</color>
+    <color name="kelly_10">#5FA641</color>
+    <color name="kelly_11">#D485B2</color>
+    <color name="kelly_12">#4277B6</color>
+    <color name="kelly_13">#DF8461</color>
+    <color name="kelly_14">#463397</color>
+    <color name="kelly_15">#E1A11A</color>
+    <color name="kelly_16">#91218C</color>
+    <color name="kelly_17">#E8E948</color>
+    <color name="kelly_18">#7E1510</color>
+    <color name="kelly_19">#92AE31</color>
+    <color name="kelly_20">#6F340D</color>
+    <color name="kelly_21">#D32B1E</color>
+    <color name="kelly_22">#2B3514</color>
+
+    <color name="simpledialogfragment_error_color">#FFD50000</color>
+
+    <color name="pin_normal">#6B767E</color>
 
 </resources>

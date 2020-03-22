@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_editor_library_name">Editor de Foto</string>
+    <string name="image_editor_no_images">Imagen no encontrada</string>
+    <string name="image_editor_images">%d imágenes</string>
+    <string name="image_editor_done">HECHO</string>
+    <string name="image_editor_apply">APLICAR</string>
+
+    <string name="image_editor_stickers">Stickers</string>
+    <string name="image_editor_filter">Filtros</string>
+    <string name="image_editor_crop">Recortar</string>
+    <string name="image_editor_rotate">Rotar</string>
+    <string name="image_editor_text">Texto</string>
+    <string name="image_editor_brush">Pincel</string>
+    <string name="image_editor_eraser">Borrador</string>
+    <string name="image_editor_edit">Editar</string>
+    <string name="image_editor_brightness">Brillo</string>
+    <string name="image_editor_saturation">Saturacion</string>
+    <string name="image_editor_size">Tamaño</string>
+    <string name="image_editor_opacity">Opacidad</string>
+
+    <string name="colorpicker_errHex">Formato de Codigo Hex incorrecto</string>
+    <string name="colorpicker_btnSelectColor">Seleccionar</string>
+    <string name="image_editor_saving_image">Guardando…</string>
+    <string name="image_editor_input_hint">Campo de Texto …</string>
+
+    <string name="image_editor_not_selected">Porfavor elija una imagen para editar</string>
+    <string name="image_editor_auto_newline">NuevaLineaAuto.</string>
+    <string name="image_editor_save_error">Error en guardado!</string>
+    <string name="image_editor_load_error">Fallo la carga de imagen!</string>
+    <string name="image_editor_loading">Cargando…</string>
+    <string name="image_editor_pick_a_color">Seleccione un color</string>
+
+    <string name="image_editor_free_size">LIBRE</string>
+    <string name="image_editor_fit_image">ORIGINAL</string>
+    <string name="image_editor_square">CUADRADO</string>
+    <string name="image_editor_ratio3_4">3:4</string>
+    <string name="image_editor_ratio4_3">4:3</string>
+    <string name="image_editor_ratio9_16">9:16</string>
+    <string name="image_editor_ratio16_9">16:9</string>
+
+    <string-array name="image_editor_filters">
+        <item>Original</item>
+        <item>Software</item>
+        <item>Negro</item>
+        <item>Clasico</item>
+        <item>Maravilla</item>
+        <item>Antiguo</item>
+        <item>Gris</item>
+        <item>Película</item>
+        <item>Memoria</item>
+        <item>Yogur</item>
+        <item>Fugaz</item>
+        <item>Brillo</item>
+    </string-array>
+
+    <string-array translatable="false" name="image_editor_filter_drawable_list">
+        <item>filter_1</item>
+        <item>filter_2</item>
+        <item>filter_3</item>
+        <item>filter_4</item>
+        <item>filter_5</item>
+        <item>filter_6</item>
+        <item>filter_7</item>
+        <item>filter_8</item>
+        <item>filter_9</item>
+        <item>filter_10</item>
+        <item>filter_11</item>
+        <item>filter_12</item>
+    </string-array>
+
+    <string-array translatable="false" name="image_editor_types">
+        <item>type1</item>
+        <item>type2</item>
+        <item>type3</item>
+        <item>type4</item>
+        <item>type5</item>
+        <item>type6</item>
+    </string-array>
+
+    <string-array name="image_editor_type_names">
+        <item>Tipo 1</item>
+        <item>Tipo 2</item>
+        <item>Tipo 3</item>
+        <item>Tipo 4</item>
+        <item>Tipo 5</item>
+        <item>Tipo 6</item>
+    </string-array>
+
+    <integer-array translatable="false" name="image_editor_type_count">
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+
+    <string name="image_editor_more">Mas</string>
+    <string name="image_editor_exit_without_save">La imagen no esta guardada. Quiere salir ?</string>
+    <string name="image_editor_confirm">Confirmar</string>
+    <string name="image_editor_cancel">Cancelar</string>
+
+    <string name="image_editor_beauty">Belleza</string>
+    <string name="image_editor_smooth">Suavidad</string>
+    <string name="image_editor_white_skin">Tono de piel</string>
+
+    <item type="id" translatable="false" name="image_editor_TAG_STICKERS_PATH" />
+    <item type="id" translatable="false" name="image_editor_TAG_STICKERS_COUNT" />
+</resources>
