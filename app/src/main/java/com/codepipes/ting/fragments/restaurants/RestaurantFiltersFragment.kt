@@ -4,7 +4,7 @@ package com.codepipes.ting.fragments.restaurants
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -130,7 +130,7 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 activity!!.runOnUiThread {
                     mLocalData.saveFilters(dataString)
                     assignFilters(Gson().fromJson(dataString, RestaurantFilters::class.java), view)
@@ -143,7 +143,7 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
         this.mFilterRestaurantsClickListener = filterRestaurantsClickListener
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         try {
             val paramsFilters = mLocalData.getParametersFilters()

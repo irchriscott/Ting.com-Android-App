@@ -2,8 +2,8 @@ package com.codepipes.ting.imageeditor.picchooser;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.codepipes.ting.imageeditor.BaseActivity;
 

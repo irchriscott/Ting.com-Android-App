@@ -1,6 +1,6 @@
 package com.codepipes.ting.dialogs.messages
 
-import android.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -30,26 +30,26 @@ class SuccessOverlay : DialogFragment(){
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val mArgs = arguments
-        val message = mArgs.getString("message")
-        val messageType = mArgs.getString("type")
+        val message = mArgs?.getString("message")
+        val messageType = mArgs?.getString("type")
 
-        val view = inflater!!.inflate(R.layout.include_success_overlay, container, false)
+        val view = inflater.inflate(R.layout.include_success_overlay, container, false)
 
         mCheckOverlayImage = view.findViewById(R.id.successOverlayImage) as ImageView
         mMessageOverlayText = view.findViewById(R.id.successOverlayText) as TextView
 
         when (messageType) {
-            "info" -> { mCheckOverlayImage.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_info_white_64dp)) }
-            "error" -> { mCheckOverlayImage.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_exclamation_white)) }
-            else -> { mCheckOverlayImage.setImageDrawable(activity.resources.getDrawable(R.drawable.ic_check_circle_primary_64dp)) }
+            "info" -> { mCheckOverlayImage.setImageDrawable(activity?.resources?.getDrawable(R.drawable.ic_info_white_64dp)) }
+            "error" -> { mCheckOverlayImage.setImageDrawable(activity?.resources?.getDrawable(R.drawable.ic_exclamation_white)) }
+            else -> { mCheckOverlayImage.setImageDrawable(activity?.resources?.getDrawable(R.drawable.ic_check_circle_primary_64dp)) }
         }
 
-        mMessageOverlayText.text = mArgs.getString("message")
+        mMessageOverlayText.text = mArgs?.getString("message")
 
         val mPopInAnimation = AnimationUtils.loadAnimation(activity!!, R.anim.pop_in)
         mCheckOverlayImage.startAnimation(mPopInAnimation)
@@ -64,7 +64,7 @@ class SuccessOverlay : DialogFragment(){
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 
@@ -72,7 +72,7 @@ class SuccessOverlay : DialogFragment(){
         this.mCloseListener = closeListener
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         mCloseListener.handleDialogClose(null)
         super.onDismiss(dialog)
     }

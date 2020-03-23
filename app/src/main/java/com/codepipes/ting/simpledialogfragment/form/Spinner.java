@@ -2,9 +2,9 @@ package com.codepipes.ting.simpledialogfragment.form;
 
 import android.content.Context;
 import android.os.Parcel;
-import android.support.annotation.ArrayRes;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import androidx.annotation.ArrayRes;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.codepipes.ting.simpledialogfragment.SimpleDialog;
 

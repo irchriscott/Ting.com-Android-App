@@ -2,7 +2,7 @@ package com.codepipes.ting.pageindicatorview.draw.drawer.type;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.codepipes.ting.pageindicatorview.animation.data.Value;
 import com.codepipes.ting.pageindicatorview.animation.data.type.FillAnimationValue;

@@ -2,11 +2,11 @@ package com.codepipes.ting.dialogs.messages
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.adapters.others.SelectAdapter
@@ -33,7 +33,7 @@ class SelectDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.fragment_select, null, false)
         val title = arguments?.getString(CurrentRestaurant.CONFIRM_TITLE_KEY)
         if(title != null) { view.dialog_title.text = title }
-        view.form_close.setOnClickListener { dialog.dismiss() }
+        view.form_close.setOnClickListener { dialog?.dismiss() }
         view.form_select.layoutManager = LinearLayoutManager(context)
         view.form_select.adapter = SelectAdapter(items, selectItemListener)
         return view
@@ -44,7 +44,7 @@ class SelectDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 

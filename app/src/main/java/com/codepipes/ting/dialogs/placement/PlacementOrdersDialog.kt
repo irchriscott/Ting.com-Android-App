@@ -5,15 +5,15 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.view.ViewCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.placement.PlacementOrdersMenuAdapter
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
@@ -67,7 +67,7 @@ class PlacementOrdersDialog : DialogFragment() {
 
     @SuppressLint("SetTextI18n", "InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_restaurant_menus_order, null, false)
 
         userAuthentication = UserAuthentication(context!!)
@@ -77,7 +77,7 @@ class PlacementOrdersDialog : DialogFragment() {
 
         view.restaurant_menus_type.text = "Orders"
         view.close_restaurant_menus.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
             restaurantMenusOrderCloseListener.onClose()
         }
 
@@ -191,25 +191,21 @@ class PlacementOrdersDialog : DialogFragment() {
                     val messageBranch = SocketResponseMessage(pubnubConfiguration.uuid, UtilData.SOCKET_REQUEST_NOTIFY_ORDER, userAuthentication.socketUser(), receiverBranch, 200, null, args, data)
 
                     pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(messageBranch))
-                        .async(object : PNCallback<PNPublishResult>() {
-                            override fun onResponse(result: PNPublishResult?, status: PNStatus) {
-                                if (status.isError || status.statusCode != 200) {
-                                    TingToast(context!!, "Connection Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                }
+                        .async { _, status ->
+                            if (status.isError || status.statusCode != 200) {
+                                TingToast(context!!, "Connection Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                             }
-                        })
+                        }
 
                     val receiverWaiter = SocketUser(placement.waiter?.id, 1, "${placement.waiter?.name}", placement.waiter?.email, placement.waiter?.image, placement.waiter?.channel)
                     val messageWaiter = SocketResponseMessage(pubnubConfiguration.uuid, UtilData.SOCKET_REQUEST_W_NOTIFY_ORDER, userAuthentication.socketUser(), receiverWaiter, 200, null, args, data)
 
                     pubnub.publish().channel(placement.waiter?.channel).message(Gson().toJson(messageWaiter))
-                        .async(object : PNCallback<PNPublishResult>() {
-                            override fun onResponse(result: PNPublishResult?, status: PNStatus) {
-                                if (status.isError || status.statusCode != 200) {
-                                    TingToast(context!!, "Connection Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                } else { TingToast(context!!, "Order Notified", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG) }
-                            }
-                        })
+                        .async { _, status ->
+                            if (status.isError || status.statusCode != 200) {
+                                TingToast(context!!, "Connection Error Occurred", TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                            } else { TingToast(context!!, "Order Notified", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG) }
+                        }
                 }
 
                 override fun onCancel(order: Int, position: Int) {
@@ -274,7 +270,7 @@ class PlacementOrdersDialog : DialogFragment() {
                             pageNum++
 
                             val interceptor = Interceptor {
-                                val url = it.request().url().newBuilder()
+                                val url = it.request().url.newBuilder()
                                     .addQueryParameter("token", placement.token)
                                     .addQueryParameter("query", query)
                                     .addQueryParameter("page", pageNum.toString())
@@ -314,7 +310,7 @@ class PlacementOrdersDialog : DialogFragment() {
     private fun getOrders(view: View, placement: Placement, query: String) {
 
         val interceptor = Interceptor {
-            val url = it.request().url().newBuilder()
+            val url = it.request().url.newBuilder()
                 .addQueryParameter("token", placement.token)
                 .addQueryParameter("query", query)
                 .build()
@@ -342,7 +338,7 @@ class PlacementOrdersDialog : DialogFragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 activity?.runOnUiThread {
                     try {
                         val orders = Gson().fromJson<MutableList<Order>>(dataString, object : TypeToken<MutableList<Order>>(){}.type)
@@ -365,7 +361,7 @@ class PlacementOrdersDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 
@@ -374,7 +370,7 @@ class PlacementOrdersDialog : DialogFragment() {
         super.onDestroy()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         disposable.clear()
         super.onDismiss(dialog)
     }

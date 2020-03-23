@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +25,12 @@ class SendMessageDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_send_message_form, null, false)
         view.dialog_send.setOnClickListener {
             onSubmitOrderListener.onSubmitOrder("", view.dialog_message_input.text.toString())
         }
-        view.dialog_close.setOnClickListener { dialog.dismiss() }
+        view.dialog_close.setOnClickListener { dialog?.dismiss() }
 
         return view
     }
@@ -40,7 +40,7 @@ class SendMessageDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 

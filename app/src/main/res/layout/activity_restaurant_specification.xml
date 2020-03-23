@@ -12,7 +12,7 @@
                 android:layout_height="wrap_content"
                 tools:ignore="UselessParent">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -38,7 +38,7 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/restaurant_specials"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/restaurant_services"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -94,7 +94,7 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/restaurant_cuisines"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,14 +122,14 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/restaurant_categories"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/restaurant_categories_title"/>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 

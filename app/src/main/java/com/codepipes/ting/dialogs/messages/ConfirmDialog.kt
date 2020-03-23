@@ -1,13 +1,13 @@
 package com.codepipes.ting.dialogs.messages
 
 import android.annotation.SuppressLint
-import android.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.interfaces.ConfirmDialogListener
@@ -29,7 +29,7 @@ class ConfirmDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val view = inflater.inflate(R.layout.fragment_confirm_dialog, null, false)
 

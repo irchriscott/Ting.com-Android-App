@@ -3,8 +3,7 @@ package com.codepipes.ting.simpledialogfragment.form;
 import android.content.Context;
 import android.os.Bundle;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 
@@ -12,6 +11,7 @@ import com.codepipes.ting.R;
 import com.codepipes.ting.simpledialogfragment.SimpleDateDialog;
 import com.codepipes.ting.simpledialogfragment.SimpleDialog;
 import com.codepipes.ting.simpledialogfragment.SimpleTimeDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

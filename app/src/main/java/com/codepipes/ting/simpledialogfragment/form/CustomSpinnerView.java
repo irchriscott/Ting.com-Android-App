@@ -2,8 +2,9 @@ package com.codepipes.ting.simpledialogfragment.form;
 
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatSpinner;
 
 public class CustomSpinnerView extends AppCompatSpinner {
     private OnSpinnerOpenListener mListener;

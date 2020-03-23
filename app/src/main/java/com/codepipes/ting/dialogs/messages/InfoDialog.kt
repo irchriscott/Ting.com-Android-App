@@ -1,7 +1,7 @@
 package com.codepipes.ting.dialogs.messages
 
 import android.annotation.SuppressLint
-import android.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -25,7 +25,7 @@ class InfoDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val view = inflater.inflate(R.layout.fragment_info_dialog, null, false)
 
@@ -36,7 +36,7 @@ class InfoDialog : DialogFragment() {
         if(image != null) { Picasso.get().load("${Routes.HOST_END_POINT}$image").into(view.dialog_image) }
         view.dialog_title.text = title
         if(message != null) { view.dialog_text.text = message } else { view.dialog_text.visibility = View.GONE }
-        view.dialog_close.setOnClickListener { dialog.dismiss() }
+        view.dialog_close.setOnClickListener { dialog?.dismiss() }
 
         return view
     }

@@ -230,4 +230,6 @@
     <item type="id" translatable="false" name="image_editor_TAG_STICKERS_PATH" />
     <item type="id" translatable="false" name="image_editor_TAG_STICKERS_COUNT" />
 
+    <string name="default_progressbar" translatable="false">Default Progressbar:</string>
+
 </resources>

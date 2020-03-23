@@ -3,8 +3,8 @@ package com.codepipes.ting.fragments.user
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -124,7 +124,7 @@ class UserRestaurants : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 user = gson.fromJson(dataString, User::class.java)
                 activity?.runOnUiThread{
                     showRestaurants(user.restaurants?.restaurants?.toMutableList(), view)

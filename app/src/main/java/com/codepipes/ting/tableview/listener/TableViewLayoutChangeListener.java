@@ -1,6 +1,6 @@
 package com.codepipes.ting.tableview.listener;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.codepipes.ting.tableview.ITableView;

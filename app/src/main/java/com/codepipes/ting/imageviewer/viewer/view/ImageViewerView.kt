@@ -1,7 +1,6 @@
 package com.codepipes.ting.imageviewer.viewer.view
 
 import android.content.Context
-import android.support.v4.view.GestureDetectorCompat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import androidx.core.view.GestureDetectorCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.imageviewer.common.extensions.*
 import com.codepipes.ting.imageviewer.common.extensions.animateAlpha

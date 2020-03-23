@@ -1,14 +1,13 @@
 package com.codepipes.ting.imageeditor.editimage.interfaces;
 
 import android.view.View;
-
 import com.codepipes.ting.imageeditor.editimage.gesture.ScaleGestureDetector;
 
 /**
  * The listener for receiving notifications when gestures occur.
  * If you want to listen for all the different gestures then implement
  * this interface. If you only want to listen for a subset it might
- * be easier to extend {@link ScaleGestureDetector.SimpleOnScaleGestureListener}.
+ * be easier to extend {@link ScaleGestureDetector}.
  * <p>
  * An application will receive events in the following order:
  */
@@ -46,8 +45,8 @@ public interface OnScaleGestureListener {
      * Responds to the end of a scale gesture. Reported by existing
      * pointers going up.
      * <p>
-     * Once a scale has ended, {@link ScaleGestureDetector#getFocusX()}
-     * and {@link ScaleGestureDetector#getFocusY()} will return the location
+     * Once a scale has ended, {@link ScaleGestureDetector#}
+     * and {@link ScaleGestureDetector#()} will return the location
      * of the pointer remaining on the screen.
      *
      * @param detector The detector reporting the event - use this to

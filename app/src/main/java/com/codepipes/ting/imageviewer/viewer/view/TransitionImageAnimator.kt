@@ -1,13 +1,14 @@
 package com.codepipes.ting.imageviewer.viewer.view
 
-import android.support.transition.AutoTransition
-import android.support.transition.Transition
-import android.support.transition.TransitionManager
+
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.transition.AutoTransition
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import com.codepipes.ting.imageviewer.common.extensions.*
 import com.codepipes.ting.imageviewer.common.extensions.applyMargin
 import com.codepipes.ting.imageviewer.common.extensions.globalVisibleRect

@@ -4,8 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -16,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -139,7 +139,7 @@ class SignUpAboutFragment : Fragment() {
                     bundle.putString("message", "Fill All The Fields")
                     bundle.putString("type", "error")
                     successOverlay.arguments = bundle
-                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.show(fragmentManager!!, successOverlay.tag)
                     successOverlay.dismissListener(object :
                         SuccessDialogCloseListener {
                         override fun handleDialogClose(dialog: DialogInterface?) {

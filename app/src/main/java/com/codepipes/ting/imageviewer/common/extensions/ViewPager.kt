@@ -1,6 +1,6 @@
 package com.codepipes.ting.imageviewer.common.extensions
 
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 
 internal fun ViewPager.addOnPageChangeListener(
     onPageScrolled: ((position: Int, offset: Float, offsetPixels: Int) -> Unit)? = null,

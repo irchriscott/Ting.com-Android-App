@@ -1,7 +1,7 @@
 package com.codepipes.ting.simpledialogfragment.form;
 
 import android.os.Parcel;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 
 @SuppressWarnings({"unused", "WeakerAccess"})

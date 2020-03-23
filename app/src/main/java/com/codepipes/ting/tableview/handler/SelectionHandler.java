@@ -1,9 +1,9 @@
 package com.codepipes.ting.tableview.handler;
 
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.codepipes.ting.tableview.ITableView;
 import com.codepipes.ting.tableview.adapter.recyclerview.CellRecyclerView;

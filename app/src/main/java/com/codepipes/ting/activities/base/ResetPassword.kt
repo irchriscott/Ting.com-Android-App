@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -70,7 +70,7 @@ class ResetPassword : AppCompatActivity() {
 
         mResetPasswordBtn.setOnClickListener {
             if(!mResetPasswordEmailInput.text.isNullOrEmpty()){
-                mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
                 this.submitResetPassword()
             } else { ErrorMessage(
                 this@ResetPassword,
@@ -107,7 +107,7 @@ class ResetPassword : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -119,7 +119,7 @@ class ResetPassword : AppCompatActivity() {
                             args.putString("message", serverResponse.message)
                             args.putString("type", serverResponse.type)
                             successDialog.arguments = args
-                            successDialog.show(this@ResetPassword.fragmentManager, successDialog.tag)
+                            successDialog.show(supportFragmentManager, successDialog.tag)
 
                             val onDialogClosed = object : SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {

@@ -3,10 +3,10 @@ package com.codepipes.ting.fragments.restaurants
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -149,7 +149,7 @@ class RestaurantPromotionsFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try {
                     promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
                     activity?.runOnUiThread {

@@ -7,12 +7,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.codepipes.ting"
         minSdkVersion 19
         //noinspection OldTargetApi
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -27,6 +27,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -45,69 +48,64 @@ dependencies {
     //noinspection GradleDependency
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:support-annotations:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    //noinspection GradleDependency
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.6'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.3.0-alpha02'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.pnikosis:materialish-progress:1.7'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-auth:16.0.0'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-places:16.0.0'
-    //noinspection GradleDependency
-    annotationProcessor 'com.google.auto.value:auto-value:1.4'
-    compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.4'
-    annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
-    implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation 'com.github.WrathChaos:MediaPickerLib:0.1.5'
-    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    annotationProcessor 'com.google.auto.value:auto-value:1.7'
+    compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.5'
+    annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.8'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.WrathChaos:MediaPickerLib:0.2.0'
     implementation 'com.caverock:androidsvg-aar:1.4'
-    implementation 'com.google.maps.android:android-maps-utils:0.5'
-    implementation 'org.sufficientlysecure:html-textview:3.6'
+    implementation 'com.google.maps.android:android-maps-utils:1.0.2'
+    implementation 'org.sufficientlysecure:html-textview:3.9'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
-    //noinspection GradleDependency
-    implementation 'com.stepstone.apprating:app-rating:2.3.0'
-    implementation 'com.github.varunest:sparkbutton:1.0.6'
-    //noinspection GradleDependency
-    implementation 'com.github.chrisbanes:PhotoView:2.1.0'
-    implementation 'com.facebook.shimmer:shimmer:0.4.0'
-    implementation 'com.github.livefront:bridge:v1.2.0'
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.stepstone.apprating:app-rating:2.3.1'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation ('com.github.livefront:bridge:v1.2.0') {
+        exclude group: 'com.android.support'
+    }
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
-    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.30.0'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-core:16.0.9'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-analytics:16.0.9'
-    implementation 'com.pusher:pusher-java-client:2.0.2'
-    implementation 'com.pusher:push-notifications-android:1.6.2'
-    implementation 'com.github.jumadeveloper:networkmanager:0.0.2'
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor  'com.github.bumptech.glide:compiler:4.9.0'
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.31.0'
+    implementation 'com.google.firebase:firebase-core:17.2.3'
+    implementation 'com.google.firebase:firebase-messaging:20.1.3'
+    implementation 'com.google.firebase:firebase-analytics:17.2.3'
+    implementation ('com.pusher:pusher-java-client:2.0.2'){
+        exclude group: 'com.android.support'
+    }
+    implementation ('com.pusher:push-notifications-android:1.6.2'){
+        exclude group: 'com.android.support'
+    }
+    implementation ('com.github.jumadeveloper:networkmanager:0.0.2'){
+        exclude group: 'com.android.support'
+    }
+    implementation ('com.jakewharton.rxbinding2:rxbinding:2.2.0'){
+        exclude group: 'com.android.support'
+    }
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     api 'frankiesardo:icepick:3.2.0'
     compileOnly 'frankiesardo:icepick-processor:3.2.0'
     annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

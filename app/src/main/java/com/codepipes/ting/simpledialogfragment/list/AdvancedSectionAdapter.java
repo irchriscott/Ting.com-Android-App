@@ -1,6 +1,6 @@
 package com.codepipes.ting.simpledialogfragment.list;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.SectionIndexer;
 
 import java.util.ArrayList;

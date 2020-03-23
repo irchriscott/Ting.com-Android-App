@@ -2,10 +2,11 @@ package com.codepipes.ting.imageeditor.picchooser;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 
-public class SquareImageView extends android.support.v7.widget.AppCompatImageView {
+public class SquareImageView extends AppCompatImageView {
 
     public SquareImageView(final Context context, final AttributeSet attrs) {
         super(context, attrs);

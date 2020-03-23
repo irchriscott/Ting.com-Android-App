@@ -1,12 +1,10 @@
 package com.codepipes.ting.events
 
-import android.support.annotation.NonNull
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.NonNull
+import androidx.recyclerview.widget.RecyclerView
 
 import com.codepipes.ting.adapters.tableview.holders.ColumnHeaderViewHolder
-
 import com.codepipes.ting.tableview.ITableView
-
 import com.codepipes.ting.tableview.listener.ITableViewListener
 
 

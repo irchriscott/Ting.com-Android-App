@@ -3,10 +3,10 @@ package com.codepipes.ting.activities.restaurant
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.User
@@ -127,7 +127,7 @@ class RestaurantAbout : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 branch = Gson().fromJson(dataString, Branch::class.java)
                 runOnUiThread {
                     branchTimer.cancel()

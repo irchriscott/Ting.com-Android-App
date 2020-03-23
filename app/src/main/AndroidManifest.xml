@@ -140,6 +140,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
         <activity android:name=".imageeditor.BaseActivity" />
         <activity android:name=".imagecropper.CropImageActivity" />
         <activity android:name=".imageeditor.picchooser.SelectPictureActivity" />

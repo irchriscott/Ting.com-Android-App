@@ -1,7 +1,7 @@
 package com.codepipes.ting.imageeditor.editimage.view;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 
 import com.codepipes.ting.imageeditor.editimage.utils.GestureNavigationBounds;

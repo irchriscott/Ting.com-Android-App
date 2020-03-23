@@ -203,7 +203,7 @@
 
     <style name="RateAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">@dimen/text_size_medium</item>
+<!--        <item name="android:textSize">@dimen/text_size_medium</item>-->
     </style>
 
     <style name="RateDialogFadeAnimation">

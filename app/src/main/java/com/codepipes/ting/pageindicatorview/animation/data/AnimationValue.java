@@ -1,7 +1,7 @@
 package com.codepipes.ting.pageindicatorview.animation.data;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.codepipes.ting.pageindicatorview.animation.data.type.*;
 

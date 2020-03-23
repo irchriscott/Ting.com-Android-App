@@ -7,15 +7,14 @@ import android.content.DialogInterface
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.design.widget.CoordinatorLayout
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
@@ -30,6 +29,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
 import com.codepipes.ting.utils.Settings
 import com.codepipes.ting.utils.UtilsFunctions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.livefront.bridge.Bridge
 import java.lang.Exception
 import java.util.*
@@ -122,7 +122,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         } else { mSearchAddressInput.setText(signUpUserData["address"]) }
 
         mUseLocationBtn.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
         }
 
         return view
@@ -130,9 +130,9 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     override fun setCancelable(cancelable: Boolean) {
         val dialog = dialog
-        val touchOutsideView = dialog.window!!.decorView.findViewById<View>(android.support.design.R.id.touch_outside)
+        val touchOutsideView = dialog?.window!!.decorView.findViewById<View>(com.google.android.material.R.id.touch_outside)
         val bottomSheetView =
-            dialog.window!!.decorView.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+            dialog.window!!.decorView.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
 
         if (cancelable) {
             touchOutsideView.setOnClickListener {
@@ -150,8 +150,8 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setOnShowListener {
-            dialog.window.findViewById<View>(R.id.touch_outside).setOnClickListener(null)
-            (dialog.window.findViewById<View>(R.id.design_bottom_sheet).layoutParams as CoordinatorLayout.LayoutParams).behavior = null
+            dialog.window?.findViewById<View>(R.id.touch_outside)?.setOnClickListener(null)
+            (dialog.window?.findViewById<View>(R.id.design_bottom_sheet)?.layoutParams as CoordinatorLayout.LayoutParams).behavior = null
         }
         return dialog
     }

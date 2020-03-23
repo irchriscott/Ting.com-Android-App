@@ -1,7 +1,7 @@
 package com.codepipes.ting.sliderview;
 
-import android.support.annotation.IntDef;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.IntDef;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 
 import java.lang.annotation.Retention;

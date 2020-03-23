@@ -1,7 +1,7 @@
 package com.codepipes.ting.pageindicatorview.animation.controller;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.codepipes.ting.pageindicatorview.animation.data.Value;
 import com.codepipes.ting.pageindicatorview.animation.type.ColorAnimation;

@@ -1,7 +1,7 @@
 package com.codepipes.ting.dialogs.placement
 
 import android.annotation.SuppressLint
-import android.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,17 +28,17 @@ class PlacementPeopleDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val view = inflater.inflate(R.layout.fragment_placement_people, null, false)
 
-        val people = arguments.getString(CurrentRestaurant.PEOPLE_VALUE_KEY)
-        val title = arguments.getString(CurrentRestaurant.PEOPLE_TITLE_KEY)
+        val people = arguments?.getString(CurrentRestaurant.PEOPLE_VALUE_KEY)
+        val title = arguments?.getString(CurrentRestaurant.PEOPLE_TITLE_KEY)
 
         view.dialog_title.text = title
         view.dialog_input.setText(people ?: "1")
         view.dialog_success.setOnClickListener { submitPeoplePlacementListener.onSubmit(view.dialog_input.text.toString()?:"1") }
-        view.dialog_close.setOnClickListener { dialog.dismiss() }
+        view.dialog_close.setOnClickListener { dialog?.dismiss() }
 
         return view
     }

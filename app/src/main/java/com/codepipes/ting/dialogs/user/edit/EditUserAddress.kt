@@ -5,15 +5,13 @@ import android.app.Dialog
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.design.widget.CoordinatorLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.ErrorMessage
@@ -36,6 +34,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_user_address_map.*
 import okhttp3.*
@@ -140,7 +140,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 mapPin = try {
                     val pin = gson.fromJson(responseBody, MapPin::class.java)
                     val sharp = SVG.getFromString(pin.pin)
@@ -156,9 +156,9 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     override fun setCancelable(cancelable: Boolean) {
         val dialog = dialog
-        val touchOutsideView = dialog.window!!.decorView.findViewById<View>(android.support.design.R.id.touch_outside)
+        val touchOutsideView = dialog?.window!!.decorView.findViewById<View>(com.google.android.material.R.id.touch_outside)
         val bottomSheetView =
-            dialog.window!!.decorView.findViewById<View>(android.support.design.R.id.design_bottom_sheet)
+            dialog.window!!.decorView.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
 
         if (cancelable) {
             touchOutsideView.setOnClickListener {
@@ -174,8 +174,8 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.setOnShowListener {
-            dialog.window.findViewById<View>(R.id.touch_outside).setOnClickListener(null)
-            (dialog.window.findViewById<View>(R.id.design_bottom_sheet).layoutParams as CoordinatorLayout.LayoutParams).behavior = null
+            dialog.window?.findViewById<View>(R.id.touch_outside)?.setOnClickListener(null)
+            (dialog.window?.findViewById<View>(R.id.design_bottom_sheet)?.layoutParams as CoordinatorLayout.LayoutParams).behavior = null
         }
         return dialog
     }
@@ -294,7 +294,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
             .post(form)
             .build()
 
-        mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
+        mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
 
         client.newCall(request).enqueue(object : Callback {
 
@@ -309,14 +309,14 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
                     activity!!.runOnUiThread {
                         mProgressOverlay.dismiss()
                         if (serverResponse.status == 200){
-                            dialog.dismiss()
+                            dialog?.dismiss()
                             userAuthentication.set(gson.toJson(serverResponse.user))
                             TingToast(
                                 activity!!,

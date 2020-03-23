@@ -6,9 +6,9 @@ import android.animation.Animator
 import android.os.Build
 import android.view.animation.DecelerateInterpolator
 import android.os.Bundle
-import android.support.annotation.RequiresApi
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
+import androidx.annotation.RequiresApi
 import com.codepipes.ting.R
 import com.codepipes.ting.interfaces.OnFragmentTouched
 import com.livefront.bridge.Bridge

@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.codepipes.ting.R
 import com.codepipes.ting.interfaces.SubmitOrderListener
 import com.codepipes.ting.utils.Routes
@@ -27,14 +27,14 @@ class OrderFormDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_order_form, null, false)
         view.dialog_quantity_input.setText(arguments?.getString("quantity"))
         view.dialog_conditions_input.setText(arguments?.getString("conditions"))
         view.dialog_success.setOnClickListener {
             onSubmitOrderListener.onSubmitOrder(view.dialog_quantity_input.text.toString(), view.dialog_conditions_input.text.toString())
         }
-        view.dialog_close.setOnClickListener { dialog.dismiss() }
+        view.dialog_close.setOnClickListener { dialog?.dismiss() }
 
         return view
     }
@@ -44,7 +44,7 @@ class OrderFormDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 

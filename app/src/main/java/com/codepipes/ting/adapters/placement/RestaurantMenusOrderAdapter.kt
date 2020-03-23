@@ -5,8 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Paint
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -171,7 +171,7 @@ class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 activity.runOnUiThread {
                     try {
                         val serverResponse = Gson().fromJson(dataString, ServerResponse::class.java)

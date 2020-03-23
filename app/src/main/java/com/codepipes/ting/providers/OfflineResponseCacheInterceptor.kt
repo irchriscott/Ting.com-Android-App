@@ -3,9 +3,9 @@ package com.codepipes.ting.providers
 import android.content.Context
 import android.net.NetworkInfo
 import android.content.Context.CONNECTIVITY_SERVICE
-import android.support.v4.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemService
 import android.net.ConnectivityManager
-import android.support.annotation.NonNull
+import androidx.annotation.NonNull
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException

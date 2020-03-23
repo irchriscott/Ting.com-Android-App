@@ -5,12 +5,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.support.v7.view.menu.MenuBuilder
+import androidx.core.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +27,7 @@ import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilData
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.livefront.bridge.Bridge
 import com.pubnub.api.PNConfiguration
@@ -141,7 +140,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                     bundle.putString("message", "This is the waiter who will be serving you today. Enjoy !")
 
                                     infoDialog.arguments = bundle
-                                    infoDialog.show(this@CurrentRestaurant.fragmentManager, infoDialog.tag)
+                                    infoDialog.show(supportFragmentManager, infoDialog.tag)
 
                                     getPlacement(userPlacement.getToken()!!)
                                 }
@@ -151,7 +150,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                     bundle.putString("message", "Placement Terminated")
                                     bundle.putString("type", "info")
                                     successOverlay.arguments = bundle
-                                    successOverlay.show(fragmentManager, successOverlay.tag)
+                                    successOverlay.show(supportFragmentManager, successOverlay.tag)
                                     successOverlay.dismissListener(object : SuccessDialogCloseListener {
                                         override fun handleDialogClose(dialog: DialogInterface?) {
                                             userPlacement.placeOut()
@@ -168,7 +167,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                     bundle.putString("message", "Bill has been terminated successfully and marked as paid !!!")
 
                                     infoDialog.arguments = bundle
-                                    infoDialog.show(this@CurrentRestaurant.fragmentManager, infoDialog.tag)
+                                    infoDialog.show(supportFragmentManager, infoDialog.tag)
 
                                     getPlacement(userPlacement.getToken()!!)
                                 }
@@ -228,7 +227,7 @@ class CurrentRestaurant : AppCompatActivity() {
                     bundle.putString("image", placement.waiter.image)
                     bundle.putString("message", "This is the waiter who will be serving you today. Enjoy !")
                     infoDialog.arguments = bundle
-                    infoDialog.show(this@CurrentRestaurant.fragmentManager, infoDialog.tag)
+                    infoDialog.show(supportFragmentManager, infoDialog.tag)
                 }
             } else {
                 place_waiter_name.text = "Request Waiter"
@@ -248,17 +247,15 @@ class CurrentRestaurant : AppCompatActivity() {
                                 val responseData = mapOf<String, String>("table" to placement.table.number)
                                 val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, responseData)
                                 pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
-                                    .async(object : PNCallback<PNPublishResult>() {
-                                        override fun onResponse(result: PNPublishResult?, status: PNStatus) {
-                                            if (status.isError || status.statusCode != 200) {
-                                                TingToast(
-                                                    this@CurrentRestaurant,
-                                                    "Connection Error Occurred",
-                                                    TingToastType.ERROR
-                                                ).showToast(Toast.LENGTH_LONG)
-                                            }
+                                    .async { _, status ->
+                                        if (status.isError || status.statusCode != 200) {
+                                            TingToast(
+                                                this@CurrentRestaurant,
+                                                "Connection Error Occurred",
+                                                TingToastType.ERROR
+                                            ).showToast(Toast.LENGTH_LONG)
                                         }
-                                    })
+                                    }
                             }
                         }
                     })
@@ -272,7 +269,7 @@ class CurrentRestaurant : AppCompatActivity() {
                 bundle.putString(PEOPLE_VALUE_KEY, placement.people.toString())
                 bundle.putString(PEOPLE_TITLE_KEY, "How Many Are You ?")
                 placementPeopleDialog.arguments = bundle
-                placementPeopleDialog.show(fragmentManager, placementPeopleDialog.tag)
+                placementPeopleDialog.show(supportFragmentManager, placementPeopleDialog.tag)
                 placementPeopleDialog.onSubmitPeople(object : SubmitPeoplePlacementListener {
 
                     override fun onSubmit(people: String) {
@@ -322,7 +319,7 @@ class CurrentRestaurant : AppCompatActivity() {
 
             place_menu_bill.setOnClickListener {
                 val placementBillDialog = PlacementBillDialog()
-                placementBillDialog.show(fragmentManager, placementBillDialog.tag)
+                placementBillDialog.show(supportFragmentManager, placementBillDialog.tag)
                 placementBillDialog.onDialogClose(object : RestaurantMenusOrderCloseListener {
                     override fun onClose() {
                         placementBillDialog.dismiss()
@@ -362,7 +359,7 @@ class CurrentRestaurant : AppCompatActivity() {
 
             place_end_placement.setOnClickListener {
                 val interceptor = Interceptor {
-                    val url = it.request().url().newBuilder()
+                    val url = it.request().url.newBuilder()
                         .addQueryParameter("token", placement.token)
                         .build()
                     val request = it.request().newBuilder()
@@ -377,14 +374,14 @@ class CurrentRestaurant : AppCompatActivity() {
                 bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Terminate Placement")
                 bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Do you really want to terminate this placement ?")
                 confirmDialog.arguments = bundle
-                confirmDialog.show(fragmentManager, confirmDialog.tag)
+                confirmDialog.show(supportFragmentManager, confirmDialog.tag)
 
                 val progressOverlay = ProgressOverlay()
 
                 confirmDialog.onDialogListener(object : ConfirmDialogListener {
                     override fun onAccept() {
                         confirmDialog.dismiss()
-                        progressOverlay.show(fragmentManager, progressOverlay.tag)
+                        progressOverlay.show(supportFragmentManager, progressOverlay.tag)
                         TingClient.getRequest(Routes.placementTerminate, interceptor, session.token) { _, isSuccess, result ->
                             runOnUiThread {
                                 progressOverlay.dismiss()
@@ -397,7 +394,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                             args.putString("message", "Placement Terminated")
                                             args.putString("type", "info")
                                             successOverlay.arguments = args
-                                            successOverlay.show(fragmentManager, successOverlay.tag)
+                                            successOverlay.show(supportFragmentManager, successOverlay.tag)
                                             successOverlay.dismissListener(object : SuccessDialogCloseListener {
                                                 override fun handleDialogClose(dialog: DialogInterface?) {
                                                     userPlacement.placeOut()
@@ -434,7 +431,7 @@ class CurrentRestaurant : AppCompatActivity() {
 
         class TokenInterceptor : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
-                val url = chain.request().url().newBuilder()
+                val url = chain.request().url.newBuilder()
                     .addQueryParameter("token", token)
                     .build()
                 val request = chain.request().newBuilder()
@@ -463,7 +460,7 @@ class CurrentRestaurant : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 runOnUiThread {
                     try {
                         val placement = Gson().fromJson(dataString, Placement::class.java)
@@ -479,7 +476,7 @@ class CurrentRestaurant : AppCompatActivity() {
                             bundle.putString("message", serverResponse.message)
                             bundle.putString("type", serverResponse.type)
                             successOverlay.arguments = bundle
-                            successOverlay.show(fragmentManager, successOverlay.tag)
+                            successOverlay.show(supportFragmentManager, successOverlay.tag)
                             successOverlay.dismissListener(object : SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
                                     userPlacement.placeOut()

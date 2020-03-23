@@ -18,8 +18,7 @@ package com.codepipes.ting.simpledialogfragment.form;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.Nullable;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.InputType;
@@ -33,6 +32,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.codepipes.ting.R;
+import com.google.android.material.textfield.TextInputLayout;
 
 
 @SuppressWarnings("WeakerAccess")

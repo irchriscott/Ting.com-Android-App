@@ -2,9 +2,9 @@ package com.codepipes.ting.fragments.menu
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,7 +72,7 @@ class MenuReviewsBottomSheetFragment : BottomSheetDialogFragment(){
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val reviews = gson.fromJson<MutableList<MenuReview>>(responseBody, object : TypeToken<MutableList<MenuReview>>(){}.type)

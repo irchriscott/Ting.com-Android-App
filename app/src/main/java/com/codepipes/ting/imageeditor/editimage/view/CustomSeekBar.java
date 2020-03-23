@@ -9,7 +9,9 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.widget.SeekBar;
 
-public class CustomSeekBar extends android.support.v7.widget.AppCompatSeekBar {
+import androidx.appcompat.widget.AppCompatSeekBar;
+
+public class CustomSeekBar extends AppCompatSeekBar {
 
     private Rect rect;
     private Paint paint;
@@ -19,7 +21,6 @@ public class CustomSeekBar extends android.support.v7.widget.AppCompatSeekBar {
 
     public CustomSeekBar(Context context) {
         super(context);
-
     }
 
     public CustomSeekBar(Context context, AttributeSet attrs) {

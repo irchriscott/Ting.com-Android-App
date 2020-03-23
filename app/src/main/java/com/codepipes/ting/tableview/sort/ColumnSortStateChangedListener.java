@@ -1,6 +1,6 @@
 package com.codepipes.ting.tableview.sort;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public abstract class ColumnSortStateChangedListener {
 

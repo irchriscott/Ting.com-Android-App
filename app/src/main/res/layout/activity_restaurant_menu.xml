@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".activities.menu.RestaurantMenu">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refresh_menu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -43,7 +43,7 @@
                                 android:scaleType="fitCenter"
                                 tools:ignore="ContentDescription"/>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="260dp"
@@ -228,12 +228,12 @@
                                         app:layout_constraintStart_toStartOf="parent"
                                         tools:ignore="HardcodedText"/>
 
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/menu_view"
                             android:visibility="gone"
                             android:layout_width="match_parent"
@@ -250,7 +250,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"/>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="8dp"
@@ -492,7 +492,7 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/menu_separator_first">
 
-                                <android.support.constraint.ConstraintLayout
+                                <androidx.constraintlayout.widget.ConstraintLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content">
 
@@ -534,7 +534,7 @@
                                             app:layout_constraintBottom_toBottomOf="@id/menu_new_price"
                                             tools:ignore="HardcodedText"/>
 
-                                    <com.varunest.sparkbutton.SparkButton
+                                    <com.codepipes.ting.sparkbutton.SparkButton
                                             android:id="@+id/menu_like_button"
                                             android:layout_width="50dp"
                                             android:layout_height="50dp"
@@ -549,7 +549,7 @@
                                             app:layout_constraintTop_toTopOf="parent"
                                             app:layout_constraintBottom_toBottomOf="parent"/>
 
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </RelativeLayout>
 
@@ -644,7 +644,7 @@
                                     android:id="@+id/menu_availability_icon"
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
-                                    android:src="@drawable/ic_check_white_48dp"
+                                    android:src="@drawable/ic_check_white"
                                     tools:ignore="ContentDescription"/>
 
                             <TextView
@@ -781,7 +781,7 @@
 
                     </LinearLayout>
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/menu_dish_foods_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -810,16 +810,16 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 tools:ignore="HardcodedText"/>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/menu_dish_foods_recycler_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintTop_toBottomOf="@id/menu_dish_foods_title"
                                 app:layout_constraintStart_toStartOf="parent"/>
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/menu_promotions_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -849,17 +849,17 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 tools:ignore="HardcodedText"/>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/menu_promotions_recycler_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 app:layout_constraintTop_toBottomOf="@id/menu_promotions_title"
                                 app:layout_constraintStart_toStartOf="parent"/>
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/menu_reviews_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -888,7 +888,7 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 tools:ignore="HardcodedText"/>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                                 android:id="@+id/menu_rating_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -931,7 +931,7 @@
                                     app:layout_constraintTop_toTopOf="parent"
                                     tools:ignore="RtlHardcoded"/>
 
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
                                 android:id="@+id/menu_separator_seventh"
@@ -952,7 +952,7 @@
                                 app:layout_constraintTop_toBottomOf="@id/menu_separator_seventh"
                                 layout="@layout/include_empty_data" />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/menu_reviews_recycler_view"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -972,16 +972,16 @@
                                 app:layout_constraintStart_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/menu_reviews_recycler_view"/>
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </RelativeLayout>
 
     </ScrollView>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

@@ -1,6 +1,6 @@
 package com.codepipes.ting.tableview.filter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class FilterItem {
 

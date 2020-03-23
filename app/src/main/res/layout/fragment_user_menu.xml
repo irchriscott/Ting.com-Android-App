@@ -13,7 +13,7 @@
              android:background="@drawable/address_map_background"
              tools:context=".fragments.navigation.UserMenuFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
@@ -76,9 +76,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="ContentDescription,UnusedAttribute"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_marginTop="90dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -110,6 +110,6 @@
 
         </android.support.design.widget.NavigationView>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

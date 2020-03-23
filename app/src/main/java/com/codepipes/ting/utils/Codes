@@ -81,7 +81,7 @@ private fun addFragment(v: View) {
                         android:layout_width="match_parent"
                         android:layout_height="200dp">
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -115,6 +115,6 @@ private fun addFragment(v: View) {
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/restaurants_text"/>
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>

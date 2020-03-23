@@ -21,13 +21,13 @@ public class ColorPicker extends Dialog implements SeekBar.OnSeekBarChangeListen
     public Activity c;
     public Dialog d;
 
-    View colorView;
-    SeekBar redSeekBar, greenSeekBar, blueSeekBar;
-    TextView redToolTip, greenToolTip, blueToolTip;
-    EditText codHex;
+    private View colorView;
+    private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
+    private TextView redToolTip, greenToolTip, blueToolTip;
+    private EditText codHex;
     private int red, green, blue;
-    int seekBarLeft;
-    Rect thumbRect;
+    private int seekBarLeft;
+    private Rect thumbRect;
 
     public ColorPicker(Activity a) {
         super(a);

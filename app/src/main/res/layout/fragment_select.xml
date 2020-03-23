@@ -9,7 +9,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_margin="8dp"
             android:padding="20dp"
             android:background="@drawable/background_dialog_rounded"
@@ -30,7 +30,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="HardcodedText,SpUsage" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/form_select"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,6 +56,6 @@
                 app:layout_constraintTop_toBottomOf="@id/form_select"
                 tools:ignore="ButtonStyle,HardcodedText,RtlHardcoded,SpUsage" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

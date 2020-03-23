@@ -5,14 +5,14 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
@@ -57,7 +57,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
 
     @SuppressLint("SetTextI18n", "InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_restaurant_menus_order, null, false)
 
         userAuthentication = UserAuthentication(context!!)
@@ -68,7 +68,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
 
         view.restaurant_menus_type.text = when (menuType) { 1 -> { "Foods" } 2 -> { "Drinks" } 3 -> { "Dishes" } else -> { "Foods" } }
         view.close_restaurant_menus.setOnClickListener {
-            dialog.dismiss()
+            dialog?.dismiss()
             restaurantMenusOrderCloseListener.onClose()
         }
 
@@ -107,7 +107,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
                                     pageNum++
 
                                     val interceptor = Interceptor {
-                                        val url = it.request().url().newBuilder()
+                                        val url = it.request().url.newBuilder()
                                             .addQueryParameter("branch", branchId.toString())
                                             .addQueryParameter("query", view.restaurant_menus_filter.text.toString())
                                             .addQueryParameter("type", menuType.toString())
@@ -230,7 +230,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 
@@ -239,7 +239,7 @@ class RestaurantMenusOrderDialog : DialogFragment() {
         super.onDestroy()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         disposable.clear()
         super.onDismiss(dialog)
     }

@@ -2,6 +2,7 @@
   <dictionary name="Ir Christian Scott">
     <words>
       <w>abcdefghijklmnopqrstuvwxyz</w>
+      <w>btns</w>
       <w>cancelation</w>
       <w>cancle</w>
       <w>checkmark</w>
@@ -11,12 +12,17 @@
       <w>customclasses</w>
       <w>dlat</w>
       <w>dlng</w>
+      <w>editimage</w>
       <w>geocoder</w>
       <w>gson</w>
+      <w>imagecropper</w>
+      <w>imageeditor</w>
       <w>linebottom</w>
       <w>msgs</w>
       <w>navbar</w>
+      <w>picchooser</w>
       <w>popwin</w>
+      <w>prog</w>
       <w>pubnub</w>
       <w>rects</w>
       <w>recyclerview</w>
@@ -26,8 +32,10 @@
       <w>signup</w>
       <w>simpledialogfragment</w>
       <w>snackbar</w>
+      <w>sparkbutton</w>
       <w>stfalcon</w>
       <w>textview</w>
+      <w>unreveal</w>
       <w>urlc</w>
     </words>
   </dictionary>

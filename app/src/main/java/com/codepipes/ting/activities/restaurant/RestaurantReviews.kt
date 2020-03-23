@@ -4,17 +4,17 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.restaurant.RestaurantReviewsAdapter
 import com.codepipes.ting.customclasses.XAxisValueFormatter
@@ -219,7 +219,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try {
                     branch = Gson().fromJson(dataString, Branch::class.java)
                     runOnUiThread {
@@ -247,7 +247,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try {
                     reviews = Gson().fromJson<MutableList<RestaurantReview>>(dataString, object : TypeToken<MutableList<RestaurantReview>>(){}.type)
                     runOnUiThread {
@@ -376,10 +376,10 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        val dataString = response.body()!!.string()
+                        val dataString = response.body!!.string()
                         runOnUiThread {
                             try {
-                                if(response.code() == 200) {
+                                if(response.code == 200) {
                                     val review = Gson().fromJson<RestaurantReview>(dataString, RestaurantReview::class.java)
                                     ratingDialog.setDefaultRating(review.review)
                                     ratingDialog.setDefaultComment(review.comment)
@@ -433,7 +433,7 @@ class RestaurantReviews : AppCompatActivity(), RatingDialogListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 try{
                     val serverResponse = Gson().fromJson(responseBody, ServerResponse::class.java)
                     runOnUiThread {

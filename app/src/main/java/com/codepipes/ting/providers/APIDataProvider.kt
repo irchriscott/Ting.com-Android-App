@@ -26,7 +26,7 @@ class APILoadGlobalRestaurants(val context: Context) : AsyncTask<Void, Void, Mut
         val request = Request.Builder().url(url).get().build()
         return try {
             val response = client.newCall(request).execute()
-            val dataString = response.body()!!.string()
+            val dataString = response.body!!.string()
             gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
         } catch (e: Exception){
             val activity = context as Activity

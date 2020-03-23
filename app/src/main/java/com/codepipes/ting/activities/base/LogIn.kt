@@ -6,13 +6,13 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
@@ -105,14 +105,14 @@ class LogIn : AppCompatActivity() {
         mAppNameText.text = spanText
 
         mSubmitLogInFormButton.setOnClickListener {
-            mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+            mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
             this.authenticateUser()
         }
 
         mSignInWithGoogleButton.setOnClickListener{
             if (mUtilFunctions.isConnectedToInternet() && mUtilFunctions.isConnected()) {
                 if(mUtilFunctions.checkLocationPermissions()) {
-                    mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                    mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
                     mGoogleSignInClient.signOut()
                     val signInIntent = mGoogleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -172,7 +172,7 @@ class LogIn : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -184,7 +184,7 @@ class LogIn : AppCompatActivity() {
                             args.putString("message", serverResponse.message)
                             args.putString("type", serverResponse.type)
                             successDialog.arguments = args
-                            successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+                            successDialog.show(supportFragmentManager, successDialog.tag)
 
                             val onDialogClosed = object : SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
@@ -198,7 +198,7 @@ class LogIn : AppCompatActivity() {
                                         bundle.putString("message", "Unable To Fetch User Data")
                                         bundle.putString("type", "error")
                                         successOverlay.arguments = bundle
-                                        successOverlay.show(fragmentManager, successOverlay.tag)
+                                        successOverlay.show(supportFragmentManager, successOverlay.tag)
                                         successOverlay.dismissListener(object :
                                             SuccessDialogCloseListener {
                                             override fun handleDialogClose(dialog: DialogInterface?) {
@@ -216,7 +216,7 @@ class LogIn : AppCompatActivity() {
                             bundle.putString("message", serverResponse.message)
                             bundle.putString("type", "error")
                             successOverlay.arguments = bundle
-                            successOverlay.show(fragmentManager, successOverlay.tag)
+                            successOverlay.show(supportFragmentManager, successOverlay.tag)
                             successOverlay.dismissListener(object :
                                 SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
@@ -253,7 +253,7 @@ class LogIn : AppCompatActivity() {
         when(requestCode){
             REQUEST_FINE_LOCATION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    try { mProgressOverlay.show(fragmentManager, mProgressOverlay.tag) } catch (e: java.lang.Exception) {}
+                    try { mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag) } catch (e: java.lang.Exception) {}
                     mGoogleSignInClient.signOut()
                     val signInIntent = mGoogleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -312,7 +312,7 @@ class LogIn : AppCompatActivity() {
                                 }
 
                                 override fun onResponse(call: Call, response: Response) {
-                                    val responseBody = response.body()!!.string()
+                                    val responseBody = response.body!!.string()
                                     val gson = Gson()
                                     try{
                                         val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -325,7 +325,7 @@ class LogIn : AppCompatActivity() {
                                                 args.putString("message", serverResponse.message)
                                                 args.putString("type", serverResponse.type)
                                                 successDialog.arguments = args
-                                                successDialog.show(this@LogIn.fragmentManager, successDialog.tag)
+                                                successDialog.show(supportFragmentManager, successDialog.tag)
 
                                                 val onDialogClosed = object : SuccessDialogCloseListener {
                                                     override fun handleDialogClose(dialog: DialogInterface?) {
@@ -339,7 +339,7 @@ class LogIn : AppCompatActivity() {
                                                             bundle.putString("message", "Unable To Fetch User Data")
                                                             bundle.putString("type", "error")
                                                             successOverlay.arguments = bundle
-                                                            successOverlay.show(fragmentManager, successOverlay.tag)
+                                                            successOverlay.show(supportFragmentManager, successOverlay.tag)
                                                             successOverlay.dismissListener(object : SuccessDialogCloseListener {
                                                                 override fun handleDialogClose(dialog: DialogInterface?) {
                                                                     successOverlay.dismiss()
@@ -356,7 +356,7 @@ class LogIn : AppCompatActivity() {
                                                 bundle.putString("message", serverResponse.message)
                                                 bundle.putString("type", "error")
                                                 successOverlay.arguments = bundle
-                                                successOverlay.show(fragmentManager, successOverlay.tag)
+                                                successOverlay.show(supportFragmentManager, successOverlay.tag)
                                                 successOverlay.dismissListener(object : SuccessDialogCloseListener {
                                                     override fun handleDialogClose(dialog: DialogInterface?) {
                                                         successOverlay.dismiss()

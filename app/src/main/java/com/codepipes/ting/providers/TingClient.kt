@@ -128,8 +128,8 @@ class TingClient (val context: Context) {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val dataString = response.body()!!.string()
-                    requestResponse.invoke(response.code(), true, dataString)
+                    val dataString = response.body!!.string()
+                    requestResponse.invoke(response.code, true, dataString)
                 }
             })
         }
@@ -162,8 +162,8 @@ class TingClient (val context: Context) {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val dataString = response.body()!!.string()
-                    requestResponse.invoke(response.code(), true, dataString)
+                    val dataString = response.body!!.string()
+                    requestResponse.invoke(response.code, true, dataString)
                 }
             })
         }

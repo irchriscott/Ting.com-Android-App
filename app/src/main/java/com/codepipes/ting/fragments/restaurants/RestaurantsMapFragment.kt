@@ -13,15 +13,16 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.RequiresApi
-import android.support.constraint.ConstraintLayout
-import android.support.v4.app.DialogFragment
+import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.DialogFragment
 import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.restaurant.RestaurantProfile
+import com.codepipes.ting.customclasses.ProgressWheel
 import com.codepipes.ting.customclasses.RestaurantInfoWindowMap
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
@@ -43,7 +44,6 @@ import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
-import com.pnikosis.materialishprogress.ProgressWheel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_restaurants_map.view.*
 import okhttp3.OkHttpClient
@@ -140,11 +140,11 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         mUtilFunctions = UtilsFunctions(activity!!)
 
         mCloseRestaurantMapButton = view.findViewById(R.id.close_restaurant_map) as ImageButton
-        mCloseRestaurantMapButton.setOnClickListener { this.hideRestaurantMap(view, cx, cy, dialog) }
+        mCloseRestaurantMapButton.setOnClickListener { this.hideRestaurantMap(view, cx, cy, dialog!!) }
 
-        dialog.setOnKeyListener { _, keyCode, _ ->
+        dialog?.setOnKeyListener { _, keyCode, _ ->
             if(keyCode == KeyEvent.KEYCODE_BACK){
-                this.hideRestaurantMap(view, cx, cy, this.dialog)
+                this.hideRestaurantMap(view, cx, cy, this.dialog!!)
                 return@setOnKeyListener  true
             }
             return@setOnKeyListener false
@@ -370,7 +370,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             }
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 userMapPin = try {
                     val pin = gson.fromJson(responseBody, MapPin::class.java)
                     val sharp = SVG.getFromString(pin.pin)
@@ -409,7 +409,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             }
 
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 restaurantMapPin = try {
                     val pin = gson.fromJson(responseBody, MapPin::class.java)
                     val sharp = SVG.getFromString(pin.pin)
@@ -459,7 +459,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        val touchOutsideView = dialog.window.findViewById<View>(android.support.design.R.id.touch_outside)
+        val touchOutsideView = dialog.window?.findViewById<View>(com.google.android.material.R.id.touch_outside)
         return dialog
     }
 
@@ -471,7 +471,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         timer.cancel()
         handler?.removeCallbacks(runnable)
@@ -479,7 +479,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
 
     override fun onStart() {
         super.onStart()
-        dialog.window.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT)
     }
 
     override fun onInfoWindowClick(marker: Marker?) {

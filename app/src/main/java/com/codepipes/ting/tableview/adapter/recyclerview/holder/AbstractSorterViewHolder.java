@@ -1,6 +1,6 @@
 package com.codepipes.ting.tableview.adapter.recyclerview.holder;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.codepipes.ting.tableview.sort.SortState;

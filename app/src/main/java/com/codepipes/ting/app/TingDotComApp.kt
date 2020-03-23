@@ -3,12 +3,12 @@ package com.codepipes.ting.app
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.NonNull
+import androidx.annotation.NonNull
 import com.livefront.bridge.SavedStateHandler
-import android.support.v4.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.support.annotation.Nullable
-import android.support.multidex.MultiDex
+import androidx.annotation.Nullable
+import androidx.multidex.MultiDex
 import com.livefront.bridge.Bridge
 import icepick.Icepick
 

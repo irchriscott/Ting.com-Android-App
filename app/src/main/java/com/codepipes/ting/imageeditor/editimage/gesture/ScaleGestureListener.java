@@ -1,7 +1,6 @@
 package com.codepipes.ting.imageeditor.editimage.gesture;
 
 import android.view.View;
-
 import com.codepipes.ting.imageeditor.editimage.interfaces.OnScaleGestureListener;
 
 

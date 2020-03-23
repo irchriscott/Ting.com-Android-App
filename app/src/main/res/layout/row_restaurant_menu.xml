@@ -12,7 +12,7 @@
         android:layout_marginStart="12dp"
         android:background="@drawable/border_row">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -26,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/menu_separator_first">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -154,7 +154,7 @@
                             app:layout_constraintBottom_toBottomOf="@id/menu_new_price"
                             tools:ignore="HardcodedText"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RelativeLayout>
 
@@ -322,7 +322,7 @@
                             android:id="@+id/menu_reviews_image"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:src="@drawable/ic_star_full_48dp"
+                            android:src="@drawable/ic_star_filled_gray"
                             android:alpha="0.6"
                             tools:ignore="ContentDescription"/>
 
@@ -355,7 +355,7 @@
                             android:id="@+id/menu_availability_icon"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:src="@drawable/ic_check_white_48dp"
+                            android:src="@drawable/ic_check_white"
                             tools:ignore="ContentDescription"/>
 
                     <TextView
@@ -373,8 +373,8 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

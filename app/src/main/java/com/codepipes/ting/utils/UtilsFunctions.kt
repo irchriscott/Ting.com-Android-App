@@ -6,8 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.net.ConnectivityManager
@@ -16,6 +15,7 @@ import android.util.Base64
 import android.graphics.drawable.Drawable
 import android.text.format.DateUtils
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL

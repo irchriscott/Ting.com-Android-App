@@ -30,7 +30,7 @@
                     android:layout_height="1dp"
                     android:background="#EBEBEB" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                     android:background="#00ffffff"
                     android:id="@+id/myRecyclerview"
                     android:layout_width="match_parent"

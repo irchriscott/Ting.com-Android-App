@@ -9,7 +9,7 @@
              android:clickable="true"
              android:focusable="true">
 
-    <com.pnikosis.materialishprogress.ProgressWheel
+    <com.codepipes.ting.customclasses.ProgressWheel
             android:id="@+id/progress_wheel"
             android:layout_width="30dp"
             android:layout_height="30dp"

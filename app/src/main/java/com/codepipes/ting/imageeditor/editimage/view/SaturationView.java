@@ -4,8 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.support.annotation.FloatRange;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.FloatRange;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import android.util.AttributeSet;
 
 import java.util.concurrent.TimeUnit;

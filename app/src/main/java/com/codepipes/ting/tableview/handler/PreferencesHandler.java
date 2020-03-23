@@ -1,6 +1,6 @@
 package com.codepipes.ting.tableview.handler;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.codepipes.ting.tableview.TableView;
 import com.codepipes.ting.tableview.preference.Preferences;

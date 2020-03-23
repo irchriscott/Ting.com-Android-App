@@ -7,7 +7,7 @@ import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,7 +92,7 @@ class BookReservationDialog : DialogFragment() {
         }
 
         val interceptor = Interceptor {
-            val url = it.request().url().newBuilder()
+            val url = it.request().url.newBuilder()
                 .addQueryParameter("branch", (branchId?:0).toString())
                 .build()
             val request = it.request().newBuilder()
@@ -121,7 +121,7 @@ class BookReservationDialog : DialogFragment() {
                                         selectDialog.dismiss()
                                     }
                                 })
-                                selectDialog.show(fragmentManager, selectDialog.tag)
+                                selectDialog.show(fragmentManager!!, selectDialog.tag)
                             } else { TingToast(activity!!, "No Table Found", TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                         }
                     } catch (e: Exception) { TingToast(activity!!, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
@@ -129,7 +129,7 @@ class BookReservationDialog : DialogFragment() {
             }
         }
 
-        view.form_close.setOnClickListener { dialog.dismiss() }
+        view.form_close.setOnClickListener { dialog?.dismiss() }
         view.form_submit.setOnClickListener {
             if(selectedTable != null) {
                 submitReservationListener.onSubmitReservation(
@@ -149,7 +149,7 @@ class BookReservationDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 

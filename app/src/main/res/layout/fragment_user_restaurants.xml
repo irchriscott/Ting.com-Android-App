@@ -13,7 +13,7 @@
                 android:layout_height="wrap_content"
                 tools:ignore="UselessParent">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
                         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
 
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/user_restaurants_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toStartOf="parent"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 

@@ -2,10 +2,10 @@ package com.codepipes.ting.imageviewer.common.pager
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.view.PagerAdapter
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 import com.codepipes.ting.imageviewer.common.extensions.forEach
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -64,7 +64,7 @@ internal abstract class RecyclingPagerAdapter<VH : RecyclingPagerAdapter.ViewHol
     override fun restoreState(state: Parcelable?, loader: ClassLoader?) {
         if (state != null && state is Bundle) {
             state.classLoader = loader
-            savedStates = if (state.containsKey(STATE)) state.getSparseParcelableArray(STATE) else SparseArray()
+            savedStates = if (state.containsKey(STATE)) state.getSparseParcelableArray(STATE)!! else SparseArray()
         }
         super.restoreState(state, loader)
     }

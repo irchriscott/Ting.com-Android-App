@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.easing.Cubic;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.easing.Easing;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.graphic.FastBitmapDrawable;
@@ -20,11 +22,9 @@ import com.codepipes.ting.imageeditor.editimage.view.imagezoom.utils.IDisposable
 
 /**
  * Base View to manage image zoom/scrool/pinch operations
- * 
- * @author alessandro
- * 
+ *
  */
-public abstract class ImageViewTouchBase extends android.support.v7.widget.AppCompatImageView implements
+public abstract class ImageViewTouchBase extends AppCompatImageView implements
 		IDisposable {
 
 	public interface OnDrawableChangeListener {

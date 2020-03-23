@@ -1,13 +1,15 @@
 package com.codepipes.ting.simpledialogfragment.input;
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 
 public class TextInputAutoCompleteTextView extends AppCompatAutoCompleteTextView {

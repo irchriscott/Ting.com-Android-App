@@ -3,12 +3,12 @@ package com.codepipes.ting.activities.discovery
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.promotion.TodayPromotionAdapter
 import com.codepipes.ting.models.MenuPromotion
@@ -98,7 +98,7 @@ class TodayPromotions : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 val promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
                 runOnUiThread{
                     try {

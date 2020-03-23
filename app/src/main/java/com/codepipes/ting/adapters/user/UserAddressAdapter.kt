@@ -5,13 +5,13 @@ import com.codepipes.ting.interfaces.ActionSheetCallBack
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.chauthai.swipereveallayout.ViewBinderHelper
+import androidx.fragment.app.FragmentManager
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.ErrorMessage
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
@@ -23,13 +23,14 @@ import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.models.UserAddresses
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.swipereveal.ViewBinderHelper
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.row_user_address.view.*
 import okhttp3.*
 import java.io.IOException
 
-class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Adapter<UserAddressViewHolder>() {
+class UserAddressAdapter(private val addresses: UserAddresses, val fragmentManager: FragmentManager) : RecyclerView.Adapter<UserAddressViewHolder>() {
 
     private val viewBinderHelper = ViewBinderHelper()
     private val addressesList = addresses.addresses as MutableList
@@ -88,7 +89,7 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
                                     .get()
                                     .build()
 
-                                mProgressOverlay.show(activity.fragmentManager, mProgressOverlay.tag)
+                                mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
 
                                 client.newCall(request).enqueue(object : Callback {
 
@@ -103,7 +104,7 @@ class UserAddressAdapter(private val addresses: UserAddresses) : RecyclerView.Ad
                                     }
 
                                     override fun onResponse(call: Call, response: Response) {
-                                        val responseBody = response.body()!!.string()
+                                        val responseBody = response.body!!.string()
                                         val gson = Gson()
                                         try{
                                             val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)

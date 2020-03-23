@@ -1,6 +1,6 @@
 package com.codepipes.ting.dialogs.messages
 
-import android.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,8 +18,8 @@ class ProgressOverlay : DialogFragment(){
 
     override fun getTheme(): Int = R.style.TransparentDialog
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        this.dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        return inflater!!.inflate(R.layout.include_progress_overlay, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        this.dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return inflater.inflate(R.layout.include_progress_overlay, container, false)
     }
 }

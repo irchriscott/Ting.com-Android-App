@@ -1,6 +1,6 @@
 package com.codepipes.ting.pageindicatorview.draw.data;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import com.codepipes.ting.pageindicatorview.animation.type.AnimationType;
 import com.codepipes.ting.pageindicatorview.draw.data.Orientation;

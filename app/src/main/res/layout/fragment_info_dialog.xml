@@ -9,7 +9,7 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="20dp"
             android:background="@drawable/background_dialog_rounded"
             android:layout_width="match_parent"
@@ -71,6 +71,6 @@
                 app:layout_constraintTop_toBottomOf="@id/dialog_text"
                 tools:ignore="HardcodedText,RtlHardcoded,SpUsage" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

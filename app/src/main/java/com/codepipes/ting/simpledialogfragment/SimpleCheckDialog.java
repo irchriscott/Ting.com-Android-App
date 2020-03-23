@@ -1,7 +1,7 @@
 package com.codepipes.ting.simpledialogfragment;
 
 import android.os.Bundle;
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;

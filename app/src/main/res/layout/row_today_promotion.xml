@@ -12,7 +12,7 @@
         android:layout_marginStart="12dp"
         android:background="@drawable/border_row">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -26,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
                             android:id="@+id/promotion_status_icon"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:src="@drawable/ic_check_white_48dp"
+                            android:src="@drawable/ic_check_white"
                             tools:ignore="ContentDescription"/>
 
                     <TextView
@@ -335,8 +335,8 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

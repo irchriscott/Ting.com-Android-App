@@ -3,11 +3,11 @@ package com.codepipes.ting.activities.restaurant
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.restaurant.specifications.RestaurantCuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.specifications.RestaurantFoodCategoryAdapter
@@ -112,7 +112,7 @@ class RestaurantSpecification : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 branch = Gson().fromJson(dataString, Branch::class.java)
                 runOnUiThread {
                     branchTimer.cancel()

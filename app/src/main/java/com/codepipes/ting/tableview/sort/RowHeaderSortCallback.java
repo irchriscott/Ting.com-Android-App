@@ -1,7 +1,7 @@
 package com.codepipes.ting.tableview.sort;
 
-import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 

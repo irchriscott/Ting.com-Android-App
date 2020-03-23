@@ -8,8 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
 import com.pusher.client.Pusher

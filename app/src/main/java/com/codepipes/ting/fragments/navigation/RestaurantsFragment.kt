@@ -2,8 +2,7 @@ package com.codepipes.ting.fragments.navigation
 
 
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.location.Geocoder
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v4.view.ViewCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.RequiresApi
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
 import com.codepipes.ting.customclasses.ActionSheet
@@ -42,6 +41,7 @@ import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.livefront.bridge.Bridge
@@ -288,7 +288,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             filteredRestaurantTimer.scheduleAtFixedRate(object: TimerTask() {
                 override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query) }
             }, TIMER_PERIOD, TIMER_PERIOD)
-            mProgressOverlay.show(activity.fragmentManager, mProgressOverlay.tag)
+            mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
         }
 
         view.filter_restaurant_button.setOnLongClickListener {
@@ -509,7 +509,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     inner class LocationInterceptor : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
-            val url = chain.request().url().newBuilder()
+            val url = chain.request().url.newBuilder()
                 .addQueryParameter("country", country)
                 .addQueryParameter("town", town)
                 .build()
@@ -553,7 +553,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try {
                     restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
                     activity.runOnUiThread {
@@ -598,7 +598,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 val cuisines = gson.fromJson<MutableList<RestaurantCategory>>(dataString, object : TypeToken<MutableList<RestaurantCategory>>(){}.type)
 
                 activity.runOnUiThread{
@@ -635,7 +635,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 activity.runOnUiThread{ mLocalData.saveFilters(dataString) }
             }
         })
@@ -651,7 +651,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val bundle = Bundle()
         bundle.putString(FILTER_KEY, filter)
         restaurantsFiltersFragment.arguments = bundle
-        restaurantsFiltersFragment.show(fragmentManager, restaurantsFiltersFragment.tag)
+        restaurantsFiltersFragment.show(fragmentManager!!, restaurantsFiltersFragment.tag)
         restaurantsFiltersFragment.onFilterRestaurantsListener(object : FilterRestaurantsClickListener {
             override fun onFilterRestaurantsClickListener(type: String, filters: List<Int>) {
                 activity.runOnUiThread {
@@ -672,7 +672,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     filteredRestaurantTimer.scheduleAtFixedRate(object: TimerTask() {
                         override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query) }
                     }, TIMER_PERIOD, TIMER_PERIOD)
-                    mProgressOverlay.show(activity.fragmentManager, mProgressOverlay.tag)
+                    mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
                 }
             }
         })
@@ -717,7 +717,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
 
                 activity.runOnUiThread {
                     mRefreshRestaurant.isRefreshing = false
@@ -791,12 +791,12 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     companion object {
-        public val FILTER_KEY           = "filter"
-        public val AVAILABILITY_KEY     = "availability"
-        public val CUISINES_KEY         = "cuisines"
-        public val SERVICES_KEY         = "services"
-        public val SPECIALS_KEY         = "specials"
-        public val TYPES_KEY            = "types"
-        public val RATINGS_KEY          = "ratings"
+        public const val FILTER_KEY           = "filter"
+        public const val AVAILABILITY_KEY     = "availability"
+        public const val CUISINES_KEY         = "cuisines"
+        public const val SERVICES_KEY         = "services"
+        public const val SPECIALS_KEY         = "specials"
+        public const val TYPES_KEY            = "types"
+        public const val RATINGS_KEY          = "ratings"
     }
 }

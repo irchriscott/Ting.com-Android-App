@@ -7,7 +7,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragments.cuisine.CuisineRestaurantsFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_cuisine_restaurants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -42,7 +42,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/cuisine_restaurants"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -59,6 +59,6 @@
 
             </ScrollView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

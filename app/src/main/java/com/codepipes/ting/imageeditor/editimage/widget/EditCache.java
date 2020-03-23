@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public class EditCache {
+
     public static final int EDIT_CACHE_SIZE = 10;
 
     private final int mCacheSize;

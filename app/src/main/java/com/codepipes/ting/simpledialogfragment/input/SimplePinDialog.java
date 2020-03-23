@@ -3,8 +3,7 @@ package com.codepipes.ting.simpledialogfragment.input;
 import android.content.Context;
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.codepipes.ting.R;
 import com.codepipes.ting.customclasses.PinEntryEditText;
 import com.codepipes.ting.simpledialogfragment.CustomViewDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 
 public class SimplePinDialog extends CustomViewDialog<SimplePinDialog> {

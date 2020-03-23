@@ -2,7 +2,7 @@ package com.codepipes.ting.simpledialogfragment.form;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 import android.view.View;
 
 import com.codepipes.ting.simpledialogfragment.SimpleDialog;

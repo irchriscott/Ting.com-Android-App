@@ -1,7 +1,7 @@
 package com.codepipes.ting.dialogs.placement
 
 import android.annotation.SuppressLint
-import android.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -57,16 +57,16 @@ class PlacementBillDialog : DialogFragment() {
     @SuppressLint("SetTextI18n", "InflateParams", "DefaultLocale")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val view = inflater.inflate(R.layout.fragment_placement_bill, null, false)
 
-        userAuthentication = UserAuthentication(activity)
+        userAuthentication = UserAuthentication(activity!!)
         session = userAuthentication.get()!!
 
-        placement = UserPlacement(activity).get()!!
+        placement = UserPlacement(activity!!).get()!!
 
         interceptor = Interceptor {
-            val url = it.request().url().newBuilder()
+            val url = it.request().url.newBuilder()
                 .addQueryParameter("token", placement.token)
                 .build()
             val request = it.request().newBuilder()
@@ -93,8 +93,8 @@ class PlacementBillDialog : DialogFragment() {
 
                         try {
                             val serverResponse = Gson().fromJson<ServerResponse>(result, ServerResponse::class.java)
-                            TingToast(activity, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                        } catch (e: Exception) { TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            TingToast(activity!!, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        } catch (e: Exception) { TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                     }
                 } else {
                     view.placement_bill_content.visibility = View.GONE
@@ -103,14 +103,14 @@ class PlacementBillDialog : DialogFragment() {
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
                     view.empty_data.empty_image.alpha = 0.6f
                     view.empty_data.empty_text.text = result
-                    TingToast(activity, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    TingToast(activity!!, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
         }
 
         if (view.bill_number.text == "0001") {
 
-            TingClient.getInstance(activity)
+            TingClient.getInstance(activity!!)
                 .getPlacementBill(placement.token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -132,7 +132,7 @@ class PlacementBillDialog : DialogFragment() {
                         view.empty_data.empty_image.setImageResource(R.drawable.ic_star_filled_gray)
                         view.empty_data.empty_image.alpha = 0.6f
                         view.empty_data.empty_text.text = "No Order Made So Far"
-                        TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                        TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                     }
                 })
         }
@@ -182,30 +182,30 @@ class PlacementBillDialog : DialogFragment() {
             bundle.putString(CurrentRestaurant.PEOPLE_VALUE_KEY, bill.tips.toString())
             bundle.putString(CurrentRestaurant.PEOPLE_TITLE_KEY, "Enter Tip Amount")
             placementPeopleDialog.arguments = bundle
-            placementPeopleDialog.show(fragmentManager, placementPeopleDialog.tag)
+            placementPeopleDialog.show(fragmentManager!!, placementPeopleDialog.tag)
             placementPeopleDialog.onSubmitPeople(object : SubmitPeoplePlacementListener {
                 override fun onSubmit(people: String) {
                     placementPeopleDialog.dismiss()
                     if(people != "" && people.toDouble().toInt() > 1) {
                         val data = hashMapOf<String, String>("token" to placement.token, "tips" to people)
                         TingClient.postRequest(Routes.placementUpdateBillTips, data, null, session.token) { _, isSuccess, result ->
-                            activity.runOnUiThread {
+                            activity?.runOnUiThread {
                                 if(isSuccess) {
                                     try {
                                         val billData = Gson().fromJson(result, Bill::class.java)
                                         if (billData.id <= 0) { throw Exception("An Error Occurred") }
-                                        TingToast(activity, "Tip Updated Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                                        TingToast(activity!!, "Tip Updated Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
                                         showPlacementBill(billData, view)
                                     } catch (e: Exception) {
                                         try {
                                             val serverResponse = Gson().fromJson<ServerResponse>(result, ServerResponse::class.java)
-                                            TingToast(activity, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                        } catch (e: Exception) { TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                            TingToast(activity!!, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        } catch (e: Exception) { TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                                     }
-                                } else { TingToast(activity, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                } else { TingToast(activity!!, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                             }
                         }
-                    } else { TingToast(activity, "Tip Cannot Be Empty Or 0", TingToastType.WARNING).showToast(Toast.LENGTH_LONG) }
+                    } else { TingToast(activity!!, "Tip Cannot Be Empty Or 0", TingToastType.WARNING).showToast(Toast.LENGTH_LONG) }
                 }
             })
         }
@@ -220,25 +220,25 @@ class PlacementBillDialog : DialogFragment() {
                 bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Complete Bill")
                 bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Dou you really want to complete this bill?\nAfter Completion, No More Order Can Be Made Again.")
                 confirmDialog.arguments = bundle
-                confirmDialog.show(fragmentManager, confirmDialog.tag)
+                confirmDialog.show(fragmentManager!!, confirmDialog.tag)
                 confirmDialog.onDialogListener(object : ConfirmDialogListener {
                     override fun onAccept() {
                         TingClient.getRequest(Routes.placementBillComplete, interceptor, session.token) { _, isSuccess, result ->
-                            activity.runOnUiThread {
+                            activity?.runOnUiThread {
                                 confirmDialog.dismiss()
                                 if(isSuccess) {
                                     try {
                                         val billData = Gson().fromJson(result, Bill::class.java)
                                         if (billData.id <= 0) { throw Exception("An Error Occurred") }
-                                        TingToast(activity, "Bill Completed Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                                        TingToast(activity!!, "Bill Completed Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
                                         showPlacementBill(billData, view)
                                     } catch (e: Exception) {
                                         try {
                                             val serverResponse = Gson().fromJson<ServerResponse>(result, ServerResponse::class.java)
-                                            TingToast(activity, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                        } catch (e: Exception) { TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                            TingToast(activity!!, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                        } catch (e: Exception) { TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                                     }
-                                } else { TingToast(activity, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                } else { TingToast(activity!!, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                             }
                         }
                     }
@@ -254,25 +254,25 @@ class PlacementBillDialog : DialogFragment() {
             bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Request Bill")
             bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Dou you really want to request this bill?\nPlease, Make sure the tip amount has been updated.")
             confirmDialog.arguments = bundle
-            confirmDialog.show(fragmentManager, confirmDialog.tag)
+            confirmDialog.show(fragmentManager!!, confirmDialog.tag)
             confirmDialog.onDialogListener(object : ConfirmDialogListener {
                 override fun onAccept() {
                     TingClient.getRequest(Routes.placementBillRequest, interceptor, session.token) { _, isSuccess, result ->
-                        activity.runOnUiThread {
+                        activity?.runOnUiThread {
                             confirmDialog.dismiss()
                             if(isSuccess) {
                                 try {
                                     val billData = Gson().fromJson(result, Bill::class.java)
                                     if (billData.id <= 0) { throw Exception("An Error Occurred") }
-                                    TingToast(activity, "Bill Requested Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
+                                    TingToast(activity!!, "Bill Requested Successfully !!!", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)
                                     showPlacementBill(billData, view)
                                 } catch (e: Exception) {
                                     try {
                                         val serverResponse = Gson().fromJson<ServerResponse>(result, ServerResponse::class.java)
-                                        TingToast(activity, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-                                    } catch (e: Exception) { TingToast(activity, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                                        TingToast(activity!!, serverResponse.message, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                                    } catch (e: Exception) { TingToast(activity!!, e.message!!, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                                 }
-                            } else { TingToast(activity, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            } else { TingToast(activity!!, result, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
                         }
                     }
                 }
@@ -287,7 +287,7 @@ class PlacementBillDialog : DialogFragment() {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
-            dialog.window!!.setLayout(width, height)
+            dialog?.window!!.setLayout(width, height)
         }
     }
 

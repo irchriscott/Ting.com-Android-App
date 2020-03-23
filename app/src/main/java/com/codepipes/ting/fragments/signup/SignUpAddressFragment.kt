@@ -5,8 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.location.Geocoder
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -18,6 +17,7 @@ import com.codepipes.ting.customclasses.LockableViewPager
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilData
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.MapAddressChangedListener
@@ -140,7 +140,7 @@ class SignUpAddressFragment : Fragment() {
 
         if(signUpUserData["address"].isNullOrEmpty() && signUpUserData["latitude"].isNullOrEmpty() && signUpUserData["longitude"].isNullOrEmpty()){
 
-            mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
+            mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
 
             if(mUtilFunctions.checkLocationPermissions()){
                 try {
@@ -203,7 +203,7 @@ class SignUpAddressFragment : Fragment() {
                     bundle.putString("message", "Fill All The Fields")
                     bundle.putString("type", "error")
                     successOverlay.arguments = bundle
-                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.show(fragmentManager!!, successOverlay.tag)
                     successOverlay.dismissListener(object :
                         SuccessDialogCloseListener {
                         override fun handleDialogClose(dialog: DialogInterface?) {

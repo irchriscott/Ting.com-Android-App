@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.Toast
@@ -216,7 +216,7 @@ class RestaurantScanner : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val responseBody = response.body()!!.string()
+                    val responseBody = response.body!!.string()
                     val gson = Gson()
                     runOnUiThread {
                         if(utilsFunctions.checkLocationPermissions()) {
@@ -237,7 +237,7 @@ class RestaurantScanner : AppCompatActivity() {
                                             if(statusTimer["st"] == "opened") {
                                                 if(distance <= 5000) {
                                                     try {
-                                                        progressOverlay.show(fragmentManager, progressOverlay.tag)
+                                                        progressOverlay.show(supportFragmentManager, progressOverlay.tag)
                                                         if(userPlacement.getTempToken().isNullOrEmpty()) {
                                                             userPlacement.setTempToken(utilsFunctions.getToken((100 until 200).random()))
                                                         }
@@ -246,19 +246,17 @@ class RestaurantScanner : AppCompatActivity() {
                                                         val data = mapOf<String, String>("table" to table.number)
                                                         val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, 200, null, args, data)
                                                         pubnub.publish().channel(table.branch.channel).message(Gson().toJson(message))
-                                                            .async(object : PNCallback<PNPublishResult>() {
-                                                                override fun onResponse(result: PNPublishResult?, status: PNStatus) {
-                                                                    if (status.isError || status.statusCode != 200) {
-                                                                        progressOverlay.dismiss()
-                                                                        codeScanner.startPreview()
-                                                                        TingToast(
-                                                                            this@RestaurantScanner,
-                                                                            "Connection Error Occurred",
-                                                                            TingToastType.ERROR
-                                                                        ).showToast(Toast.LENGTH_LONG)
-                                                                    }
+                                                            .async { _, status ->
+                                                                if (status.isError || status.statusCode != 200) {
+                                                                    progressOverlay.dismiss()
+                                                                    codeScanner.startPreview()
+                                                                    TingToast(
+                                                                        this@RestaurantScanner,
+                                                                        "Connection Error Occurred",
+                                                                        TingToastType.ERROR
+                                                                    ).showToast(Toast.LENGTH_LONG)
                                                                 }
-                                                            })
+                                                            }
                                                     } catch (e: java.lang.Exception){
                                                         codeScanner.startPreview()
                                                         try {

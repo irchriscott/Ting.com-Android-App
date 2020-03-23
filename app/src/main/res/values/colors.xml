@@ -68,7 +68,9 @@
     <color name="kelly_22">#2B3514</color>
 
     <color name="simpledialogfragment_error_color">#FFD50000</color>
-
     <color name="pin_normal">#6B767E</color>
 
+    <color name="spark_primary_color">#FFFFC107</color>
+    <color name="spark_secondary_color">#FFFF5722</color>
+    <color name="spark_image_tint">#00000000</color>
 </resources>

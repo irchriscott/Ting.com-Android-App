@@ -2,8 +2,7 @@ package com.codepipes.ting.fragments.navigation
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.design.widget.NavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import com.codepipes.ting.R
 import com.codepipes.ting.activities.user.UserProfile
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
+import com.google.android.material.navigation.NavigationView
 import com.livefront.bridge.Bridge
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView

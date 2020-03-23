@@ -1,6 +1,6 @@
 package com.codepipes.ting.imageeditor.editimage.fragment.crop
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.codepipes.ting.R
 
 enum class RatioText constructor(@StringRes val ratioTextId: Int, val aspectRatio: AspectRatio) {

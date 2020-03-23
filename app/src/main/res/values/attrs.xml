@@ -274,4 +274,44 @@
         <attr name="cropFlipVertically" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="SwipeRevealLayout">
+        <attr name="dragEdge">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+        </attr>
+        <attr name="mode">
+            <enum name="normal" value="0" />
+            <enum name="same_level"   value="1" />
+        </attr>
+        <attr name="flingVelocity" format="integer" />
+        <attr name="minDistRequestDisallowParent" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="sparkbutton">
+        <attr name="sparkbutton_iconSize" format="dimension|reference" />
+        <attr name="sparkbutton_activeImage" format="reference" />
+        <attr name="sparkbutton_inActiveImage" format="reference" />
+        <attr name="sparkbutton_primaryColor" format="reference" />
+        <attr name="sparkbutton_secondaryColor" format="reference" />
+        <attr name="sparkbutton_pressOnTouch" format="boolean" />
+        <attr name="sparkbutton_animationSpeed" format="float" />
+        <attr name="sparkbutton_activeImageTint" format="reference" />
+        <attr name="sparkbutton_inActiveImageTint" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean" />
+        <attr name="matProg_barColor" format="color" />
+        <attr name="matProg_rimColor" format="color" />
+        <attr name="matProg_rimWidth" format="dimension" />
+        <attr name="matProg_spinSpeed" format="float" />
+        <attr name="matProg_barSpinCycleTime" format="integer" />
+        <attr name="matProg_circleRadius" format="dimension" />
+        <attr name="matProg_fillRadius" format="boolean" />
+        <attr name="matProg_barWidth" format="dimension" />
+        <attr name="matProg_linearProgress" format="boolean" />
+    </declare-styleable>
+
 </resources>

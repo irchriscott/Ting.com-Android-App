@@ -3,8 +3,8 @@ package com.codepipes.ting.customclasses
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.MotionEvent
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
+import androidx.viewpager.widget.ViewPager
 
 class LockableViewPager : ViewPager {
 

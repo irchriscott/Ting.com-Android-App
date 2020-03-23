@@ -9,12 +9,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.text.TextUtilsCompat;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
@@ -33,7 +33,10 @@ import com.codepipes.ting.pageindicatorview.utils.CoordinatesUtils;
 import com.codepipes.ting.pageindicatorview.utils.DensityUtils;
 import com.codepipes.ting.pageindicatorview.utils.IdUtils;
 
-public class PageIndicatorView extends View implements ViewPager.OnPageChangeListener, com.codepipes.ting.pageindicatorview.IndicatorManager.Listener, ViewPager.OnAdapterChangeListener, View.OnTouchListener {
+public class PageIndicatorView extends View
+        implements ViewPager.OnPageChangeListener,
+        com.codepipes.ting.pageindicatorview.IndicatorManager.Listener,
+        ViewPager.OnAdapterChangeListener, View.OnTouchListener {
 
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
 

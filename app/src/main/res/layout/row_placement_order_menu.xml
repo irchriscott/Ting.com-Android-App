@@ -12,7 +12,7 @@
         android:layout_marginStart="12dp"
         android:background="@drawable/border_row">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -26,7 +26,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/menu_container_view"
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
@@ -72,7 +72,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/menu_rating">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -118,7 +118,7 @@
                             app:layout_constraintBottom_toBottomOf="@id/menu_order_total_price"
                             tools:ignore="HardcodedText"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RelativeLayout>
 
@@ -303,7 +303,7 @@
                     app:layout_constraintTop_toBottomOf="@id/menu_type_view"
                     tools:ignore="HardcodedText" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
                 android:id="@+id/menu_order_pending_view"
@@ -343,6 +343,6 @@
         </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

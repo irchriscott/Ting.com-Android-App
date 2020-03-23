@@ -35,7 +35,7 @@ class RoundedCornerImageView : ImageView {
     protected override fun onDraw(canvas: Canvas) {
         rect = RectF(0f, 0f, this.width.toFloat(), this.height.toFloat())
         path!!.addRoundRect(rect, radius, radius, Path.Direction.CW)
-        canvas.clipPath(path)
+        canvas.clipPath(path!!)
         super.onDraw(canvas)
     }
 }

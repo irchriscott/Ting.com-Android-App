@@ -16,6 +16,7 @@ import com.codepipes.ting.R;
 import com.codepipes.ting.imageeditor.editimage.utils.RectUtil;
 
 public class StickerItem {
+
     private static final float MIN_SCALE = 0.15f;
     private static final int HELP_BOX_PAD = 25;
     private static final int BORDER_STROKE_WIDTH = 8;

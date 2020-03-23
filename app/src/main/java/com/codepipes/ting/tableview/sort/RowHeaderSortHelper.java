@@ -1,7 +1,7 @@
 package com.codepipes.ting.tableview.sort;
 
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class RowHeaderSortHelper {
     @Nullable

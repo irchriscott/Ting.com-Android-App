@@ -1,0 +1,10 @@
+package com.codepipes.ting.sparkbutton;
+
+import android.widget.ImageView;
+
+
+public interface SparkEventListener {
+    void onEvent(ImageView button, boolean buttonState);
+    void onEventAnimationEnd(ImageView button, boolean buttonState);
+    void onEventAnimationStart(ImageView button, boolean buttonState);
+}

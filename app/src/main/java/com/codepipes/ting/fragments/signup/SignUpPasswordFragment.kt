@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -93,7 +93,7 @@ class SignUpPasswordFragment : Fragment() {
         mFinishSignUpBtn.setOnClickListener {
             if(!mSignUpPasswordInput.text.isNullOrEmpty() && !mSignUpConfirmPasswordInput.text.isNullOrEmpty()){
                 if(mSignUpPasswordInput.text.toString() == mSignUpConfirmPasswordInput.text.toString()){
-                    mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
+                    mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
                     this.submitSignUp()
                 } else {
                     val successOverlay = SuccessOverlay()
@@ -101,7 +101,7 @@ class SignUpPasswordFragment : Fragment() {
                     bundle.putString("message", "Passwords Didn't Match")
                     bundle.putString("type", "error")
                     successOverlay.arguments = bundle
-                    successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                    successOverlay.show(fragmentManager!!, successOverlay.tag)
                     successOverlay.dismissListener(object :
                         SuccessDialogCloseListener {
                         override fun handleDialogClose(dialog: DialogInterface?) {
@@ -115,7 +115,7 @@ class SignUpPasswordFragment : Fragment() {
                 bundle.putString("message", "Passwords Cannot Be Empty")
                 bundle.putString("type", "error")
                 successOverlay.arguments = bundle
-                successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                successOverlay.show(fragmentManager!!, successOverlay.tag)
                 successOverlay.dismissListener(object :
                     SuccessDialogCloseListener {
                     override fun handleDialogClose(dialog: DialogInterface?) {
@@ -170,7 +170,7 @@ class SignUpPasswordFragment : Fragment() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try {
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -182,7 +182,7 @@ class SignUpPasswordFragment : Fragment() {
                             args.putString("message", serverResponse.message)
                             args.putString("type", serverResponse.type)
                             successDialog.arguments = args
-                            successDialog.show(activity!!.fragmentManager, successDialog.tag)
+                            successDialog.show(fragmentManager!!, successDialog.tag)
 
                             val onDialogClosed = object : SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {
@@ -197,7 +197,7 @@ class SignUpPasswordFragment : Fragment() {
                                         bundle.putString("message", "Unable To Fetch User Data")
                                         bundle.putString("type", "error")
                                         successOverlay.arguments = bundle
-                                        successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                                        successOverlay.show(fragmentManager!!, successOverlay.tag)
                                         successOverlay.dismissListener(object :
                                             SuccessDialogCloseListener {
                                             override fun handleDialogClose(dialog: DialogInterface?) {
@@ -215,7 +215,7 @@ class SignUpPasswordFragment : Fragment() {
                             bundle.putString("message", serverResponse.message)
                             bundle.putString("type", "error")
                             successOverlay.arguments = bundle
-                            successOverlay.show(activity?.fragmentManager, successOverlay.tag)
+                            successOverlay.show(fragmentManager!!, successOverlay.tag)
                             successOverlay.dismissListener(object :
                                 SuccessDialogCloseListener {
                                 override fun handleDialogClose(dialog: DialogInterface?) {

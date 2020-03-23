@@ -1,6 +1,6 @@
 package com.codepipes.ting.imageviewer.common.extensions
 
-import android.support.transition.Transition
+import androidx.transition.Transition
 
 
 internal fun Transition.addListener(

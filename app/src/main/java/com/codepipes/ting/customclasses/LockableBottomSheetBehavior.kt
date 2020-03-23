@@ -1,11 +1,11 @@
 package com.codepipes.ting.customclasses
 
 import android.content.Context
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 @Suppress("unused")
 class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {

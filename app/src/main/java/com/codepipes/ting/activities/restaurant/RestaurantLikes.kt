@@ -3,14 +3,14 @@ package com.codepipes.ting.activities.restaurant
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.LinearLayoutManager
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.restaurant.RestaurantLikesAdapter
 import com.codepipes.ting.models.Branch
@@ -178,7 +178,7 @@ class RestaurantLikes : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try {
                     val likes = Gson().fromJson<MutableList<UserRestaurant>>(dataString, object : TypeToken<MutableList<UserRestaurant>>(){}.type)
                     runOnUiThread { showLikes(likes, url) }

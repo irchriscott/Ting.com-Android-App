@@ -8,7 +8,7 @@
         tools:context=".fragments.cuisine.CuisineMenusFragment">
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_cuisine_menus"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -43,7 +43,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/cuisine_menus"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -60,6 +60,6 @@
 
             </ScrollView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

@@ -1,7 +1,7 @@
 package com.codepipes.ting.abstracts
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 abstract class EndlessScrollEventListener(private val mLinearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {

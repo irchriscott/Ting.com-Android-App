@@ -7,7 +7,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".fragments.navigation.DiscoveryFragment">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refresh_discovery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -17,7 +17,7 @@
                     android:layout_height="wrap_content"
                     tools:ignore="UselessParent">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -132,7 +132,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/cuisines_recycler_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
                                         android:background="@color/colorVeryLightGray"
                                         android:scaleType="centerCrop"/>
 
-                                <android.support.constraint.ConstraintLayout
+                                <androidx.constraintlayout.widget.ConstraintLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/background_dark_to_transparent"
@@ -217,7 +217,7 @@
                                             app:layout_constraintStart_toStartOf="parent"
                                             app:layout_constraintTop_toBottomOf="@id/promotion_title_shimmer"/>
 
-                                </android.support.constraint.ConstraintLayout>
+                                </androidx.constraintlayout.widget.ConstraintLayout>
 
                             </RelativeLayout>
 
@@ -368,7 +368,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
 
                                 android:id="@+id/top_restaurants"
                                 android:layout_width="match_parent"
@@ -426,7 +426,7 @@
 
                         </com.facebook.shimmer.ShimmerFrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/top_menus"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -434,13 +434,13 @@
                                 android:visibility="gone" />
                     </RelativeLayout>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </ScrollView>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_gravity="bottom|end"
             android:id="@+id/scan_table"
             android:src="@drawable/ic_dot"

@@ -2,18 +2,16 @@ package com.codepipes.ting.activities.base
 
 import android.content.Intent
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.Toolbar
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.androidstudy.networkmanager.Tovuti
 import com.codepipes.ting.R
 import com.codepipes.ting.fragments.navigation.DiscoveryFragment
@@ -22,6 +20,8 @@ import com.codepipes.ting.fragments.navigation.UserMenuFragment
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.services.PubnubService
 import com.codepipes.ting.services.PushNotificationService
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.livefront.bridge.Bridge
 import com.pusher.pushnotifications.PushNotifications
 import kotlin.system.exitProcess

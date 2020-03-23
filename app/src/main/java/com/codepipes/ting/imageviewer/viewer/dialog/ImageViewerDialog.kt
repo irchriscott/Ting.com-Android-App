@@ -1,9 +1,9 @@
 package com.codepipes.ting.imageviewer.viewer.dialog
 
-import android.app.AlertDialog
 import android.content.Context
 import android.view.KeyEvent
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import com.codepipes.ting.R
 import com.codepipes.ting.imageviewer.viewer.builder.BuilderData
 import com.codepipes.ting.imageviewer.viewer.view.ImageViewerView

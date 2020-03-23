@@ -13,7 +13,7 @@
         android:background="@drawable/address_map_background"
         tools:context=".fragments.menu.MenuReviewsBottomSheetFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -37,7 +37,7 @@
                 android:layout_height="200dp"
                 layout="@layout/include_progress_loader" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/menu_reviews_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,6 +46,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/menu_reviews_header"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

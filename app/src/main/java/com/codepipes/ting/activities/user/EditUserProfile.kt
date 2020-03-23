@@ -11,20 +11,20 @@ import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.user.UserAddressAdapter
 import com.codepipes.ting.dialogs.messages.ErrorMessage
@@ -46,6 +46,7 @@ import com.livefront.bridge.Bridge
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -207,7 +208,7 @@ class EditUserProfile : AppCompatActivity() {
 
         mUserAddressesRecycleView = findViewById<RecyclerView>(R.id.user_addresses_recycle_view) as RecyclerView
         mUserAddressesRecycleView.layoutManager = LinearLayoutManager(this@EditUserProfile)
-        mUserAddressesRecycleView.adapter = UserAddressAdapter(user.addresses!!)
+        mUserAddressesRecycleView.adapter = UserAddressAdapter(user.addresses!!, supportFragmentManager)
 
         mAddUserAddressButton = findViewById<Button>(R.id.user_address_add) as Button
         mAddUserAddressButton.setOnClickListener {
@@ -257,7 +258,7 @@ class EditUserProfile : AppCompatActivity() {
             .post(requestBody)
             .build()
 
-        mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+        mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
 
         client.newCall(request).enqueue(object : Callback {
 
@@ -274,7 +275,7 @@ class EditUserProfile : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -329,7 +330,7 @@ class EditUserProfile : AppCompatActivity() {
                             .writeTimeout(60, TimeUnit.SECONDS)
                             .build()
 
-                        val MEDIA_TYPE_PNG = MediaType.parse("image/png")
+                        val MEDIA_TYPE_PNG = "image/png".toMediaTypeOrNull()
                         val imageName = "${user.username.toLowerCase()}_${utilsFunctions.getToken(12).toLowerCase()}.png"
 
                         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
@@ -341,7 +342,7 @@ class EditUserProfile : AppCompatActivity() {
                             .post(requestBody)
                             .build()
 
-                        mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                        mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
 
                         client.newCall(request).enqueue(object : Callback {
 
@@ -358,7 +359,7 @@ class EditUserProfile : AppCompatActivity() {
                             }
 
                             override fun onResponse(call: Call, response: Response) {
-                                val responseBody = response.body()!!.string()
+                                val responseBody = response.body!!.string()
                                 val gson = Gson()
                                 try{
                                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)

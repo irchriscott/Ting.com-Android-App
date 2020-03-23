@@ -3,7 +3,7 @@ package com.codepipes.ting.dialogs.user.edit
 import android.icu.util.TimeZone
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +60,7 @@ class EditUserEmailAddress : DialogFragment(){
         userAuthentication = UserAuthentication(activity!!)
         user = userAuthentication.get()!!
 
-        mCancelUpdateButton.setOnClickListener { dialog.dismiss() }
+        mCancelUpdateButton.setOnClickListener { dialog?.dismiss() }
         mUpdateEmailButton.setOnClickListener {
             if(!mEmailOldInput.text.isNullOrEmpty() && !mEmailNewInput.text.isNullOrEmpty() && !mEmailPasswordInput.text.isNullOrEmpty()){
                 this.updateUserEmail()
@@ -104,7 +104,7 @@ class EditUserEmailAddress : DialogFragment(){
             .post(requestBody)
             .build()
 
-        mProgressOverlay.show(activity!!.fragmentManager, mProgressOverlay.tag)
+        mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
 
         client.newCall(request).enqueue(object : Callback {
 
@@ -119,7 +119,7 @@ class EditUserEmailAddress : DialogFragment(){
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body!!.string()
                 val gson = Gson()
                 try{
                     val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
@@ -132,7 +132,7 @@ class EditUserEmailAddress : DialogFragment(){
                                 serverResponse.message,
                                 TingToastType.SUCCESS
                             ).showToast(Toast.LENGTH_LONG)
-                            dialog.dismiss()
+                            dialog?.dismiss()
                         } else { ErrorMessage(
                             activity!!,
                             serverResponse.message
@@ -154,6 +154,6 @@ class EditUserEmailAddress : DialogFragment(){
 
     override fun onStart() {
         super.onStart()
-        dialog.window.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 }

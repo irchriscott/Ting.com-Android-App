@@ -2,9 +2,9 @@ package com.codepipes.ting.simpledialogfragment.form;
 
 import android.content.Context;
 import android.os.Parcel;
-import android.support.annotation.ArrayRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
+import androidx.annotation.ArrayRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.codepipes.ting.simpledialogfragment.SimpleDialog;
 import com.codepipes.ting.simpledialogfragment.color.ColorView;

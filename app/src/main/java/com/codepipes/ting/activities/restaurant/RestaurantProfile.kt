@@ -3,15 +3,8 @@ package com.codepipes.ting.activities.restaurant
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -24,9 +17,15 @@ import de.hdodenhof.circleimageview.CircleImageView
 import android.content.Intent
 import android.os.Build
 import android.os.PersistableBundle
-import android.support.v7.view.menu.MenuBuilder
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.Toolbar
+import androidx.viewpager.widget.ViewPager
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.codepipes.ting.R
 import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
@@ -44,6 +43,7 @@ import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.tabs.TabLayout
 import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.activity_restaurant_profile.*
 import okhttp3.*
@@ -151,7 +151,7 @@ class RestaurantProfile : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val dataString = response.body()!!.string()
+                val dataString = response.body!!.string()
                 try{
                     branch = Gson().fromJson(dataString, Branch::class.java)
                     runOnUiThread {
@@ -474,7 +474,7 @@ class RestaurantProfile : AppCompatActivity() {
                             form["time"] = time
                             form["location"] = table.toString()
                             form["branch"] = branch.id.toString()
-                            progressOverlay.show(fragmentManager, progressOverlay.tag)
+                            progressOverlay.show(supportFragmentManager, progressOverlay.tag)
                             TingClient.postRequest(Routes.restaurantBook, form, null, session.token) { _, isSuccess, result ->
                                 runOnUiThread {
                                     progressOverlay.dismiss()

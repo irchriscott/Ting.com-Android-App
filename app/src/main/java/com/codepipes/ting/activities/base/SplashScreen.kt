@@ -1,7 +1,7 @@
 package com.codepipes.ting.activities.base
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.Spannable

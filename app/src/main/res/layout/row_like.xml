@@ -8,7 +8,7 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/border_row">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,7 +23,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_width="wrap_content"
@@ -108,8 +108,8 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

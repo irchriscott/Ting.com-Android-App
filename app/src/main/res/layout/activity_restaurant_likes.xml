@@ -7,12 +7,12 @@
         android:layout_height="match_parent"
         tools:context=".activities.restaurant.RestaurantLikes">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh_likes"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -23,7 +23,7 @@
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/restaurant_reviews_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
 
                     </com.facebook.shimmer.ShimmerFrameLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/restaurant_likes_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -90,12 +90,12 @@
                             app:layout_constraintTop_toBottomOf="@id/restaurant_separator_seventh"
                             app:layout_constraintStart_toStartOf="parent"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </RelativeLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>
