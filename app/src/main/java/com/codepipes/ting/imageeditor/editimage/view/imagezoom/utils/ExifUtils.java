@@ -8,7 +8,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.Images;
-import android.support.media.ExifInterface;
+
+import androidx.exifinterface.media.ExifInterface;
 
 public class ExifUtils {
 

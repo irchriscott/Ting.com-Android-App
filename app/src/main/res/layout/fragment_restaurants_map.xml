@@ -291,7 +291,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.pnikosis.materialishprogress.ProgressWheel
+    <com.codepipes.ting.customclasses.ProgressWheel
             wheel:layout_constraintTop_toTopOf="parent"
             wheel:layout_constraintBottom_toBottomOf="parent"
             wheel:layout_constraintStart_toStartOf="parent"

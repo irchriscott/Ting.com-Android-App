@@ -94,7 +94,7 @@
                 android:fontFamily="@font/poppins_semi_bold"
         />
 
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
                 android:id="@+id/userProfileMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                 app:menu="@menu/user_profile_menu"
                 tools:ignore="UnusedAttribute">
 
-        </android.support.design.widget.NavigationView>
+        </com.google.android.material.navigation.NavigationView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

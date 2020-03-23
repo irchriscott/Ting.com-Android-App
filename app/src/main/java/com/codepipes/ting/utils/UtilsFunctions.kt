@@ -22,6 +22,7 @@ import java.net.URL
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.models.*
+import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
@@ -31,7 +32,8 @@ import kotlin.math.floor
 import kotlin.math.round
 
 
-class UtilsFunctions( private val context: Context ) {
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class UtilsFunctions(private val context: Context ) {
 
     public fun getToken(length: Int): String{
         val chars: String = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -80,6 +82,7 @@ class UtilsFunctions( private val context: Context ) {
     }
 
     public fun vectorToBitmap(vectorDrawable: SVG): BitmapDescriptor {
+        MapsInitializer.initialize(context)
         val bitmap = Bitmap.createBitmap(160, 160, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         vectorDrawable.renderToCanvas(canvas)

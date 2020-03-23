@@ -60,6 +60,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Bridge.restoreInstanceState(this, savedInstanceState)
+        MapsInitializer.initialize(context)
         savedInstanceState?.clear()
     }
 
@@ -87,9 +88,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
         signUpUserData = if(!userDataString.isNullOrEmpty()){
             gson.fromJson(userDataString, object : TypeToken<MutableMap<String, String>>() {}.type)
-        } else {
-            mutableMapOf()
-        }
+        } else { mutableMapOf() }
 
         mUseLocationBtn = view.findViewById<Button>(R.id.useLocationBtn) as Button
         mSearchAddressInput = view.findViewById<EditText>(R.id.searchAddressInput) as EditText

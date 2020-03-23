@@ -10,10 +10,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
-import android.support.media.ExifInterface;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

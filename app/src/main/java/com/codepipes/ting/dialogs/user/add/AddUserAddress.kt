@@ -29,10 +29,7 @@ import com.codepipes.ting.utils.UtilData
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -73,6 +70,7 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        MapsInitializer.initialize(context)
         super.onCreate(savedInstanceState)
     }
 

@@ -63,10 +63,14 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
     annotationProcessor 'com.google.auto.value:auto-value:1.7'
     compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.5'
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.8'
@@ -85,27 +89,21 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.31.0'
-    implementation 'com.google.firebase:firebase-core:17.2.3'
-    implementation 'com.google.firebase:firebase-messaging:20.1.3'
-    implementation 'com.google.firebase:firebase-analytics:17.2.3'
-    implementation ('com.pusher:pusher-java-client:2.0.2'){
-        exclude group: 'com.android.support'
-    }
-    implementation ('com.pusher:push-notifications-android:1.6.2'){
-        exclude group: 'com.android.support'
-    }
-    implementation ('com.github.jumadeveloper:networkmanager:0.0.2'){
-        exclude group: 'com.android.support'
-    }
-    implementation ('com.jakewharton.rxbinding2:rxbinding:2.2.0'){
-        exclude group: 'com.android.support'
-    }
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    //noinspection GradleDependency
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.pusher:pusher-java-client:2.0.2'
+    implementation 'com.pusher:push-notifications-android:1.6.2'
+    implementation 'com.github.jumadeveloper:networkmanager:0.0.2'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     api 'frankiesardo:icepick:3.2.0'
     compileOnly 'frankiesardo:icepick-processor:3.2.0'
     annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
-    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
