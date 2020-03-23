@@ -81,7 +81,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_marginTop="90dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:elevation="0dp"
+            tools:ignore="UnusedAttribute">
 
         <TextView
                 android:id="@+id/userProfileMyMenu"
@@ -100,6 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:elevation="0dp"
+                android:background="@color/colorWhite"
                 app:itemBackground="@drawable/navigation_selected_item"
                 app:itemIconTint="@color/colorGray"
                 app:itemTextAppearance="@style/NavigationViewStyle"

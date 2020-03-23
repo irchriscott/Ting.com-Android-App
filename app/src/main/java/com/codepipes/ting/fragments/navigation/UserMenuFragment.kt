@@ -89,6 +89,7 @@ class UserMenuFragment : BottomSheetDialogFragment() {
         mUserProfileName.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
         mUserProfileEmail.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
 
+        mUserProfileMenu.elevation = 0.0f
         mUserProfileMenu.setNavigationItemSelectedListener(mOnNavigationViewItemClickListener)
 
         return view
