@@ -8,14 +8,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imageeditor.BaseActivity;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
-import com.codepipes.ting.imageeditor.editimage.fliter.PhotoProcessing;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.ImageViewTouchBase;
 
+import java.util.Objects;
+
+import iamutkarshtiwari.github.io.ananas.editimage.fliter.PhotoProcessing;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,7 +35,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
     public static final int INDEX = ModuleConfig.INDEX_BEAUTY;
 
     private View mainView;
-    private Dialog dialog;
+    private ProgressOverlay dialog;
 
     private SeekBar smoothValueBar;
     private SeekBar whiteValueBar;
@@ -67,7 +73,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View backToMenu = mainView.findViewById(R.id.back_to_main);
-        backToMenu.setOnClickListener(new BackToMenuClick());// 返回主菜单
+        backToMenu.setOnClickListener(new BackToMenuClick());
 
         smoothValueBar.setOnSeekBarChangeListener(this);
         whiteValueBar.setOnSeekBarChangeListener(this);
@@ -101,7 +107,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
         beautyDisposable = beautify(smooth, whiteSkin)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> dialog.show())
+                .doOnSubscribe(subscriber -> dialog.show(Objects.requireNonNull(getFragmentManager()), dialog.getTag()))
                 .doFinally(() -> dialog.dismiss())
                 .subscribe(bitmap -> {
                     if (bitmap == null)
@@ -109,7 +115,8 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
                     activity.mainImage.setImageBitmap(bitmap);
                     finalBmp = bitmap;
                 }, e -> {
-                    // Do nothing on error
+                    TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), Objects.requireNonNull(e.getLocalizedMessage()), TingToastType.ERROR);
+                    tingToast.showToast(Toast.LENGTH_LONG);
                 });
         disposable.add(beautyDisposable);
     }
@@ -141,7 +148,7 @@ public class BeautyFragment extends BaseEditFragment implements SeekBar.OnSeekBa
 
         activity.mode = EditImageActivity.MODE_NONE;
         activity.bottomGallery.setCurrentItem(MainMenuFragment.INDEX);
-        activity.mainImage.setImageBitmap(activity.getMainBit());// 返回原图
+        activity.mainImage.setImageBitmap(activity.getMainBit());
 
         activity.mainImage.setVisibility(View.VISIBLE);
         activity.mainImage.setScaleEnabled(true);

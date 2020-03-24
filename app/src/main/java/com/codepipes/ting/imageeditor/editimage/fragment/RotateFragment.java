@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
 import com.codepipes.ting.imageeditor.BaseActivity;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
@@ -35,7 +36,7 @@ public class RotateFragment extends BaseEditFragment implements OnClickListener 
 
     private View mainView;
     private RotateImageView rotatePanel;
-    private Dialog loadingDialog;
+    private ProgressOverlay loadingDialog;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -138,7 +139,7 @@ public class RotateFragment extends BaseEditFragment implements OnClickListener 
             Disposable applyRotationDisposable = applyRotation(activity.getMainBit())
                     .subscribeOn(Schedulers.computation())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe(subscriber -> loadingDialog.show())
+                    .doOnSubscribe(subscriber -> loadingDialog.show(getFragmentManager(), loadingDialog.getTag()))
                     .doFinally(() -> loadingDialog.dismiss())
                     .subscribe(processedBitmap -> {
                         if (processedBitmap == null)

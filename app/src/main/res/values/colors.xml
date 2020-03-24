@@ -41,7 +41,7 @@
     <color name="material_colorpicker_blue">#2196F3</color>
     <color name="material_colorpicker_grey">#B3B3B3</color>
     <color name="hint_foreground_material_light">#00000000</color>
-    <color name="text_color">#BEC2C4</color>
+    <color name="text_color">#FFFFFF</color>
     <color name="text_color_gray_3">#A6A5A5</color>
 
     <color name="kelly_1">#F2F3F4</color>

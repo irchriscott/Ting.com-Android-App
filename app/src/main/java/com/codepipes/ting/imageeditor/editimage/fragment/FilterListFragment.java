@@ -11,13 +11,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imageeditor.BaseActivity;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
 import com.codepipes.ting.imageeditor.editimage.adapter.FilterAdapter;
-import com.codepipes.ting.imageeditor.editimage.fliter.PhotoProcessing;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.ImageViewTouchBase;
 
+import java.util.Objects;
+
+import iamutkarshtiwari.github.io.ananas.editimage.fliter.PhotoProcessing;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -33,7 +38,7 @@ public class FilterListFragment extends BaseEditFragment {
     private View mainView;
     private Bitmap filterBitmap;
     private Bitmap currentBitmap;
-    private Dialog loadingDialog;
+    private ProgressOverlay loadingDialog;
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -131,7 +136,7 @@ public class FilterListFragment extends BaseEditFragment {
         Disposable applyFilterDisposable = applyFilter(filterIndex)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> loadingDialog.show())
+                .doOnSubscribe(subscriber -> loadingDialog.show(getFragmentManager(), loadingDialog.getTag()))
                 .doFinally(() -> loadingDialog.dismiss())
                 .subscribe(
                         this::updatePreviewWithFilter,
@@ -154,7 +159,8 @@ public class FilterListFragment extends BaseEditFragment {
     }
 
     private void showSaveErrorToast() {
-        Toast.makeText(getActivity(), R.string.image_editor_save_error, Toast.LENGTH_SHORT).show();
+        TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), "Save Error", TingToastType.ERROR);
+        tingToast.showToast(Toast.LENGTH_LONG);
     }
 
     private Single<Bitmap> applyFilter(int filterIndex) {

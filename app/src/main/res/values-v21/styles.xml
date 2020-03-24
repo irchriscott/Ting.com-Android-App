@@ -16,4 +16,9 @@
         <item name="android:colorControlNormal">@color/colorLightGray</item>
         <item name="android:colorControlActivated">@color/colorYellowRate</item>
     </style>
+
+    <style name="SeekBarTheme" parent="Widget.AppCompat.SeekBar">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
 </resources>

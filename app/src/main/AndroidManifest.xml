@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         package="com.codepipes.ting">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,8 +17,8 @@
 
     <application
             android:name=".app.TingDotComApp"
-            android:icon="@mipmap/ic_launcher"
             android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
@@ -35,7 +35,6 @@
                 android:name=".services.PushNotificationService"
                 android:enabled="true"
                 android:exported="false" />
-
         <service
                 android:name=".services.NotificationMessagingService"
                 android:enabled="true"
@@ -44,6 +43,11 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+                android:name=".activities.moment.CaptureMoment"
+                android:parentActivityName=".activities.placement.CurrentRestaurant"
+                android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
                 android:name=".activities.placement.CurrentRestaurant"
@@ -140,11 +144,18 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".imageeditor.BaseActivity" />
-        <activity android:name=".imagecropper.CropImageActivity" />
-        <activity android:name=".imageeditor.picchooser.SelectPictureActivity" />
-        <activity android:name=".imageeditor.editimage.EditImageActivity" />
+        <activity
+                android:name=".imageeditor.BaseActivity"
+                android:theme="@style/AppTheme.DefaultActionBar"/>
+        <activity
+                android:name=".imagecropper.CropImageActivity"
+                android:theme="@style/AppTheme.DefaultActionBar"/>
+        <activity
+                android:name=".imageeditor.picchooser.SelectPictureActivity"
+                android:theme="@style/AppTheme.DefaultActionBar"/>
+        <activity
+                android:name=".imageeditor.editimage.EditImageActivity"
+                android:theme="@style/AppTheme.DefaultActionBar"/>
 
         <uses-library
                 android:name="org.apache.http.legacy"

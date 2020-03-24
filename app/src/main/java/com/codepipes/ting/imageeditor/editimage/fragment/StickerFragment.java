@@ -16,6 +16,9 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imageeditor.BaseActivity;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
@@ -26,6 +29,7 @@ import com.codepipes.ting.imageeditor.editimage.view.StickerItem;
 import com.codepipes.ting.imageeditor.editimage.view.StickerView;
 
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +49,7 @@ public class StickerFragment extends BaseEditFragment {
     private StickerView stickerView;
     private StickerAdapter stickerAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private Dialog loadingDialog;
+    private ProgressOverlay loadingDialog;
 
     public static StickerFragment newInstance() {
         return new StickerFragment();
@@ -156,7 +160,7 @@ public class StickerFragment extends BaseEditFragment {
         Disposable saveStickerDisposable = applyStickerToImage(activity.getMainBit())
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> loadingDialog.show())
+                .doOnSubscribe(subscriber -> loadingDialog.show(getFragmentManager(), loadingDialog.getTag()))
                 .doFinally(() -> loadingDialog.dismiss())
                 .subscribe(bitmap -> {
                     if (bitmap == null) {
@@ -167,7 +171,8 @@ public class StickerFragment extends BaseEditFragment {
                     activity.changeMainBitmap(bitmap, true);
                     backToMain();
                 }, e -> {
-                    Toast.makeText(getActivity(), R.string.image_editor_save_error, Toast.LENGTH_SHORT).show();
+                    TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), "Save Error", TingToastType.ERROR);
+                    tingToast.showToast(Toast.LENGTH_LONG);
                 });
 
         compositeDisposable.add(saveStickerDisposable);

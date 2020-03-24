@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
 import com.codepipes.ting.imageeditor.editimage.gesture.MultiTouchListener;
@@ -35,6 +37,7 @@ import com.codepipes.ting.imageeditor.editimage.view.TextStickerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -216,7 +219,8 @@ public class AddTextFragment extends BaseEditFragment implements OnPhotoEditorLi
                         e -> {
                             e.printStackTrace();
                             backToMain();
-                            Toast.makeText(getContext(), getString(R.string.image_editor_save_error), Toast.LENGTH_SHORT).show();
+                            TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), getString(R.string.image_editor_save_error), TingToastType.ERROR);
+                            tingToast.showToast(Toast.LENGTH_LONG);
                         });
         compositeDisposable.add(applyTextDisposable);
     }

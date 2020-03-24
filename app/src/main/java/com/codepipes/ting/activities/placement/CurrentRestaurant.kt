@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
+import com.codepipes.ting.activities.moment.CaptureMoment
 import com.codepipes.ting.activities.restaurant.RestaurantAbout
 import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.messages.*
@@ -411,6 +412,10 @@ class CurrentRestaurant : AppCompatActivity() {
 
                     override fun onCancel() { confirmDialog.dismiss() }
                 })
+            }
+
+            place_share_moment.setOnClickListener {
+                startActivity(Intent(this@CurrentRestaurant, CaptureMoment::class.java))
             }
         }
     }

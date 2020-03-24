@@ -176,7 +176,7 @@
         <item>Shine</item>
     </string-array>
 
-    <string-array translatable="false" name="image_editor_filter_drawable_list">
+    <string-array name="image_editor_filter_drawable_list" translatable="false">
         <item>filter_1</item>
         <item>filter_2</item>
         <item>filter_3</item>
@@ -191,7 +191,7 @@
         <item>filter_12</item>
     </string-array>
 
-    <string-array translatable="false" name="image_editor_types">
+    <string-array name="image_editor_types" translatable="false">
         <item>type1</item>
         <item>type2</item>
         <item>type3</item>
@@ -209,7 +209,7 @@
         <item>Type 6</item>
     </string-array>
 
-    <integer-array translatable="false" name="image_editor_type_count">
+    <integer-array name="image_editor_type_count" translatable="false">
         <item>5</item>
         <item>5</item>
         <item>5</item>
@@ -227,8 +227,8 @@
     <string name="image_editor_smooth">Smoothness</string>
     <string name="image_editor_white_skin">Skin Tone</string>
 
-    <item type="id" translatable="false" name="image_editor_TAG_STICKERS_PATH" />
-    <item type="id" translatable="false" name="image_editor_TAG_STICKERS_COUNT" />
+    <item name="image_editor_TAG_STICKERS_PATH" translatable="false" type="id" />
+    <item name="image_editor_TAG_STICKERS_COUNT" translatable="false" type="id" />
 
     <string name="default_progressbar" translatable="false">Default Progressbar:</string>
 

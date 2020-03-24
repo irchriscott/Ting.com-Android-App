@@ -26,6 +26,9 @@ import android.widget.ViewFlipper;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imagecropper.CropImageView;
 import com.codepipes.ting.imageeditor.BaseActivity;
 import com.codepipes.ting.R;
@@ -100,7 +103,7 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
     public SaturationView saturationView;
     public RotateImageView rotatePanel;
     protected int numberOfOperations = 0;
-    private Dialog loadingDialog;
+    private ProgressOverlay loadingDialog;
 
     public CustomViewPager bottomGallery;
     private MainMenuFragment mainMenuFragment;
@@ -120,7 +123,8 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
 
     public static void start(Activity activity, Intent intent, int requestCode) {
         if (TextUtils.isEmpty(intent.getStringExtra(ImageEditorIntentBuilder.SOURCE_PATH))) {
-            Toast.makeText(activity, R.string.image_editor_not_selected, Toast.LENGTH_SHORT).show();
+            TingToast tingToast = new TingToast(activity, activity.getString(R.string.image_editor_not_selected), TingToastType.ERROR);
+            tingToast.showToast(Toast.LENGTH_LONG);
             return;
         }
         activity.startActivityForResult(intent, requestCode);
@@ -142,7 +146,7 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
 
     @Override
     public void showLoadingDialog() {
-        loadingDialog.show();
+        loadingDialog.show(getSupportFragmentManager(), loadingDialog.getTag());
     }
 
     @Override
@@ -341,15 +345,13 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
         Disposable saveImageDisposable = saveImage(mainBitmap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> loadingDialog.show())
+                .doOnSubscribe(subscriber -> loadingDialog.show(getSupportFragmentManager(), loadingDialog.getTag()))
                 .doFinally(() -> loadingDialog.dismiss())
                 .subscribe(result -> {
                     if (result) {
                         resetOpTimes();
                         onSaveTaskDone();
-                    } else {
-                        showToast(R.string.image_editor_save_error);
-                    }
+                    } else { showToast(R.string.image_editor_save_error); }
                 }, e -> showToast(R.string.image_editor_save_error));
 
         compositeDisposable.add(saveImageDisposable);
@@ -370,7 +372,7 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
         Disposable loadImageDisposable = loadImage(filePath)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> loadingDialog.show())
+                .doOnSubscribe(subscriber -> loadingDialog.show(getSupportFragmentManager(), loadingDialog.getTag()))
                 .doFinally(() -> loadingDialog.dismiss())
                 .subscribe(processedBitmap -> changeMainBitmap(processedBitmap, false), e -> showToast(R.string.image_editor_load_error));
 
@@ -383,7 +385,8 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
     }
 
     private void showToast(@StringRes int resId) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+        TingToast tingToast = new TingToast(this, this.getString(resId), TingToastType.ERROR);
+        tingToast.showToast(Toast.LENGTH_LONG);
     }
 
     @Override

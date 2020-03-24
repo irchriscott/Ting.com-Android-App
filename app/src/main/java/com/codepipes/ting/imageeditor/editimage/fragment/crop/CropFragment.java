@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 import com.codepipes.ting.imagecropper.CropImageView;
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity;
 import com.codepipes.ting.imageeditor.editimage.ModuleConfig;
@@ -24,6 +26,9 @@ import com.codepipes.ting.imageeditor.editimage.view.imagezoom.ImageViewTouchBas
 import org.jetbrains.annotations.NotNull;
 
 import com.codepipes.ting.imageeditor.editimage.interfaces.OnLoadingDialogListener;
+
+import java.util.Objects;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -191,7 +196,8 @@ public class CropFragment extends BaseEditFragment {
                 }, e -> {
                     e.printStackTrace();
                     backToMain();
-                    Toast.makeText(getContext(), "Error while saving image", Toast.LENGTH_SHORT).show();
+                    TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), "Error While Saving Image", TingToastType.ERROR);
+                    tingToast.showToast(Toast.LENGTH_LONG);
                 }));
     }
 

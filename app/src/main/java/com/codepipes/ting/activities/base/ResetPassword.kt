@@ -16,9 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.messages.ErrorMessage
-import com.codepipes.ting.dialogs.messages.ProgressOverlay
-import com.codepipes.ting.dialogs.messages.SuccessOverlay
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.utils.Routes
@@ -102,7 +100,7 @@ class ResetPassword : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Toast.makeText(this@ResetPassword, e.message, Toast.LENGTH_LONG).show()
+                    TingToast(this@ResetPassword, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
                 }
             }
 

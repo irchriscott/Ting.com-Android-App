@@ -2,8 +2,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/colorDarkGray">
+        android:layout_height="fill_parent">
 
     <ImageView
         android:id="@+id/back_to_main"
@@ -33,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/image_editor_smooth"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <com.codepipes.ting.imageeditor.editimage.view.CustomSeekBar
                     android:id="@+id/smooth_value_bar"
@@ -41,6 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:max="500"
+                    android:progressTint="@color/colorWhite"
                     android:thumbTint="@color/colorWhite"
                     tools:ignore="UnusedAttribute" />
 
@@ -58,7 +58,7 @@
                 android:text="@string/image_editor_white_skin"
                 android:textColor="@color/colorWhite"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <com.codepipes.ting.imageeditor.editimage.view.CustomSeekBar
                     android:id="@+id/white_skin_value_bar"
@@ -66,6 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:max="10"
+                    android:progressTint="@color/colorWhite"
                     android:thumbTint="@color/colorWhite"
                     tools:ignore="UnusedAttribute" />
 

@@ -505,6 +505,18 @@
                 </TableLayout>
 
                 <Button
+                        android:id="@+id/place_share_moment"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/background_primary_gradient"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:textSize="17sp"
+                        android:text="Capture &amp; Share Moment"
+                        tools:ignore="HardcodedText" />
+
+                <Button
                         android:id="@+id/place_end_placement"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"

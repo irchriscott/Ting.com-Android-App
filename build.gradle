@@ -8,9 +8,11 @@ buildscript {
     }
     dependencies {
         //noinspection GradleDependency
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -24,6 +26,13 @@ allprojects {
         maven { url "https://clojars.org/repo/" }
         maven { url "https://oss.jfrog.org/libs-snapshot" }
         mavenCentral()
+    }
+
+    project.ext {
+        buildToolsVersion="29.0.2"
+        minSdkVersion=19
+        targetSdkVersion=29
+        compileSdkVersion=29
     }
 }
 

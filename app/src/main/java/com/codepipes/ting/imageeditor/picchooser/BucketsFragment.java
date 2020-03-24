@@ -2,6 +2,7 @@ package com.codepipes.ting.imageeditor.picchooser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 
 
 public class BucketsFragment extends Fragment {
@@ -58,8 +61,8 @@ public class BucketsFragment extends Fragment {
 		}
 
 		if (buckets.isEmpty()) {
-			Toast.makeText(getActivity(), R.string.image_editor_no_images,
-					Toast.LENGTH_SHORT).show();
+			TingToast tingToast = new TingToast(Objects.requireNonNull(getContext()), getString(R.string.image_editor_no_images), TingToastType.ERROR);
+			tingToast.showToast(Toast.LENGTH_LONG);
 			getActivity().finish();
 		} else {
 			GridView grid = (GridView) v.findViewById(R.id.grid);

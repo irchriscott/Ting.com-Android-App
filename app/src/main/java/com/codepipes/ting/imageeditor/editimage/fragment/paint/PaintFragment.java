@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+
+import com.codepipes.ting.dialogs.messages.ProgressOverlay;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,7 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
 
     private BrushConfigDialog brushConfigDialog;
     private EraserConfigDialog eraserConfigDialog;
-    private Dialog loadingDialog;
+    private ProgressOverlay loadingDialog;
 
     private float brushSize = INITIAL_WIDTH;
     private float eraserSize = INITIAL_WIDTH;
@@ -185,7 +187,7 @@ public class PaintFragment extends BaseEditFragment implements View.OnClickListe
                 })
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(subscriber -> loadingDialog.show())
+                .doOnSubscribe(subscriber -> loadingDialog.show(getFragmentManager(), loadingDialog.getTag()))
                 .doFinally(() -> loadingDialog.dismiss())
                 .subscribe(bitmap -> {
                     customPaintView.reset();

@@ -5,8 +5,8 @@ import android.graphics.Bitmap.Config;
 
 
 public class PhotoProcessing {
-    private static final String TAG = "PhotoProcessing";
 
+    private static final String TAG = "PhotoProcessing";
 
     public static Bitmap filterPhoto(Bitmap bitmap, int position) {
         if (bitmap != null) {

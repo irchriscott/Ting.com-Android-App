@@ -3,7 +3,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorDarkGray"
+        android:background="@drawable/address_map_background"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -15,7 +15,8 @@
             android:layout_margin="4dp"
             android:layout_weight="1"
             android:max="100"
-            android:thumbTint="@color/colorWhite"
+            android:progressTint="@color/colorPrimary"
+            android:thumbTint="@color/colorPrimary"
             tools:ignore="UnusedAttribute" />
 
 </LinearLayout>

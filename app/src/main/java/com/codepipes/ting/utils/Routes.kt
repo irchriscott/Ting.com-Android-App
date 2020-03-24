@@ -5,7 +5,7 @@ class Routes {
 
     companion object {
 
-        public const val HOST_END_POINT: String         = "http://192.168.1.3:8000"
+        public const val HOST_END_POINT: String         = "http://10.0.2.2:8000"
         private const val END_POINT: String             = "${HOST_END_POINT}/api/v1/"
         public const val UPLOAD_END_POINT: String       = "${HOST_END_POINT}/tinguploads/"
         public const val API_HOST_PREFIX: String        = "/api/v1/"

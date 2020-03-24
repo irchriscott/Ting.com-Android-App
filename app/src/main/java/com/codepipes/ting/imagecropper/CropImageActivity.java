@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.codepipes.ting.R;
+import com.codepipes.ting.dialogs.messages.TingToast;
+import com.codepipes.ting.dialogs.messages.TingToastType;
 
 import java.io.File;
 import java.io.IOException;
@@ -217,7 +219,8 @@ public class CropImageActivity extends AppCompatActivity
         // required permissions granted, start crop image activity
         mCropImageView.setImageUriAsync(mCropImageUri);
       } else {
-        Toast.makeText(this, R.string.crop_image_activity_no_permissions, Toast.LENGTH_LONG).show();
+        TingToast tingToast = new TingToast(this, getString(R.string.crop_image_activity_no_permissions), TingToastType.ERROR);
+        tingToast.showToast(Toast.LENGTH_LONG);
         setResultCancel();
       }
     }

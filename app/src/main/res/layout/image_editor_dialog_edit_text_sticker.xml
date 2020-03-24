@@ -18,10 +18,11 @@
             android:background="@drawable/background_border"
             android:padding="@dimen/padding_10dp"
             android:text="@string/image_editor_done"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/text_size_16sp"
             android:fontFamily="@font/poppins_regular"
+            android:includeFontPadding="false"
             tools:ignore="RtlHardcoded" />
 
     <EditText
