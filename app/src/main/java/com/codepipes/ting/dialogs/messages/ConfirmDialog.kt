@@ -23,6 +23,7 @@ class ConfirmDialog : DialogFragment() {
     override fun getTheme(): Int = R.style.TransparentDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        isCancelable = false
         super.onCreate(savedInstanceState)
     }
 

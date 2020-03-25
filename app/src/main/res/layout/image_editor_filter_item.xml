@@ -3,12 +3,12 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp">
+    android:layout_margin="4dp">
 
     <ImageView
         android:id="@+id/filter_image"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="4dp" />
 

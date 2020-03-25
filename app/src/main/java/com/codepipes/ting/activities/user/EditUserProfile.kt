@@ -78,8 +78,6 @@ class EditUserProfile : AppCompatActivity() {
     private lateinit var mUserAddressesRecycleView: RecyclerView
     private lateinit var mAddUserAddressButton: Button
 
-    private val REQUEST_CODE_IMAGE_PICKER: Int = 1
-
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
 
@@ -144,7 +142,7 @@ class EditUserProfile : AppCompatActivity() {
             } else {
                 ActivityCompat.requestPermissions(this@EditUserProfile,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    REQUEST_CODE_IMAGE_PICKER
+                    REQUEST_CODE_IMAGE_GALLERY
                 )
             }
         }
@@ -408,6 +406,21 @@ class EditUserProfile : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            REQUEST_CODE_IMAGE_GALLERY -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    val intent = Intent(this, Gallery::class.java)
+                    intent.putExtra("title", resources.getString(R.string.edit_user_profile_select_image))
+                    intent.putExtra("mode", 2)
+                    intent.putExtra("maxSelection", 1)
+                    startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
+                }
+            }
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -433,5 +446,10 @@ class EditUserProfile : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Bridge.clear(this)
+    }
+
+    companion object {
+        private const val REQUEST_CODE_IMAGE_PICKER: Int = 1
+        private const val REQUEST_CODE_IMAGE_GALLERY: Int = 5
     }
 }

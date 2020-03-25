@@ -4,19 +4,51 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/colorGray"
         tools:context=".activities.moment.CaptureMoment">
 
-    <com.camerakit.CameraKitView
+    <com.otaliastudios.cameraview.CameraView
             android:id="@+id/camera_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cameraPictureSizeAspectRatio="1:1"
+            app:cameraVideoSizeAspectRatio="1:1"
+            app:cameraVideoSizeBiggest="true"
+            app:cameraPictureSizeBiggest="true"
+            app:cameraGestureTap="autoFocus"
+            app:cameraGestureLongTap="none"
+            app:cameraGesturePinch="zoom"
+            app:cameraGestureScrollHorizontal="filterControl1"
+            app:cameraGestureScrollVertical="filterControl2"
+            app:cameraFacing="back"
+            app:cameraHdr="off"
+            app:cameraFlash="auto"
+            app:cameraWhiteBalance="auto"
+            app:cameraAudio="on"
+            app:cameraGrid="off"
+            app:cameraPlaySounds="true"
+            app:cameraVideoCodec="deviceDefault"
+            app:cameraAutoFocusMarker="Focus"
+            app:cameraUseDeviceOrientation="true"
+            app:cameraPictureMetering="true"
+            app:cameraPictureSnapshotMetering="false"
+            app:cameraPictureFormat="jpeg"
+            app:cameraRequestPermissions="true"
+            app:cameraPreviewFrameRate="60"
+            app:cameraExperimental="false"
+            app:cameraAutoFocusResetDelay="0"/>
+
+    <com.camerakit.CameraKitView
+            android:id="@+id/camera_view_kit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:keepScreenOn="true"
             app:camera_flash="auto"
             app:camera_facing="back"
             app:camera_focus="continuous"
-            app:camera_permissions="camera"
-            app:camera_imageJpegQuality="100"/>
+            app:camera_permissions="camera" />
 
     <ImageButton
             android:id="@+id/close_camera"
@@ -49,7 +81,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="-25dp"
             android:padding="18dp">
 
             <ImageView
@@ -59,14 +90,16 @@
                     android:scaleType="centerCrop"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
+                    android:visibility="visible"
                     android:src="@drawable/ic_open_gallery"/>
 
-            <ImageView
+
+            <com.iammert.library.cameravideobuttonlib.CameraVideoButton
                     android:id="@+id/take_picture"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/ic_take_picture"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    app:cvb_recording_color="#5FBE78"/>
 
 
             <ImageView

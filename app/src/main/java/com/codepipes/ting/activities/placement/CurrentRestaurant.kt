@@ -51,6 +51,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class CurrentRestaurant : AppCompatActivity() {
 
     private lateinit var userAuthentication: UserAuthentication
@@ -518,7 +519,7 @@ class CurrentRestaurant : AppCompatActivity() {
             }
             R.id.placement_restaurant_info -> {
                 val intent = Intent(this@CurrentRestaurant, RestaurantAbout::class.java)
-                intent.putExtra("resto", userPlacement.get()?.id)
+                intent.putExtra("resto", userPlacement.get()?.table?.branch?.id)
                 intent.putExtra("apiGet", userPlacement.get()?.table?.branch?.urls?.apiGet)
                 startActivity(intent)
                 return true

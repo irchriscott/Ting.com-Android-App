@@ -34,6 +34,7 @@ import java.lang.Exception
 import java.text.NumberFormat
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RestaurantMenusOrderAdapter (private val menus: MutableList<RestaurantMenu>, val fragmentManager: FragmentManager, val context: Context) : RecyclerView.Adapter<RestaurantMenusOrderViewHolder>(){
 
     private lateinit var userAuthentication: UserAuthentication

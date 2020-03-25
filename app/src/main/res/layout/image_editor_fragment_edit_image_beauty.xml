@@ -25,14 +25,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/image_editor_smooth"
                 android:textColor="@color/colorWhite"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <com.codepipes.ting.imageeditor.editimage.view.CustomSeekBar
                     android:id="@+id/smooth_value_bar"
@@ -58,7 +59,7 @@
                 android:text="@string/image_editor_white_skin"
                 android:textColor="@color/colorWhite"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <com.codepipes.ting.imageeditor.editimage.view.CustomSeekBar
                     android:id="@+id/white_skin_value_bar"

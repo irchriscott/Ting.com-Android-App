@@ -75,7 +75,7 @@ class PlacementOrdersMenuAdapter (private val orders: MutableList<Order>, privat
                     orderFormDialog.show(fragmentManager, orderFormDialog.tag)
                     orderFormDialog.onSubmitOrder(object : SubmitOrderListener {
                         override fun onSubmitOrder(quantity: String, conditions: String) {
-                            ordersMenuEventsListener.onReorder(order.id, if(quantity != ""){ quantity.toInt() } else { 1 }, conditions)
+                            ordersMenuEventsListener.onReorder(order.id, if(quantity != ""){ quantity.toInt() } else { 1 }, conditions.replace("\\s".toRegex(), ""))
                             orderFormDialog.dismiss()
                         }
                     })

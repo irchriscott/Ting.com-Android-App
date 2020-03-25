@@ -6,11 +6,14 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Camera
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.PersistableBundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -24,7 +27,12 @@ import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.imageeditor.editimage.EditImageActivity
 import com.codepipes.ting.imageeditor.editimage.ImageEditorIntentBuilder
 import com.coursion.freakycoder.mediapicker.galleries.Gallery
+import com.iammert.library.cameravideobuttonlib.CameraVideoButton
 import com.livefront.bridge.Bridge
+import com.otaliastudios.cameraview.*
+import com.otaliastudios.cameraview.controls.Facing
+import com.otaliastudios.cameraview.controls.Flash
+import com.otaliastudios.cameraview.controls.Mode
 import kotlinx.android.synthetic.main.activity_capture_moment.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -37,7 +45,10 @@ import java.io.IOException
 )
 class CaptureMoment : AppCompatActivity() {
 
+    private lateinit var cameraView: CameraView
     private lateinit var cameraKitView: CameraKitView
+
+    private var isUsingCameraKit = false
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
@@ -49,13 +60,8 @@ class CaptureMoment : AppCompatActivity() {
         Bridge.restoreInstanceState(this, savedInstanceState)
         savedInstanceState?.clear()
 
-        cameraKitView = findViewById<CameraKitView>(R.id.camera_view) as CameraKitView
-        cameraKitView.facing = CameraKit.FACING_BACK
-        cameraKitView.flash = CameraKit.FLASH_AUTO
-
-        cameraKitView.errorListener = CameraKitView.ErrorListener { _, cameraException ->
-            TingToast(this@CaptureMoment, cameraException.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
-        }
+        if(isUsingCameraKit) { initializeCameraViewKit() }
+        else { initializeCameraView() }
 
         close_camera.setOnClickListener { onBackPressed() }
         open_gallery.setOnClickListener {
@@ -72,71 +78,208 @@ class CaptureMoment : AppCompatActivity() {
             } else {
                 ActivityCompat.requestPermissions(this@CaptureMoment,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    REQUEST_CODE_IMAGE_PICKER
+                    REQUEST_CODE_IMAGE_GALLERY
                 )
             }
         }
-        switch_camera.setOnClickListener { cameraKitView.toggleFacing() }
+
+        if (ContextCompat.checkSelfPermission(
+                this@CaptureMoment,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this@CaptureMoment,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUEST_CODE_RECORD_AUDIO
+            )
+        }
+
+        switch_camera.setOnClickListener {
+            if(isUsingCameraKit){ try { cameraKitView.toggleFacing() } catch (e: Exception) {} }
+            else {
+                when(cameraView.facing) {
+                    Facing.BACK -> { cameraView.facing = Facing.FRONT }
+                    Facing.FRONT -> { cameraView.facing = Facing.BACK }
+                }
+            }
+        }
+
         toggle_flash.setOnClickListener { toggleCameraFlash() }
 
-        take_picture.setOnClickListener {
-            cameraKitView.onPause()
-            mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
-            cameraKitView.captureImage { _, capturedImage ->
-                val filename = "moment_${System.currentTimeMillis()}.jpeg"
-                val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments")
-                if (!path.exists()) { path.mkdirs() }
-                val picture = File(path, filename)
-                try {
-                    val outputStream = FileOutputStream(picture)
-                    outputStream.write(capturedImage)
-                    outputStream.close()
+        take_picture.setVideoDuration(30000)
+        take_picture.enableVideoRecording(true)
+        take_picture.enablePhotoTaking(true)
 
-                    cameraKitView.onPause()
-                    mProgressOverlay.dismiss()
+        take_picture.actionListener = object : CameraVideoButton.ActionListener {
+            override fun onDurationTooShortError() {}
 
-                    try {
-                        val intent = ImageEditorIntentBuilder(this, picture.absolutePath, picture.absolutePath)
-                             .withAddText()
-                             .withPaintFeature()
-                             .withFilterFeature()
-                             .withRotateFeature()
-                             .withCropFeature()
-                             .withBrightnessFeature()
-                             .withSaturationFeature()
-                             .withBeautyFeature()
-                             .withStickerFeature()
-                             .forcePortrait(true)
-                             .build()
+            override fun onEndRecord() {
+                if(isUsingCameraKit) {
+                    cameraKitView.startVideo()
+                } else {
+                    cameraView.apply {
+                        stopVideo()
+                        open()
+                    }
+                }
+            }
 
-                        EditImageActivity.start(this@CaptureMoment, intent, PHOTO_EDITOR_REQUEST_CODE)
-                    } catch (e: Exception) { TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
-                } catch (e: IOException) {
-                    mProgressOverlay.dismiss()
-                    cameraKitView.onResume()
-                    TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+            override fun onSingleTap() {
+                mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
+                if(isUsingCameraKit){
+                    cameraKitView.captureImage { _, data ->  saveCapturedPicture(data) }
+                } else {
+                    cameraView.apply {
+                        mode = Mode.PICTURE
+                        takePicture()
+                    }
+                }
+            }
+
+            override fun onStartRecord() {
+                if(isUsingCameraKit) {
+                    cameraKitView.captureVideo { _, _ ->  }
+                } else {
+                    cameraView.mode = Mode.VIDEO
+
+                    val videoFilename = "moment_video_${System.currentTimeMillis()}.mp4"
+                    val videoPath = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments" + File.separator + "Videos")
+                    if (!videoPath.exists()) { videoPath.mkdirs() }
+                    val video = File(videoPath, videoFilename)
+
+                    cameraView.takeVideo(video)
                 }
             }
         }
     }
 
     private fun toggleCameraFlash() {
-        if(cameraKitView.hasFlash()) {
-            if(cameraKitView.flash == CameraKit.FLASH_AUTO) {
+
+        if(isUsingCameraKit) {
+            if(cameraKitView.hasFlash()) {
+                when (cameraKitView.flash) {
+                    CameraKit.FLASH_AUTO -> {
+                        cameraKitView.flash = CameraKit.FLASH_OFF
+                        toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_off))
+                    }
+                    CameraKit.FLASH_OFF -> {
+                        cameraKitView.flash = CameraKit.FLASH_ON
+                        toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_on))
+                    }
+                    CameraKit.FLASH_ON -> {
+                        cameraKitView.flash = CameraKit.FLASH_AUTO
+                        toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_auto))
+                    }
+                }
+            } else {
                 cameraKitView.flash = CameraKit.FLASH_OFF
                 toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_off))
             }
-            if(cameraKitView.flash == CameraKit.FLASH_OFF) {
-                cameraKitView.flash = CameraKit.FLASH_ON
-                toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_on))
-            }
-            if(cameraKitView.flash == CameraKit.FLASH_ON) {
-                cameraKitView.flash = CameraKit.FLASH_AUTO
-                toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_auto))
-            }
         } else {
-            cameraKitView.flash = CameraKit.FLASH_OFF
-            toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_off))
+            when (cameraView.flash) {
+                Flash.AUTO -> {
+                    cameraView.flash = Flash.OFF
+                    toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_off))
+                }
+                Flash.OFF -> {
+                    cameraView.flash = Flash.ON
+                    toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_on))
+                }
+                Flash.ON -> {
+                    cameraView.flash = Flash.AUTO
+                    toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_auto))
+                }
+                else -> {
+                    cameraView.flash = Flash.TORCH
+                    toggle_flash.setImageDrawable(resources.getDrawable(R.drawable.ic_camera_flash_on))
+                }
+            }
+        }
+    }
+
+    private fun initializeCameraView() {
+        camera_view_kit.visibility = View.GONE
+        camera_view.visibility = View.VISIBLE
+
+        cameraView = findViewById<CameraView>(R.id.camera_view) as CameraView
+        cameraView.videoMaxDuration = 30000
+        cameraView.mode = Mode.PICTURE
+        cameraView.facing = Facing.BACK
+        cameraView.flash = Flash.AUTO
+
+        cameraView.addCameraListener(object : CameraListener() {
+
+            override fun onCameraOpened(options: CameraOptions) {}
+
+            override fun onCameraClosed() {}
+
+            override fun onCameraError(error: CameraException) { TingToast(this@CaptureMoment, error.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+
+            override fun onPictureTaken(result: PictureResult) { saveCapturedPicture(result.data) }
+
+            override fun onVideoTaken(result: VideoResult) {}
+
+            override fun onOrientationChanged(orientation: Int) {}
+
+            override fun onVideoRecordingStart() {}
+
+            override fun onVideoRecordingEnd() {}
+        })
+    }
+
+    private fun initializeCameraViewKit() {
+        camera_view.visibility = View.GONE
+        camera_view_kit.visibility = View.VISIBLE
+        cameraKitView = findViewById<CameraKitView>(R.id.camera_view_kit) as CameraKitView
+        cameraKitView.cameraListener = object : CameraKitView.CameraListener {
+            override fun onOpened() {}
+            override fun onClosed() {}
+        }
+        cameraKitView.gestureListener = object : CameraKitView.GestureListener {
+            override fun onTap(cameraKitView: CameraKitView?, x: Float, y: Float) {}
+            override fun onDoubleTap(cameraKitView: CameraKitView?, x: Float, y: Float) {}
+            override fun onPinch(cameraKitView: CameraKitView?, z: Float, x: Float, y: Float) {}
+            override fun onLongTap(cameraKitView: CameraKitView?, x: Float, y: Float) {}
+        }
+        cameraKitView.errorListener = CameraKitView.ErrorListener { _, error ->
+            TingToast(this@CaptureMoment, error.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+        }
+    }
+
+    private fun saveCapturedPicture(data: ByteArray) {
+        val filename = "moment_${System.currentTimeMillis()}.jpeg"
+        val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments" + File.separator + "Images")
+        if (!path.exists()) { path.mkdirs() }
+        val picture = File(path, filename)
+        try {
+            val outputStream = FileOutputStream(picture)
+            outputStream.write(data)
+            outputStream.close()
+
+            if(isUsingCameraKit) { cameraKitView.onPause() }
+
+            mProgressOverlay.dismiss()
+
+            try {
+                val intent = ImageEditorIntentBuilder(this, picture.absolutePath, picture.absolutePath)
+                    .withAddText()
+                    .withPaintFeature()
+                    .withFilterFeature()
+                    .withRotateFeature()
+                    .withCropFeature()
+                    .withBrightnessFeature()
+                    .withSaturationFeature()
+                    .withBeautyFeature()
+                    .withStickerFeature()
+                    .forcePortrait(true)
+                    .build()
+
+                EditImageActivity.start(this@CaptureMoment, intent, PHOTO_EDITOR_REQUEST_CODE)
+            } catch (e: Exception) { TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+        } catch (e: IOException) {
+            mProgressOverlay.dismiss()
+            if(isUsingCameraKit) { cameraKitView.onResume() }
+            TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
         }
     }
 
@@ -155,86 +298,116 @@ class CaptureMoment : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        cameraKitView.onStart()
+        if(isUsingCameraKit) { cameraKitView.onStart() }
+        else { cameraView.open() }
     }
 
     override fun onResume() {
         super.onResume()
-        cameraKitView.onResume()
+        if(isUsingCameraKit) { cameraKitView.onResume() }
+        else { cameraView.open() }
+        cameraView.open()
     }
 
     override fun onPause() {
-        cameraKitView.onPause()
+        if(isUsingCameraKit) { cameraKitView.onPause() }
+        else { cameraView.close() }
         super.onPause()
     }
 
     override fun onStop() {
-        cameraKitView.onStop()
+        if(isUsingCameraKit) { cameraKitView.onStop() }
+        else { cameraView.close() }
         super.onStop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        if(isUsingCameraKit) { cameraKitView.onStop() }
+        else { cameraView.destroy() }
         Bridge.clear(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(isUsingCameraKit) { cameraKitView.onRequestPermissionsResult(requestCode, permissions, grantResults) }
+        when(requestCode) {
+            REQUEST_CODE_IMAGE_GALLERY -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(this, Gallery::class.java)
+                    intent.putExtra("title", resources.getString(R.string.edit_user_profile_select_image))
+                    intent.putExtra("mode", 2)
+                    intent.putExtra("maxSelection", 1)
+                    startActivityForResult(intent, REQUEST_CODE_IMAGE_PICKER)
+                }
+            }
+
+            REQUEST_CODE_RECORD_AUDIO -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(!isUsingCameraKit) {
+                        cameraView.open()
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("DefaultLocale")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_IMAGE_PICKER) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                val selectionResult = data.getStringArrayListExtra("result")
-                if(selectionResult.size > 0){
-                    try {
-                        val image = File(selectionResult[0])
-                        val uriFromPath = Uri.fromFile(image)
-                        val imageBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uriFromPath))
-
-                        val filename = "moment_${System.currentTimeMillis()}.jpeg"
-                        val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments")
-                        if (!path.exists()) { path.mkdirs() }
-                        val picture = File(path, filename)
-
+        when (requestCode) {
+            REQUEST_CODE_IMAGE_PICKER -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val selectionResult = data.getStringArrayListExtra("result")
+                    if(selectionResult.size > 0){
                         try {
-                            val intent = ImageEditorIntentBuilder(this, image.absolutePath, picture.absolutePath)
-                                .withAddText()
-                                .withPaintFeature()
-                                .withFilterFeature()
-                                .withRotateFeature()
-                                .withCropFeature()
-                                .withBrightnessFeature()
-                                .withSaturationFeature()
-                                .withBeautyFeature()
-                                .withStickerFeature()
-                                .forcePortrait(true)
-                                .build()
+                            val image = File(selectionResult[0])
+                            val uriFromPath = Uri.fromFile(image)
+                            val imageBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uriFromPath))
 
-                            EditImageActivity.start(this@CaptureMoment, intent, PHOTO_EDITOR_REQUEST_CODE)
+                            val filename = "moment_${System.currentTimeMillis()}.jpeg"
+                            val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments")
+                            if (!path.exists()) { path.mkdirs() }
+                            val picture = File(path, filename)
 
-                        } catch (e: Exception) { TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+                            try {
+                                val intent = ImageEditorIntentBuilder(this, image.absolutePath, picture.absolutePath)
+                                    .withAddText()
+                                    .withPaintFeature()
+                                    .withFilterFeature()
+                                    .withRotateFeature()
+                                    .withCropFeature()
+                                    .withBrightnessFeature()
+                                    .withSaturationFeature()
+                                    .withBeautyFeature()
+                                    .withStickerFeature()
+                                    .forcePortrait(true)
+                                    .build()
 
-                    } catch (e: FileNotFoundException) {
-                        TingToast(
-                            this@CaptureMoment,
-                            e.message!!,
-                            TingToastType.ERROR
-                        ).showToast(Toast.LENGTH_LONG)
-                    }
-                } else { TingToast(
-                    this@CaptureMoment,
-                    "No Image Selected",
-                    TingToastType.DEFAULT
-                ).showToast(Toast.LENGTH_LONG) }
+                                EditImageActivity.start(this@CaptureMoment, intent, PHOTO_EDITOR_REQUEST_CODE)
+
+                            } catch (e: Exception) { TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
+
+                        } catch (e: FileNotFoundException) {
+                            TingToast(
+                                this@CaptureMoment,
+                                e.message!!,
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
+                        }
+                    } else { TingToast(
+                        this@CaptureMoment,
+                        "No Image Selected",
+                        TingToastType.DEFAULT
+                    ).showToast(Toast.LENGTH_LONG) }
+                }
             }
-        } else if (requestCode == PHOTO_EDITOR_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                val newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH)
-                val isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false)
+
+            PHOTO_EDITOR_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    val newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH)
+                    val isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false)
+                }
             }
         }
     }
@@ -242,5 +415,7 @@ class CaptureMoment : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_IMAGE_PICKER: Int = 3
         private const val PHOTO_EDITOR_REQUEST_CODE: Int = 5
+        private const val REQUEST_CODE_IMAGE_GALLERY: Int = 6
+        private const val REQUEST_CODE_RECORD_AUDIO: Int = 10
     }
 }

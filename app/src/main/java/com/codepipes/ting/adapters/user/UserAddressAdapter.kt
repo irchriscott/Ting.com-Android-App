@@ -13,11 +13,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.codepipes.ting.R
-import com.codepipes.ting.dialogs.messages.ErrorMessage
-import com.codepipes.ting.dialogs.messages.ProgressOverlay
-import com.codepipes.ting.dialogs.messages.TingToast
-import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.activities.placement.CurrentRestaurant
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.dialogs.user.edit.EditUserAddress
+import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.models.Address
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
@@ -67,84 +66,79 @@ class UserAddressAdapter(private val addresses: UserAddresses, val fragmentManag
             else -> holder.view.address_icon.setImageResource(R.drawable.ic_address_other)
         }
 
-        val menuList = mutableListOf<String>()
-        menuList.add("Delete Address")
-
         holder.view.address_delete.setOnClickListener {
-            ActionSheet(holder.view.context, menuList)
-                .setTitle("You won't be able to get notification of this address")
-                .setColorData(activity.resources.getColor(R.color.colorGoogleRedTwo))
-                .setColorTitleCancel(activity.resources.getColor(R.color.colorGoogleRedTwo))
-                .setCancelTitle("Cancel")
-                .create(object : ActionSheetCallBack {
-                    override fun data(data: String, position: Int) {
-                        when(position){
-                            0 -> {
-                                val url = "${Routes.deleteUserAddress}${address.id}/"
-                                val client = OkHttpClient()
 
-                                val request = Request.Builder()
-                                    .header("Authorization", user.token!!)
-                                    .url(url)
-                                    .get()
-                                    .build()
+            val confirmDialog = ConfirmDialog()
+            val bundle = Bundle()
+            bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Delete Address")
+            bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Do you really want to delete this address?")
+            confirmDialog.arguments = bundle
+            confirmDialog.show(fragmentManager, confirmDialog.tag)
+            confirmDialog.onDialogListener(object : ConfirmDialogListener {
+                override fun onAccept() {
+                    val url = "${Routes.deleteUserAddress}${address.id}/"
+                    val client = OkHttpClient()
 
-                                mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
+                    val request = Request.Builder()
+                        .header("Authorization", user.token!!)
+                        .url(url)
+                        .get()
+                        .build()
 
-                                client.newCall(request).enqueue(object : Callback {
+                    mProgressOverlay.show(fragmentManager, mProgressOverlay.tag)
 
-                                    override fun onFailure(call: Call, e: IOException) {
-                                        activity.runOnUiThread {
-                                            TingToast(
-                                                activity,
-                                                e.message!!,
-                                                TingToastType.ERROR
-                                            ).showToast(Toast.LENGTH_LONG)
-                                        }
-                                    }
+                    client.newCall(request).enqueue(object : Callback {
 
-                                    override fun onResponse(call: Call, response: Response) {
-                                        val responseBody = response.body!!.string()
-                                        val gson = Gson()
-                                        try{
-                                            val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
-                                            activity.runOnUiThread {
-                                                mProgressOverlay.dismiss()
-                                                if (serverResponse.status == 200){
-                                                    addressesList.removeAt(position)
-                                                    notifyItemRemoved(position)
-                                                    notifyItemRangeRemoved(position, addressesList.size)
-                                                    userAuthentication.set(gson.toJson(serverResponse.user))
-                                                    TingToast(
-                                                        activity,
-                                                        serverResponse.message,
-                                                        TingToastType.SUCCESS
-                                                    ).showToast(
-                                                        Toast.LENGTH_LONG)
-                                                } else { ErrorMessage(
-                                                    activity,
-                                                    serverResponse.message
-                                                ).show() }
-                                            }
-                                        } catch (e: Exception){
-                                            activity.runOnUiThread {
-                                                mProgressOverlay.dismiss()
-                                                TingToast(
-                                                    activity,
-                                                    "An Error Has Occurred",
-                                                    TingToastType.ERROR
-                                                ).showToast(
-                                                    Toast.LENGTH_LONG)
-                                            }
-                                        }
-
-                                    }
-                                })
+                        override fun onFailure(call: Call, e: IOException) {
+                            activity.runOnUiThread {
+                                TingToast(
+                                    activity,
+                                    e.message!!,
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
                             }
                         }
 
-                    }
-                })
+                        override fun onResponse(call: Call, response: Response) {
+                            val responseBody = response.body!!.string()
+                            val gson = Gson()
+                            try{
+                                val serverResponse = gson.fromJson(responseBody, ServerResponse::class.java)
+                                activity.runOnUiThread {
+                                    mProgressOverlay.dismiss()
+                                    if (serverResponse.status == 200){
+                                        addressesList.removeAt(position)
+                                        notifyItemRemoved(position)
+                                        notifyItemRangeRemoved(position, addressesList.size)
+                                        userAuthentication.set(gson.toJson(serverResponse.user))
+                                        TingToast(
+                                            activity,
+                                            serverResponse.message,
+                                            TingToastType.SUCCESS
+                                        ).showToast(
+                                            Toast.LENGTH_LONG)
+                                    } else { ErrorMessage(
+                                        activity,
+                                        serverResponse.message
+                                    ).show() }
+                                }
+                            } catch (e: Exception){
+                                activity.runOnUiThread {
+                                    mProgressOverlay.dismiss()
+                                    TingToast(
+                                        activity,
+                                        "An Error Has Occurred",
+                                        TingToastType.ERROR
+                                    ).showToast(
+                                        Toast.LENGTH_LONG)
+                                }
+                            }
+                        }
+                    })
+                }
+
+                override fun onCancel() { confirmDialog.dismiss() }
+            })
         }
 
         holder.view.address_edit.setOnClickListener {

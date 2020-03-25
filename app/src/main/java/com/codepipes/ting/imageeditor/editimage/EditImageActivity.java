@@ -26,6 +26,8 @@ import android.widget.ViewFlipper;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.codepipes.ting.activities.placement.CurrentRestaurant;
+import com.codepipes.ting.dialogs.messages.ConfirmDialog;
 import com.codepipes.ting.dialogs.messages.ProgressOverlay;
 import com.codepipes.ting.dialogs.messages.TingToast;
 import com.codepipes.ting.dialogs.messages.TingToastType;
@@ -56,6 +58,7 @@ import com.codepipes.ting.imageeditor.editimage.view.TextStickerView;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.ImageViewTouch;
 import com.codepipes.ting.imageeditor.editimage.view.imagezoom.ImageViewTouchBase;
 import com.codepipes.ting.imageeditor.editimage.widget.RedoUndoController;
+import com.codepipes.ting.interfaces.ConfirmDialogListener;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -296,12 +299,21 @@ public class EditImageActivity extends BaseActivity implements OnLoadingDialogLi
                 if (canAutoExit()) {
                     onSaveTaskDone();
                 } else {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                    alertDialogBuilder.setMessage(R.string.image_editor_exit_without_save)
-                            .setCancelable(false).setPositiveButton(R.string.image_editor_confirm, (dialog, id) -> finish()).setNegativeButton(R.string.image_editor_cancel, (dialog, id) -> dialog.cancel());
 
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
+                    ConfirmDialog confirmDialog = new ConfirmDialog();
+                    confirmDialog.setCancelable(false);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Exit Photo Editor");
+                    bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, getString(R.string.image_editor_exit_without_save));
+                    confirmDialog.setArguments(bundle);
+                    confirmDialog.show(getSupportFragmentManager(), confirmDialog.getTag());
+                    confirmDialog.onDialogListener(new ConfirmDialogListener() {
+                        @Override
+                        public void onAccept() { finish(); }
+
+                        @Override
+                        public void onCancel() { confirmDialog.dismiss(); }
+                    });
                 }
                 break;
         }

@@ -4,23 +4,18 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.Toast
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.budiyev.android.codescanner.*
 import com.codepipes.ting.R
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
-import com.codepipes.ting.models.RestaurantTable
-import com.codepipes.ting.models.ServerResponse
-import com.codepipes.ting.models.SocketResponseMessage
-import com.codepipes.ting.models.SocketUser
+import com.codepipes.ting.models.*
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
@@ -34,9 +29,7 @@ import com.google.maps.android.SphericalUtil
 import com.livefront.bridge.Bridge
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
-import com.pubnub.api.callbacks.PNCallback
 import com.pubnub.api.callbacks.SubscribeCallback
-import com.pubnub.api.models.consumer.PNPublishResult
 import com.pubnub.api.models.consumer.PNStatus
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult
@@ -48,7 +41,6 @@ import com.pubnub.api.models.consumer.pubsub.objects.PNUserResult
 import kotlinx.android.synthetic.main.activity_restaurant_scanner.*
 import okhttp3.*
 import java.io.IOException
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class RestaurantScanner : AppCompatActivity() {
@@ -61,6 +53,14 @@ class RestaurantScanner : AppCompatActivity() {
 
     private lateinit var utilsFunctions: UtilsFunctions
     private lateinit var userPlacement: UserPlacement
+
+    private lateinit var userAuthentication: UserAuthentication
+    private lateinit var session: User
+
+    private val progressOverlay = ProgressOverlay()
+
+    private lateinit var pubnubConfig: PNConfiguration
+    private lateinit var pubnub: PubNub
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,17 +76,15 @@ class RestaurantScanner : AppCompatActivity() {
         utilsFunctions = UtilsFunctions(this@RestaurantScanner)
         userPlacement = UserPlacement(this@RestaurantScanner)
 
-        val userAuthentication = UserAuthentication(this@RestaurantScanner)
-        val session = userAuthentication.get()!!
+        userAuthentication = UserAuthentication(this@RestaurantScanner)
+        session = userAuthentication.get()!!
 
-        val progressOverlay = ProgressOverlay()
-
-        val pubnubConfig = PNConfiguration()
+        pubnubConfig = PNConfiguration()
         pubnubConfig.subscribeKey = UtilData.PUBNUB_SUBSCRIBE_KEY
         pubnubConfig.publishKey = UtilData.PUBNUB_PUBLISH_KEY
         pubnubConfig.isSecure = true
 
-        val pubnub = PubNub(pubnubConfig)
+        pubnub = PubNub(pubnubConfig)
         pubnub.subscribe().channels(listOf(session.channel)).withPresence().execute()
 
         pubnub.addListener(object : SubscribeCallback() {
@@ -183,50 +181,91 @@ class RestaurantScanner : AppCompatActivity() {
         codeScanner.isFlashEnabled = false
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_PERMISSION)
-            }
-        }
 
-        codeScanner.decodeCallback = DecodeCallback { result ->
-
-            val stringURL = "${Routes.requestRestaurantTable}?table=${result.text}"
-
-            val client = OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .build()
-
-            val request = Request.Builder()
-                .header("Authorization", session.token!!)
-                .url(stringURL)
-                .get()
-                .build()
-
-            client.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
+            if (ContextCompat.checkSelfPermission(
+                    this@RestaurantScanner,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                codeScanner.decodeCallback = DecodeCallback { result ->
+                    handleQRCodeScan(result)
+                }
+                codeScanner.errorCallback = ErrorCallback {
                     runOnUiThread {
                         codeScanner.startPreview()
                         TingToast(
                             this@RestaurantScanner,
-                            e.message!!,
+                            it.message!!,
                             TingToastType.ERROR
                         ).showToast(Toast.LENGTH_LONG)
                     }
                 }
+            } else {
+                ActivityCompat.requestPermissions(this@RestaurantScanner,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    CAMERA_REQUEST_PERMISSION
+                )
+            }
+        }
 
-                override fun onResponse(call: Call, response: Response) {
-                    val responseBody = response.body!!.string()
-                    val gson = Gson()
-                    runOnUiThread {
-                        if(utilsFunctions.checkLocationPermissions()) {
-                            try {
-                                val table = gson.fromJson(responseBody, RestaurantTable::class.java)
-                                fusedLocationClient.lastLocation.addOnSuccessListener {
-                                    if(it != null){
-                                        runOnUiThread {
+        scanner_view.setOnClickListener { codeScanner.startPreview() }
+        close_scanner.setOnClickListener { onBackPressed() }
+    }
+
+    private fun handleQRCodeScan(result: com.google.zxing.Result) {
+
+        val stringURL = "${Routes.requestRestaurantTable}?table=${result.text}"
+
+        val client = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val request = Request.Builder()
+            .header("Authorization", session.token!!)
+            .url(stringURL)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    codeScanner.startPreview()
+                    TingToast(
+                        this@RestaurantScanner,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
+                }
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val responseBody = response.body!!.string()
+                val gson = Gson()
+                runOnUiThread {
+                    if(utilsFunctions.checkLocationPermissions()) {
+                        try {
+                            val table = gson.fromJson(responseBody, RestaurantTable::class.java)
+                            fusedLocationClient.lastLocation.addOnSuccessListener {
+                                if(it != null){
+                                    runOnUiThread {
+                                        if (table.branch?.latitude == null) {
+                                            try {
+                                                val placement = gson.fromJson(responseBody, Placement::class.java)
+                                                userPlacement.setToken(placement.token)
+                                                userPlacement.set(gson.toJson(placement))
+                                                startActivity(Intent(this@RestaurantScanner, CurrentRestaurant::class.java))
+                                            } catch (e: Exception){
+                                                codeScanner.startPreview()
+                                                TingToast(
+                                                    this@RestaurantScanner,
+                                                    "An Error Occurred",
+                                                    TingToastType.ERROR
+                                                ).showToast(Toast.LENGTH_LONG)
+                                            }
+                                        } else {
                                             val userLocation = LatLng(it.latitude, it.longitude)
-                                            val branchLocation = LatLng(table.branch!!.latitude, table.branch.longitude)
+                                            val branchLocation = LatLng(table.branch.latitude, table.branch.longitude)
                                             val distance = SphericalUtil.computeDistanceBetween(userLocation, branchLocation)
 
                                             val statusTimer = utilsFunctions.statusWorkTime(
@@ -286,33 +325,40 @@ class RestaurantScanner : AppCompatActivity() {
                                                 codeScanner.startPreview()
                                                 TingToast(
                                                     this@RestaurantScanner,
-                                                    "The Restaurant Is Not Opened Yet",
+                                                    "The Restaurant Is Closed",
                                                     TingToastType.DEFAULT
                                                 ).showToast(Toast.LENGTH_LONG)
                                             }
                                         }
                                     }
-                                }.addOnCanceledListener {
-                                    runOnUiThread {
-                                        codeScanner.startPreview()
-                                        TingToast(
-                                            this@RestaurantScanner,
-                                            "Operation Canceled",
-                                            TingToastType.ERROR
-                                        ).showToast(Toast.LENGTH_LONG)
-                                    }
-                                }.addOnFailureListener {
-                                    runOnUiThread {
-                                        codeScanner.startPreview()
-                                        TingToast(
-                                            this@RestaurantScanner,
-                                            it.message!!,
-                                            TingToastType.ERROR
-                                        ).showToast(Toast.LENGTH_LONG)
-                                    }
                                 }
-                            } catch (e: Exception){
+                            }.addOnCanceledListener {
                                 runOnUiThread {
+                                    codeScanner.startPreview()
+                                    TingToast(
+                                        this@RestaurantScanner,
+                                        "Operation Canceled",
+                                        TingToastType.ERROR
+                                    ).showToast(Toast.LENGTH_LONG)
+                                }
+                            }.addOnFailureListener {
+                                runOnUiThread {
+                                    codeScanner.startPreview()
+                                    TingToast(
+                                        this@RestaurantScanner,
+                                        it.message!!,
+                                        TingToastType.ERROR
+                                    ).showToast(Toast.LENGTH_LONG)
+                                }
+                            }
+                        } catch (e: Exception){
+                            runOnUiThread {
+                                try {
+                                    val placement = gson.fromJson(responseBody, Placement::class.java)
+                                    userPlacement.setToken(placement.token)
+                                    userPlacement.set(gson.toJson(placement))
+                                    startActivity(Intent(this@RestaurantScanner, CurrentRestaurant::class.java))
+                                } catch (e: Exception){
                                     codeScanner.startPreview()
                                     TingToast(
                                         this@RestaurantScanner,
@@ -321,31 +367,18 @@ class RestaurantScanner : AppCompatActivity() {
                                     ).showToast(Toast.LENGTH_LONG)
                                 }
                             }
-                        } else {
-                            codeScanner.startPreview()
-                            TingToast(
-                                this@RestaurantScanner,
-                                "Please, Allow App To Use Your Location",
-                                TingToastType.ERROR
-                            ).showToast(Toast.LENGTH_LONG)
                         }
+                    } else {
+                        codeScanner.startPreview()
+                        TingToast(
+                            this@RestaurantScanner,
+                            "Please, Allow App To Use Your Location",
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
                     }
                 }
-            })
-        }
-        codeScanner.errorCallback = ErrorCallback {
-            runOnUiThread {
-                codeScanner.startPreview()
-                TingToast(
-                    this@RestaurantScanner,
-                    it.message!!,
-                    TingToastType.ERROR
-                ).showToast(Toast.LENGTH_LONG)
             }
-        }
-
-        scanner_view.setOnClickListener { codeScanner.startPreview() }
-        close_scanner.setOnClickListener { onBackPressed() }
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -353,6 +386,19 @@ class RestaurantScanner : AppCompatActivity() {
         if(requestCode == CAMERA_REQUEST_PERMISSION) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 codeScanner.startPreview()
+                codeScanner.decodeCallback = DecodeCallback { result ->
+                    handleQRCodeScan(result)
+                }
+                codeScanner.errorCallback = ErrorCallback {
+                    runOnUiThread {
+                        codeScanner.startPreview()
+                        TingToast(
+                            this@RestaurantScanner,
+                            it.message!!,
+                            TingToastType.ERROR
+                        ).showToast(Toast.LENGTH_LONG)
+                    }
+                }
             }
         }
     }

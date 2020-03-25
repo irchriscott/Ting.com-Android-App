@@ -15,12 +15,15 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.adapters.placement.PlacementOrdersMenuAdapter
 import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
 import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.dialogs.messages.ConfirmDialog
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.ActionSheetCallBack
+import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.interfaces.PlacementOrdersMenuEventsListener
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
 import com.codepipes.ting.models.*
@@ -53,6 +56,7 @@ import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PlacementOrdersDialog : DialogFragment() {
 
     private lateinit var userAuthentication: UserAuthentication
@@ -209,15 +213,14 @@ class PlacementOrdersDialog : DialogFragment() {
                 }
 
                 override fun onCancel(order: Int, position: Int) {
-                    val actionSheet = ActionSheet(context!!, mutableListOf("Cancel This Order"))
-                        .setTitle("Cancel Order")
-                        .setColorData(activity?.resources!!.getColor(R.color.colorGray))
-                        .setColorTitleCancel(activity?.resources!!.getColor(R.color.colorGoogleRedTwo))
-                        .setColorSelected(activity?.resources!!.getColor(R.color.colorPrimary))
-                        .setCancelTitle("Cancel")
-
-                    actionSheet.create(object : ActionSheetCallBack {
-                        override fun data(data: String, position: Int) {
+                    val confirmDialog = ConfirmDialog()
+                    val bundle = Bundle()
+                    bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Cancel Order")
+                    bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Do you really want to cancel this order ?")
+                    confirmDialog.arguments = bundle
+                    confirmDialog.show(fragmentManager!!, confirmDialog.tag)
+                    confirmDialog.onDialogListener(object : ConfirmDialogListener {
+                        override fun onAccept() {
                             activity?.runOnUiThread {
                                 TingClient.getInstance(context!!)
                                     .cancelOrderPlacement(order)
@@ -246,6 +249,8 @@ class PlacementOrdersDialog : DialogFragment() {
                                     })
                             }
                         }
+
+                        override fun onCancel() { confirmDialog.dismiss() }
                     })
                 }
             })
