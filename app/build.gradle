@@ -19,7 +19,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,7 +51,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/INDEX.LIST'
         doNotStrip '*/mips/*.so'
-        pickFirst  'META-INF/*'
+        pickFirst 'META-INF/*'
     }
 }
 
@@ -116,6 +116,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0'
     implementation 'com.facebook.android:facebook-share:5.15.3'
     implementation 'com.github.iammert:CameraVideoButton:0.2'
+    implementation 'com.github.HamidrezaAmz:MagicalExoPlayer:1.0.14'
     implementation project(path: ':imageprocessor')
     api 'com.otaliastudios:cameraview:2.6.2'
     api 'frankiesardo:icepick:3.2.0'

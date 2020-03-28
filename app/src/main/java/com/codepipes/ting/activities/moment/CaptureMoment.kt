@@ -7,12 +7,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Camera
+import android.graphics.Point
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.ContextMenu
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -33,7 +35,11 @@ import com.otaliastudios.cameraview.*
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Flash
 import com.otaliastudios.cameraview.controls.Mode
+import com.otaliastudios.cameraview.size.AspectRatio
+import com.otaliastudios.cameraview.size.Size
+import com.otaliastudios.cameraview.size.SizeSelectors
 import kotlinx.android.synthetic.main.activity_capture_moment.*
+import kotlinx.android.synthetic.main.simpledialogfragment_image.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -107,7 +113,7 @@ class CaptureMoment : AppCompatActivity() {
         toggle_flash.setOnClickListener { toggleCameraFlash() }
 
         take_picture.setVideoDuration(30000)
-        take_picture.enableVideoRecording(true)
+        take_picture.enableVideoRecording(!isUsingCameraKit)
         take_picture.enablePhotoTaking(true)
 
         take_picture.actionListener = object : CameraVideoButton.ActionListener {
@@ -207,22 +213,45 @@ class CaptureMoment : AppCompatActivity() {
         cameraView.facing = Facing.BACK
         cameraView.flash = Flash.AUTO
 
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display. getRealSize(size)
+
+        val width = SizeSelectors.minWidth(size.x)
+        val height = SizeSelectors.minHeight(size.y)
+        val dimensions = SizeSelectors.and(width, height)
+        val ratio = SizeSelectors.aspectRatio(AspectRatio.of(1, 1), 0.0f)
+
+        val result = SizeSelectors.or(
+            SizeSelectors.and(ratio, dimensions),
+            ratio,
+            SizeSelectors.biggest()
+        )
+
+        cameraView.setPictureSize(result)
+        cameraView.setVideoSize(result)
+
         cameraView.addCameraListener(object : CameraListener() {
-
             override fun onCameraOpened(options: CameraOptions) {}
-
             override fun onCameraClosed() {}
-
             override fun onCameraError(error: CameraException) { TingToast(this@CaptureMoment, error.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG) }
-
             override fun onPictureTaken(result: PictureResult) { saveCapturedPicture(result.data) }
-
-            override fun onVideoTaken(result: VideoResult) {}
-
+            override fun onVideoTaken(result: VideoResult) {
+                cameraView.mode = Mode.PICTURE
+                try {
+                    val videoFile = File(result.file.absolutePath)
+                    val intent = Intent(this@CaptureMoment, ShareMoment::class.java)
+                    intent.putExtra(SHARE_MOMENT_FILE_PATH, videoFile.absolutePath)
+                    intent.putExtra(SHARE_MOMENT_FILE_TYPE, 2)
+                    startActivity(intent)
+                } catch (e: FileNotFoundException) {
+                    TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                } catch (e: IOException) {
+                    TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                }
+            }
             override fun onOrientationChanged(orientation: Int) {}
-
             override fun onVideoRecordingStart() {}
-
             override fun onVideoRecordingEnd() {}
         })
     }
@@ -231,6 +260,7 @@ class CaptureMoment : AppCompatActivity() {
         camera_view.visibility = View.GONE
         camera_view_kit.visibility = View.VISIBLE
         cameraKitView = findViewById<CameraKitView>(R.id.camera_view_kit) as CameraKitView
+        cameraKitView.imageMegaPixels = 40.0f
         cameraKitView.cameraListener = object : CameraKitView.CameraListener {
             override fun onOpened() {}
             override fun onClosed() {}
@@ -306,7 +336,6 @@ class CaptureMoment : AppCompatActivity() {
         super.onResume()
         if(isUsingCameraKit) { cameraKitView.onResume() }
         else { cameraView.open() }
-        cameraView.open()
     }
 
     override fun onPause() {
@@ -344,9 +373,7 @@ class CaptureMoment : AppCompatActivity() {
 
             REQUEST_CODE_RECORD_AUDIO -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(!isUsingCameraKit) {
-                        cameraView.open()
-                    }
+                    if(!isUsingCameraKit) { cameraView.open() }
                 }
             }
         }
@@ -407,6 +434,18 @@ class CaptureMoment : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH)
                     val isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false)
+
+                    try {
+                        val imageFile = File(newFilePath)
+                        val intent = Intent(this@CaptureMoment, ShareMoment::class.java)
+                        intent.putExtra(SHARE_MOMENT_FILE_PATH, imageFile.absolutePath)
+                        intent.putExtra(SHARE_MOMENT_FILE_TYPE, 1)
+                        startActivity(intent)
+                    } catch (e: FileNotFoundException) {
+                        TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    } catch (e: IOException) {
+                        TingToast(this@CaptureMoment, e.localizedMessage, TingToastType.ERROR).showToast(Toast.LENGTH_LONG)
+                    }
                 }
             }
         }
@@ -417,5 +456,8 @@ class CaptureMoment : AppCompatActivity() {
         private const val PHOTO_EDITOR_REQUEST_CODE: Int = 5
         private const val REQUEST_CODE_IMAGE_GALLERY: Int = 6
         private const val REQUEST_CODE_RECORD_AUDIO: Int = 10
+
+        public const val SHARE_MOMENT_FILE_PATH: String = "moment_file_path"
+        public const val SHARE_MOMENT_FILE_TYPE: String = "moment_file_type"
     }
 }

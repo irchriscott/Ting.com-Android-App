@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".activities.moment.ShareMoment"
+        android:padding="12dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <EditText
+                    android:id="@+id/moment_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="4"
+                    android:hint="Write Caption"
+                    android:gravity="top|start"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="15sp"
+                    android:textColor="@color/colorLightGray"
+                    android:background="@color/colorTransparent"
+                    tools:ignore="Autofill,HardcodedText" />
+
+            <com.codepipes.ting.customclasses.RoundedCornerImageView
+                    android:id="@+id/moment_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/default_user"/>
+
+            <com.potyvideo.library.AndExoPlayerView
+                    android:id="@+id/moment_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:keepScreenOn="true"
+                    android:visibility="gone"
+                    app:andexo_aspect_ratio="aspect_16_9"
+                    app:andexo_full_screen="false"
+                    app:andexo_play_when_ready="false"
+                    app:andexo_show_controller="false"
+                    app:andexo_resize_mode="Fill"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/colorGray"
+                        android:text="Facebook Feed"
+                        tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/share_facebook_feed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:textOn="true"
+                        android:textOff="false"
+                        android:theme="@style/SwitchButtonTheme"
+                        tools:ignore="HardcodedText,RtlHardcoded" />
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorVeryLightGray" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/colorGray"
+                        android:text="Facebook Story"
+                        tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/share_facebook_story"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:textOn="true"
+                        android:textOff="false"
+                        android:theme="@style/SwitchButtonTheme"
+                        tools:ignore="HardcodedText,RtlHardcoded" />
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorVeryLightGray" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/colorGray"
+                        android:text="Instagram Feed"
+                        tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/share_instagram_feed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:textOn="true"
+                        android:textOff="false"
+                        android:theme="@style/SwitchButtonTheme"
+                        tools:ignore="HardcodedText,RtlHardcoded" />
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/colorVeryLightGray" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:background="@drawable/border_bottom">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/colorGray"
+                        android:text="Instagram Story"
+                        tools:ignore="HardcodedText" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/share_instagram_story"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="12dp"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:textOn="true"
+                        android:textOff="false"
+                        android:theme="@style/SwitchButtonTheme"
+                        tools:ignore="HardcodedText,RtlHardcoded" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

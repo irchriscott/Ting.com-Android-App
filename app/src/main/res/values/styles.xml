@@ -309,4 +309,10 @@
     <style name="SeekBarTheme" parent="Widget.AppCompat.SeekBar">
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
+    <style name="SwitchButtonTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorSwitchThumbNormal">#EFEFEF</item>
+        <item name="android:colorForeground">@color/colorDarkGray</item>
+    </style>
 </resources>

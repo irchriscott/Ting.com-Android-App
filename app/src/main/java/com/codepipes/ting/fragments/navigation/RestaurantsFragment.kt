@@ -57,6 +57,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var mOpenRestaurantMapButton: FloatingActionButton

@@ -27,29 +27,15 @@
             android:usesCleartextTraffic="true"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
-        <service
-                android:name=".services.PubnubService"
-                android:enabled="true"
-                android:exported="true"
-                tools:ignore="ExportedService" />
-        <service
-                android:name=".services.PushNotificationService"
-                android:enabled="true"
-                android:exported="false" />
-        <service
-                android:name=".services.NotificationMessagingService"
-                android:enabled="true"
-                tools:ignore="ExportedService">
-            <intent-filter android:priority="1">
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+        <activity
+                android:name=".activities.moment.ShareMoment"
+                android:parentActivityName=".activities.moment.CaptureMoment"
+                android:theme="@style/AppTheme.WhiteActionBarDefault"/>
 
         <activity
                 android:name=".activities.moment.CaptureMoment"
                 android:parentActivityName=".activities.placement.CurrentRestaurant"
-                android:theme="@style/AppTheme.NoActionBar"/>
-
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".activities.placement.CurrentRestaurant"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
@@ -147,20 +133,43 @@
         </activity>
         <activity
                 android:name=".imageeditor.BaseActivity"
-                android:theme="@style/AppTheme.DefaultActionBar"/>
+                android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imagecropper.CropImageActivity"
-                android:theme="@style/AppTheme.DefaultActionBar"/>
+                android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imageeditor.picchooser.SelectPictureActivity"
-                android:theme="@style/AppTheme.DefaultActionBar"/>
+                android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imageeditor.editimage.EditImageActivity"
-                android:theme="@style/AppTheme.DefaultActionBar"/>
+                android:theme="@style/AppTheme.DefaultActionBar" />
 
         <uses-library
                 android:name="org.apache.http.legacy"
                 android:required="false" />
+
+        <service
+                android:name=".services.PubnubService"
+                android:enabled="true"
+                android:exported="true"
+                tools:ignore="ExportedService" />
+        <service
+                android:name=".services.PushNotificationService"
+                android:enabled="true"
+                android:exported="false" />
+        <service
+                android:name=".services.NotificationMessagingService"
+                android:enabled="true"
+                tools:ignore="ExportedService">
+            <intent-filter android:priority="1">
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider498926397470599"
+                android:name="com.facebook.FacebookContentProvider"
+                android:exported="true"/>
+
     </application>
 
 </manifest>

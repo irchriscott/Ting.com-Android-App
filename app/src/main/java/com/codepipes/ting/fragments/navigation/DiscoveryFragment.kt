@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import com.codepipes.ting.*
 import com.codepipes.ting.activities.discovery.TodayPromotions
 import com.codepipes.ting.activities.placement.CurrentRestaurant
@@ -645,6 +646,7 @@ class DiscoveryFragment : Fragment() {
                                     TingToastType.ERROR
                                 ).showToast(Toast.LENGTH_LONG)
                             }
+                            ViewCompat.setNestedScrollingEnabled(view.top_restaurants, false)
                         } catch (e: Exception){
                             topRestaurantTimer.cancel()
                             topRestaurantsTimerTask.cancel()
@@ -690,6 +692,7 @@ class DiscoveryFragment : Fragment() {
                         view.top_menus.visibility = View.VISIBLE
                         view.top_menus.layoutManager = LinearLayoutManager(context)
                         view.top_menus.adapter = CuisineMenusAdapter(menus.toMutableSet())
+                        ViewCompat.setNestedScrollingEnabled(view.top_menus, false)
                     } catch (e: Exception) { view.top_menus_view.visibility = View.GONE }
                 }
             }

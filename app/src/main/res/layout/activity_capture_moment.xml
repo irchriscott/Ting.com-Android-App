@@ -29,13 +29,13 @@
             app:cameraGrid="off"
             app:cameraPlaySounds="true"
             app:cameraVideoCodec="deviceDefault"
-            app:cameraAutoFocusMarker="Focus"
+            app:cameraVideoBitRate="0"
             app:cameraUseDeviceOrientation="true"
             app:cameraPictureMetering="true"
             app:cameraPictureSnapshotMetering="false"
             app:cameraPictureFormat="jpeg"
             app:cameraRequestPermissions="true"
-            app:cameraPreviewFrameRate="60"
+            app:cameraPreviewFrameRate="0"
             app:cameraExperimental="false"
             app:cameraAutoFocusResetDelay="0"/>
 
