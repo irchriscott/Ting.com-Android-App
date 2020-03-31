@@ -49,6 +49,7 @@
 
     <!-- GOOGLE APIS KEYS -->
     <string name="server_client_id" translatable="false">1033794072902-sumfcak8j137q01u255h912slil7v32v.apps.googleusercontent.com</string>
+    <string name="facebook_app_id" translatable="false">498926397470599</string>
 
     <!-- NAV BAR -->
     <string name="nav_bar_discovery" translatable="false">Discovery</string>

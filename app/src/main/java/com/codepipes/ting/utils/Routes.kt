@@ -65,6 +65,10 @@ class Routes {
         const val placementBillComplete: String         = "${END_POINT}usr/po/placement/bill/complete/"
         const val placementBillRequest: String          = "${END_POINT}usr/po/placement/bill/request/"
         const val placementRequestWaiter: String        = "${END_POINT}usr/po/placement/request/send/"
-        const val placementTerminate: String            = "${END_POINT}/usr/po/placement/terminate/"
+        const val placementTerminate: String            = "${END_POINT}usr/po/placement/terminate/"
+
+        //MOMENT
+
+        const val momentsSave: String                   = "${END_POINT}usr/moments/save/"
     }
 }

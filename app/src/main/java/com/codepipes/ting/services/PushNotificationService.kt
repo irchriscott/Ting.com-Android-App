@@ -28,9 +28,7 @@ import java.lang.Exception
 
 class PushNotificationService : Service() {
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 

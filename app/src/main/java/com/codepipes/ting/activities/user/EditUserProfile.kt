@@ -55,6 +55,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class EditUserProfile : AppCompatActivity() {
 
     private lateinit var user: User
@@ -370,10 +371,11 @@ class EditUserProfile : AppCompatActivity() {
                                                 serverResponse.message,
                                                 TingToastType.SUCCESS
                                             ).showToast(Toast.LENGTH_LONG)
-                                        } else { ErrorMessage(
+                                        } else { TingToast(
                                             this@EditUserProfile,
-                                            serverResponse.message
-                                        ).show() }
+                                            serverResponse.message,
+                                            TingToastType.ERROR
+                                        ).showToast(Toast.LENGTH_LONG) }
                                     }
                                 } catch (e: Exception){
                                     runOnUiThread {
