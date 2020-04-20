@@ -640,8 +640,8 @@
                                         android:layout_gravity="right"
                                         android:gravity="right"
                                         android:layout_marginLeft="12dp"
+                                        android:theme="@style/AppTheme.Style.SmallRating"
                                         style="@style/AppTheme.SmallRating"
-                                        android:theme="@style/AppTheme.SmallRating"
                                         tools:ignore="RtlHardcoded" />
 
                             </RelativeLayout>

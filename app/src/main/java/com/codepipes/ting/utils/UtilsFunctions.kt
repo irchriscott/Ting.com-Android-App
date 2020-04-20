@@ -220,6 +220,6 @@ class UtilsFunctions(private val context: Context ) {
     }
 
     companion object {
-        private const val REQUEST_FINE_LOCATION = 2
+        public const val REQUEST_FINE_LOCATION = 2
     }
 }

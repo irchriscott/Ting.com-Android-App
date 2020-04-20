@@ -314,4 +314,8 @@
         <attr name="matProg_linearProgress" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RoundedCornerImageView">
+        <attr name="imageRadius" format="float" />
+    </declare-styleable>
+
 </resources>

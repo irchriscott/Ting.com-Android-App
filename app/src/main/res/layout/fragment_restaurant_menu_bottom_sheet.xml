@@ -36,7 +36,7 @@
                     app:layout_constraintBottom_toTopOf="parent"
                     tools:ignore="HardcodedText"/>
 
-            <com.codepipes.ting.customclasses.RoundedCornerImageView
+            <com.codepipes.ting.custom.RoundedCornerImageView
                     android:id="@+id/menu_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,8 +69,8 @@
                     app:layout_constraintTop_toBottomOf="@id/menu_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/menu_name"
-                    style="@style/AppTheme.SmallRating"
-                    android:theme="@style/AppTheme.SmallRating"/>
+                    android:theme="@style/AppTheme.Style.SmallRating"
+                    style="@style/AppTheme.SmallRating" />
 
             <ImageView
                     android:id="@+id/menu_description_icon"

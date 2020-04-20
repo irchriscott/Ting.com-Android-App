@@ -22,7 +22,7 @@
                 android:background="@color/colorTransparent"
                 android:fitsSystemWindows="true"
                 android:theme="@style/AppTheme.White"
-                app:layout_behavior=".customclasses.FlingBehavior">
+                app:layout_behavior=".custom.FlingBehavior">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/userCollapsingToolbar"

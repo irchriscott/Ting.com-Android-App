@@ -393,7 +393,7 @@ class CaptureMoment : AppCompatActivity() {
                             val imageBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uriFromPath))
 
                             val filename = "moment_${System.currentTimeMillis()}.jpeg"
-                            val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments")
+                            val path = File(Environment.getExternalStorageDirectory(), "Ting.com" + File.separator + "Moments" + File.separator + "Images")
                             if (!path.exists()) { path.mkdirs() }
                             val picture = File(path, filename)
 
@@ -433,10 +433,11 @@ class CaptureMoment : AppCompatActivity() {
             PHOTO_EDITOR_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val newFilePath = data.getStringExtra(ImageEditorIntentBuilder.OUTPUT_PATH)
+                    val oldFilePath = data.getStringExtra(ImageEditorIntentBuilder.SOURCE_PATH)
                     val isImageEdit = data.getBooleanExtra(EditImageActivity.IS_IMAGE_EDITED, false)
 
                     try {
-                        val imageFile = File(newFilePath)
+                        val imageFile = File(if(isImageEdit) { newFilePath } else { oldFilePath })
                         val intent = Intent(this@CaptureMoment, ShareMoment::class.java)
                         intent.putExtra(SHARE_MOMENT_FILE_PATH, imageFile.absolutePath)
                         intent.putExtra(SHARE_MOMENT_FILE_TYPE, 1)

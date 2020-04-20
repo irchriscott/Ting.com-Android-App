@@ -7,6 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -25,70 +26,94 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-
+        <!-- android:largeHeap="true" -->
+        <!-- android:hardwareAccelerated="false" -->
+        <activity
+                android:name=".activities.base.SearchResults"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.DefaultActionBar"/>
+        <activity
+                android:name=".activities.base.LiveSearch"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".activities.moment.ShareMoment"
                 android:parentActivityName=".activities.moment.CaptureMoment"
-                android:theme="@style/AppTheme.WhiteActionBarDefault"/>
-
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.moment.CaptureMoment"
                 android:parentActivityName=".activities.placement.CurrentRestaurant"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".activities.placement.CurrentRestaurant"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.placement.RestaurantScanner"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".activities.restaurant.RestaurantSpecification"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.discovery.TodayPromotions"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.discovery.Cuisine"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.restaurant.RestaurantAbout"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.restaurant.RestaurantReviews"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.restaurant.RestaurantLikes"
                 android:parentActivityName=".activities.restaurant.RestaurantProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.menu.MenuPromotion"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.menu.RestaurantMenu"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.restaurant.RestaurantProfile"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".activities.user.EditUserProfile"
                 android:parentActivityName=".activities.user.UserProfile"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBarDefault" />
         <activity
                 android:name=".activities.user.UserProfile"
                 android:parentActivityName=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".activities.base.LogIn"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -97,6 +122,7 @@
         <activity
                 android:name=".activities.base.ResetPassword"
                 android:parentActivityName=".activities.base.LogIn"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -109,7 +135,6 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="@string/google_maps_key" />
-
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/facebook_app_id" />
@@ -117,9 +142,11 @@
         <activity
                 android:name=".activities.base.SignUp"
                 android:parentActivityName=".activities.base.LogIn"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.WhiteActionBar" />
         <activity
                 android:name=".activities.base.SplashScreen"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -129,6 +156,7 @@
         </activity>
         <activity
                 android:name=".activities.base.TingDotCom"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -136,15 +164,19 @@
         </activity>
         <activity
                 android:name=".imageeditor.BaseActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imagecropper.CropImageActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imageeditor.picchooser.SelectPictureActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
         <activity
                 android:name=".imageeditor.editimage.EditImageActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.DefaultActionBar" />
 
         <uses-library
@@ -168,16 +200,15 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
                 android:name=".services.UploadMomentService"
                 android:enabled="true"
-                android:exported="false"/>
+                android:exported="false" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider498926397470599"
+        <provider
                 android:name="com.facebook.FacebookContentProvider"
-                android:exported="true"/>
-
+                android:authorities="com.facebook.app.FacebookContentProvider498926397470599"
+                android:exported="true" />
     </application>
 
 </manifest>

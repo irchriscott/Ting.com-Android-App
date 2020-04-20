@@ -25,7 +25,7 @@ import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -42,7 +42,9 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
+    "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
+)
 class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
 
     private lateinit var mUseLocationBtn: Button
@@ -102,15 +104,25 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
         if (mUtilFunctions.checkLocationPermissions()) {
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val geocoder = Geocoder(activity, Locale.getDefault())
                     if(it != null) {
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        activity!!.runOnUiThread {
-                            mSearchAddressInput.setText(addresses[0].getAddressLine(0))
-                            newAddress["address"] = addresses[0].getAddressLine(0)
-                            newAddress["longitude"] = it.longitude.toString()
-                            newAddress["latitude"] = it.latitude.toString()
-                            newAddress["type"] = UtilData().addressType[0]
+                        try {
+                            val geocoder = Geocoder(activity, Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                            activity!!.runOnUiThread {
+                                mSearchAddressInput.setText(addresses[0].getAddressLine(0))
+                                newAddress["address"] = addresses[0].getAddressLine(0)
+                                newAddress["longitude"] = it.longitude.toString()
+                                newAddress["latitude"] = it.latitude.toString()
+                                newAddress["type"] = Constants().addressType[0]
+                            }
+                        } catch (e: java.lang.Exception) {
+                            activity!!.runOnUiThread {
+                                TingToast(
+                                    context!!,
+                                    e.localizedMessage,
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
+                            }
                         }
                     } else {
                         activity!!.runOnUiThread {
@@ -321,7 +333,7 @@ class AddUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback{
             newAddress["address"] = address
             newAddress["longitude"] = longitude.toString()
             newAddress["latitude"] = latitude.toString()
-            newAddress["type"] = UtilData().addressType[0]
+            newAddress["type"] = Constants().addressType[0]
             mSearchAddressInput.setText(address)
         }
     }

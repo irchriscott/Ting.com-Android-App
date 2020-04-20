@@ -27,7 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.codepipes.ting.R
-import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.custom.ActionSheet
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
@@ -53,6 +53,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RestaurantProfile : AppCompatActivity() {
 
     private lateinit var mUserProfileName: TextView

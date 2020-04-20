@@ -57,4 +57,12 @@ public interface TingService {
     public fun getPlacementBill(
         @Query("token") token: String
     ) : Observable<Bill>
+
+
+    @GET("api/v1/usr/g/search/live/")
+    public fun getLiveSearchResults(
+        @Query("query") query: String,
+        @Query("country") country: String,
+        @Query("town") town: String
+    ) : Observable<List<SearchResult>>
 }

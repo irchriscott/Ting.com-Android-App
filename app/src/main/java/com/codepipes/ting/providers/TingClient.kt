@@ -2,10 +2,7 @@ package com.codepipes.ting.providers
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.codepipes.ting.models.Bill
-import com.codepipes.ting.models.Order
-import com.codepipes.ting.models.RestaurantMenu
-import com.codepipes.ting.models.ServerResponse
+import com.codepipes.ting.models.*
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.UtilsFunctions
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,6 +16,7 @@ import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class TingClient (val context: Context) {
 
     private val userAuthentication = UserAuthentication(context)
@@ -103,6 +101,10 @@ class TingClient (val context: Context) {
 
     public fun getPlacementBill(token: String) : Observable<Bill> {
         return tingService.getPlacementBill(token)
+    }
+
+    public fun getLiveSearchResults(query: String, country: String, town: String) : Observable<List<SearchResult>> {
+        return tingService.getLiveSearchResults(query, country, town)
     }
 
     companion object {

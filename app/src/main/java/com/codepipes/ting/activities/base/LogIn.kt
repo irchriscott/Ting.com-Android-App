@@ -21,7 +21,7 @@ import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -49,9 +49,6 @@ class LogIn : AppCompatActivity() {
 
     private lateinit var settings: Settings
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-
-    private val RC_SIGN_IN = 1
-    private val REQUEST_FINE_LOCATION = 2
 
     private lateinit var geocoder: Geocoder
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -291,7 +288,7 @@ class LogIn : AppCompatActivity() {
                                 .addFormDataPart("address", addresses[0].getAddressLine(0))
                                 .addFormDataPart("longitude", it.longitude.toString())
                                 .addFormDataPart("latitude", it.latitude.toString())
-                                .addFormDataPart("type", UtilData().addressType[0])
+                                .addFormDataPart("type", Constants().addressType[0])
                                 .build()
 
                             val request = Request.Builder()
@@ -416,5 +413,10 @@ class LogIn : AppCompatActivity() {
                 TingToastType.ERROR
             ).showToast(Toast.LENGTH_LONG)
         }
+    }
+
+    companion object {
+        private const val RC_SIGN_IN = 1
+        private const val REQUEST_FINE_LOCATION = 2
     }
 }

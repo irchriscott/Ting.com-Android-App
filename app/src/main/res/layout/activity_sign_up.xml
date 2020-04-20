@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".activities.base.SignUp">
 
-    <com.codepipes.ting.customclasses.LockableViewPager
+    <com.codepipes.ting.custom.LockableViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

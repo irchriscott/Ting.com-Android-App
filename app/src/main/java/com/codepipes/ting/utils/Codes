@@ -118,3 +118,8 @@ private fun addFragment(v: View) {
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </RelativeLayout>
+
+//CREATE APP HASH KEY
+
+open cmd and navigate to keystool.exe which is in programs/jre/bin
+then keytool -exportcert -alias androiddebugkey -keystore "C:\Documents and Settings\Administrator.android\debug.keystore" | "C:\OpenSSL\bin\openssl" sha1 -binary |"C:\OpenSSL\bin\openssl" base64

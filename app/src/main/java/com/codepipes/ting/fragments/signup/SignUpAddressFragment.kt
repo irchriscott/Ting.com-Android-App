@@ -13,9 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.codepipes.ting.customclasses.LockableViewPager
+import com.codepipes.ting.custom.LockableViewPager
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.codepipes.ting.R
@@ -43,10 +43,9 @@ class SignUpAddressFragment : Fragment() {
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
     private val routes: Routes = Routes()
-    private val utilData: UtilData = UtilData()
+    private val constants: Constants = Constants()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val REQUEST_FINE_LOCATION = 1
 
     private lateinit var mUtilFunctions: UtilsFunctions
 
@@ -97,7 +96,7 @@ class SignUpAddressFragment : Fragment() {
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 4, spanText.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         mAppNameText.text = spanText
 
-        val types = utilData.addressType
+        val types = constants.addressType
         mSignUpAddressTypeInput.setText(types[0])
         this.selectedAddressType = types[0]
 
@@ -145,16 +144,26 @@ class SignUpAddressFragment : Fragment() {
             if(mUtilFunctions.checkLocationPermissions()){
                 try {
                     fusedLocationClient.lastLocation.addOnSuccessListener {
-                        val geocoder = Geocoder(activity, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        activity!!.runOnUiThread {
-                            mSignUpAddressInput.setText(addresses[0].getAddressLine(0))
-                            signUpUserData["address"] = addresses[0].getAddressLine(0)
-                            signUpUserData["latitude"] = it.latitude.toString()
-                            signUpUserData["longitude"] = it.longitude.toString()
-                            signUpUserData["country"] = addresses[0].countryName
-                            signUpUserData["town"] = addresses[0].locality
-                            settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                        if(it != null) {
+                            val geocoder = Geocoder(activity, Locale.getDefault())
+                            val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                            activity!!.runOnUiThread {
+                                mSignUpAddressInput.setText(addresses[0].getAddressLine(0))
+                                signUpUserData["address"] = addresses[0].getAddressLine(0)
+                                signUpUserData["latitude"] = it.latitude.toString()
+                                signUpUserData["longitude"] = it.longitude.toString()
+                                signUpUserData["country"] = addresses[0].countryName
+                                signUpUserData["town"] = addresses[0].locality
+                                settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                            }
+                        } else {
+                            activity!!.runOnUiThread {
+                                TingToast(
+                                    context!!,
+                                    "Please, Try Again",
+                                    TingToastType.ERROR
+                                ).showToast(Toast.LENGTH_LONG)
+                            }
                         }
                     }.addOnFailureListener {
                         activity!!.runOnUiThread {
@@ -238,5 +247,9 @@ class SignUpAddressFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+    }
+
+    companion object {
+        private const val REQUEST_FINE_LOCATION = 1
     }
 }

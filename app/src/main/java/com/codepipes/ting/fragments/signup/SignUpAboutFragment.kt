@@ -19,12 +19,12 @@ import androidx.appcompat.app.AlertDialog
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.codepipes.ting.customclasses.LockableViewPager
+import com.codepipes.ting.custom.LockableViewPager
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.utils.Routes
 import com.codepipes.ting.utils.Settings
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 import com.livefront.bridge.Bridge
 import java.text.SimpleDateFormat
@@ -42,7 +42,7 @@ class SignUpAboutFragment : Fragment() {
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
     private val routes: Routes = Routes()
-    private val utilData: UtilData = UtilData()
+    private val constants: Constants = Constants()
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -87,7 +87,7 @@ class SignUpAboutFragment : Fragment() {
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 4, spanText.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         mAppNameText.text = spanText
 
-        val genders = utilData.genders
+        val genders = constants.genders
         if(signUpUserData.isNotEmpty() && !signUpUserData.isNullOrEmpty()){
             if(!signUpUserData["dob"].isNullOrEmpty()){
                 mSignUpGenderInput.setText(signUpUserData["gender"])

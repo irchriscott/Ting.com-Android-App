@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.activity_cuisine.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class Cuisine : AppCompatActivity() {
 
     @SuppressLint("PrivateResource", "DefaultLocale")

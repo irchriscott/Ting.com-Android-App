@@ -16,7 +16,7 @@ import android.widget.*
 import com.codepipes.ting.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.codepipes.ting.customclasses.LockableViewPager
+import com.codepipes.ting.custom.LockableViewPager
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
@@ -102,15 +102,25 @@ class SignUpIdentityFragment : Fragment() {
         if(mUtilFunctions.checkLocationPermissions()){
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val geocoder = Geocoder(activity, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    activity!!.runOnUiThread {
-                        signUpUserData["address"] = addresses[0].getAddressLine(0)
-                        signUpUserData["latitude"] = it.latitude.toString()
-                        signUpUserData["longitude"] = it.longitude.toString()
-                        signUpUserData["country"] = addresses[0].countryName
-                        signUpUserData["town"] = addresses[0].locality
-                        settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    try {
+                        val geocoder = Geocoder(activity, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        activity!!.runOnUiThread {
+                            signUpUserData["address"] = addresses[0].getAddressLine(0)
+                            signUpUserData["latitude"] = it.latitude.toString()
+                            signUpUserData["longitude"] = it.longitude.toString()
+                            signUpUserData["country"] = addresses[0].countryName
+                            signUpUserData["town"] = addresses[0].locality
+                            settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                        }
+                    } catch (e: Exception) {
+                        activity!!.runOnUiThread {
+                            TingToast(
+                                context!!,
+                                "Geocoder Failed To Get Location",
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
+                        }
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {

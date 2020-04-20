@@ -73,7 +73,7 @@ class EditUserAddress : BottomSheetDialogFragment(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val mArgs = arguments

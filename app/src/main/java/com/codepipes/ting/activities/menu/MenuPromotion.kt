@@ -14,7 +14,7 @@ import android.widget.Toast
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.adapters.menu.PromotionMenusListAdapter
-import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.custom.ActionSheet
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
@@ -41,6 +41,7 @@ import java.text.NumberFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MenuPromotion : AppCompatActivity() {
 
     private lateinit var promotion: MenuPromotion

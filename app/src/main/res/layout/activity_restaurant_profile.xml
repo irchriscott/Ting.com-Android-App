@@ -21,7 +21,7 @@
                 android:background="@color/colorTransparent"
                 android:fitsSystemWindows="true"
                 android:theme="@style/AppTheme.White"
-                app:layout_behavior=".customclasses.FlingBehavior">
+                app:layout_behavior=".custom.FlingBehavior">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/userCollapsingToolbar"
@@ -114,7 +114,7 @@
                                     android:paddingTop="8dp"
                                     android:numStars="5"
                                     style="@style/AppTheme.IndicatorRating"
-                                    android:theme="@style/AppTheme.IndicatorRating"/>
+                                    android:theme="@style/AppTheme.Style.IndicatorRating"/>
 
                             <LinearLayout
                                     android:id="@+id/restaurant_time_statusShimmer"
@@ -247,7 +247,7 @@
                                 android:paddingTop="8dp"
                                 android:numStars="5"
                                 style="@style/AppTheme.IndicatorRating"
-                                android:theme="@style/AppTheme.IndicatorRating"/>
+                                android:theme="@style/AppTheme.Style.IndicatorRating"/>
 
                         <LinearLayout
                                 android:id="@+id/restaurant_time_status"
@@ -331,7 +331,7 @@
                         android:layout_gravity="top"
                         android:layout_marginBottom="48dp"
                         app:layout_collapseMode="pin"
-                        app:popupTheme="@style/AppTheme"/>
+                        app:popupTheme="@style/ContextMenuTheme"/>
 
                 <com.google.android.material.tabs.TabLayout
                         android:id="@+id/userTabLayout"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -26,7 +27,7 @@
                     android:background="@color/colorTransparent"
                     tools:ignore="Autofill,HardcodedText" />
 
-            <com.codepipes.ting.customclasses.RoundedCornerImageView
+            <com.codepipes.ting.custom.RoundedCornerImageView
                     android:id="@+id/moment_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,18 +122,19 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="12dp"
-                    android:paddingBottom="12dp">
+                    android:paddingBottom="12dp"
+                    android:background="@drawable/border_bottom">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/colorGray"
-                        android:text="Instagram Feed"
+                        android:text="Instagram Story"
                         tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/share_instagram_feed"
+                        android:id="@+id/share_instagram_story"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"
@@ -155,19 +157,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:background="@drawable/border_bottom">
+                    android:paddingBottom="12dp">
 
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_medium"
                         android:textColor="@color/colorGray"
-                        android:text="Instagram Story"
+                        android:text="Other Apps"
                         tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/share_instagram_story"
+                        android:id="@+id/share_others"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="12dp"

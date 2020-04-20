@@ -43,7 +43,7 @@ class UploadMomentService : Service() {
 
             try {
 
-                val image = File(intent?.getStringExtra(ShareMoment.MOMENT_FILE_PATH_KEY)!!)
+                val image = File(intent?.getStringExtra(ShareMoment.MOMENT_FILE_PATH_KEY)?:"")
 
                 val url = Routes.momentsSave
                 val client = OkHttpClient.Builder()
@@ -112,13 +112,22 @@ class UploadMomentService : Service() {
                 })
 
             } catch (e: FileNotFoundException) {
-                TingToast(
-                    this,
-                    e.message!!,
-                    TingToastType.ERROR
-                ).showToast(Toast.LENGTH_LONG)
+                Handler(Looper.getMainLooper()).post(Runnable {
+                    TingToast(
+                        this,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
+                })
+            } catch (e: java.lang.Exception) {
+                Handler(Looper.getMainLooper()).post(Runnable {
+                    TingToast(
+                        this,
+                        e.message!!,
+                        TingToastType.ERROR
+                    ).showToast(Toast.LENGTH_LONG)
+                })
             }
-
         }
 
         return Service.START_STICKY

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.codepipes.ting.R
-import com.codepipes.ting.customclasses.LockableViewPager
+import com.codepipes.ting.custom.LockableViewPager
 import com.codepipes.ting.fragments.signup.SignUpAboutFragment
 import com.codepipes.ting.fragments.signup.SignUpAddressFragment
 import com.codepipes.ting.fragments.signup.SignUpIdentityFragment

@@ -19,7 +19,7 @@ import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.codepipes.ting.customclasses.LockableViewPager
+import com.codepipes.ting.custom.LockableViewPager
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse

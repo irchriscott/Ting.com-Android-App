@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/border_bottom">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.codepipes.ting.custom.RoundedCornerImageView
+                android:id="@+id/search_image"
+                android:src="@drawable/default_user"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/search_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                tools:ignore="RtlHardcoded">
+
+            <TextView
+                    android:id="@+id/search_name"
+                    android:text="Christian Scott"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:textSize="13sp"
+                    android:paddingRight="54dp"
+                    android:includeFontPadding="false"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+
+            <TextView
+                    android:id="@+id/search_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="This is a comment on a review"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="11sp"
+                    android:paddingEnd="54dp"
+                    android:paddingRight="54dp"
+                    android:textColor="@color/colorGray"
+                    android:includeFontPadding="false"
+                    app:layout_constraintTop_toBottomOf="@id/search_name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry,SmallSp"/>
+
+            <TextView
+                    android:id="@+id/search_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="This is a comment on a review"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="11sp"
+                    android:paddingEnd="54dp"
+                    android:paddingRight="54dp"
+                    android:textColor="@color/colorGray"
+                    app:layout_constraintTop_toBottomOf="@id/search_description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="HardcodedText,RtlSymmetry,SmallSp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

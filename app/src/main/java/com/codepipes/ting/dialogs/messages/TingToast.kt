@@ -1,5 +1,6 @@
 package com.codepipes.ting.dialogs.messages
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.Gravity
@@ -9,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 
 
@@ -23,11 +24,10 @@ class TingToast(
     private val toastType: TingToastType
 ) {
 
-    private val activity = this.context as Activity
-
+    @SuppressLint("InflateParams")
     public fun showToast(duration: Int){
-        val inflater: LayoutInflater = this.activity.layoutInflater
-        val layout = inflater.inflate(R.layout.ting_toast_layout, activity.findViewById(R.id.tingToastLayout), false)
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+        val layout = inflater.inflate(R.layout.ting_toast_layout, null, false)
 
         val containerView = layout.findViewById<LinearLayout>(R.id.toastContainer) as LinearLayout
         val imageView = layout.findViewById<ImageView>(R.id.toastIcon) as ImageView
@@ -37,19 +37,19 @@ class TingToast(
 
             TingToastType.DEFAULT -> {
                 containerView.background = context.resources.getDrawable(R.drawable.background_toast_default)
-                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastDefaultImage))
+                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(Constants().toastDefaultImage))
             }
             TingToastType.SUCCESS -> {
                 containerView.background = context.resources.getDrawable(R.drawable.background_toast_success)
-                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastSuccessImage))
+                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(Constants().toastSuccessImage))
             }
             TingToastType.WARNING -> {
                 containerView.background = context.resources.getDrawable(R.drawable.background_toast_warning)
-                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastWarningImage))
+                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(Constants().toastWarningImage))
             }
             TingToastType.ERROR -> {
                 containerView.background = context.resources.getDrawable(R.drawable.background_toast_error)
-                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(UtilData().toastErrorImage))
+                imageView.setImageBitmap(UtilsFunctions(context).base64ToBitmap(Constants().toastErrorImage))
             }
         }
 

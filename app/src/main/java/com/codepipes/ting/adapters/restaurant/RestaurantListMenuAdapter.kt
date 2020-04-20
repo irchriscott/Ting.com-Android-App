@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.customclasses.RoundedCornerImageView
+import com.codepipes.ting.custom.RoundedCornerImageView
 import com.codepipes.ting.fragments.menu.RestaurantMenuBottomSheetFragment
 import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.row_menu_restaurant_list.view.*
 
 class RestaurantListMenuAdapter(private val menus: MutableList<RestaurantMenu>, private val fragmentManager: FragmentManager) : RecyclerView.Adapter<RestaurantListMenuAdapterViewHolder>(){
 
@@ -32,8 +31,6 @@ class RestaurantListMenuAdapter(private val menus: MutableList<RestaurantMenu>, 
         val image = menu.menu.images.images[index]
 
         val imageView = holder.view.findViewById<RoundedCornerImageView>(R.id.restaurant_menu_image) as RoundedCornerImageView
-        imageView.radius = 10.0F
-
         Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(imageView)
         imageView.setOnClickListener {
             val restaurantMenuFragment = RestaurantMenuBottomSheetFragment()

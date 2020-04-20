@@ -9,7 +9,7 @@
         android:layout_marginRight="8dp"
         tools:ignore="RtlHardcoded">
 
-        <com.codepipes.ting.customclasses.RoundedCornerImageView
+        <com.codepipes.ting.custom.RoundedCornerImageView
                 android:id="@+id/cuisine_image"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

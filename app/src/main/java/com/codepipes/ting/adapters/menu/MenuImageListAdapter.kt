@@ -1,20 +1,14 @@
 package com.codepipes.ting.adapters.menu
 
-import android.os.Bundle
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codepipes.ting.R
-import com.codepipes.ting.customclasses.RoundedCornerImageView
-import com.codepipes.ting.fragments.menu.RestaurantMenuBottomSheetFragment
+import com.codepipes.ting.custom.RoundedCornerImageView
 import com.codepipes.ting.models.MenuImage
-import com.codepipes.ting.models.RestaurantMenu
 import com.codepipes.ting.utils.Routes
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.row_menu_restaurant_list.view.*
 
 class MenuImageListAdapter(private val images: MutableList<MenuImage>) : RecyclerView.Adapter<MenuImageListViewHolder>(){
 
@@ -31,7 +25,6 @@ class MenuImageListAdapter(private val images: MutableList<MenuImage>) : Recycle
         holder.image = image
 
         val imageView = holder.view.findViewById<RoundedCornerImageView>(R.id.restaurant_menu_image) as RoundedCornerImageView
-        imageView.radius = 10.0F
         Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(imageView)
     }
 }

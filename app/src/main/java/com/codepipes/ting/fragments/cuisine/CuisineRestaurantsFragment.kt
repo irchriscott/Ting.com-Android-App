@@ -51,7 +51,6 @@ class CuisineRestaurantsFragment : Fragment() {
     private lateinit var userAuthentication: UserAuthentication
 
     private lateinit var cuisineRestaurantsTimer: Timer
-    private val TIMER_PERIOD = 6000.toLong()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -291,6 +290,8 @@ class CuisineRestaurantsFragment : Fragment() {
     }
 
     companion object {
+
+        private const val TIMER_PERIOD = 6000.toLong()
 
         fun newInstance(cuisine: String) =
             CuisineRestaurantsFragment().apply {

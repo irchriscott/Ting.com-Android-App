@@ -69,8 +69,8 @@
                                         app:layout_constraintTop_toBottomOf="@id/menu_nameShimmer"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintBottom_toBottomOf="@id/menu_nameShimmer"
-                                        style="@style/AppTheme.SmallRating"
-                                        android:theme="@style/AppTheme.SmallRating"/>
+                                        android:theme="@style/AppTheme.Style.SmallRating"
+                                        style="@style/AppTheme.SmallRating"/>
 
                                 <ImageView
                                         android:id="@+id/menu_description_iconShimmer"
@@ -277,8 +277,8 @@
                                     app:layout_constraintTop_toBottomOf="@id/menu_name"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintBottom_toBottomOf="@id/menu_name"
-                                    style="@style/AppTheme.SmallRating"
-                                    android:theme="@style/AppTheme.SmallRating"/>
+                                    android:theme="@style/AppTheme.Style.SmallRating"
+                                    style="@style/AppTheme.SmallRating" />
 
                             <ImageView
                                     android:id="@+id/menu_description_icon"

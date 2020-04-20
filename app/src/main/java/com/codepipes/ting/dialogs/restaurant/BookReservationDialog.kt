@@ -33,6 +33,7 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class BookReservationDialog : DialogFragment() {
 
     private var selectedTable: Int? = null

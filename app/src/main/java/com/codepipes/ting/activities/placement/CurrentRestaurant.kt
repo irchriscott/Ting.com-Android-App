@@ -17,25 +17,22 @@ import com.codepipes.ting.R
 import com.codepipes.ting.activities.base.TingDotCom
 import com.codepipes.ting.activities.moment.CaptureMoment
 import com.codepipes.ting.activities.restaurant.RestaurantAbout
-import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.custom.ActionSheet
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.dialogs.placement.*
 import com.codepipes.ting.interfaces.*
 import com.codepipes.ting.models.*
 import com.codepipes.ting.providers.TingClient
-import com.codepipes.ting.providers.TingService
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.livefront.bridge.Bridge
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
-import com.pubnub.api.callbacks.PNCallback
 import com.pubnub.api.callbacks.SubscribeCallback
-import com.pubnub.api.models.consumer.PNPublishResult
 import com.pubnub.api.models.consumer.PNStatus
 import com.pubnub.api.models.consumer.pubsub.PNMessageResult
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult
@@ -91,8 +88,8 @@ class CurrentRestaurant : AppCompatActivity() {
         session = userAuthentication.get()!!
 
         pubnubConfig = PNConfiguration()
-        pubnubConfig.subscribeKey = UtilData.PUBNUB_SUBSCRIBE_KEY
-        pubnubConfig.publishKey = UtilData.PUBNUB_PUBLISH_KEY
+        pubnubConfig.subscribeKey = Constants.PUBNUB_SUBSCRIBE_KEY
+        pubnubConfig.publishKey = Constants.PUBNUB_PUBLISH_KEY
         pubnubConfig.isSecure = true
 
         pubnub = PubNub(pubnubConfig)
@@ -120,7 +117,7 @@ class CurrentRestaurant : AppCompatActivity() {
                         if(RestaurantScanner.ACTIVITY_ID == 2) {
                             val response = pnMessageResult.message.asJsonObject
                             when (response.get("type").asString) {
-                                UtilData.SOCKET_RESPONSE_ERROR -> {
+                                Constants.SOCKET_RESPONSE_ERROR -> {
                                     TingToast(
                                         this@CurrentRestaurant,
                                         if (!response.get("message").isJsonNull) {
@@ -132,7 +129,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                     ).showToast(
                                         Toast.LENGTH_LONG)
                                 }
-                                UtilData.SOCKET_RESPONSE_TABLE_WAITER -> {
+                                Constants.SOCKET_RESPONSE_TABLE_WAITER -> {
                                     val waiter = response.get("data").asJsonObject.get("waiter").asJsonObject
                                     val infoDialog = InfoDialog()
 
@@ -146,7 +143,7 @@ class CurrentRestaurant : AppCompatActivity() {
 
                                     getPlacement(userPlacement.getToken()!!)
                                 }
-                                UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
+                                Constants.SOCKET_RESPONSE_PLACEMENT_DONE -> {
                                     val successOverlay = SuccessOverlay()
                                     val bundle = Bundle()
                                     bundle.putString("message", "Placement Terminated")
@@ -161,7 +158,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                         }
                                     })
                                 }
-                                UtilData.SOCKET_RESPONSE_RESTO_BILL_PAID -> {
+                                Constants.SOCKET_RESPONSE_RESTO_BILL_PAID -> {
                                     val infoDialog = InfoDialog()
 
                                     val bundle = Bundle()
@@ -247,7 +244,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                 val receiver = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
                                 val args = mapOf<String, String?>("table" to placement.table.id.toString(), "token" to userPlacement.getTempToken())
                                 val responseData = mapOf<String, String>("table" to placement.table.number)
-                                val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, responseData)
+                                val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, responseData)
                                 pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
                                     .async { _, status ->
                                         if (status.isError || status.statusCode != 200) {

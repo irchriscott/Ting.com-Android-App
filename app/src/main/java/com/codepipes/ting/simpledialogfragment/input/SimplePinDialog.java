@@ -13,7 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.codepipes.ting.R;
-import com.codepipes.ting.customclasses.PinEntryEditText;
+import com.codepipes.ting.custom.PinEntryEditText;
 import com.codepipes.ting.simpledialogfragment.CustomViewDialog;
 import com.google.android.material.textfield.TextInputLayout;
 

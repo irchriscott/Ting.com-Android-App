@@ -1,11 +1,18 @@
 package com.codepipes.ting.activities.restaurant
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
 import com.codepipes.ting.models.Branch
@@ -19,9 +26,9 @@ import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.activity_restaurant_about.*
 import okhttp3.*
 import java.io.IOException
-import java.lang.Exception
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 class RestaurantAbout : AppCompatActivity() {
 
@@ -79,7 +86,7 @@ class RestaurantAbout : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "MissingPermission")
     private fun showRestaurantProfile(_branch: Branch){
         restaurant_name.text = _branch.restaurant?.name
         restaurant_branch.text = _branch.name
@@ -90,6 +97,26 @@ class RestaurantAbout : AppCompatActivity() {
         restaurant_email.text = _branch.email
         restaurant_phone.text = _branch.phone
         restaurant_full_address.text = _branch.address
+
+        restaurant_email.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "*/*"
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>(_branch.email))
+            intent.putExtra(Intent.EXTRA_SUBJECT, "")
+            intent.putExtra(Intent.EXTRA_TEXT, "")
+
+            startActivity(createEmailOnlyChooserIntent(intent, "Send Email Via", _branch.email))
+        }
+
+        restaurant_phone.setOnClickListener {
+            if(checkCallPermission()) {
+                try {
+                    val callIntent = Intent(Intent.ACTION_CALL);
+                    callIntent.data = Uri.parse("tel:${_branch.phone}")
+                    startActivity(callIntent)
+                } catch (e: ActivityNotFoundException) { }
+            } else { requestCallPermission() }
+        }
 
         restaurant_foods.text = _branch.menus.type.foods.count.toString()
         restaurant_drinks.text = _branch.menus.type.drinks.toString()
@@ -138,6 +165,50 @@ class RestaurantAbout : AppCompatActivity() {
         })
     }
 
+    private fun createEmailOnlyChooserIntent(source: Intent?, chooserTitle: CharSequence?, email: String): Intent? {
+        val intents = Stack<Intent?>()
+        val i = Intent(
+            Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto",
+                email, null
+            )
+        )
+        val activities = packageManager
+            .queryIntentActivities(i, 0)
+        for (ri in activities) {
+            val target = Intent(source)
+            target.setPackage(ri.activityInfo.packageName)
+            intents.add(target)
+        }
+        return if (!intents.isEmpty()) {
+            val chooserIntent = Intent.createChooser(
+                intents.removeAt(0),
+                chooserTitle
+            )
+            chooserIntent.putExtra(
+                Intent.EXTRA_INITIAL_INTENTS,
+                intents.toArray(arrayOfNulls<Parcelable>(intents.size))
+            )
+            chooserIntent
+        } else { Intent.createChooser(source, chooserTitle) }
+    }
+
+    private fun checkCallPermission(): Boolean {
+        return if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CALL_PHONE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) { true } else { requestCallPermission(); false }
+    }
+
+    private fun requestCallPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CALL_PHONE),
+            REQUEST_CALL
+        )
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -179,5 +250,26 @@ class RestaurantAbout : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         try { branchTimer.cancel() } catch (e: Exception) {}
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode) {
+            REQUEST_CALL -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        val callIntent = Intent(Intent.ACTION_CALL);
+                        callIntent.data = Uri.parse("tel:${branch.phone}")
+                        startActivity(callIntent)
+                    } catch (e: ActivityNotFoundException) { }
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CALL = 176
     }
 }

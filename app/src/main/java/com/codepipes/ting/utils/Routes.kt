@@ -5,7 +5,7 @@ class Routes {
 
     companion object {
 
-        public const val HOST_END_POINT: String         = "http://10.0.2.2:8000"
+        public const val HOST_END_POINT: String         = "http://172.20.10.9:8000"
         private const val END_POINT: String             = "${HOST_END_POINT}/api/v1/"
         public const val UPLOAD_END_POINT: String       = "${HOST_END_POINT}/tinguploads/"
         public const val API_HOST_PREFIX: String        = "/api/v1/"
@@ -68,7 +68,11 @@ class Routes {
         const val placementTerminate: String            = "${END_POINT}usr/po/placement/terminate/"
 
         //MOMENT
+        const val momentsSave: String                   = "${END_POINT}usr/m/moments/save/"
 
-        const val momentsSave: String                   = "${END_POINT}usr/moments/save/"
+        //SEARCH
+        const val liveSearchResults: String             = "${END_POINT}usr/g/search/live/"
+        const val menusSearchResults: String            = "${END_POINT}usr/g/search/menus/"
+        const val restaurantSearchResults: String       = "${END_POINT}usr/g/search/restaurants/"
     }
 }

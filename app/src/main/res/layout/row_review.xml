@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.codepipes.ting.customclasses.RoundedCornerImageView
+        <com.codepipes.ting.custom.RoundedCornerImageView
                 android:id="@+id/review_image"
                 android:src="@drawable/default_user"
                 android:layout_width="50dp"
@@ -43,6 +43,7 @@
                     android:paddingRight="64dp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:theme="@style/AppTheme.Style.SmallRating"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
 
             <RatingBar
@@ -54,8 +55,7 @@
                     app:layout_constraintTop_toBottomOf="@id/review_user_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/review_user_name"
-                    style="@style/AppTheme.SmallRating"
-                    android:theme="@style/AppTheme.SmallRating"/>
+                    style="@style/AppTheme.SmallRating" />
 
             <TextView
                     android:id="@+id/review_comment"

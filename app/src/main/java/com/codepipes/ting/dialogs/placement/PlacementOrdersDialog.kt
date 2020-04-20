@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +16,9 @@ import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.adapters.placement.PlacementOrdersMenuAdapter
-import com.codepipes.ting.adapters.placement.RestaurantMenusOrderAdapter
-import com.codepipes.ting.customclasses.ActionSheet
 import com.codepipes.ting.dialogs.messages.ConfirmDialog
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
-import com.codepipes.ting.interfaces.ActionSheetCallBack
 import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.interfaces.PlacementOrdersMenuEventsListener
 import com.codepipes.ting.interfaces.RestaurantMenusOrderCloseListener
@@ -31,16 +27,13 @@ import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.jakewharton.rxbinding2.widget.TextViewTextChangeEvent
 import com.pubnub.api.PNConfiguration
 import com.pubnub.api.PubNub
-import com.pubnub.api.callbacks.PNCallback
-import com.pubnub.api.models.consumer.PNPublishResult
-import com.pubnub.api.models.consumer.PNStatus
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -183,8 +176,8 @@ class PlacementOrdersDialog : DialogFragment() {
 
                 override fun onNotify(order: Int) {
                     val pubnubConfiguration = PNConfiguration()
-                    pubnubConfiguration.publishKey = UtilData.PUBNUB_PUBLISH_KEY
-                    pubnubConfiguration.subscribeKey = UtilData.PUBNUB_SUBSCRIBE_KEY
+                    pubnubConfiguration.publishKey = Constants.PUBNUB_PUBLISH_KEY
+                    pubnubConfiguration.subscribeKey = Constants.PUBNUB_SUBSCRIBE_KEY
                     pubnubConfiguration.isSecure = true
 
                     val pubnub = PubNub(pubnubConfiguration)
@@ -192,7 +185,7 @@ class PlacementOrdersDialog : DialogFragment() {
                     val data = mapOf<String, String>("table" to placement.table.number)
 
                     val receiverBranch = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
-                    val messageBranch = SocketResponseMessage(pubnubConfiguration.uuid, UtilData.SOCKET_REQUEST_NOTIFY_ORDER, userAuthentication.socketUser(), receiverBranch, 200, null, args, data)
+                    val messageBranch = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_NOTIFY_ORDER, userAuthentication.socketUser(), receiverBranch, 200, null, args, data)
 
                     pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(messageBranch))
                         .async { _, status ->
@@ -202,7 +195,7 @@ class PlacementOrdersDialog : DialogFragment() {
                         }
 
                     val receiverWaiter = SocketUser(placement.waiter?.id, 1, "${placement.waiter?.name}", placement.waiter?.email, placement.waiter?.image, placement.waiter?.channel)
-                    val messageWaiter = SocketResponseMessage(pubnubConfiguration.uuid, UtilData.SOCKET_REQUEST_W_NOTIFY_ORDER, userAuthentication.socketUser(), receiverWaiter, 200, null, args, data)
+                    val messageWaiter = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_W_NOTIFY_ORDER, userAuthentication.socketUser(), receiverWaiter, 200, null, args, data)
 
                     pubnub.publish().channel(placement.waiter?.channel).message(Gson().toJson(messageWaiter))
                         .async { _, status ->

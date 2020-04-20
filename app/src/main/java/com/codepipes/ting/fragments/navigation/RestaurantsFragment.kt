@@ -16,13 +16,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
-import com.codepipes.ting.customclasses.ActionSheet
+import com.codepipes.ting.custom.ActionSheet
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
@@ -126,14 +125,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
                     if(it != null){
-                        val geocoder = Geocoder(activity, Locale.getDefault())
-                        activity.runOnUiThread {
-                            try {
-                                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                                country = addresses[0].countryName
-                                town = addresses[0].locality
-                            } catch (e: Exception) {}
-                        }
+                        try {
+                            val geocoder = Geocoder(activity, Locale.getDefault())
+                            activity.runOnUiThread {
+                                try {
+                                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                                    country = addresses[0].countryName
+                                    town = addresses[0].locality
+                                } catch (e: Exception) {}
+                            }
+                        } catch (e: Exception){}
                     }
                 }
             } catch (e: Exception){ }

@@ -187,6 +187,16 @@
         <item name="colorControlActivated">@color/colorYellowRate</item>
     </style>
 
+    <style name="AppTheme.Style.SmallRating" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorLightGray</item>
+        <item name="colorControlActivated">@color/colorYellowRate</item>
+    </style>
+
+    <style name="AppTheme.Style.IndicatorRating" parent="AppTheme">
+        <item name="colorControlNormal">@color/colorLightGray</item>
+        <item name="colorControlActivated">@color/colorYellowRate</item>
+    </style>
+
     <style name="DialogAnimations" />
 
     <style name="DialogAnimations.SmileWindow">
@@ -203,7 +213,6 @@
 
     <style name="RateAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/colorPrimary</item>
-<!--        <item name="android:textSize">@dimen/text_size_medium</item>-->
     </style>
 
     <style name="RateDialogFadeAnimation">
@@ -243,6 +252,11 @@
     <style name="CheckBoxStyle" parent="Base.Theme.AppCompat">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/colorGray</item>
+    </style>
+
+    <style name="ContextMenuTheme">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
 
     <!-- IMAGE EDITOR -->

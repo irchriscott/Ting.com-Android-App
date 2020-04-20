@@ -17,7 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
 import com.codepipes.ting.adapters.restaurant.RestaurantReviewsAdapter
-import com.codepipes.ting.customclasses.XAxisValueFormatter
+import com.codepipes.ting.custom.XAxisValueFormatter
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.Branch

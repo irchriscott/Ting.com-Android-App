@@ -97,16 +97,26 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
             if (mUtilFunctions.checkLocationPermissions()) {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val geocoder = Geocoder(activity, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    activity!!.runOnUiThread {
-                        mSearchAddressInput.setText(addresses[0].getAddressLine(0))
-                        signUpUserData["address"] = addresses[0].getAddressLine(0)
-                        signUpUserData["latitude"] = it.latitude.toString()
-                        signUpUserData["longitude"] = it.longitude.toString()
-                        signUpUserData["country"] = addresses[0].countryName
-                        signUpUserData["town"] = addresses[0].locality
-                        settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                    try {
+                        val geocoder = Geocoder(activity, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        activity!!.runOnUiThread {
+                            mSearchAddressInput.setText(addresses[0].getAddressLine(0))
+                            signUpUserData["address"] = addresses[0].getAddressLine(0)
+                            signUpUserData["latitude"] = it.latitude.toString()
+                            signUpUserData["longitude"] = it.longitude.toString()
+                            signUpUserData["country"] = addresses[0].countryName
+                            signUpUserData["town"] = addresses[0].locality
+                            settings.saveSettingToSharedPreferences("signup_data", gson.toJson(signUpUserData))
+                        }
+                    } catch (e: Exception) {
+                        activity!!.runOnUiThread {
+                            TingToast(
+                                context!!,
+                                "Geocoder Failed To Get Location",
+                                TingToastType.ERROR
+                            ).showToast(Toast.LENGTH_LONG)
+                        }
                     }
                 }.addOnFailureListener {
                     activity!!.runOnUiThread {

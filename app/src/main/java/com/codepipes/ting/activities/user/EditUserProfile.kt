@@ -26,19 +26,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.adapters.user.UserAddressAdapter
-import com.codepipes.ting.dialogs.messages.ErrorMessage
-import com.codepipes.ting.dialogs.messages.ProgressOverlay
-import com.codepipes.ting.dialogs.messages.TingToast
-import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.dialogs.user.add.AddUserAddress
 import com.codepipes.ting.dialogs.user.edit.EditUserEmailAddress
 import com.codepipes.ting.dialogs.user.edit.EditUserPassword
+import com.codepipes.ting.interfaces.SelectItemListener
 import com.codepipes.ting.models.ServerResponse
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 import com.coursion.freakycoder.mediapicker.galleries.Gallery
 import com.google.gson.Gson
@@ -55,7 +54,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
+    "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
+)
 class EditUserProfile : AppCompatActivity() {
 
     private lateinit var user: User
@@ -172,17 +173,23 @@ class EditUserProfile : AppCompatActivity() {
         mEditProfileUsernameInput.setText(user.username)
         mEditProfileGenderInput.setText(user.gender)
 
-        val genders = UtilData().genders
+        val genders = Constants().genders
 
         mEditProfileGenderInput.setOnClickListener {
-            val alertDialogBuilder = AlertDialog.Builder(this@EditUserProfile)
-            alertDialogBuilder.setTitle("Select Gender")
-            alertDialogBuilder.setItems(genders, DialogInterface.OnClickListener{ _, i ->
-                val selectedText = genders[i]
-                mEditProfileGenderInput.setText(selectedText) })
-            val alertDialog: AlertDialog = alertDialogBuilder.create()
-            alertDialog.show()
+            val selectDialog = SelectDialog()
+            val bundle = Bundle()
+            bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Select Gender")
+            selectDialog.arguments = bundle
+            selectDialog.setItems(genders.toList(), object : SelectItemListener {
+                override fun onSelectItem(position: Int) {
+                    val selectedText = genders[position]
+                    mEditProfileGenderInput.setText(selectedText)
+                    selectDialog.dismiss()
+                }
+            })
+            selectDialog.show(supportFragmentManager, selectDialog.tag)
         }
+
         mEditProfileGenderInput.setOnKeyListener(null)
 
         val calendar = Calendar.getInstance()

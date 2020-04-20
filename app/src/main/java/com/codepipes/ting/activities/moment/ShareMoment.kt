@@ -11,11 +11,14 @@ import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
+import com.codepipes.ting.dialogs.messages.TingToast
+import com.codepipes.ting.dialogs.messages.TingToastType
+import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.services.UploadMomentService
-import com.facebook.FacebookSdk
 import com.facebook.share.model.*
 import com.facebook.share.widget.ShareDialog
 import com.livefront.bridge.Bridge
@@ -24,12 +27,15 @@ import kotlinx.android.synthetic.main.activity_share_moment.*
 import java.io.File
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class ShareMoment : AppCompatActivity() {
 
     private var usePackage: Boolean = true
 
     private var fileType = 1
     private var filePath = ""
+
+    private lateinit var userPlacement: UserPlacement
 
     @SuppressLint("PrivateResource", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,12 +45,12 @@ class ShareMoment : AppCompatActivity() {
         Bridge.restoreInstanceState(this, savedInstanceState)
         savedInstanceState?.clear()
 
-        FacebookSdk.sdkInitialize(this@ShareMoment)
-
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.elevation = 0F
         supportActionBar!!.title = "Share Moment".toUpperCase()
+
+        userPlacement = UserPlacement(this@ShareMoment)
 
         try {
             val upArrow = ContextCompat.getDrawable(this@ShareMoment,
@@ -69,9 +75,19 @@ class ShareMoment : AppCompatActivity() {
             moment_image.visibility = View.GONE
             moment_video.setSource(filePath)
         }
+
+        val message = "At ${userPlacement.get()?.table?.branch?.restaurant?.name}, ${userPlacement.get()?.table?.branch?.name}"
+        moment_caption.setText(message)
+
+        share_facebook_feed.setOnCheckedChangeListener { _, isChecked -> if(isChecked) { shareWithFacebookFeed() } }
+        share_facebook_story.setOnCheckedChangeListener { _, isChecked -> if(isChecked) { shareWithFacebookStory() } }
+        share_instagram_story.setOnCheckedChangeListener { _, isChecked -> if(isChecked) { shareWithInstagramStory() } }
+        share_others.setOnCheckedChangeListener { _, isChecked -> if(isChecked) { shareWithOtherApps() } }
     }
 
     private fun shareWithFacebookFeed() {
+
+        val message = "At ${userPlacement.get()?.table?.branch?.restaurant?.name}, ${userPlacement.get()?.table?.branch?.name}"
 
         if(fileType == 1) {
             val image = BitmapFactory.decodeFile(filePath)
@@ -82,7 +98,6 @@ class ShareMoment : AppCompatActivity() {
 
             val sharePhotoContent = SharePhotoContent.Builder()
                 .addPhoto(sharePhoto)
-                .setContentUrl(Uri.parse(attributionLinkUrl))
                 .setShareHashtag(ShareHashtag.Builder()
                     .setHashtag("#TingDotCom #RestoMoment")
                     .build())
@@ -92,14 +107,13 @@ class ShareMoment : AppCompatActivity() {
 
         } else {
 
-            val videoUri = Uri.fromFile(File(filePath!!))
+            val videoUri = Uri.fromFile(File(filePath))
             val shareVideo = ShareVideo.Builder()
                 .setLocalUrl(videoUri)
                 .build()
 
             val shareVideoContent = ShareVideoContent.Builder()
                 .setVideo(shareVideo)
-                .setContentUrl(Uri.parse(attributionLinkUrl))
                 .setShareHashtag(ShareHashtag.Builder()
                     .setHashtag("#TingDotCom #RestoMoment")
                     .build())
@@ -112,90 +126,78 @@ class ShareMoment : AppCompatActivity() {
 
     private fun shareWithFacebookStory() {
 
-        if(usePackage) {
+        if (fileType == 1) {
+            val image = BitmapFactory.decodeFile(filePath)
 
-            if (fileType == 1) {
-                val image = BitmapFactory.decodeFile(filePath)
+            val sharePhoto = SharePhoto.Builder()
+                .setBitmap(image)
+                .build()
 
-                val sharePhoto = SharePhoto.Builder()
-                    .setBitmap(image)
-                    .build()
+            val sharePhotoContent = ShareStoryContent.Builder()
+                .setBackgroundAsset(sharePhoto)
+                .setContentUrl(Uri.parse("https://www.facebook.com/irchriscott/"))
+                .setBackgroundColorList(mutableListOf<String>("#908CED", "#B56FE8"))
+                .setShareHashtag(
+                    ShareHashtag.Builder()
+                        .setHashtag("#TingDotCom #RestoMoment")
+                        .build()
+                )
+                .build()
 
-                val sharePhotoContent = ShareStoryContent.Builder()
-                    .setBackgroundAsset(sharePhoto)
-                    .setContentUrl(Uri.parse(attributionLinkUrl))
-                    .setShareHashtag(
-                        ShareHashtag.Builder()
-                            .setHashtag("#TingDotCom #RestoMoment")
-                            .build()
-                    )
-                    .build()
+            ShareDialog.show(this@ShareMoment, sharePhotoContent)
 
-                ShareDialog.show(this@ShareMoment, sharePhotoContent)
-
-            } else {
-
-                val videoUri = Uri.fromFile(File(filePath!!))
-                val shareVideo = ShareVideo.Builder()
-                    .setLocalUrl(videoUri)
-                    .build()
-
-                val shareVideoContent = ShareStoryContent.Builder()
-                    .setBackgroundAsset(shareVideo)
-                    .setContentUrl(Uri.parse(attributionLinkUrl))
-                    .setShareHashtag(
-                        ShareHashtag.Builder()
-                            .setHashtag("#TingDotCom #RestoMoment")
-                            .build()
-                    )
-                    .build()
-
-                ShareDialog.show(this@ShareMoment, shareVideoContent)
-            }
         } else {
 
-            val backgroundAssetUri = Uri.fromFile(File(filePath))
-            val attributionLinkUrl = "https://ting.com/wb/usr/g/moments/"
+            val videoUri = Uri.fromFile(File(filePath))
+            val shareVideo = ShareVideo.Builder()
+                .setLocalUrl(videoUri)
+                .build()
 
-            val intent = Intent("com.instagram.share.ADD_TO_STORY")
+            val shareVideoContent = ShareStoryContent.Builder()
+                .setBackgroundAsset(shareVideo)
+                .setContentUrl(Uri.parse("https://www.facebook.com/irchriscott/"))
+                .setBackgroundColorList(mutableListOf<String>("#908CED", "#B56FE8"))
+                .setShareHashtag(
+                    ShareHashtag.Builder()
+                        .setHashtag("#TingDotCom #RestoMoment")
+                        .build()
+                )
+                .build()
 
-            intent.type = MEDIA_TYPE_JPEG
-            intent.putExtra("com.facebook.platform.extra.APPLICATION_ID", resources.getString(R.string.facebook_app_id))
-            intent.setDataAndType(backgroundAssetUri, MEDIA_TYPE_JPEG)
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            intent.putExtra("content_url", attributionLinkUrl)
-            intent.putExtra("top_background_color", "#908CED")
-            intent.putExtra("bottom_background_color", "#B56FE8")
-
-            if (packageManager.resolveActivity(intent, 0) != null) { startActivityForResult(intent, 0) }
+            ShareDialog.show(this@ShareMoment, shareVideoContent)
         }
     }
 
-    private fun shareWithInstagramFeed() {
+    private fun shareWithOtherApps() {
 
         val type = if(fileType == 1) { "image/*" } else { "video/*" }
+        val message = "At ${userPlacement.get()?.table?.branch?.restaurant?.name}, ${userPlacement.get()?.table?.branch?.name} #TingDotCom #RestoMoment"
 
         val share = Intent(Intent.ACTION_SEND)
         share.type = type
 
-        val uri = Uri.fromFile(File(filePath!!))
+        val uri = Uri.fromFile(File(filePath))
         share.putExtra(Intent.EXTRA_STREAM, uri)
+        share.putExtra(Intent.EXTRA_TEXT, message)
+        share.putExtra(Intent.EXTRA_TITLE, message)
+        share.putExtra(Intent.EXTRA_SUBJECT, message)
         startActivity(Intent.createChooser(share, "Share to"))
     }
 
     private fun shareWithInstagramStory() {
 
-        val backgroundAssetUri = Uri.fromFile(File(filePath!!))
+        val backgroundAssetUri = Uri.fromFile(File(filePath))
 
         val intent = Intent("com.instagram.share.ADD_TO_STORY")
 
         intent.setDataAndType(backgroundAssetUri, MEDIA_TYPE_JPEG)
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        intent.putExtra("content_url", attributionLinkUrl)
+        intent.putExtra("content_url", "https://www.instagram.com/ir_chris_scott/")
         intent.putExtra("top_background_color", "#908CED")
         intent.putExtra("bottom_background_color", "#B56FE8")
 
         if (packageManager.resolveActivity(intent, 0) != null) { startActivityForResult(intent, 0) }
+        else { TingToast(this@ShareMoment, "Please, Install Instagram to proceed", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -215,9 +217,9 @@ class ShareMoment : AppCompatActivity() {
                 uploadMomentService.putExtra(MOMENT_FILE_TYPE_KEY, fileType)
                 uploadMomentService.putExtra(MOMENT_FILE_PATH_KEY, filePath)
                 uploadMomentService.putExtra(MOMENT_CONTENT_TEXT_KEY, moment_caption.text.toString())
-                //startService(uploadMomentService)
-
-                shareWithFacebookFeed()
+                startService(uploadMomentService)
+                TingToast(this@ShareMoment, "Posting Moment...", TingToastType.DEFAULT).showToast(Toast.LENGTH_LONG)
+                onBackPressed()
             }
         }
         return false
@@ -251,11 +253,11 @@ class ShareMoment : AppCompatActivity() {
     }
 
     companion object {
-        private const val MEDIA_TYPE_JPEG = "image/jpeg"
-        private const val attributionLinkUrl = "https://ting.com/wb/usr/g/moments/"
+        private const val MEDIA_TYPE_JPEG           = "image/jpeg"
+        private const val attributionLinkUrl        = "https://ting.com/wb/usr/g/moments/"
 
-        public const val MOMENT_FILE_PATH_KEY = "file_path"
-        public const val MOMENT_CONTENT_TEXT_KEY = "content"
-        public const val MOMENT_FILE_TYPE_KEY = "file_type"
+        public const val MOMENT_FILE_PATH_KEY       = "file_path"
+        public const val MOMENT_CONTENT_TEXT_KEY    = "content"
+        public const val MOMENT_FILE_TYPE_KEY       = "file_type"
     }
 }

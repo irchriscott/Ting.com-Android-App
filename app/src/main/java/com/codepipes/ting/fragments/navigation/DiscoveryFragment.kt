@@ -1,8 +1,11 @@
 package com.codepipes.ting.fragments.navigation
 
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +14,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import com.codepipes.ting.*
 import com.codepipes.ting.activities.discovery.TodayPromotions
@@ -85,6 +90,8 @@ class DiscoveryFragment : Fragment() {
     private var country: String = ""
     private var town: String = ""
 
+    private lateinit var contextView: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Bridge.restoreInstanceState(this, savedInstanceState)
@@ -95,7 +102,9 @@ class DiscoveryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_discovery, container, false)
+        contextView = view
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
@@ -107,21 +116,29 @@ class DiscoveryFragment : Fragment() {
         country = session.country
         town = session.town
 
-        if(mUtilFunctions.checkLocationPermissions()){
+        if(ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener {
                     if(it != null){
-                        val geocoder = Geocoder(activity, Locale.getDefault())
-                        activity!!.runOnUiThread {
-                            try {
-                                val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                                country = addresses[0].countryName
-                                town = addresses[0].locality
-                            } catch (e: Exception) {}
-                        }
+                        try {
+                            val geocoder = Geocoder(activity, Locale.getDefault())
+                            activity!!.runOnUiThread {
+                                try {
+                                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                                    country = addresses[0].countryName
+                                    town = addresses[0].locality
+                                } catch (e: Exception) {}
+                            }
+                        } catch (e: Exception) {}
                     }
                 }
             } catch (e: Exception){ }
+        } else {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                UtilsFunctions.REQUEST_FINE_LOCATION
+            )
         }
 
         gson = Gson()
@@ -369,7 +386,7 @@ class DiscoveryFragment : Fragment() {
                                     }
                                 }
                                 hideIndicator(true)
-                                show()
+                                try { show() } catch (e: Exception){}
                             }
                             TingToast(
                                 context!!,
@@ -568,7 +585,7 @@ class DiscoveryFragment : Fragment() {
                             hideIndicator(true)
                             enableSnapping(true)
                             scaleOnScroll = false
-                            show()
+                            try { show() } catch (e: Exception){}
                         }
                     } catch (e: Exception) {
                         discoverMenusTimer.cancel()
@@ -741,6 +758,16 @@ class DiscoveryFragment : Fragment() {
         } catch (e: Exception) {}
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+            UtilsFunctions.REQUEST_FINE_LOCATION -> {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getDiscoverTopRestaurants(contextView)
+                }
+            }
+        }
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

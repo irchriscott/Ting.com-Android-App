@@ -44,7 +44,7 @@
                 wheel:layout_constraintStart_toStartOf="parent"
                 wheel:layout_constraintEnd_toEndOf="parent">
             
-                <com.codepipes.ting.customclasses.RoundedCornerImageView
+                <com.codepipes.ting.custom.RoundedCornerImageView
                         android:id="@+id/restaurant_image"
                         android:layout_width="95dp"
                         android:layout_height="95dp"
@@ -82,8 +82,8 @@
                             app:layout_constraintTop_toBottomOf="@id/restaurant_name"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintBottom_toBottomOf="@id/restaurant_name"
-                            style="@style/AppTheme.SmallRating"
-                            android:theme="@style/AppTheme.SmallRating"/>
+                            android:theme="@style/AppTheme.SmallRating"
+                            style="@style/AppTheme.Style.SmallRating" />
 
                     <ImageView
                             android:id="@+id/restaurant_address_pin"
@@ -291,7 +291,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.codepipes.ting.customclasses.ProgressWheel
+    <com.codepipes.ting.custom.ProgressWheel
             wheel:layout_constraintTop_toTopOf="parent"
             wheel:layout_constraintBottom_toBottomOf="parent"
             wheel:layout_constraintStart_toStartOf="parent"

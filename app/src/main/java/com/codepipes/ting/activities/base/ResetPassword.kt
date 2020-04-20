@@ -30,7 +30,7 @@ class ResetPassword : AppCompatActivity() {
     lateinit var mAppNameText: TextView
     lateinit var mAnimation: Animation
 
-    lateinit var mResetPasswordEmailInput: EditText
+    private lateinit var mResetPasswordEmailInput: EditText
     lateinit var mResetPasswordBtn: Button
 
     private val mProgressOverlay: ProgressOverlay =
@@ -70,10 +70,20 @@ class ResetPassword : AppCompatActivity() {
             if(!mResetPasswordEmailInput.text.isNullOrEmpty()){
                 mProgressOverlay.show(supportFragmentManager, mProgressOverlay.tag)
                 this.submitResetPassword()
-            } else { ErrorMessage(
-                this@ResetPassword,
-                "Enter Your Email Address"
-            ).show() }
+            } else {
+                val successOverlay = SuccessOverlay()
+                val bundle = Bundle()
+                bundle.putString("message", "Enter Your Email Address")
+                bundle.putString("type", "error")
+                successOverlay.arguments = bundle
+                successOverlay.show(supportFragmentManager, successOverlay.tag)
+                successOverlay.dismissListener(object :
+                    SuccessDialogCloseListener {
+                    override fun handleDialogClose(dialog: DialogInterface?) {
+                        successOverlay.dismiss()
+                    }
+                })
+            }
         }
     }
 
@@ -126,18 +136,36 @@ class ResetPassword : AppCompatActivity() {
                             }
                             successDialog.dismissListener(onDialogClosed)
 
-                        } else { ErrorMessage(
-                            this@ResetPassword,
-                            serverResponse.message
-                        ).show() }
+                        } else { 
+							val successOverlay = SuccessOverlay()
+							val bundle = Bundle()
+							bundle.putString("message", "Enter Your Email Address")
+							bundle.putString("type", "error")
+							successOverlay.arguments = bundle
+							successOverlay.show(supportFragmentManager, successOverlay.tag)
+							successOverlay.dismissListener(object :
+								SuccessDialogCloseListener {
+								override fun handleDialogClose(dialog: DialogInterface?) {
+									successOverlay.dismiss()
+								}
+							})
+						}
                     }
                 } catch (e: Exception){
                     runOnUiThread {
                         mProgressOverlay.dismiss()
-                        ErrorMessage(
-                            this@ResetPassword,
-                            "An Error Has Occurred"
-                        ).show()
+                        val successOverlay = SuccessOverlay()
+						val bundle = Bundle()
+						bundle.putString("message", "Enter Your Email Address")
+						bundle.putString("type", "error")
+						successOverlay.arguments = bundle
+						successOverlay.show(supportFragmentManager, successOverlay.tag)
+						successOverlay.dismissListener(object :
+							SuccessDialogCloseListener {
+							override fun handleDialogClose(dialog: DialogInterface?) {
+								successOverlay.dismiss()
+							}
+						})
                     }
                 }
             }

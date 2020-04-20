@@ -4,15 +4,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+        android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.codepipes.ting.customclasses.RoundedCornerImageView
+        <com.codepipes.ting.custom.RoundedCornerImageView
                 android:id="@+id/review_image"
                 android:background="@color/colorVeryLightGray"
                 android:layout_width="50dp"
@@ -53,8 +52,8 @@
                     app:layout_constraintTop_toBottomOf="@id/review_user_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/review_user_name"
-                    style="@style/AppTheme.SmallRating"
-                    android:theme="@style/AppTheme.SmallRating"/>
+                    android:theme="@style/AppTheme.Style.SmallRating"
+                    style="@style/AppTheme.SmallRating" />
 
             <TextView
                     android:id="@+id/review_comment"

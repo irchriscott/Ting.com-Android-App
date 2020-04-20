@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.*
 import androidx.annotation.RequiresApi
 import com.codepipes.ting.R
-import com.codepipes.ting.interfaces.OnFragmentTouched
+import com.codepipes.ting.interfaces.FragmentTouchedListener
 import com.livefront.bridge.Bridge
 import java.util.*
 import kotlin.math.hypot
@@ -18,7 +18,7 @@ import kotlin.math.hypot
 
 class CircularRevealingFragment : Fragment() {
 
-    internal var listener: OnFragmentTouched? = null
+    internal var listener: FragmentTouchedListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +63,8 @@ class CircularRevealingFragment : Fragment() {
 
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
-        if (activity is OnFragmentTouched) {
-            listener = activity as OnFragmentTouched
+        if (activity is FragmentTouchedListener) {
+            listener = activity as FragmentTouchedListener
         }
     }
 

@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-    <com.codepipes.ting.customclasses.RoundedCornerImageView
+    <com.codepipes.ting.custom.RoundedCornerImageView
             android:id="@+id/menu_image"
             android:layout_width="match_parent"
             android:layout_height="130dp"
@@ -31,12 +31,12 @@
 
     <RatingBar
             android:id="@+id/menu_rating"
-            style="@style/AppTheme.SmallRating"
             android:layout_width="81dp"
             android:layout_height="27dp"
             android:numStars="5"
             android:paddingTop="10dp"
-            android:theme="@style/AppTheme.SmallRating"
+            android:theme="@style/AppTheme.Style.SmallRating"
+            style="@style/AppTheme.SmallRating"
             app:layout_constraintBottom_toBottomOf="@id/menu_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/menu_name" />

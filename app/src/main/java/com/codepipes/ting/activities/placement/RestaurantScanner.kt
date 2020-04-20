@@ -19,7 +19,7 @@ import com.codepipes.ting.models.*
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.providers.UserPlacement
 import com.codepipes.ting.utils.Routes
-import com.codepipes.ting.utils.UtilData
+import com.codepipes.ting.utils.Constants
 import com.codepipes.ting.utils.UtilsFunctions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -43,10 +43,10 @@ import okhttp3.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RestaurantScanner : AppCompatActivity() {
 
     private lateinit var codeScanner: CodeScanner
-    private val CAMERA_REQUEST_PERMISSION = 10
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var hasScanned: Boolean = false
@@ -61,6 +61,8 @@ class RestaurantScanner : AppCompatActivity() {
 
     private lateinit var pubnubConfig: PNConfiguration
     private lateinit var pubnub: PubNub
+
+    private var hasShownToast: Boolean =  false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +82,8 @@ class RestaurantScanner : AppCompatActivity() {
         session = userAuthentication.get()!!
 
         pubnubConfig = PNConfiguration()
-        pubnubConfig.subscribeKey = UtilData.PUBNUB_SUBSCRIBE_KEY
-        pubnubConfig.publishKey = UtilData.PUBNUB_PUBLISH_KEY
+        pubnubConfig.subscribeKey = Constants.PUBNUB_SUBSCRIBE_KEY
+        pubnubConfig.publishKey = Constants.PUBNUB_PUBLISH_KEY
         pubnubConfig.isSecure = true
 
         pubnub = PubNub(pubnubConfig)
@@ -107,7 +109,7 @@ class RestaurantScanner : AppCompatActivity() {
                         if(ACTIVITY_ID == 1) {
                             val response = pnMessageResult.message.asJsonObject
                             when (response.get("type").asString) {
-                                UtilData.SOCKET_RESPONSE_RESTO_TABLE -> {
+                                Constants.SOCKET_RESPONSE_RESTO_TABLE -> {
                                     val dataObject = response.getAsJsonObject("data")
                                     if(dataObject != null) {
                                         userPlacement.setToken(dataObject.get("token").asString)
@@ -121,7 +123,7 @@ class RestaurantScanner : AppCompatActivity() {
                                         ).showToast(Toast.LENGTH_LONG)
                                     }
                                 }
-                                UtilData.SOCKET_RESPONSE_ERROR -> {
+                                Constants.SOCKET_RESPONSE_ERROR -> {
                                     progressOverlay.dismiss()
                                     codeScanner.startPreview()
                                     TingToast(
@@ -134,7 +136,7 @@ class RestaurantScanner : AppCompatActivity() {
                                         TingToastType.ERROR
                                     ).showToast(Toast.LENGTH_LONG)
                                 }
-                                UtilData.SOCKET_RESPONSE_PLACEMENT_DONE -> {
+                                Constants.SOCKET_RESPONSE_PLACEMENT_DONE -> {
                                     progressOverlay.dismiss()
                                     userPlacement.placeOut()
                                     codeScanner.startPreview()
@@ -180,19 +182,19 @@ class RestaurantScanner : AppCompatActivity() {
         codeScanner.isAutoFocusEnabled = true
         codeScanner.isFlashEnabled = false
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (ContextCompat.checkSelfPermission(
-                    this@RestaurantScanner,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                codeScanner.decodeCallback = DecodeCallback { result ->
-                    handleQRCodeScan(result)
-                }
-                codeScanner.errorCallback = ErrorCallback {
-                    runOnUiThread {
-                        codeScanner.startPreview()
+        if (ContextCompat.checkSelfPermission(
+                this@RestaurantScanner,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            codeScanner.decodeCallback = DecodeCallback { result ->
+                handleQRCodeScan(result)
+            }
+            codeScanner.errorCallback = ErrorCallback {
+                runOnUiThread {
+                    codeScanner.startPreview()
+                    if(!hasShownToast) {
+                        hasShownToast = true
                         TingToast(
                             this@RestaurantScanner,
                             it.message!!,
@@ -200,12 +202,12 @@ class RestaurantScanner : AppCompatActivity() {
                         ).showToast(Toast.LENGTH_LONG)
                     }
                 }
-            } else {
-                ActivityCompat.requestPermissions(this@RestaurantScanner,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    CAMERA_REQUEST_PERMISSION
-                )
             }
+        } else {
+            ActivityCompat.requestPermissions(this@RestaurantScanner,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_REQUEST_PERMISSION
+            )
         }
 
         scanner_view.setOnClickListener { codeScanner.startPreview() }
@@ -283,7 +285,7 @@ class RestaurantScanner : AppCompatActivity() {
                                                         val receiver = SocketUser(table.branch.id, 1, "${table.branch.restaurant.name}, ${table.branch.name}", table.branch.email, table.branch.restaurant.logo, table.branch.channel)
                                                         val args = mapOf<String, String?>("table" to table.id.toString(), "token" to userPlacement.getTempToken())
                                                         val data = mapOf<String, String>("table" to table.number)
-                                                        val message = SocketResponseMessage(pubnubConfig.uuid, UtilData.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, 200, null, args, data)
+                                                        val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, 200, null, args, data)
                                                         pubnub.publish().channel(table.branch.channel).message(Gson().toJson(message))
                                                             .async { _, status ->
                                                                 if (status.isError || status.statusCode != 200) {
@@ -385,6 +387,7 @@ class RestaurantScanner : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == CAMERA_REQUEST_PERMISSION) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
                 codeScanner.startPreview()
                 codeScanner.decodeCallback = DecodeCallback { result ->
                     handleQRCodeScan(result)
@@ -419,11 +422,15 @@ class RestaurantScanner : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         ACTIVITY_ID = 1
-        codeScanner.startPreview()
+        try {
+            codeScanner.startPreview()
+        } catch (e: java.lang.Exception) {}
     }
 
     override fun onPause() {
-        codeScanner.releaseResources()
+        try {
+            codeScanner.releaseResources()
+        } catch (e: java.lang.Exception) {}
         ACTIVITY_ID = 0
         super.onPause()
     }
@@ -435,5 +442,6 @@ class RestaurantScanner : AppCompatActivity() {
 
     companion object {
         public var ACTIVITY_ID = 0
+        private const val CAMERA_REQUEST_PERMISSION = 2
     }
 }

@@ -27,6 +27,7 @@ import com.pusher.pushnotifications.PushNotifications
 import kotlin.system.exitProcess
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class TingDotCom : AppCompatActivity() {
 
     private lateinit var mAppNameText: TextView
@@ -68,6 +69,15 @@ class TingDotCom : AppCompatActivity() {
         mNavigation = findViewById<BottomNavigationView>(R.id.navigation) as BottomNavigationView
 
         mToolbar.inflateMenu(R.menu.toolbar_menu)
+        mToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.toolbar_menu_search -> {
+                    startActivity(Intent(this@TingDotCom, LiveSearch::class.java))
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            return@setOnMenuItemClickListener false
+        }
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         changeFragment(DiscoveryFragment())
 

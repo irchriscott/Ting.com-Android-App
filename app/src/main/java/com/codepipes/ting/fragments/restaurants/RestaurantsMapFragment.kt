@@ -22,8 +22,8 @@ import android.widget.Toast
 import com.caverock.androidsvg.SVG
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.restaurant.RestaurantProfile
-import com.codepipes.ting.customclasses.ProgressWheel
-import com.codepipes.ting.customclasses.RestaurantInfoWindowMap
+import com.codepipes.ting.custom.ProgressWheel
+import com.codepipes.ting.custom.RestaurantInfoWindowMap
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.interfaces.RetrofitGoogleMapsRoute

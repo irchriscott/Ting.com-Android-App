@@ -20,8 +20,8 @@ import com.codepipes.ting.activities.restaurant.RestaurantProfile
 import com.codepipes.ting.adapters.menu.MenuFoodsAdapter
 import com.codepipes.ting.adapters.menu.MenuReviewsAdapter
 import com.codepipes.ting.adapters.promotion.PromotionRestaurantMenuAdapter
-import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.customclasses.XAxisValueFormatter
+import com.codepipes.ting.custom.ActionSheet
+import com.codepipes.ting.custom.XAxisValueFormatter
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.menu.MenuReviewsBottomSheetFragment
@@ -57,6 +57,7 @@ import java.text.NumberFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
     private lateinit var menu: RestaurantMenu

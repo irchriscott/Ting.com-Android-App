@@ -1,7 +1,5 @@
 package com.codepipes.ting.adapters.user
 
-import com.codepipes.ting.customclasses.ActionSheet
-import com.codepipes.ting.interfaces.ActionSheetCallBack
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle

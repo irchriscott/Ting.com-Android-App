@@ -12,7 +12,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import com.codepipes.ting.R
 import com.codepipes.ting.providers.UserAuthentication
-
+import com.livefront.bridge.Bridge
 
 
 class SplashScreen : AppCompatActivity() {
@@ -35,6 +35,9 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         userAuthentication = UserAuthentication(this@SplashScreen)
 
         mAppNameText = findViewById<TextView>(R.id.appNameText) as TextView
@@ -51,8 +54,6 @@ class SplashScreen : AppCompatActivity() {
 
         handler = Handler()
         handler?.postDelayed(runnable, 3000)
-
-
     }
 
     override fun onDestroy() {
