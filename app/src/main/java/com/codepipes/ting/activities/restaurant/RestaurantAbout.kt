@@ -11,10 +11,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.base.LiveSearch
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.User
 import com.codepipes.ting.providers.LocalData
@@ -216,6 +219,25 @@ class RestaurantAbout : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.toolbar_menu_search -> {
+                startActivity(Intent(this@RestaurantAbout, LiveSearch::class.java))
+                return true
+            }
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

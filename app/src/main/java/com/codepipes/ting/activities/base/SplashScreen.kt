@@ -1,6 +1,7 @@
 package com.codepipes.ting.activities.base
 
 import android.content.Intent
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,8 +12,14 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import com.codepipes.ting.R
+import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
+import com.codepipes.ting.utils.UtilsFunctions
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.livefront.bridge.Bridge
+import java.lang.Exception
+import java.util.*
 
 
 class SplashScreen : AppCompatActivity() {
@@ -23,6 +30,12 @@ class SplashScreen : AppCompatActivity() {
     lateinit var userAuthentication: UserAuthentication
 
     private var handler: Handler? = null
+
+    private lateinit var localData: LocalData
+    private lateinit var utilsFunctions: UtilsFunctions
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private val runnable: Runnable = Runnable {
         if(userAuthentication.isLoggedIn()){
             startActivity(Intent(this@SplashScreen, TingDotCom::class.java))
@@ -52,8 +65,28 @@ class SplashScreen : AppCompatActivity() {
         )
         mAppNameText.startAnimation(mAnimation)
 
+        utilsFunctions = UtilsFunctions(this@SplashScreen)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this@SplashScreen)
+
+        if(utilsFunctions.checkLocationPermissions()) { getCurrentLocation() }
+
         handler = Handler()
         handler?.postDelayed(runnable, 3000)
+    }
+
+    private fun getCurrentLocation() {
+        try {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                if(it != null) {
+                    try {
+                        val geocoder = Geocoder(this@SplashScreen, Locale.getDefault())
+                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        localData.saveUserCountry(addresses[0].countryName)
+                        localData.saveUserTown(addresses[0].locality)
+                    } catch (e: Exception) { }
+                }
+            }.addOnFailureListener {}
+        } catch (e: Exception){ }
     }
 
     override fun onDestroy() {

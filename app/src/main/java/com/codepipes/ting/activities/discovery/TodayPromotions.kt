@@ -1,15 +1,19 @@
 package com.codepipes.ting.activities.discovery
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.base.LiveSearch
 import com.codepipes.ting.adapters.promotion.TodayPromotionAdapter
 import com.codepipes.ting.models.MenuPromotion
 import com.codepipes.ting.models.User
@@ -133,6 +137,25 @@ class TodayPromotions : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.toolbar_menu_search -> {
+                startActivity(Intent(this@TodayPromotions, LiveSearch::class.java))
+                return true
+            }
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

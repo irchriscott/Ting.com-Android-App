@@ -1,16 +1,20 @@
 package com.codepipes.ting.activities.discovery
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.base.LiveSearch
 import com.codepipes.ting.fragments.cuisine.CuisineMenusFragment
 import com.codepipes.ting.fragments.cuisine.CuisineRestaurantsFragment
 import com.codepipes.ting.models.RestaurantCategory
@@ -81,6 +85,25 @@ class Cuisine : AppCompatActivity() {
             this.fragments.add(fragment)
             this.fragmentsTitle.add(title)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.toolbar_menu_search -> {
+                startActivity(Intent(this@Cuisine, LiveSearch::class.java))
+                return true
+            }
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

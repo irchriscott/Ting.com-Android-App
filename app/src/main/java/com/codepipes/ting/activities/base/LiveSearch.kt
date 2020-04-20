@@ -2,6 +2,8 @@ package com.codepipes.ting.activities.base
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.location.Geocoder
@@ -10,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,6 +25,7 @@ import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.models.SearchResult
 import com.codepipes.ting.models.User
+import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.Routes
@@ -62,6 +67,8 @@ class LiveSearch : AppCompatActivity() {
     private val disposable = CompositeDisposable()
     private val publishSubject = PublishSubject.create<String>()
 
+    private lateinit var mLocalData: LocalData
+
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,24 +94,16 @@ class LiveSearch : AppCompatActivity() {
 
         input_search.requestFocus()
 
+        mLocalData = LocalData(this@LiveSearch)
         utilsFunctions = UtilsFunctions(this@LiveSearch)
 
         userAuthentication = UserAuthentication(this@LiveSearch)
         session = userAuthentication.get()!!
 
-        country = session.country
-        town = session.town
+        country = mLocalData.getUserCountry() ?: session.country
+        town = mLocalData.getUserTown() ?: session.town
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this@LiveSearch)
-
-        if(utilsFunctions.checkLocationPermissions()) { getCurrentLocation() }
-        else {
-            ActivityCompat.requestPermissions(
-                this@LiveSearch,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_FINE_LOCATION
-            )
-        }
 
         val searchResultObserver = object : DisposableObserver<List<SearchResult>>() {
 
@@ -172,53 +171,19 @@ class LiveSearch : AppCompatActivity() {
                 .subscribeWith(searchMenusWatcher))
 
         disposable.add(searchResultObserver)
-    }
 
-    private fun getCurrentLocation() {
-        try {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if(it != null) {
-                    try {
-                        val geocoder = Geocoder(this@LiveSearch, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        country = addresses[0].countryName
-                        town = addresses[0].locality
-                    } catch (e: Exception) { }
-                } else {
-                    runOnUiThread {
-                        TingToast(
-                            this@LiveSearch,
-                            "Please, Try Again",
-                            TingToastType.ERROR
-                        ).showToast(Toast.LENGTH_LONG)
-                    }
-                }
-            }.addOnFailureListener {
-                runOnUiThread {
-                    TingToast(
-                        this@LiveSearch,
-                        it.message!!,
-                        TingToastType.ERROR
-                    ).showToast(Toast.LENGTH_LONG)
+        input_search.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if(input_search.text.isNotBlank() && input_search.text.isNotEmpty() && !input_search.text.isNullOrBlank()) {
+                    val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputManager.hideSoftInputFromWindow(input_search.windowToken, 0)
+                    val intent = Intent(this@LiveSearch, SearchResults::class.java)
+                    intent.putExtra("query", input_search.text.toString())
+                    startActivity(intent)
+                    return@setOnEditorActionListener true
                 }
             }
-        } catch (e: Exception){
-            TingToast(
-                this@LiveSearch,
-                e.message!!,
-                TingToastType.ERROR
-            ).showToast(Toast.LENGTH_LONG)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode) {
-            REQUEST_FINE_LOCATION -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation()
-                }
-            }
+            return@setOnEditorActionListener false
         }
     }
 
@@ -234,6 +199,8 @@ class LiveSearch : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         input_search.requestFocus()
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.showSoftInputFromInputMethod(input_search.windowToken, 0)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -1,17 +1,21 @@
 package com.codepipes.ting.activities.restaurant
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.View
 import androidx.core.widget.NestedScrollView
 import com.codepipes.ting.R
+import com.codepipes.ting.activities.base.LiveSearch
 import com.codepipes.ting.adapters.restaurant.RestaurantLikesAdapter
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.User
@@ -194,6 +198,25 @@ class RestaurantLikes : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+            R.id.toolbar_menu_search -> {
+                startActivity(Intent(this@RestaurantLikes, LiveSearch::class.java))
+                return true
+            }
+        }
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

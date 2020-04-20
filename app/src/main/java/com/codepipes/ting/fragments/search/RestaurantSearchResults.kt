@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.livefront.bridge.Bridge
 import kotlinx.android.synthetic.main.fragment_restaurant_search_results.view.*
 import kotlinx.android.synthetic.main.include_empty_data.view.*
 import okhttp3.Interceptor
@@ -59,6 +60,10 @@ class RestaurantSearchResults : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         val view = inflater.inflate(R.layout.fragment_restaurant_search_results, container, false)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
@@ -70,17 +75,8 @@ class RestaurantSearchResults : Fragment() {
         cuisineRestaurantsTimer = Timer()
 
         query = arguments?.getString("query") ?: ""
-        country = session.country
-        town = session.town
-
-        if(mUtilFunctions.checkLocationPermissions()) { getCurrentLocation() }
-        else {
-            ActivityCompat.requestPermissions(
-                activity!!,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_FINE_LOCATION
-            )
-        }
+        country = mLocalData.getUserCountry() ?: session.country
+        town = mLocalData.getUserTown() ?: session.town
 
         view.shimmer_loader.startShimmer()
         cuisineRestaurantsTimer.scheduleAtFixedRate(object : TimerTask() {
@@ -95,43 +91,6 @@ class RestaurantSearchResults : Fragment() {
         }
 
         return view
-    }
-
-    private fun getCurrentLocation() {
-        try {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if(it != null) {
-                    try {
-                        val geocoder = Geocoder(context!!, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        country = addresses[0].countryName
-                        town = addresses[0].locality
-                    } catch (e: Exception) { }
-                } else {
-                    activity?.runOnUiThread {
-                        TingToast(
-                            context!!,
-                            "Please, Try Again",
-                            TingToastType.ERROR
-                        ).showToast(Toast.LENGTH_LONG)
-                    }
-                }
-            }.addOnFailureListener {
-                activity?.runOnUiThread {
-                    TingToast(
-                        context!!,
-                        it.message!!,
-                        TingToastType.ERROR
-                    ).showToast(Toast.LENGTH_LONG)
-                }
-            }
-        } catch (e: Exception){
-            TingToast(
-                context!!,
-                e.message!!,
-                TingToastType.ERROR
-            ).showToast(Toast.LENGTH_LONG)
-        }
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
@@ -328,6 +287,33 @@ class RestaurantSearchResults : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Bridge.saveInstanceState(this, outState)
+        outState.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
     }
 
     companion object {

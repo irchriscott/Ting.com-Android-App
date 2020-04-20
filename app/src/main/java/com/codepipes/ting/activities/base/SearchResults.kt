@@ -1,11 +1,15 @@
 package com.codepipes.ting.activities.base
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -44,7 +48,10 @@ class SearchResults : AppCompatActivity() {
         } catch (e: java.lang.Exception) {}
 
         val query = intent?.getStringExtra("query")
-        input_search.setText(query)
+        input_search_else.setText(query)
+
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(input_search_else.windowToken, 0)
 
         val adapter = SearchResultsViewPagerAdapter(
             supportFragmentManager
@@ -54,6 +61,8 @@ class SearchResults : AppCompatActivity() {
 
         result_viewpager.adapter = adapter
         result_tabs.setupWithViewPager(result_viewpager)
+
+        input_search_else.setOnClickListener { onBackPressed() }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -80,6 +89,8 @@ class SearchResults : AppCompatActivity() {
             this.fragments.add(fragment)
             this.fragmentsTitle.add(title)
         }
+
+        public fun updateFragment(fragment: Fragment, item: Int) {}
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -98,5 +109,11 @@ class SearchResults : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Bridge.clear(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(input_search_else.windowToken, 0)
     }
 }

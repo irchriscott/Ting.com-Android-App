@@ -137,6 +137,7 @@ class RestaurantDishesFragment : Fragment() {
                     if(view.dishes_recycler_view.visibility != View.VISIBLE) {
                         view.dishes_recycler_view.visibility = View.GONE
                         view.progress_loader.visibility = View.GONE
+                        view.shimmer_loader.visibility = View.GONE
                         view.empty_data.visibility = View.VISIBLE
 
                         view.empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)

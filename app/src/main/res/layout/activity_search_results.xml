@@ -16,7 +16,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-                android:id="@+id/input_search"
+                android:id="@+id/input_search_else"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:textSize="14sp"
@@ -24,12 +24,15 @@
                 android:fontFamily="@font/poppins_regular"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:inputType="text"
+                android:inputType="none"
                 android:background="@drawable/background_labeled_button"
                 android:textColor="@color/colorGray"
                 android:textColorHint="@color/colorLightGray"
                 android:drawableStart="@drawable/ic_search_small"
                 android:drawablePadding="8dp"
+                android:imeActionLabel="Search"
+                android:imeOptions="actionSearch"
+                android:focusable="false"
                 tools:ignore="Autofill,HardcodedText" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -39,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
+            android:background="@color/colorWhite"
             app:tabIndicatorColor="@color/colorPrimary"
             app:tabSelectedTextColor="@color/colorPrimary"
             app:tabTextColor="@color/colorPrimary"
@@ -52,9 +56,10 @@
             android:id="@+id/result_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="84dp"
+            android:layout_marginTop="104dp"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
+            android:background="@color/colorWhite"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

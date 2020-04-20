@@ -118,27 +118,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
 
-        country = session.country
-        town = session.town
-
-        if(mUtilFunctions.checkLocationPermissions()){
-            try {
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    if(it != null){
-                        try {
-                            val geocoder = Geocoder(activity, Locale.getDefault())
-                            activity.runOnUiThread {
-                                try {
-                                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                                    country = addresses[0].countryName
-                                    town = addresses[0].locality
-                                } catch (e: Exception) {}
-                            }
-                        } catch (e: Exception){}
-                    }
-                }
-            } catch (e: Exception){ }
-        }
+        country = mLocalData.getUserCountry() ?: session.country
+        town = mLocalData.getUserTown() ?: session.town
 
         this.getFilters()
         this.getRestaurants()

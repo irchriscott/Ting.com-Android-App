@@ -19,24 +19,6 @@ class LocalData (
 
     val gson = Gson()
 
-    private val RESTAURANTS_SHARED_PREFERENCES_KEY = "restaurants"
-    private val PROMOTIONS_SHARED_PREFERENCES_KEY = "promotions_"
-    private val FOODS_SHARED_PREFERENCES_KEY = "foods_"
-    private val DRINKS_SHARED_PREFERENCES_KEY = "drinks_"
-    private val DISHES_SHARED_PREFERENCES_KEY = "dishes_"
-
-    private val USERS_SHARED_PREFERENCES_KEY = "users"
-    private val CUISINES_SHARED_PREFERENCES_KEY = "cuisines"
-    private val FILTERS_SHARED_PREFERENCES_KEY = "filters"
-    private val PARAMS_FILTERS_SHARED_PREFERENCES_KEY = "params_filters"
-
-    private val DEFAULT_PARAMS = "{'${RestaurantsFragment.AVAILABILITY_KEY}': [], " +
-                                        "'${RestaurantsFragment.CUISINES_KEY}': [], " +
-                                        "'${RestaurantsFragment.SERVICES_KEY}': [], " +
-                                        "'${RestaurantsFragment.SPECIALS_KEY}': [], " +
-                                        "'${RestaurantsFragment.TYPES_KEY}': [], " +
-                                        "'${RestaurantsFragment.RATINGS_KEY}': []}"
-
     public fun saveRestaurants(data: String){
         this.sharedPreferencesEditor.putString(RESTAURANTS_SHARED_PREFERENCES_KEY, data)
         this.sharedPreferencesEditor.apply()
@@ -188,5 +170,43 @@ class LocalData (
     public fun getParametersFilters() : FiltersParameters {
         val filtersString = this.sharedPreferences.getString(PARAMS_FILTERS_SHARED_PREFERENCES_KEY, DEFAULT_PARAMS)
         return gson.fromJson(filtersString, FiltersParameters::class.java)
+    }
+
+    public fun saveUserCountry(data: String?) {
+        this.sharedPreferencesEditor.putString(USER_COUNTRY_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun saveUserTown(data: String?) {
+        this.sharedPreferencesEditor.putString(USER_TOWN_KEY, data)
+        this.sharedPreferencesEditor.apply()
+        this.sharedPreferencesEditor.commit()
+    }
+
+    public fun getUserCountry() : String? = this.sharedPreferences.getString(USER_COUNTRY_KEY, null)
+    public fun getUserTown() : String? = this.sharedPreferences.getString(USER_TOWN_KEY, null)
+
+    companion object {
+        private const val RESTAURANTS_SHARED_PREFERENCES_KEY = "restaurants"
+        private const val PROMOTIONS_SHARED_PREFERENCES_KEY = "promotions_"
+        private const val FOODS_SHARED_PREFERENCES_KEY = "foods_"
+        private const val DRINKS_SHARED_PREFERENCES_KEY = "drinks_"
+        private const val DISHES_SHARED_PREFERENCES_KEY = "dishes_"
+
+        private const val USERS_SHARED_PREFERENCES_KEY = "users"
+        private const val CUISINES_SHARED_PREFERENCES_KEY = "cuisines"
+        private const val FILTERS_SHARED_PREFERENCES_KEY = "filters"
+        private const val PARAMS_FILTERS_SHARED_PREFERENCES_KEY = "params_filters"
+
+        private const val DEFAULT_PARAMS = "{'${RestaurantsFragment.AVAILABILITY_KEY}': [], " +
+                "'${RestaurantsFragment.CUISINES_KEY}': [], " +
+                "'${RestaurantsFragment.SERVICES_KEY}': [], " +
+                "'${RestaurantsFragment.SPECIALS_KEY}': [], " +
+                "'${RestaurantsFragment.TYPES_KEY}': [], " +
+                "'${RestaurantsFragment.RATINGS_KEY}': []}"
+
+        private const val USER_COUNTRY_KEY = "user_country"
+        private const val USER_TOWN_KEY = "user_town"
     }
 }

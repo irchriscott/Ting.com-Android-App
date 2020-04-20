@@ -55,7 +55,8 @@
                     app:layout_constraintTop_toBottomOf="@id/review_user_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/review_user_name"
-                    style="@style/AppTheme.SmallRating" />
+                    style="@style/AppTheme.SmallRating"
+                    android:theme="@style/AppTheme.Style.SmallRating"/>
 
             <TextView
                     android:id="@+id/review_comment"

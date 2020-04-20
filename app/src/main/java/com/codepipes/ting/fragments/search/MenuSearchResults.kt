@@ -65,6 +65,9 @@ class MenuSearchResults : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        Bridge.restoreInstanceState(this, savedInstanceState)
+        savedInstanceState?.clear()
+
         val view = inflater.inflate(R.layout.fragment_menu_search_results, container, false)
 
         mUtilFunctions = UtilsFunctions(context!!)
@@ -77,17 +80,8 @@ class MenuSearchResults : Fragment() {
         session = userAuthentication.get()!!
 
         query = arguments?.getString("query") ?: ""
-        country = session.country
-        town = session.town
-
-        if(mUtilFunctions.checkLocationPermissions()) { getCurrentLocation() }
-        else {
-            ActivityCompat.requestPermissions(
-                activity!!,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_FINE_LOCATION
-            )
-        }
+        country = mLocalData.getUserCountry() ?: session.country
+        town = mLocalData.getUserTown() ?: session.town
 
         view.shimmer_loader.startShimmer()
         menusTimer.scheduleAtFixedRate(object : TimerTask() {
@@ -224,54 +218,6 @@ class MenuSearchResults : Fragment() {
 
                     view.empty_data.empty_image.setImageResource(R.drawable.ic_search)
                     view.empty_data.empty_text.text = "No Menu To Show"
-                }
-            }
-        }
-    }
-
-    private fun getCurrentLocation() {
-        try {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if(it != null) {
-                    try {
-                        val geocoder = Geocoder(context!!, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        country = addresses[0].countryName
-                        town = addresses[0].locality
-                    } catch (e: Exception) { }
-                } else {
-                    activity?.runOnUiThread {
-                        TingToast(
-                            context!!,
-                            "Please, Try Again",
-                            TingToastType.ERROR
-                        ).showToast(Toast.LENGTH_LONG)
-                    }
-                }
-            }.addOnFailureListener {
-                activity?.runOnUiThread {
-                    TingToast(
-                        context!!,
-                        it.message!!,
-                        TingToastType.ERROR
-                    ).showToast(Toast.LENGTH_LONG)
-                }
-            }
-        } catch (e: Exception){
-            TingToast(
-                context!!,
-                e.message!!,
-                TingToastType.ERROR
-            ).showToast(Toast.LENGTH_LONG)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode) {
-            REQUEST_FINE_LOCATION -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation()
                 }
             }
         }
