@@ -2,9 +2,11 @@ package com.codepipes.ting.activities.base
 
 import android.content.Intent
 import android.location.Geocoder
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -15,8 +17,7 @@ import com.codepipes.ting.R
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.UserAuthentication
 import com.codepipes.ting.utils.UtilsFunctions
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.livefront.bridge.Bridge
 import java.lang.Exception
 import java.util.*
@@ -44,6 +45,9 @@ class SplashScreen : AppCompatActivity() {
         }
     }
 
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -65,32 +69,51 @@ class SplashScreen : AppCompatActivity() {
         )
         mAppNameText.startAnimation(mAnimation)
 
+        locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = UPDATE_INTERVAL
+        locationRequest.fastestInterval = FASTEST_INTERVAL
+
         utilsFunctions = UtilsFunctions(this@SplashScreen)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this@SplashScreen)
 
-        if(utilsFunctions.checkLocationPermissions()) { getCurrentLocation() }
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                if(locationResult != null) {
+                    locationResult ?: return
+                    for (location in locationResult.locations){ getCurrentLocation(location) }
+                }
+            }
+        }
+
+        if(utilsFunctions.checkLocationPermissions()) { startLocationUpdates() }
 
         handler = Handler()
         handler?.postDelayed(runnable, 3000)
     }
 
-    private fun getCurrentLocation() {
+    private fun startLocationUpdates() {
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+    }
+
+    private fun getCurrentLocation(location: Location) {
         try {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if(it != null) {
-                    try {
-                        val geocoder = Geocoder(this@SplashScreen, Locale.getDefault())
-                        val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                        localData.saveUserCountry(addresses[0].countryName)
-                        localData.saveUserTown(addresses[0].locality)
-                    } catch (e: Exception) { }
-                }
-            }.addOnFailureListener {}
+            val geocoder = Geocoder(this@SplashScreen, Locale.getDefault())
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            localData.saveUserCountry(addresses[0].countryName)
+            localData.saveUserTown(addresses[0].locality)
         } catch (e: Exception){ }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         handler?.removeCallbacks(runnable)
+    }
+
+    companion object {
+        private const val UPDATE_INTERVAL = (60 * 60 * 1000).toLong()
+        private const val FASTEST_INTERVAL = (30 * 60 * 1000).toLong()
     }
 }

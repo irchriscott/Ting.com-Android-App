@@ -347,6 +347,7 @@
                                     android:textSize="14sp"
                                     android:textColorHint="@color/colorVeryLightGray"
                                     android:inputType="text"
+                                    android:imeOptions="actionSearch"
                                     tools:ignore="HardcodedText" />
 
                         </LinearLayout>

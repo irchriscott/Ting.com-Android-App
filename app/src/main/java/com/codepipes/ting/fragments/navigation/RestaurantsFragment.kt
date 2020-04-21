@@ -10,8 +10,11 @@ import com.codepipes.ting.R
 import com.codepipes.ting.fragments.restaurants.RestaurantsMapFragment
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.location.Geocoder
 import android.os.Build
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,14 +22,17 @@ import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.adapters.cuisine.CuisinesAdapter
 import com.codepipes.ting.adapters.restaurant.GlobalRestaurantAdapter
 import com.codepipes.ting.custom.ActionSheet
+import com.codepipes.ting.dialogs.messages.ConfirmDialog
 import com.codepipes.ting.dialogs.messages.ProgressOverlay
 import com.codepipes.ting.dialogs.messages.TingToast
 import com.codepipes.ting.dialogs.messages.TingToastType
 import com.codepipes.ting.fragments.restaurants.RestaurantFiltersFragment
 import com.codepipes.ting.interfaces.ActionSheetCallBack
+import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.interfaces.FilterRestaurantsClickListener
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantCategory
@@ -88,8 +94,6 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var cuisinesTimer: Timer
     private lateinit var restaurantsTimer: Timer
     private lateinit var filteredRestaurantTimer: Timer
-
-    private val TIMER_PERIOD = 10000.toLong()
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
@@ -275,20 +279,34 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         view.filter_restaurant_button.setOnLongClickListener {
-            val actionSheet = ActionSheet(context!!, mutableListOf("Reset All Filters"))
-                .setTitle("Reset Filters")
-                .setColorData(activity.resources.getColor(R.color.colorGray))
-                .setColorTitleCancel(activity.resources.getColor(R.color.colorGoogleRedTwo))
-                .setColorSelected(activity.resources.getColor(R.color.colorPrimary))
-                .setCancelTitle("Cancel")
 
-            actionSheet.create(object : ActionSheetCallBack {
-                override fun data(data: String, position: Int) {
-                    activity.runOnUiThread { mLocalData.saveParametersFilters(null) }
+            val confirmDialog = ConfirmDialog()
+            val bundle = Bundle()
+            bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Reset All Filters")
+            bundle.putString(CurrentRestaurant.CONFIRM_MESSAGE_KEY, "Do you really want to reset all filters ?")
+            confirmDialog.arguments = bundle
+            confirmDialog.show(fragmentManager!!, confirmDialog.tag)
+            confirmDialog.onDialogListener(object : ConfirmDialogListener {
+                override fun onAccept() { activity.runOnUiThread {
+                    mLocalData.saveParametersFilters(null)
+                    confirmDialog.dismiss()
+                    TingToast(context!!, "Filters Reset Successfully", TingToastType.SUCCESS).showToast(Toast.LENGTH_LONG)}
                 }
+                override fun onCancel() { confirmDialog.dismiss() }
             })
 
             return@setOnLongClickListener true
+        }
+
+        view.search_restaurant_input.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if(view.search_restaurant_input.text.isNotBlank() && view.search_restaurant_input.text.isNotEmpty() && !view.search_restaurant_input.text.isNullOrBlank()) {
+                    val inputManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputManager.hideSoftInputFromWindow(view.search_restaurant_input.windowToken, 0)
+                    return@setOnEditorActionListener true
+                }
+            }
+            return@setOnEditorActionListener false
         }
 
         return view
@@ -781,5 +799,6 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         public const val SPECIALS_KEY         = "specials"
         public const val TYPES_KEY            = "types"
         public const val RATINGS_KEY          = "ratings"
+        private const val TIMER_PERIOD        = 10000.toLong()
     }
 }
