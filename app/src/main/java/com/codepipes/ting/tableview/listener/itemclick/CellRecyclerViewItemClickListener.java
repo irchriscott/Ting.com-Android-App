@@ -82,26 +82,28 @@ public class CellRecyclerViewItemClickListener extends AbstractItemClickListener
         View childView = mCellRecyclerView.findChildViewUnder(e.getX(), e.getY());
 
         if (childView != null) {
-            // Find the view holder
-            AbstractViewHolder holder = (AbstractViewHolder) mRecyclerView.getChildViewHolder
-                    (childView);
+            try {
+                // Find the view holder
+                AbstractViewHolder holder = (AbstractViewHolder) mRecyclerView.getChildViewHolder
+                        (childView);
 
-            // Get y position from adapter
-            CellRowRecyclerViewAdapter adapter = (CellRowRecyclerViewAdapter) mRecyclerView
-                    .getAdapter();
+                // Get y position from adapter
+                CellRowRecyclerViewAdapter adapter = (CellRowRecyclerViewAdapter) mRecyclerView
+                        .getAdapter();
 
-            int column = holder.getAdapterPosition();
-            int row = adapter.getYPosition();
+                int column = holder.getAdapterPosition();
+                int row = adapter.getYPosition();
 
-            // Control to ignore selection color
-            if (!mTableView.isIgnoreSelectionColors()) {
-                mSelectionHandler.setSelectedCellPositions(holder, column, row);
-            }
+                // Control to ignore selection color
+                if (!mTableView.isIgnoreSelectionColors()) {
+                    mSelectionHandler.setSelectedCellPositions(holder, column, row);
+                }
 
-            // Call ITableView listener for item click
-            getTableViewListener().onCellDoubleClicked(holder, column, row);
+                // Call ITableView listener for item click
+                getTableViewListener().onCellDoubleClicked(holder, column, row);
 
-            return true;
+                return true;
+            } catch (Exception ex) { return false; }
         }
         return false;
     }

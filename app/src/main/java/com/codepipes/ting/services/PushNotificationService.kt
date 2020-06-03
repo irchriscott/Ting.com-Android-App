@@ -65,6 +65,8 @@ class PushNotificationService : Service() {
                         notificationChannel.setShowBadge(true)
                         notificationManager.createNotificationChannel(notificationChannel)
                     }
+					
+					val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
                     val builder = NotificationCompat.Builder(this, user.channel)
                         .setSmallIcon(R.drawable.logo_round)
@@ -72,12 +74,13 @@ class PushNotificationService : Service() {
                         .setContentText(body)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setAutoCancel(true)
+						.setSound(soundUri)
 
                     if(data.has("image") && data.get("image").asString != null) {
                         builder
                             .setLargeIcon(Picasso.get().load(data["image"].asString).get())
                             .setStyle(NotificationCompat.BigPictureStyle()
-                                .bigLargeIcon(null)
+                                .bigLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo_round))
                                 .bigPicture(Picasso.get().load(data["image"].asString).get())
                                 .setBigContentTitle(title)
                                 .setSummaryText(body)
@@ -121,6 +124,13 @@ class PushNotificationService : Service() {
                             }
                         }
                     }
+					
+					try {
+						val notification =
+							RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+						val ringtone = RingtoneManager.getRingtone(applicationContext, notification)
+						ringtone.play()
+					} catch (e: java.lang.Exception) { }
 
                     val notificationId = (0..1000000000).random()
                     notificationManager.notify(notificationId, builder.build())

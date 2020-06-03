@@ -215,6 +215,7 @@ class PlacementOrdersDialog : DialogFragment() {
                     confirmDialog.onDialogListener(object : ConfirmDialogListener {
                         override fun onAccept() {
                             activity?.runOnUiThread {
+                                confirmDialog.dismiss()
                                 TingClient.getInstance(context!!)
                                     .cancelOrderPlacement(order)
                                     .subscribeOn(Schedulers.io())

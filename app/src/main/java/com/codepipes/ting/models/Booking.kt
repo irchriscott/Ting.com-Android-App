@@ -8,10 +8,7 @@ class Booking (
     val people: Int,
     val date: String,
     val time: String,
-    val isComplete: Boolean,
-    val isCanceled: Boolean,
-    val isAccepted: Boolean,
-    val isRefunded: Boolean,
+    val status: String,
     val createdAt: String,
     val updatedAt: String
 ){}

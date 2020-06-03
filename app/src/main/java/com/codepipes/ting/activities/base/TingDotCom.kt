@@ -143,13 +143,13 @@ class TingDotCom : AppCompatActivity() {
         snackbar.dismiss()
         super.onPause()
     }
+	
+	override fun onBackPressed() {}
 
     override fun onDestroy() {
         super.onDestroy()
         Bridge.clear(this)
-        finishAffinity()
         Tovuti.from(this).stop()
         snackbar.dismiss()
-        exitProcess(0)
     }
 }

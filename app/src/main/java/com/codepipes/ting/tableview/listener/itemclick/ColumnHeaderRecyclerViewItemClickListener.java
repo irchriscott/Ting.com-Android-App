@@ -66,21 +66,24 @@ public class ColumnHeaderRecyclerViewItemClickListener extends AbstractItemClick
         View childView = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
 
         if (childView != null) {
-            // Find the view holder
-            AbstractViewHolder holder = (AbstractViewHolder) mRecyclerView.getChildViewHolder
-                    (childView);
+            try {
+                // Find the view holder
+                AbstractViewHolder holder = (AbstractViewHolder) mRecyclerView.getChildViewHolder
+                        (childView);
 
-            int column = holder.getAdapterPosition();
+                int column = holder.getAdapterPosition();
 
-            // Control to ignore selection color
-            if (!mTableView.isIgnoreSelectionColors()) {
-                mSelectionHandler.setSelectedColumnPosition(holder, column);
-            }
+                // Control to ignore selection color
+                if (!mTableView.isIgnoreSelectionColors()) {
+                    mSelectionHandler.setSelectedColumnPosition(holder, column);
+                }
 
-            // Call ITableView listener for item click
-            getTableViewListener().onColumnHeaderDoubleClicked(holder, column);
+                // Call ITableView listener for item click
+                getTableViewListener().onColumnHeaderDoubleClicked(holder, column);
 
-            return true;
+                return true;
+
+            } catch (Exception ex) { return false; }
         }
         return false;
     }
