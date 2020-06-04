@@ -346,7 +346,7 @@ class DiscoveryFragment : Fragment() {
                                         view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
                                         view.restaurant_address.text = branch.address
                                         view.restaurant_rating.rating = branch.reviews!!.average
-                                        Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
+                                        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
                                         view.setOnClickListener {
                                             val intent = Intent(context, RestaurantProfile::class.java)
                                             intent.putExtra("resto", branch.id)
@@ -378,7 +378,7 @@ class DiscoveryFragment : Fragment() {
                                     view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
                                     view.restaurant_address.text = branch.address
                                     view.restaurant_rating.rating = branch.reviews!!.average
-                                    Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
+                                    Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
                                     view.setOnClickListener {
                                         val intent = Intent(context, RestaurantProfile::class.java)
                                         intent.putExtra("resto", branch.id)
@@ -495,7 +495,7 @@ class DiscoveryFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun inflateDiscoveredPromotion(promotion: MenuPromotion) : View {
         val view = layoutInflater.inflate(R.layout.row_discover_promotion, null)
-        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").fit().into(view.promotion_poster)
         view.promotion_title.text = promotion.occasionEvent
         when (promotion.promotionItem.type.id) {
             5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
@@ -572,7 +572,7 @@ class DiscoveryFragment : Fragment() {
 
                                 val index = (0 until menu.menu.images.count - 1).random()
                                 val image = menu.menu.images.images[index]
-                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
+                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(view.menu_image)
 
                                 view.menu_price.text = "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.price)}".toUpperCase()
                                 view.setOnClickListener {

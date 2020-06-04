@@ -23,7 +23,7 @@ class RestaurantReviewsAdapter (private val reviews: MutableList<RestaurantRevie
 
     override fun onBindViewHolder(holder: RestaurantReviewsViewHolder, position: Int) {
         val review = reviews[position]
-        Picasso.get().load(review.user?.imageURL()).into(holder.view.review_image)
+        Picasso.get().load(review.user?.imageURL()).fit().into(holder.view.review_image)
 
         val utilsFunctions = UtilsFunctions(holder.view.context)
 

@@ -307,11 +307,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(menu_image)
 
         menu_image.setOnClickListener {
             StfalconImageViewer.Builder<MenuImage>(this@RestaurantMenu, menu.menu.images.images) { view, image ->
-                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(view)
             }.show(true)
         }
 
@@ -327,8 +327,10 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             menu_subcategory_name.text = menu.menu.category?.name
             menu_cuisine_name.text = menu.menu.cuisine?.name
             Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}")
+                .fit()
                 .into(menu_subcategory_image)
             Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}")
+                .fit()
                 .into(menu_cuisine_image)
         } else {
             menu_subcategory.visibility = View.GONE
@@ -385,7 +387,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         if (menu.menu.branch != null && menu.menu.restaurant != null) {
 
-            Picasso.get().load(menu.menu.restaurant.logoURL()).into(menu_restaurant_image)
+            Picasso.get().load(menu.menu.restaurant.logoURL()).fit().into(menu_restaurant_image)
             menu_restaurant_name.text = "${menu.menu.restaurant.name}, ${menu.menu.branch.name}"
 
             menu_restaurant_name.isClickable = true

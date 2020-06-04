@@ -6,7 +6,9 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.media.RingtoneManager
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -78,10 +80,10 @@ class PushNotificationService : Service() {
 
                     if(data.has("image") && data.get("image").asString != null) {
                         builder
-                            .setLargeIcon(Picasso.get().load(data["image"].asString).get())
+                            .setLargeIcon(Picasso.get().load(data["image"].asString).fit().get())
                             .setStyle(NotificationCompat.BigPictureStyle()
                                 .bigLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo_round))
-                                .bigPicture(Picasso.get().load(data["image"].asString).get())
+                                .bigPicture(Picasso.get().load(data["image"].asString).fit().get())
                                 .setBigContentTitle(title)
                                 .setSummaryText(body)
                             )

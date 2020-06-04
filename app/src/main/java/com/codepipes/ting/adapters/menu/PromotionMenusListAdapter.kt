@@ -32,7 +32,7 @@ class PromotionMenusListAdapter (private val menus: MutableList<RestaurantMenu>,
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(holder.view.menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(holder.view.menu_image)
 
         holder.view.menu_name.text = menu.menu.name
         holder.view.menu_rating.rating = menu.menu.reviews?.average!!.toFloat()

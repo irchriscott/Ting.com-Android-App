@@ -24,7 +24,7 @@ class RestaurantInfoWindowMap (val context: Context) : GoogleMap.InfoWindowAdapt
         val branch = Gson().fromJson(data,Branch::class.java)
 
         if(branch != null) {
-            Picasso.get().load(branch.restaurant?.logoURL()).into(view.info_image)
+            Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.info_image)
             view.info_name.text = branch.restaurant?.name
             view.info_branch.text = branch.name + " Branch"
             view.info_address.text = branch.address

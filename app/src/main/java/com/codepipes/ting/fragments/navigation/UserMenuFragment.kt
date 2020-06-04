@@ -83,7 +83,7 @@ class UserMenuFragment : BottomSheetDialogFragment() {
 
         mUserProfileName.text = session.name
         mUserProfileEmail.text = session.email
-        Picasso.get().load(session.imageURL()).into(mUserProfileImage)
+        Picasso.get().load(session.imageURL()).fit().into(mUserProfileImage)
 
         mUserProfileImage.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
         mUserProfileName.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }

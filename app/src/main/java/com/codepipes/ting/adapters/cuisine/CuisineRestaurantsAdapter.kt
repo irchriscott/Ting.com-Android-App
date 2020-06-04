@@ -38,7 +38,7 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
         val activity = holder.view.context as Activity
         val utilsFunctions = UtilsFunctions(holder.view.context)
 
-        Picasso.get().load(branch.restaurant?.logoURL()).into(holder.view.restaurant_image)
+        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(holder.view.restaurant_image)
         holder.view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
         holder.view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
         holder.view.restaurant_address.text = branch.address

@@ -26,7 +26,7 @@ class RestaurantLikesAdapter (private val likes: MutableList<UserRestaurant>) : 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RestaurantLikesViewHolder, position: Int) {
         val like = likes[position]
-        Picasso.get().load(like.user.imageURL()).into(holder.view.like_image)
+        Picasso.get().load(like.user.imageURL()).fit().into(holder.view.like_image)
 
         val utilsFunctions = UtilsFunctions(holder.view.context)
 

@@ -31,7 +31,7 @@ class SearchResultAdapter (val results: MutableList<SearchResult>) : RecyclerVie
         holder.view.search_name.text = result.name
         holder.view.search_description.text = result.description
         holder.view.search_text.text = if(result.type == 1) { result.text } else { result.text.toUpperCase() }
-        Picasso.get().load("${Routes.HOST_END_POINT}${result.image}").into(holder.view.search_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${result.image}").fit().into(holder.view.search_image)
         if(result.type == 2) { holder.view.search_text.textSize = 15.0f }
 
         val activity = holder.view.context as Activity

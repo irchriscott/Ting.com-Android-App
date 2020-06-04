@@ -178,7 +178,7 @@ class RestaurantProfile : AppCompatActivity() {
 
         mUserProfileName.text = "${branch.restaurant?.name}, ${branch.name}"
         mUserProfileAddress.text = branch.address
-        Picasso.get().load(branch.restaurant?.logoURL()).into(mUserProfileImage)
+        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(mUserProfileImage)
         restaurant_rating.rating = branch.reviews?.average!!
 
 

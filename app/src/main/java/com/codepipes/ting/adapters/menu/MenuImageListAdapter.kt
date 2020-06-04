@@ -25,7 +25,7 @@ class MenuImageListAdapter(private val images: MutableList<MenuImage>) : Recycle
         holder.image = image
 
         val imageView = holder.view.findViewById<RoundedCornerImageView>(R.id.restaurant_menu_image) as RoundedCornerImageView
-        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(imageView)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(imageView)
     }
 }
 

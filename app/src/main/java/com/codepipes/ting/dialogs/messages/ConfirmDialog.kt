@@ -13,7 +13,6 @@ import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.interfaces.ConfirmDialogListener
 import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
 import com.codepipes.ting.utils.Routes
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_confirm_dialog.view.*
 
 class ConfirmDialog : DialogFragment() {

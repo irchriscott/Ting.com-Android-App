@@ -116,7 +116,7 @@ class EditUserProfile : AppCompatActivity() {
 
         mProfileImageView = findViewById<CircleImageView>(R.id.edit_user_image_view) as CircleImageView
         mEditProfileImageButton = findViewById<ImageButton>(R.id.edit_user_image_button) as ImageButton
-        Picasso.get().load(user.imageURL()).into(mProfileImageView)
+        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
 
         mEditProfileEmailInput = findViewById<EditText>(R.id.user_profile_edit_email_input) as EditText
         mEditProfileEmailButton = findViewById<ImageButton>(R.id.user_profile_edit_email_button) as ImageButton
@@ -271,7 +271,7 @@ class EditUserProfile : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Picasso.get().load(user.imageURL()).into(mProfileImageView)
+                    Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
                     TingToast(
                         this@EditUserProfile,
                         e.message!!,
@@ -301,7 +301,7 @@ class EditUserProfile : AppCompatActivity() {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        Picasso.get().load(user.imageURL()).into(mProfileImageView)
+                        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
                         mProgressOverlay.dismiss()
                         TingToast(
                             this@EditUserProfile,
@@ -355,7 +355,7 @@ class EditUserProfile : AppCompatActivity() {
                             override fun onFailure(call: Call, e: IOException) {
                                 runOnUiThread {
                                     mProgressOverlay.dismiss()
-                                    Picasso.get().load(user.imageURL()).into(mProfileImageView)
+                                    Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
                                     TingToast(
                                         this@EditUserProfile,
                                         e.message!!,
@@ -386,7 +386,7 @@ class EditUserProfile : AppCompatActivity() {
                                     }
                                 } catch (e: Exception){
                                     runOnUiThread {
-                                        Picasso.get().load(user.imageURL()).into(mProfileImageView)
+                                        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
                                         mProgressOverlay.dismiss()
                                         TingToast(
                                             this@EditUserProfile,

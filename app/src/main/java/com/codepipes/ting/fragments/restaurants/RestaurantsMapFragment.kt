@@ -167,7 +167,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
             view.restaurant_view.visibility = View.VISIBLE
             branch = gson.fromJson(restaurant, Branch::class.java)
 
-            Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
+            Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
             view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
             view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
             view.restaurant_address.text = branch.address

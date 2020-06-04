@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import com.codepipes.ting.R
 import com.codepipes.ting.activities.placement.CurrentRestaurant
 import com.codepipes.ting.interfaces.SubmitPeoplePlacementListener
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_placement_people.view.*
 
 class PlacementPeopleDialog : DialogFragment() {

@@ -211,14 +211,14 @@ class CurrentRestaurant : AppCompatActivity() {
             shimmer_loader.visibility = View.GONE
             place_header_view.visibility = View.VISIBLE
 
-            Picasso.get().load(placement.table.branch?.restaurant?.logoURL()).into(place_restaurant_image)
+            Picasso.get().load(placement.table.branch?.restaurant?.logoURL()).fit().into(place_restaurant_image)
             place_restaurant_name.text = "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}"
             place_table_number.text = "Table No ${placement.table.number}"
             place_bill_number.text = if(placement.bill != null) { "Bill No ${placement.bill.number}" } else { "Bill No -" }
 
             if(placement.waiter != null) {
                 place_waiter_name.text = placement.waiter.name
-                Picasso.get().load("${Routes.HOST_END_POINT}${placement.waiter.image}").into(place_waiter_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${placement.waiter.image}").fit().into(place_waiter_image)
                 place_waiter_view.setOnClickListener {
                     val infoDialog = InfoDialog()
                     val bundle = Bundle()

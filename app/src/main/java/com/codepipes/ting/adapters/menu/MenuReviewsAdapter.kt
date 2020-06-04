@@ -21,7 +21,7 @@ class MenuReviewsAdapter (private val reviews: MutableList<MenuReview>) : Recycl
 
     override fun onBindViewHolder(holder: MenuReviewsViewHolder, position: Int) {
         val review = reviews[position]
-        Picasso.get().load(review.user.imageURL()).into(holder.view.review_image)
+        Picasso.get().load(review.user.imageURL()).fit().into(holder.view.review_image)
 
         val utilsFunctions = UtilsFunctions(holder.view.context)
 

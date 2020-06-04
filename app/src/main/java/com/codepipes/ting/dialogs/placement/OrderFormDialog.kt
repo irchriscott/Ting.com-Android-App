@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment
 import com.codepipes.ting.R
 import com.codepipes.ting.interfaces.SubmitOrderListener
 import com.codepipes.ting.utils.Routes
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_order_form.view.*
 
 class OrderFormDialog : DialogFragment() {
