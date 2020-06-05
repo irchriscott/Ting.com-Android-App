@@ -27,7 +27,11 @@ import java.text.NumberFormat
 import java.util.*
 
 @SuppressLint("SetTextI18n")
-class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, private val fragmentManager: FragmentManager) : RecyclerView.Adapter<RestaurantViewHolder>() {
+class GlobalRestaurantAdapter (
+    private val restaurants: MutableList<Branch>,
+    private val fragmentManager: FragmentManager,
+    private val statusWorkTimer: Timer
+) : RecyclerView.Adapter<RestaurantViewHolder>() {
 
     private lateinit var utilsFunctions: UtilsFunctions
 
@@ -39,7 +43,6 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
 
     override fun getItemCount(): Int = restaurants.size
 
-
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
         val branch = restaurants[position]
         holder.branch = branch
@@ -47,7 +50,7 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
         val activity = holder.view.context as Activity
         utilsFunctions = UtilsFunctions(holder.view.context)
 
-        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(holder.view.restaurant_image)
+        Picasso.get().load(branch.restaurant?.logoURL()).into(holder.view.restaurant_image)
         holder.view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
         holder.view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
         holder.view.restaurant_address.text = branch.address
@@ -130,7 +133,7 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
                 }
             }
 
-            Timer().scheduleAtFixedRate(object : TimerTask() {
+            statusWorkTimer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     activity.runOnUiThread {
 
@@ -169,9 +172,9 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
 
             args.putInt("cx", cx)
             args.putInt("cy", cy)
-            args.putString("resto", Gson().toJson(branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(branch))
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
 
@@ -184,9 +187,9 @@ class GlobalRestaurantAdapter (private val restaurants: MutableList<Branch>, pri
 
             args.putInt("cx", cx)
             args.putInt("cy", cy)
-            args.putString("resto", Gson().toJson(branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(branch))
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
     }

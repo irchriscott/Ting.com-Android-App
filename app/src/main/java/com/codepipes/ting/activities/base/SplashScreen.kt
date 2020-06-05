@@ -109,6 +109,7 @@ class SplashScreen : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         handler?.removeCallbacks(runnable)
     }
 

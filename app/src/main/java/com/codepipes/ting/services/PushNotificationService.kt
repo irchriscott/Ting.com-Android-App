@@ -80,10 +80,10 @@ class PushNotificationService : Service() {
 
                     if(data.has("image") && data.get("image").asString != null) {
                         builder
-                            .setLargeIcon(Picasso.get().load(data["image"].asString).fit().get())
+                            .setLargeIcon(Picasso.get().load(data["image"].asString).get())
                             .setStyle(NotificationCompat.BigPictureStyle()
                                 .bigLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo_round))
-                                .bigPicture(Picasso.get().load(data["image"].asString).fit().get())
+                                .bigPicture(Picasso.get().load(data["image"].asString).get())
                                 .setBigContentTitle(title)
                                 .setSummaryText(body)
                             )

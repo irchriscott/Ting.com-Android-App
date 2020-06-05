@@ -238,16 +238,19 @@ class MenuSearchResults : Fragment() {
     override fun onPause() {
         super.onPause()
         try { menusTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     override fun onDetach() {
         super.onDetach()
         try { menusTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         try { menusTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     companion object {

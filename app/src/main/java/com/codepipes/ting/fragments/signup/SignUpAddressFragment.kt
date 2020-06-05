@@ -243,10 +243,17 @@ class SignUpAddressFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Bridge.clear(this)
     }
 
     override fun onDetach() {
         super.onDetach()
+        Bridge.clear(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Bridge.clear(this)
     }
 
     companion object {

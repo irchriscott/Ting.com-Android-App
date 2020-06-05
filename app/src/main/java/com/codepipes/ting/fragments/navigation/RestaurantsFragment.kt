@@ -37,7 +37,6 @@ import com.codepipes.ting.interfaces.FilterRestaurantsClickListener
 import com.codepipes.ting.models.Branch
 import com.codepipes.ting.models.RestaurantCategory
 import com.codepipes.ting.models.User
-import com.codepipes.ting.providers.APILoadGlobalRestaurants
 import com.codepipes.ting.providers.LocalData
 import com.codepipes.ting.providers.TingClient
 import com.codepipes.ting.providers.UserAuthentication
@@ -63,19 +62,11 @@ import kotlin.collections.HashMap
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
-
-    private lateinit var mOpenRestaurantMapButton: FloatingActionButton
-    private lateinit var mRestaurantsRecyclerView: RecyclerView
-    private lateinit var mProgressLoader: View
-    private lateinit var mEmptyDataView: View
-    private lateinit var mRefreshRestaurant: SwipeRefreshLayout
-    private lateinit var mScrollView: NestedScrollView
+class RestaurantsFragment : Fragment() {
 
     private lateinit var activity: Activity
     private val gson: Gson = Gson()
 
-    private var isAsync: Boolean = false
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mUtilFunctions: UtilsFunctions
     private lateinit var mLocalData: LocalData
@@ -94,6 +85,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var cuisinesTimer: Timer
     private lateinit var restaurantsTimer: Timer
     private lateinit var filteredRestaurantTimer: Timer
+    private lateinit var statusWorkTimer: Timer
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
@@ -126,16 +118,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         town = mLocalData.getUserTown() ?: session.town
 
         this.getFilters()
-        this.getRestaurants()
+        this.getRestaurants(view)
 
         cuisinesTimer = Timer()
         restaurantsTimer = Timer()
         filteredRestaurantTimer = Timer()
+        statusWorkTimer = Timer()
 
-        mOpenRestaurantMapButton = view.findViewById(R.id.open_restaurant_map) as FloatingActionButton
-        mOpenRestaurantMapButton.setOnClickListener {
-            val cx = (mOpenRestaurantMapButton.x + mOpenRestaurantMapButton.width / 2).toInt()
-            val cy = (mOpenRestaurantMapButton.y + mOpenRestaurantMapButton.height + 56).toInt()
+        view.open_restaurant_map.setOnClickListener {
+            val cx = (open_restaurant_map.x + open_restaurant_map.width / 2).toInt()
+            val cy = (open_restaurant_map.y + open_restaurant_map.height + 56).toInt()
 
             val mapFragment =  RestaurantsMapFragment()
             val args: Bundle = Bundle()
@@ -145,15 +137,12 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             args.putDouble("lat", selectedLatitude)
             args.putDouble("lng", selectedLongitude)
 
-            if(!restaurants.isNullOrEmpty()){
-                args.putString("restos", gson.toJson(restaurants))
-            }
-
             mapFragment.arguments = args
+            mapFragment.setRestaurants(gson.toJson(restaurants))
             mapFragment.show(fragmentManager!!, mapFragment.tag)
         }
 
-        mOpenRestaurantMapButton.isClickable = false
+        view.open_restaurant_map.isClickable = false
 
         view.cuisines_shimmer.startShimmer()
         view.shimmer_loader.startShimmer()
@@ -179,7 +168,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         menuList.add("Current Location")
         session.addresses?.addresses!!.forEach { menuList.add("${it.type} - ${it.address}") }
 
-        mOpenRestaurantMapButton.setOnLongClickListener {
+        view.open_restaurant_map.setOnLongClickListener {
             val actionSheet = ActionSheet(context!!, menuList)
                 .setTitle("Restaurant Near Location")
                 .setColorData(activity.resources.getColor(R.color.colorGray))
@@ -191,7 +180,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 override fun data(data: String, position: Int) {
                     if(!restaurants.isNullOrEmpty()){
-                        if(position == 0){ showRestaurantWithCurrentAddress(1) }
+                        if(position == 0){ showRestaurantWithCurrentAddress(1, view) }
                         else {
                             val address = session.addresses?.addresses!![position - 1]
                             val from = LatLng(address.latitude, address.longitude)
@@ -204,8 +193,8 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                 b.fromLocation = from
                             }
                             restaurants.sortBy { b -> b.dist }
-                            mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
-                            mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+                            restaurants_recycler_view.layoutManager = LinearLayoutManager(context)
+                            restaurants_recycler_view.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!, statusWorkTimer)
                         }
                     }
                 }
@@ -214,45 +203,15 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             return@setOnLongClickListener true
         }
 
-        mRestaurantsRecyclerView = view.findViewById<RecyclerView>(R.id.restaurants_recycler_view) as RecyclerView
-        mProgressLoader = view.findViewById<View>(R.id.progress_loader) as View
-        mEmptyDataView = view.findViewById<View>(R.id.empty_data) as View
-        mRefreshRestaurant = view.findViewById<SwipeRefreshLayout>(R.id.refresh_restaurants) as SwipeRefreshLayout
-        mScrollView = view.findViewById<NestedScrollView>(R.id.scroll_view) as NestedScrollView
-
-        mRefreshRestaurant.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
-        mRefreshRestaurant.setOnRefreshListener(this)
-
-        if(isAsync){
-            val asyncTask = APILoadGlobalRestaurants(context!!).execute()
-            val restaurants = asyncTask.get()
-
-            if(!restaurants.isNullOrEmpty()){
-                mOpenRestaurantMapButton.isClickable = false
-                mRestaurantsRecyclerView.visibility = View.VISIBLE
-                mProgressLoader.visibility = View.GONE
-                mEmptyDataView.visibility = View.GONE
-
-                mRestaurantsRecyclerView.layoutManager = LinearLayoutManager(context)
-                mRestaurantsRecyclerView.adapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
-            } else {
-                mOpenRestaurantMapButton.isClickable = false
-                mRestaurantsRecyclerView.visibility = View.GONE
-                mProgressLoader.visibility = View.GONE
-                mEmptyDataView.visibility = View.VISIBLE
-
-                mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                mEmptyDataView.empty_text.text = "No Restaurant To Show"
-                TingToast(
-                    context!!,
-                    "No Restaurant To Show",
-                    TingToastType.DEFAULT
-                ).showToast(Toast.LENGTH_LONG)
-            }
+        view.refresh_restaurants.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
+        view.refresh_restaurants.setOnRefreshListener {
+            statusWorkTimer = Timer()
+            refresh_restaurants.isRefreshing = true
+            this.getRestaurants(view)
         }
 
         restaurantsTimer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() { getRestaurants() }
+            override fun run() { getRestaurants(view) }
         }, TIMER_PERIOD, TIMER_PERIOD)
 
         val query = view.search_restaurant_input.text.toString()
@@ -262,18 +221,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             "Not Available For Now",
             TingToastType.DEFAULT
         ).showToast(Toast.LENGTH_LONG) }
-        view.filter_availability.setOnClickListener { showFilters(AVAILABILITY_KEY, query) }
-        view.filter_cuisines.setOnClickListener { showFilters(CUISINES_KEY, query) }
-        view.filter_services.setOnClickListener { showFilters(SERVICES_KEY, query) }
-        view.filter_specials.setOnClickListener { showFilters(SPECIALS_KEY, query) }
-        view.filter_types.setOnClickListener { showFilters(TYPES_KEY, query) }
-        view.filter_ratings.setOnClickListener { showFilters(RATINGS_KEY, query) }
+        view.filter_availability.setOnClickListener { showFilters(AVAILABILITY_KEY, query, view) }
+        view.filter_cuisines.setOnClickListener { showFilters(CUISINES_KEY, query, view) }
+        view.filter_services.setOnClickListener { showFilters(SERVICES_KEY, query, view) }
+        view.filter_specials.setOnClickListener { showFilters(SPECIALS_KEY, query, view) }
+        view.filter_types.setOnClickListener { showFilters(TYPES_KEY, query, view) }
+        view.filter_ratings.setOnClickListener { showFilters(RATINGS_KEY, query, view) }
 
         view.filter_restaurant_button.setOnClickListener {
-            searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query)
+            searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query, view)
             filteredRestaurantTimer = Timer()
             filteredRestaurantTimer.scheduleAtFixedRate(object: TimerTask() {
-                override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query) }
+                override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query, view) }
             }, TIMER_PERIOD, TIMER_PERIOD)
             mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
         }
@@ -313,16 +272,16 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun showRestaurantWithCurrentAddress(typeLoad: Int) {
+    private fun showRestaurantWithCurrentAddress(typeLoad: Int, view: View) {
 
-        mRestaurantsRecyclerView.visibility = View.VISIBLE
-        mProgressLoader.visibility = View.GONE
-        mEmptyDataView.visibility = View.GONE
+        view.restaurants_recycler_view.visibility = View.VISIBLE
+        view.progress_loader.visibility = View.GONE
+        view.empty_data.visibility = View.GONE
 
         if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
 
         val linearLayoutManager = LinearLayoutManager(context)
-        var globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
+        var globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!, statusWorkTimer)
 
         if(mUtilFunctions.checkLocationPermissions()){
             try {
@@ -349,9 +308,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         }
                     }
                     restaurants.sortBy { b -> b.dist }
-                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
-                    mRestaurantsRecyclerView.layoutManager = linearLayoutManager
-                    mRestaurantsRecyclerView.adapter = globalRestaurantAdapter
+                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!, statusWorkTimer)
+                    view.restaurants_recycler_view.layoutManager = linearLayoutManager
+                    view.restaurants_recycler_view.adapter = globalRestaurantAdapter
                 }.addOnFailureListener {
                     val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                     selectedLatitude = session.addresses!!.addresses[0].latitude
@@ -363,9 +322,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         b.fromLocation = from
                     }
                     restaurants.sortBy { b -> b.dist }
-                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!)
-                    mRestaurantsRecyclerView.layoutManager = linearLayoutManager
-                    mRestaurantsRecyclerView.adapter = globalRestaurantAdapter
+                    globalRestaurantAdapter = GlobalRestaurantAdapter(restaurants, fragmentManager!!, statusWorkTimer)
+                    view.restaurants_recycler_view.layoutManager = linearLayoutManager
+                    view.restaurants_recycler_view.adapter = globalRestaurantAdapter
                     TingToast(
                         context!!,
                         it.message!!,
@@ -374,12 +333,12 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
 
                 var pageNum = 1
-                ViewCompat.setNestedScrollingEnabled(mRestaurantsRecyclerView, false)
+                ViewCompat.setNestedScrollingEnabled(view.restaurants_recycler_view, false)
 
-                mScrollView.setOnScrollChangeListener { view: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
+                scroll_view.setOnScrollChangeListener { nestedScrollView: NestedScrollView?, _: Int, scrollY: Int, _: Int, oldScrollY: Int ->
 
-                    if(view?.getChildAt(view.childCount - 1) != null) {
-                        if ((scrollY >= (view.getChildAt(view.childCount - 1)!!.measuredHeight - view.measuredHeight)) && scrollY > oldScrollY) {
+                    if(nestedScrollView?.getChildAt(nestedScrollView.childCount - 1) != null) {
+                        if ((scrollY >= (nestedScrollView.getChildAt(nestedScrollView.childCount - 1)!!.measuredHeight - nestedScrollView.measuredHeight)) && scrollY > oldScrollY) {
 
                             val visibleItemCount = linearLayoutManager.childCount
                             val totalItemCount = linearLayoutManager.itemCount
@@ -420,6 +379,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                                                 }
                                                             }
                                                             restosResultPage.sortBy { b -> b.dist }
+                                                            restaurants.addAll(restosResultPage)
                                                             globalRestaurantAdapter.addItems(restosResultPage)
                                                         }.addOnFailureListener {
                                                             val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
@@ -430,6 +390,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                                                 b.fromLocation = from
                                                             }
                                                             restosResultPage.sortBy { b -> b.dist }
+                                                            restaurants.addAll(restosResultPage)
                                                             globalRestaurantAdapter.addItems(restosResultPage)
                                                         }
                                                     } catch (e: Exception) {}
@@ -476,6 +437,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                                                 }
                                                             }
                                                             restosResultPage.sortBy { b -> b.dist }
+                                                            restaurants.addAll(restosResultPage)
                                                             globalRestaurantAdapter.addItems(restosResultPage)
                                                         }.addOnFailureListener {
                                                             val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
@@ -486,6 +448,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                                                 b.fromLocation = from
                                                             }
                                                             restosResultPage.sortBy { b -> b.dist }
+                                                            restaurants.addAll(restosResultPage)
                                                             globalRestaurantAdapter.addItems(restosResultPage)
                                                         }
                                                     } catch (e: Exception) {}
@@ -523,7 +486,10 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     @SuppressLint("SetTextI18n", "MissingPermission", "DefaultLocale")
-    private fun getRestaurants(){
+    private fun getRestaurants(view: View){
+
+        statusWorkTimer = Timer()
+
         val url = Routes.restaurantsGlobal
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -542,14 +508,14 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity.runOnUiThread {
-                    mRefreshRestaurant.isRefreshing = false
-                    mRestaurantsRecyclerView.visibility = View.GONE
-                    mProgressLoader.visibility = View.GONE
-                    mEmptyDataView.visibility = View.VISIBLE
+                    refresh_restaurants.isRefreshing = false
+                    restaurants_recycler_view.visibility = View.GONE
+                    progress_loader.visibility = View.GONE
+                    empty_data.visibility = View.VISIBLE
 
                     if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
-                    mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                    mEmptyDataView.empty_text.text = "No Restaurant To Show"
+                    empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                    empty_data.empty_text.text = "No Restaurant To Show"
                 }
             }
 
@@ -559,18 +525,18 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
                     activity.runOnUiThread {
                         restaurantsTimer.cancel()
-                        mRefreshRestaurant.isRefreshing = false
+                        refresh_restaurants.isRefreshing = false
                         mLocalData.saveRestaurants(dataString)
 
-                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(1) }
+                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(1, view) }
                         else {
-                            mRestaurantsRecyclerView.visibility = View.GONE
-                            mProgressLoader.visibility = View.GONE
-                            mEmptyDataView.visibility = View.VISIBLE
+                            restaurants_recycler_view.visibility = View.GONE
+                            progress_loader.visibility = View.GONE
+                            empty_data.visibility = View.VISIBLE
 
                             if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
-                            mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                            mEmptyDataView.empty_text.text = "No Restaurant To Show"
+                            empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                            empty_data.empty_text.text = "No Restaurant To Show"
                             TingToast(
                                 context!!,
                                 "No Restaurant To Show",
@@ -642,12 +608,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
 
-    override fun onRefresh() {
-        mRefreshRestaurant.isRefreshing = true
-        this.getRestaurants()
-    }
-
-    private fun showFilters(filter: String, query: String) {
+    private fun showFilters(filter: String, query: String, view: View) {
         val restaurantsFiltersFragment = RestaurantFiltersFragment()
         val bundle = Bundle()
         bundle.putString(FILTER_KEY, filter)
@@ -668,10 +629,10 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                     filteredRestaurantTimer = Timer()
                     mLocalData.saveParametersFilters(gson.toJson(paramsFilters))
-                    searchFilterRestaurants(gson.toJson(paramsFilters), query)
+                    searchFilterRestaurants(gson.toJson(paramsFilters), query, view)
                     filteredRestaurantTimer = Timer()
                     filteredRestaurantTimer.scheduleAtFixedRate(object: TimerTask() {
-                        override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query) }
+                        override fun run() { searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query, view) }
                     }, TIMER_PERIOD, TIMER_PERIOD)
                     mProgressOverlay.show(fragmentManager!!, mProgressOverlay.tag)
                 }
@@ -680,7 +641,7 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun searchFilterRestaurants(filters: String, query: String) {
+    private fun searchFilterRestaurants(filters: String, query: String, view: View) {
         val url = Routes.restaurantsSearchFiltered
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -705,15 +666,15 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             override fun onFailure(call: Call, e: IOException) {
                 activity.runOnUiThread {
-                    mRefreshRestaurant.isRefreshing = false
-                    mRestaurantsRecyclerView.visibility = View.GONE
-                    mProgressLoader.visibility = View.GONE
-                    mEmptyDataView.visibility = View.VISIBLE
+                    refresh_restaurants.isRefreshing = false
+                    restaurants_recycler_view.visibility = View.GONE
+                    progress_loader.visibility = View.GONE
+                    empty_data.visibility = View.VISIBLE
                     mProgressOverlay.dismiss()
 
                     if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
-                    mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                    mEmptyDataView.empty_text.text = "No Restaurant To Show"
+                    empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                    empty_data.empty_text.text = "No Restaurant To Show"
                 }
             }
 
@@ -721,21 +682,21 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val dataString = response.body!!.string()
 
                 activity.runOnUiThread {
-                    mRefreshRestaurant.isRefreshing = false
+                    refresh_restaurants.isRefreshing = false
                     mProgressOverlay.dismiss()
 
                     try {
                         filteredRestaurantTimer.cancel()
                         restaurants = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
-                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(2) }
+                        if(!restaurants.isNullOrEmpty()){ showRestaurantWithCurrentAddress(2, view) }
                         else {
-                            mRestaurantsRecyclerView.visibility = View.GONE
-                            mProgressLoader.visibility = View.GONE
-                            mEmptyDataView.visibility = View.VISIBLE
+                            restaurants_recycler_view.visibility = View.GONE
+                            progress_loader.visibility = View.GONE
+                            empty_data.visibility = View.VISIBLE
 
                             if (shimmer_loader != null) { shimmer_loader.visibility = View.GONE }
-                            mEmptyDataView.empty_image.setImageResource(R.drawable.ic_restaurants)
-                            mEmptyDataView.empty_text.text = "No Restaurant To Show"
+                            empty_data.empty_image.setImageResource(R.drawable.ic_restaurants)
+                            empty_data.empty_text.text = "No Restaurant To Show"
                             TingToast(
                                 context!!,
                                 "No Restaurant To Show",
@@ -763,7 +724,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         try {
             cuisinesTimer.cancel()
             restaurantsTimer.cancel()
+            filteredRestaurantTimer.cancel()
         } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
     }
 
@@ -772,7 +735,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         try {
             cuisinesTimer.cancel()
             restaurantsTimer.cancel()
+            filteredRestaurantTimer.cancel()
         } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
     }
 
     override fun onDetach() {
@@ -780,7 +745,9 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         try {
             cuisinesTimer.cancel()
             restaurantsTimer.cancel()
+            filteredRestaurantTimer.cancel()
         } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
     }
 
     override fun onDestroyView() {
@@ -788,7 +755,11 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         try {
             cuisinesTimer.cancel()
             restaurantsTimer.cancel()
+            filteredRestaurantTimer.cancel()
         } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
+        Bridge.clearAll(context!!)
     }
 
     companion object {
@@ -799,6 +770,6 @@ class RestaurantsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         public const val SPECIALS_KEY         = "specials"
         public const val TYPES_KEY            = "types"
         public const val RATINGS_KEY          = "ratings"
-        private const val TIMER_PERIOD        = 10000.toLong()
+        private const val TIMER_PERIOD  = 10000.toLong()
     }
 }

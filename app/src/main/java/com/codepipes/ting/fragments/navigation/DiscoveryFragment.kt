@@ -85,12 +85,10 @@ class DiscoveryFragment : Fragment() {
     private lateinit var topRestaurantsTimerTask: TopRestaurantsTimerTask
     private lateinit var topMenusTimerTask: TopMenusTimerTask
 
-    private val TIMER_PERIOD = 10000.toLong()
-
     private var country: String = ""
     private var town: String = ""
 
-    private lateinit var contextView: View
+    private lateinit var statusWorkTimer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,7 +102,6 @@ class DiscoveryFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_discovery, container, false)
-        contextView = view
 
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
@@ -112,6 +109,8 @@ class DiscoveryFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         mUtilFunctions = UtilsFunctions(context!!)
+
+        statusWorkTimer = Timer()
 
         country = session.country
         town = session.town
@@ -150,16 +149,16 @@ class DiscoveryFragment : Fragment() {
         topRestaurantTimer = Timer()
         topMenusTimer = Timer()
 
-        restaurantsTimerTask = RestaurantsTimerTask(view)
+        restaurantsTimerTask = RestaurantsTimerTask()
         cuisinesTimerTask = CuisinesTimerTask()
-        promotionsTimerTask = PromotionsTimerTask(view)
-        discoverMenusTimerTask = DiscoverMenusTimerTask(view)
-        topRestaurantsTimerTask = TopRestaurantsTimerTask(view)
-        topMenusTimerTask = TopMenusTimerTask(view)
+        promotionsTimerTask = PromotionsTimerTask()
+        discoverMenusTimerTask = DiscoverMenusTimerTask()
+        topRestaurantsTimerTask = TopRestaurantsTimerTask()
+        topMenusTimerTask = TopMenusTimerTask()
 
         view.discover_restaurants_shimmer.startShimmer()
         restaurantsTimer.scheduleAtFixedRate(restaurantsTimerTask, TIMER_PERIOD, TIMER_PERIOD)
-        this.getDiscoverRestaurants(view)
+        this.getDiscoverRestaurants()
 
         view.cuisines_shimmer.startShimmer()
         val cuisines = mLocalData.getCuisines()
@@ -180,39 +179,40 @@ class DiscoveryFragment : Fragment() {
 
         view.promotions_shimmer.startShimmer()
         promotionsTimer.scheduleAtFixedRate(promotionsTimerTask, TIMER_PERIOD, TIMER_PERIOD)
-        this.getDiscoverTodayPromotions(view)
+        this.getDiscoverTodayPromotions()
 
         view.discover_menus_shimmer.startShimmer()
         discoverMenusTimer.scheduleAtFixedRate(discoverMenusTimerTask, TIMER_PERIOD, TIMER_PERIOD)
-        this.getDiscoverMenus(view)
+        this.getDiscoverMenus()
 
         view.top_restaurants_shimmer.startShimmer()
         topRestaurantTimer.scheduleAtFixedRate(topRestaurantsTimerTask, TIMER_PERIOD, TIMER_PERIOD)
-        this.getDiscoverTopRestaurants(view)
+        this.getDiscoverTopRestaurants()
 
         view.top_menus_shimmer.startShimmer()
         topMenusTimer.scheduleAtFixedRate(topMenusTimerTask, TIMER_PERIOD, TIMER_PERIOD)
-        this.getDiscoverTopMenus(view)
+        this.getDiscoverTopMenus()
 
         view.refresh_discovery.setColorSchemeColors(resources.getColor(R.color.colorPrimary), resources.getColor(R.color.colorAccentMain), resources.getColor(R.color.colorPrimaryDark), resources.getColor(R.color.colorAccentMain))
         view.refresh_discovery.setOnRefreshListener {
 
+            statusWorkTimer = Timer()
             view.refresh_discovery.isRefreshing = true
 
             view.discover_recommended_restaurants_view.visibility = View.VISIBLE
-            this.getDiscoverRestaurants(view)
+            this.getDiscoverRestaurants()
 
             view.discover_promotions_view.visibility = View.VISIBLE
-            this.getDiscoverTodayPromotions(view)
+            this.getDiscoverTodayPromotions()
 
             view.discover_menus_view.visibility = View.VISIBLE
-            this.getDiscoverMenus(view)
+            this.getDiscoverMenus()
 
             view.top_restaurants_view.visibility = View.VISIBLE
-            this.getDiscoverTopRestaurants(view)
+            this.getDiscoverTopRestaurants()
 
             view.top_menus_view.visibility = View.VISIBLE
-            this.getDiscoverTopMenus(view)
+            this.getDiscoverTopMenus()
         }
 
         view.discover_recommended_restaurants_view.setOnLongClickListener {
@@ -220,7 +220,7 @@ class DiscoveryFragment : Fragment() {
                 restaurantsTimer.cancel()
                 restaurantsTimerTask.cancel()
             } catch (e: Exception){ }
-            getDiscoverRestaurants(view)
+            getDiscoverRestaurants()
             return@setOnLongClickListener true
         }
 
@@ -229,7 +229,7 @@ class DiscoveryFragment : Fragment() {
                 promotionsTimer.cancel()
                 promotionsTimerTask.cancel()
             } catch (e: Exception){ }
-            getDiscoverTodayPromotions(view)
+            getDiscoverTodayPromotions()
             return@setOnLongClickListener true
         }
 
@@ -238,7 +238,7 @@ class DiscoveryFragment : Fragment() {
                 discoverMenusTimer.cancel()
                 discoverMenusTimerTask.cancel()
             } catch (e: Exception) { }
-            getDiscoverMenus(view)
+            getDiscoverMenus()
             return@setOnLongClickListener true
         }
 
@@ -247,7 +247,7 @@ class DiscoveryFragment : Fragment() {
                 topRestaurantTimer.cancel()
                 topRestaurantsTimerTask.cancel()
             } catch (e: Exception) { }
-            getDiscoverTopRestaurants(view)
+            getDiscoverTopRestaurants()
             return@setOnLongClickListener true
         }
 
@@ -256,7 +256,7 @@ class DiscoveryFragment : Fragment() {
                 topMenusTimer.cancel()
                 topMenusTimerTask.cancel()
             } catch (e: Exception) {}
-            getDiscoverTopMenus(view)
+            getDiscoverTopMenus()
             return@setOnLongClickListener true
         }
 
@@ -286,7 +286,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun getDiscoverRestaurants(view: View) {
+    private fun getDiscoverRestaurants() {
         val url = Routes.discoverRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -310,10 +310,10 @@ class DiscoveryFragment : Fragment() {
                         val branches = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
                         restaurantsTimer.cancel()
                         restaurantsTimerTask.cancel()
-                        view.refresh_discovery.isRefreshing = false
+                        refresh_discovery.isRefreshing = false
 
-                        view.discover_restaurants_shimmer.visibility = View.GONE
-                        view.discover_restaurants.visibility = View.VISIBLE
+                        discover_restaurants_shimmer.visibility = View.GONE
+                        discover_restaurants.visibility = View.VISIBLE
 
                         fusedLocationClient.lastLocation.addOnSuccessListener {
                             if(it != null){
@@ -334,9 +334,9 @@ class DiscoveryFragment : Fragment() {
                                 }
                             }
                             try {
-                                view.discover_restaurants_shimmer.visibility = View.GONE
-                                view.discover_restaurants.visibility = View.VISIBLE
-                                view.discover_restaurants.apply {
+                                discover_restaurants_shimmer.visibility = View.GONE
+                                discover_restaurants.visibility = View.VISIBLE
+                                discover_restaurants.apply {
                                     size = branches.size
                                     resource = R.layout.row_discover_restaurant
                                     indicatorAnimationType = IndicatorAnimationType.THIN_WORM
@@ -346,7 +346,7 @@ class DiscoveryFragment : Fragment() {
                                         view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
                                         view.restaurant_address.text = branch.address
                                         view.restaurant_rating.rating = branch.reviews!!.average
-                                        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
+                                        Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
                                         view.setOnClickListener {
                                             val intent = Intent(context, RestaurantProfile::class.java)
                                             intent.putExtra("resto", branch.id)
@@ -366,9 +366,9 @@ class DiscoveryFragment : Fragment() {
                                 b.dist = dist
                                 b.fromLocation = from
                             }
-                            view.discover_restaurants_shimmer.visibility = View.GONE
-                            view.discover_restaurants.visibility = View.VISIBLE
-                            view.discover_restaurants.apply {
+                            discover_restaurants_shimmer.visibility = View.GONE
+                            discover_restaurants.visibility = View.VISIBLE
+                            discover_restaurants.apply {
                                 size = branches.size
                                 resource = R.layout.row_discover_restaurant
                                 indicatorAnimationType = IndicatorAnimationType.THIN_WORM
@@ -378,7 +378,7 @@ class DiscoveryFragment : Fragment() {
                                     view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
                                     view.restaurant_address.text = branch.address
                                     view.restaurant_rating.rating = branch.reviews!!.average
-                                    Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
+                                    Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
                                     view.setOnClickListener {
                                         val intent = Intent(context, RestaurantProfile::class.java)
                                         intent.putExtra("resto", branch.id)
@@ -443,7 +443,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun getDiscoverTodayPromotions(view: View) {
+    private fun getDiscoverTodayPromotions() {
         val url = Routes.discoverTodayPromosRand
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -467,25 +467,25 @@ class DiscoveryFragment : Fragment() {
                         val promotions = gson.fromJson<MutableList<MenuPromotion>>(dataString, object : TypeToken<MutableList<MenuPromotion>>(){}.type)
                         promotionsTimer.cancel()
                         promotionsTimerTask.cancel()
-                        view.refresh_discovery.isRefreshing = false
+                        refresh_discovery.isRefreshing = false
 
                         if(promotions.size > 0) {
-                            view.promotions_shimmer.visibility = View.GONE
-                            view.discover_promotions.visibility = View.VISIBLE
+                            promotions_shimmer.visibility = View.GONE
+                            discover_promotions.visibility = View.VISIBLE
 
                             val viewListener = ViewListener { inflateDiscoveredPromotion(promotions[it]) }
-                            view.discover_promotions.setViewListener(viewListener)
-                            view.discover_promotions.pageCount = promotions.size
+                            discover_promotions.setViewListener(viewListener)
+                            discover_promotions.pageCount = promotions.size
 
-                            view.discover_more_promotions.visibility = View.VISIBLE
-                            view.discover_more_promotions.setOnClickListener {
+                            discover_more_promotions.visibility = View.VISIBLE
+                            discover_more_promotions.setOnClickListener {
                                 activity!!.startActivity(Intent(context, TodayPromotions::class.java))
                             }
-                        } else { view.discover_promotions_view.visibility = View.GONE }
+                        } else { discover_promotions_view.visibility = View.GONE }
                     } catch (e: Exception) {
                         promotionsTimer.cancel()
                         promotionsTimerTask.cancel()
-                        view.discover_promotions_view.visibility = View.GONE
+                        discover_promotions_view.visibility = View.GONE
                     }
                 }
             }
@@ -495,7 +495,7 @@ class DiscoveryFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun inflateDiscoveredPromotion(promotion: MenuPromotion) : View {
         val view = layoutInflater.inflate(R.layout.row_discover_promotion, null)
-        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").fit().into(view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(view.promotion_poster)
         view.promotion_title.text = promotion.occasionEvent
         when (promotion.promotionItem.type.id) {
             5 -> view.promotion_type.text = "Promotion On ${promotion.promotionItem.category?.name}"
@@ -528,7 +528,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     @SuppressLint("DefaultLocale", "SetTextI18n")
-    private fun getDiscoverMenus(view: View) {
+    private fun getDiscoverMenus() {
         val url = Routes.discoverMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -552,14 +552,14 @@ class DiscoveryFragment : Fragment() {
                         val menus = gson.fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
                         discoverMenusTimer.cancel()
                         discoverMenusTimerTask.cancel()
-                        view.refresh_discovery.isRefreshing = false
+                        refresh_discovery.isRefreshing = false
 
-                        view.discover_menus_shimmer.visibility = View.GONE
-                        view.discover_menus.visibility = View.VISIBLE
+                        discover_menus_shimmer.visibility = View.GONE
+                        discover_menus.visibility = View.VISIBLE
 
-                        view.discover_restaurants.carouselViewListener = null
+                        discover_restaurants.carouselViewListener = null
 
-                        view.discover_menus.apply {
+                        discover_menus.apply {
                             size = menus.size
                             resource = R.layout.row_discover_menu
                             indicatorAnimationType = IndicatorAnimationType.THIN_WORM
@@ -572,7 +572,7 @@ class DiscoveryFragment : Fragment() {
 
                                 val index = (0 until menu.menu.images.count - 1).random()
                                 val image = menu.menu.images.images[index]
-                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(view.menu_image)
+                                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view.menu_image)
 
                                 view.menu_price.text = "${menu.menu.currency} ${NumberFormat.getNumberInstance().format(menu.menu.price)}".toUpperCase()
                                 view.setOnClickListener {
@@ -597,7 +597,7 @@ class DiscoveryFragment : Fragment() {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun getDiscoverTopRestaurants(view: View) {
+    private fun getDiscoverTopRestaurants() {
         val url = Routes.discoverTopRestaurants
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -621,7 +621,7 @@ class DiscoveryFragment : Fragment() {
                         try {
                             topRestaurantTimer.cancel()
                             topRestaurantsTimerTask.cancel()
-                            view.refresh_discovery.isRefreshing = false
+                            refresh_discovery.isRefreshing = false
                             val branches = gson.fromJson<MutableList<Branch>>(dataString, object : TypeToken<MutableList<Branch>>(){}.type)
                             fusedLocationClient.lastLocation.addOnSuccessListener {
                                 if(it != null){
@@ -641,10 +641,10 @@ class DiscoveryFragment : Fragment() {
                                         b.fromLocation = from
                                     }
                                 }
-                                view.top_restaurants_shimmer.visibility = View.GONE
-                                view.top_restaurants.visibility = View.VISIBLE
-                                view.top_restaurants.layoutManager = LinearLayoutManager(context)
-                                view.top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                top_restaurants_shimmer.visibility = View.GONE
+                                top_restaurants.visibility = View.VISIBLE
+                                top_restaurants.layoutManager = LinearLayoutManager(context)
+                                top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!, statusWorkTimer)
                             }.addOnFailureListener {
                                 val from = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
                                 branches.forEach { b ->
@@ -653,21 +653,21 @@ class DiscoveryFragment : Fragment() {
                                     b.dist = dist
                                     b.fromLocation = from
                                 }
-                                view.top_restaurants_shimmer.visibility = View.GONE
-                                view.top_restaurants.visibility = View.VISIBLE
-                                view.top_restaurants.layoutManager = LinearLayoutManager(context)
-                                view.top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                top_restaurants_shimmer.visibility = View.GONE
+                                top_restaurants.visibility = View.VISIBLE
+                                top_restaurants.layoutManager = LinearLayoutManager(context)
+                                top_restaurants.adapter = CuisineRestaurantsAdapter(branches, fragmentManager!!, statusWorkTimer)
                                 TingToast(
                                     context!!,
                                     it.message!!.capitalize(),
                                     TingToastType.ERROR
                                 ).showToast(Toast.LENGTH_LONG)
                             }
-                            ViewCompat.setNestedScrollingEnabled(view.top_restaurants, false)
+                            ViewCompat.setNestedScrollingEnabled(top_restaurants, false)
                         } catch (e: Exception){
                             topRestaurantTimer.cancel()
                             topRestaurantsTimerTask.cancel()
-                            view.top_restaurants_view.visibility = View.GONE
+                            top_restaurants_view.visibility = View.GONE
                             TingToast(
                                 context!!,
                                 e.message!!.capitalize(),
@@ -680,7 +680,7 @@ class DiscoveryFragment : Fragment() {
         })
     }
 
-    private fun getDiscoverTopMenus(view: View) {
+    private fun getDiscoverTopMenus() {
         val url = Routes.discoverTopMenus
         val client = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
@@ -702,42 +702,42 @@ class DiscoveryFragment : Fragment() {
                 activity!!.runOnUiThread {
                     topMenusTimer.cancel()
                     topMenusTimerTask.cancel()
-                    view.refresh_discovery.isRefreshing = false
+                    refresh_discovery.isRefreshing = false
                     try {
                         val menus = gson.fromJson<MutableList<RestaurantMenu>>(dataString, object : TypeToken<MutableList<RestaurantMenu>>(){}.type)
-                        view.top_menus_shimmer.visibility = View.GONE
-                        view.top_menus.visibility = View.VISIBLE
-                        view.top_menus.layoutManager = LinearLayoutManager(context)
-                        view.top_menus.adapter = CuisineMenusAdapter(menus.toMutableSet())
-                        ViewCompat.setNestedScrollingEnabled(view.top_menus, false)
-                    } catch (e: Exception) { view.top_menus_view.visibility = View.GONE }
+                        top_menus_shimmer.visibility = View.GONE
+                        top_menus.visibility = View.VISIBLE
+                        top_menus.layoutManager = LinearLayoutManager(context)
+                        top_menus.adapter = CuisineMenusAdapter(menus.toMutableSet())
+                        ViewCompat.setNestedScrollingEnabled(top_menus, false)
+                    } catch (e: Exception) { top_menus_view.visibility = View.GONE }
                 }
             }
         })
     }
 
-    private inner  class RestaurantsTimerTask(val view: View) : TimerTask() {
-        override fun run() { getDiscoverRestaurants(view) }
+    private inner  class RestaurantsTimerTask() : TimerTask() {
+        override fun run() { getDiscoverRestaurants() }
     }
 
     private inner  class CuisinesTimerTask() : TimerTask() {
         override fun run() { getCuisines() }
     }
 
-    private inner  class PromotionsTimerTask(val view: View) : TimerTask() {
-        override fun run() { getDiscoverTodayPromotions(view) }
+    private inner  class PromotionsTimerTask() : TimerTask() {
+        override fun run() { getDiscoverTodayPromotions() }
     }
 
-    private inner  class DiscoverMenusTimerTask(val view: View) : TimerTask() {
-        override fun run() { getDiscoverMenus(view) }
+    private inner  class DiscoverMenusTimerTask() : TimerTask() {
+        override fun run() { getDiscoverMenus() }
     }
 
-    private inner  class TopRestaurantsTimerTask(val view: View) : TimerTask() {
-        override fun run() { getDiscoverTopRestaurants(view) }
+    private inner  class TopRestaurantsTimerTask() : TimerTask() {
+        override fun run() { getDiscoverTopRestaurants() }
     }
 
-    private inner  class TopMenusTimerTask(val view: View) : TimerTask() {
-        override fun run() { getDiscoverTopMenus(view) }
+    private inner  class TopMenusTimerTask() : TimerTask() {
+        override fun run() { getDiscoverTopMenus() }
     }
 
     private fun cancelTimers() {
@@ -763,7 +763,7 @@ class DiscoveryFragment : Fragment() {
         when(requestCode) {
             UtilsFunctions.REQUEST_FINE_LOCATION -> {
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getDiscoverTopRestaurants(contextView)
+                    getDiscoverTopRestaurants()
                 }
             }
         }
@@ -778,21 +778,32 @@ class DiscoveryFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         cancelTimers()
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cancelTimers()
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
     }
 
     override fun onPause() {
         super.onPause()
         cancelTimers()
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         cancelTimers()
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
+        Bridge.clearAll(context!!)
+    }
+
+    companion object {
+        private const val TIMER_PERIOD = 10000.toLong()
     }
 }

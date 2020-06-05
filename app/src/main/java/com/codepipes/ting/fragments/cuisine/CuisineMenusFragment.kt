@@ -212,6 +212,7 @@ class CuisineMenusFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         try { cuisineMenusTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     companion object {

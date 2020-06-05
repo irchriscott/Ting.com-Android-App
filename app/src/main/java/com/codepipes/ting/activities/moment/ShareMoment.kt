@@ -69,7 +69,7 @@ class ShareMoment : AppCompatActivity() {
         if(fileType == 1) {
             moment_video.visibility = View.GONE
             moment_image.visibility = View.VISIBLE
-            Picasso.get().load(File(filePath)).fit().into(moment_image)
+            Picasso.get().load(File(filePath)).into(moment_image)
         } else {
             moment_video.visibility = View.VISIBLE
             moment_image.visibility = View.GONE

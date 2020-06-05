@@ -240,4 +240,9 @@ class SignUpIdentityFragment : Fragment() {
         super.onDestroy()
         Bridge.clear(this)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Bridge.clear(this)
+    }
 }

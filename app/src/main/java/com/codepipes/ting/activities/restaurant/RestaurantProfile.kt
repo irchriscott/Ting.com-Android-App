@@ -77,6 +77,7 @@ class RestaurantProfile : AppCompatActivity() {
     private var selectedLongitude: Double = 0.0
 
     private lateinit var restaurantTimer: Timer
+    private lateinit var statusWorkTimer: Timer
 
     @SuppressLint("SetTextI18n", "PrivateResource", "MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +90,7 @@ class RestaurantProfile : AppCompatActivity() {
         userAuthentication = UserAuthentication(this@RestaurantProfile)
         session = userAuthentication.get()!!
         restaurantTimer = Timer()
+        statusWorkTimer = Timer()
 
         utilsFunctions = UtilsFunctions(this@RestaurantProfile)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@RestaurantProfile)
@@ -178,7 +180,7 @@ class RestaurantProfile : AppCompatActivity() {
 
         mUserProfileName.text = "${branch.restaurant?.name}, ${branch.name}"
         mUserProfileAddress.text = branch.address
-        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(mUserProfileImage)
+        Picasso.get().load(branch.restaurant?.logoURL()).into(mUserProfileImage)
         restaurant_rating.rating = branch.reviews?.average!!
 
 
@@ -214,9 +216,9 @@ class RestaurantProfile : AppCompatActivity() {
             args.putInt("cy", cy)
             args.putDouble("lat", selectedLatitude)
             args.putDouble("lng", selectedLongitude)
-            args.putString("resto", Gson().toJson(branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(branch))
             mapFragment.show(supportFragmentManager, mapFragment.tag)
         }
 
@@ -323,7 +325,7 @@ class RestaurantProfile : AppCompatActivity() {
                 }
             }
 
-            Timer().scheduleAtFixedRate(object : TimerTask() {
+            statusWorkTimer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     runOnUiThread {
 
@@ -331,9 +333,9 @@ class RestaurantProfile : AppCompatActivity() {
                             branch.restaurant?.opening!!,
                             branch.restaurant?.closing!!
                         )
-                        restaurant_time.text = statusTimer.get("msg")
+                        restaurant_time.text = statusTimer["msg"]
 
-                        when (statusTimer.get("clr")) {
+                        when (statusTimer["clr"]) {
                             "green" -> {
                                 restaurant_work_status.background =
                                     resources.getDrawable(R.drawable.background_time_green)
@@ -539,22 +541,26 @@ class RestaurantProfile : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
     }
 
     override fun onPause() {
         super.onPause()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onStop() {
         super.onStop()
         try { restaurantTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     companion object {

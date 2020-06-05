@@ -169,4 +169,9 @@ class RestaurantFiltersFragment : BottomSheetDialogFragment() {
         super.onDestroy()
         Bridge.clear(this)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Bridge.clear(this)
+    }
 }

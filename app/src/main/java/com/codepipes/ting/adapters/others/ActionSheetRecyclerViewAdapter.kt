@@ -58,5 +58,4 @@ class ActionSheetRecyclerViewAdapter(var data: MutableList<String>) : RecyclerVi
     fun onClickCallBack(actionSheetOnClickListener: ActionSheetOnClickListener){
         this.onClick =  actionSheetOnClickListener
     }
-
 }

@@ -54,6 +54,7 @@ class RestaurantSearchResults : Fragment() {
     private var country: String = ""
     private var town: String = ""
 
+    private lateinit var statusWorkTimer: Timer
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
@@ -73,6 +74,7 @@ class RestaurantSearchResults : Fragment() {
         userAuthentication = UserAuthentication(context!!)
         session = userAuthentication.get()!!
         cuisineRestaurantsTimer = Timer()
+        statusWorkTimer = Timer()
 
         query = arguments?.getString("query") ?: ""
         country = mLocalData.getUserCountry() ?: session.country
@@ -86,6 +88,7 @@ class RestaurantSearchResults : Fragment() {
 
         view.refresh_search_results_restaurants.setColorSchemeColors(context!!.resources.getColor(R.color.colorPrimary), context!!.resources.getColor(R.color.colorAccentMain), context!!.resources.getColor(R.color.colorPrimaryDark), context!!.resources.getColor(R.color.colorAccentMain))
         view.refresh_search_results_restaurants.setOnRefreshListener {
+            statusWorkTimer = Timer()
             view.refresh_search_results_restaurants.isRefreshing = true
             this.loadRestaurants(view)
         }
@@ -125,7 +128,7 @@ class RestaurantSearchResults : Fragment() {
                             view.refresh_search_results_restaurants.isRefreshing = false
 
                             val linearLayoutManager = LinearLayoutManager(context)
-                            var cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                            var cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!, statusWorkTimer)
 
                             if(mUtilFunctions.checkLocationPermissions()){
                                 try {
@@ -148,7 +151,7 @@ class RestaurantSearchResults : Fragment() {
                                             }
                                         }
                                         branches.sortBy { b -> b.dist }
-                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!, statusWorkTimer)
                                         view.search_result_restaurants.layoutManager = linearLayoutManager
                                         view.search_result_restaurants.adapter = cuisineRestaurantsAdapter
                                     }.addOnFailureListener {
@@ -159,7 +162,7 @@ class RestaurantSearchResults : Fragment() {
                                             b.dist = dist
                                             b.fromLocation = from
                                         }
-                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!)
+                                        cuisineRestaurantsAdapter = CuisineRestaurantsAdapter(branches, fragmentManager!!, statusWorkTimer)
                                         view.search_result_restaurants.layoutManager = linearLayoutManager
                                         view.search_result_restaurants.adapter = cuisineRestaurantsAdapter
                                         TingToast(
@@ -298,22 +301,29 @@ class RestaurantSearchResults : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
         Bridge.clear(this)
     }
 
     override fun onPause() {
         super.onPause()
         try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     override fun onDetach() {
         super.onDetach()
         try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         try { cuisineRestaurantsTimer.cancel() } catch (e: Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: Exception) {}
+        Bridge.clear(this)
     }
 
     companion object {

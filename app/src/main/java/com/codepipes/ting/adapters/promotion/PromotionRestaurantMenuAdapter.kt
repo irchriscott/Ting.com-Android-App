@@ -25,7 +25,7 @@ class PromotionRestaurantMenuAdapter (private val promotions: MutableList<MenuPr
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PromotionRestaurantMenuViewHolder, position: Int) {
         val promotion = promotions[position]
-        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").fit().into(holder.view.promotion_poster)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(holder.view.promotion_poster)
         holder.view.promotion_title.text = promotion.occasionEvent
         holder.view.promotion_time.text = promotion.period
 

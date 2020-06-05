@@ -66,8 +66,6 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val GOOGLE_MAPS_ZOOM = 16.0f
-
     private lateinit var geocoder: Geocoder
     private lateinit var mUtilFunctions: UtilsFunctions
     private lateinit var gson: Gson
@@ -91,6 +89,9 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     private lateinit var restaurantMapPin: BitmapDescriptor
 
     private lateinit var fromLocation: LatLng
+
+    private var restaurant: String? = null
+    private var restaurantsString: String? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private val runnable: Runnable = Runnable {
@@ -161,13 +162,11 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         handler = Handler()
         handler?.postDelayed(runnable, 2000)
 
-        val restaurant = mArgs.getString("resto")
-
         if(!restaurant.isNullOrEmpty() && !restaurant.isNullOrBlank()){
             view.restaurant_view.visibility = View.VISIBLE
             branch = gson.fromJson(restaurant, Branch::class.java)
 
-            Picasso.get().load(branch.restaurant?.logoURL()).fit().into(view.restaurant_image)
+            Picasso.get().load(branch.restaurant?.logoURL()).into(view.restaurant_image)
             view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
             view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
             view.restaurant_address.text = branch.address
@@ -221,7 +220,6 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         mMap = googleMap
 
         val mArgs = arguments
-        val restaurant = mArgs?.getString("resto")
 
         fromLocation = LatLng(session.addresses!!.addresses[0].latitude, session.addresses!!.addresses[0].longitude)
 
@@ -274,8 +272,6 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
                         Toast.LENGTH_LONG)
                 }
             }
-
-            val restaurantsString = mArgs?.getString("restos")
 
             if(!restaurantsString.isNullOrBlank() && !restaurantsString.isNullOrEmpty()){
 
@@ -466,6 +462,7 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         timer.cancel()
         val f = fragmentManager!!.findFragmentById(R.id.map)
         fragmentManager!!.beginTransaction().remove(f!!).commit()
+        Bridge.clear(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -579,6 +576,14 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
         ).showToast(Toast.LENGTH_LONG) }
     }
 
+    public fun setRestaurant(resto: String) {
+        restaurant = resto
+    }
+
+    public fun setRestaurants(restos: String) {
+        restaurantsString = restos
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Bridge.saveInstanceState(this, outState)
@@ -588,5 +593,9 @@ class RestaurantsMapFragment : DialogFragment(), OnMapReadyCallback, GoogleMap.O
     override fun onDestroy() {
         super.onDestroy()
         Bridge.clear(this)
+    }
+
+    companion object {
+        private const val GOOGLE_MAPS_ZOOM = 16.0f
     }
 }

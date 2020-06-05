@@ -44,6 +44,7 @@ import com.google.gson.Gson
 import com.livefront.bridge.Bridge
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_edit_user_profile.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.File
@@ -61,24 +62,6 @@ class EditUserProfile : AppCompatActivity() {
 
     private lateinit var user: User
     private lateinit var userAuthentication: UserAuthentication
-
-    private lateinit var mProfileImageView: CircleImageView
-    private lateinit var mEditProfileImageButton: ImageButton
-
-    private lateinit var mEditProfileEmailInput: EditText
-    private lateinit var mEditProfileEmailButton: ImageButton
-    private lateinit var mEditProfilePasswordInput: EditText
-    private lateinit var mEditProfilePasswordButton: ImageButton
-
-    private lateinit var mEditProfilePhoneNumberInput: EditText
-    private lateinit var mEditProfileDobInput: EditText
-
-    private lateinit var mEditProfileNameInput: EditText
-    private lateinit var mEditProfileUsernameInput: EditText
-    private lateinit var mEditProfileGenderInput: EditText
-
-    private lateinit var mUserAddressesRecycleView: RecyclerView
-    private lateinit var mAddUserAddressButton: Button
 
     private val mProgressOverlay: ProgressOverlay =
         ProgressOverlay()
@@ -114,23 +97,16 @@ class EditUserProfile : AppCompatActivity() {
 
         utilsFunctions = UtilsFunctions(this@EditUserProfile)
 
-        mProfileImageView = findViewById<CircleImageView>(R.id.edit_user_image_view) as CircleImageView
-        mEditProfileImageButton = findViewById<ImageButton>(R.id.edit_user_image_button) as ImageButton
-        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
+        Picasso.get().load(user.imageURL()).into(edit_user_image_view)
 
-        mEditProfileEmailInput = findViewById<EditText>(R.id.user_profile_edit_email_input) as EditText
-        mEditProfileEmailButton = findViewById<ImageButton>(R.id.user_profile_edit_email_button) as ImageButton
-        mEditProfilePasswordInput = findViewById<EditText>(R.id.user_profile_edit_password_input) as EditText
-        mEditProfilePasswordButton = findViewById<ImageButton>(R.id.user_profile_edit_password_button) as ImageButton
+        user_profile_edit_email_input.isClickable = false
+        user_profile_edit_email_input.setText(user.email)
+        user_profile_edit_password_input.isClickable = false
+        user_profile_edit_password_input.setText("1234567")
+        user_profile_edit_password_input.isEnabled = false
+        user_profile_edit_password_input.keyListener = null
 
-        mEditProfileEmailInput.isClickable = false
-        mEditProfileEmailInput.setText(user.email)
-        mEditProfilePasswordInput.isClickable = false
-        mEditProfilePasswordInput.setText("1234567")
-        mEditProfilePasswordInput.isEnabled = false
-        mEditProfilePasswordInput.keyListener = null
-
-        mEditProfileImageButton.setOnClickListener {
+        edit_user_image_button.setOnClickListener {
             val intent = Intent(this, Gallery::class.java)
             if (ContextCompat.checkSelfPermission(
                     this@EditUserProfile,
@@ -149,33 +125,26 @@ class EditUserProfile : AppCompatActivity() {
             }
         }
 
-        mEditProfileEmailButton.setOnClickListener {
+        user_profile_edit_email_button.setOnClickListener {
             val mEditEmailDialog = EditUserEmailAddress()
             mEditEmailDialog.show(supportFragmentManager, mEditEmailDialog.tag)
         }
 
-        mEditProfilePasswordButton.setOnClickListener {
+        user_profile_edit_password_button.setOnClickListener {
             val mEditPasswordDialog = EditUserPassword()
             mEditPasswordDialog.show(supportFragmentManager, mEditPasswordDialog.tag)
         }
 
-        mEditProfilePhoneNumberInput =  findViewById<EditText>(R.id.user_profile_edit_phone_number_input) as EditText
-        mEditProfileDobInput = findViewById<EditText>(R.id.user_profile_edit_dob_input) as EditText
+        user_profile_edit_phone_number_input.setText(user.phone)
+        user_profile_edit_dob_input.setText(user.dob)
 
-        mEditProfilePhoneNumberInput.setText(user.phone)
-        mEditProfileDobInput.setText(user.dob)
-
-        mEditProfileNameInput = findViewById<EditText>(R.id.user_profile_edit_name_input) as EditText
-        mEditProfileUsernameInput = findViewById<EditText>(R.id.user_profile_edit_username_input) as EditText
-        mEditProfileGenderInput = findViewById<EditText>(R.id.user_profile_edit_gender_input) as EditText
-
-        mEditProfileNameInput.setText(user.name)
-        mEditProfileUsernameInput.setText(user.username)
-        mEditProfileGenderInput.setText(user.gender)
+        user_profile_edit_name_input.setText(user.name)
+        user_profile_edit_username_input.setText(user.username)
+        user_profile_edit_gender_input.setText(user.gender)
 
         val genders = Constants().genders
 
-        mEditProfileGenderInput.setOnClickListener {
+        user_profile_edit_gender_input.setOnClickListener {
             val selectDialog = SelectDialog()
             val bundle = Bundle()
             bundle.putString(CurrentRestaurant.CONFIRM_TITLE_KEY, "Select Gender")
@@ -183,14 +152,14 @@ class EditUserProfile : AppCompatActivity() {
             selectDialog.setItems(genders.toList(), object : SelectItemListener {
                 override fun onSelectItem(position: Int) {
                     val selectedText = genders[position]
-                    mEditProfileGenderInput.setText(selectedText)
+                    user_profile_edit_gender_input.setText(selectedText)
                     selectDialog.dismiss()
                 }
             })
             selectDialog.show(supportFragmentManager, selectDialog.tag)
         }
 
-        mEditProfileGenderInput.setOnKeyListener(null)
+        user_profile_edit_gender_input.setOnKeyListener(null)
 
         val calendar = Calendar.getInstance()
         val format = "yyyy-MM-dd"
@@ -203,21 +172,19 @@ class EditUserProfile : AppCompatActivity() {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            mEditProfileDobInput.setText(sdf.format(calendar.time))
+            user_profile_edit_dob_input.setText(sdf.format(calendar.time))
         }
 
-        mEditProfileDobInput.setOnClickListener {
+        user_profile_edit_dob_input.setOnClickListener {
             DatePickerDialog(this@EditUserProfile,
                 R.style.DatePickerAppTheme, date, dobYear, dob.month, dob.date).show()
         }
-        mEditProfileDobInput.setOnKeyListener(null)
+        user_profile_edit_dob_input.setOnKeyListener(null)
 
-        mUserAddressesRecycleView = findViewById<RecyclerView>(R.id.user_addresses_recycle_view) as RecyclerView
-        mUserAddressesRecycleView.layoutManager = LinearLayoutManager(this@EditUserProfile)
-        mUserAddressesRecycleView.adapter = UserAddressAdapter(user.addresses!!, supportFragmentManager)
+        user_addresses_recycle_view.layoutManager = LinearLayoutManager(this@EditUserProfile)
+        user_addresses_recycle_view.adapter = UserAddressAdapter(user.addresses!!, supportFragmentManager)
 
-        mAddUserAddressButton = findViewById<Button>(R.id.user_address_add) as Button
-        mAddUserAddressButton.setOnClickListener {
+        user_address_add.setOnClickListener {
             val mAddUserAddressDialog = AddUserAddress()
             mAddUserAddressDialog.show(supportFragmentManager, mAddUserAddressDialog.tag)
         }
@@ -251,11 +218,11 @@ class EditUserProfile : AppCompatActivity() {
             .build()
 
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("name", mEditProfileNameInput.text.toString())
-            .addFormDataPart("username", mEditProfileUsernameInput.text.toString())
-            .addFormDataPart("gender", mEditProfileGenderInput.text.toString())
-            .addFormDataPart("date_of_birth", mEditProfileDobInput.text.toString())
-            .addFormDataPart("phone", mEditProfilePhoneNumberInput.text.toString())
+            .addFormDataPart("name", user_profile_edit_name_input.text.toString())
+            .addFormDataPart("username", user_profile_edit_username_input.text.toString())
+            .addFormDataPart("gender", user_profile_edit_gender_input.text.toString())
+            .addFormDataPart("date_of_birth", user_profile_edit_dob_input.text.toString())
+            .addFormDataPart("phone", user_profile_edit_phone_number_input.text.toString())
             .build()
 
         val request = Request.Builder()
@@ -271,7 +238,7 @@ class EditUserProfile : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
                     mProgressOverlay.dismiss()
-                    Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
+                    Picasso.get().load(user.imageURL()).into(edit_user_image_view)
                     TingToast(
                         this@EditUserProfile,
                         e.message!!,
@@ -301,7 +268,7 @@ class EditUserProfile : AppCompatActivity() {
                     }
                 } catch (e: Exception){
                     runOnUiThread {
-                        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
+                        Picasso.get().load(user.imageURL()).into(edit_user_image_view)
                         mProgressOverlay.dismiss()
                         TingToast(
                             this@EditUserProfile,
@@ -327,7 +294,7 @@ class EditUserProfile : AppCompatActivity() {
                         val uriFromPath = Uri.fromFile(image)
                         val imageBitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(uriFromPath))
 
-                        mProfileImageView.setImageBitmap(imageBitmap)
+                        edit_user_image_view.setImageBitmap(imageBitmap)
 
                         val url = Routes.updateProfileImage
                         val client = OkHttpClient.Builder()
@@ -355,7 +322,7 @@ class EditUserProfile : AppCompatActivity() {
                             override fun onFailure(call: Call, e: IOException) {
                                 runOnUiThread {
                                     mProgressOverlay.dismiss()
-                                    Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
+                                    Picasso.get().load(user.imageURL()).into(edit_user_image_view)
                                     TingToast(
                                         this@EditUserProfile,
                                         e.message!!,
@@ -386,7 +353,7 @@ class EditUserProfile : AppCompatActivity() {
                                     }
                                 } catch (e: Exception){
                                     runOnUiThread {
-                                        Picasso.get().load(user.imageURL()).fit().into(mProfileImageView)
+                                        Picasso.get().load(user.imageURL()).into(edit_user_image_view)
                                         mProgressOverlay.dismiss()
                                         TingToast(
                                             this@EditUserProfile,

@@ -38,6 +38,11 @@ class UserMoments : Fragment() {
         Bridge.clear(this)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Bridge.clear(this)
+    }
+
     companion object {
 
         fun newInstance(user: String) =

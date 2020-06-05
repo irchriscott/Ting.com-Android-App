@@ -21,7 +21,11 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, private val fragmentManager: FragmentManager) : RecyclerView.Adapter<CuisineRestaurantsViewHolder>() {
+class CuisineRestaurantsAdapter (
+    private val branches: MutableList<Branch>,
+    private val fragmentManager: FragmentManager,
+    private val statusWorkTimer: Timer
+) : RecyclerView.Adapter<CuisineRestaurantsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): CuisineRestaurantsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -38,7 +42,7 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
         val activity = holder.view.context as Activity
         val utilsFunctions = UtilsFunctions(holder.view.context)
 
-        Picasso.get().load(branch.restaurant?.logoURL()).fit().into(holder.view.restaurant_image)
+        Picasso.get().load(branch.restaurant?.logoURL()).into(holder.view.restaurant_image)
         holder.view.restaurant_name.text = "${branch.restaurant?.name}, ${branch.name}"
         holder.view.restaurant_rating.rating = branch.reviews?.average!!.toFloat()
         holder.view.restaurant_address.text = branch.address
@@ -81,7 +85,7 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
                 }
             }
 
-            Timer().scheduleAtFixedRate(object : TimerTask() {
+            statusWorkTimer.scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     activity.runOnUiThread {
 
@@ -120,9 +124,9 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
 
             args.putInt("cx", cx)
             args.putInt("cy", cy)
-            args.putString("resto", Gson().toJson(branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(branch))
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
 
@@ -135,9 +139,9 @@ class CuisineRestaurantsAdapter (private val branches: MutableList<Branch>, priv
 
             args.putInt("cx", cx)
             args.putInt("cy", cy)
-            args.putString("resto", Gson().toJson(branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(branch))
             mapFragment.show(fragmentManager, mapFragment.tag)
         }
     }

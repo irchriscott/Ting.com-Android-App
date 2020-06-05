@@ -279,6 +279,7 @@ class UserAddressMapFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
         super.onDestroyView()
         val f = fragmentManager!!.findFragmentById(R.id.map)
         fragmentManager!!.beginTransaction().remove(f!!).commit()
+        Bridge.clear(this)
     }
 
     fun dismissListener(closeListener: MapAddressChangedListener) {

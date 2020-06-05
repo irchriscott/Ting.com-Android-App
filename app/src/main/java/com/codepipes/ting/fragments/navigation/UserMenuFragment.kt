@@ -83,7 +83,7 @@ class UserMenuFragment : BottomSheetDialogFragment() {
 
         mUserProfileName.text = session.name
         mUserProfileEmail.text = session.email
-        Picasso.get().load(session.imageURL()).fit().into(mUserProfileImage)
+        Picasso.get().load(session.imageURL()).into(mUserProfileImage)
 
         mUserProfileImage.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
         mUserProfileName.setOnClickListener { this.navigateToUserProfile(0, session.id, session.urls.apiGet, session.urls.apiGetAuth) }
@@ -114,6 +114,11 @@ class UserMenuFragment : BottomSheetDialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Bridge.clear(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         Bridge.clear(this)
     }
 }

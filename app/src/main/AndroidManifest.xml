@@ -25,9 +25,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
+            android:largeHeap="true"
+            android:hardwareAccelerated="false"
             tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
-        <!-- android:largeHeap="true" -->
-        <!-- android:hardwareAccelerated="false" -->
+
         <activity
                 android:name=".activities.base.SearchResults"
                 android:screenOrientation="portrait"

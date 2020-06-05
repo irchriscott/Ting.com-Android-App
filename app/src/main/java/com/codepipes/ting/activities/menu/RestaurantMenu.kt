@@ -74,7 +74,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     private var selectedLongitude: Double = 0.0
 
     private lateinit var menuTimer: Timer
-    private val TIMER_PERIOD = 6000.toLong()
+    private lateinit var statusWorkTimer: Timer
 
     @SuppressLint("PrivateResource", "MissingPermission", "SetTextI18n", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +92,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         localData = LocalData(this@RestaurantMenu)
         menuTimer = Timer()
+        statusWorkTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -209,9 +210,9 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             args.putInt("cy", cy)
             args.putDouble("lat", selectedLatitude)
             args.putDouble("lng", selectedLongitude)
-            args.putString("resto", Gson().toJson(menu.menu.branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(menu.menu.branch))
             mapFragment.show(supportFragmentManager, mapFragment.tag)
         }
 
@@ -307,11 +308,11 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         val index = (0 until menu.menu.images.count - 1).random()
         val image = menu.menu.images.images[index]
-        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(menu_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(menu_image)
 
         menu_image.setOnClickListener {
             StfalconImageViewer.Builder<MenuImage>(this@RestaurantMenu, menu.menu.images.images) { view, image ->
-                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(view)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(view)
             }.show(true)
         }
 
@@ -327,10 +328,8 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
             menu_subcategory_name.text = menu.menu.category?.name
             menu_cuisine_name.text = menu.menu.cuisine?.name
             Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.category?.image}")
-                .fit()
                 .into(menu_subcategory_image)
             Picasso.get().load("${Routes.HOST_END_POINT}${menu.menu.cuisine?.image}")
-                .fit()
                 .into(menu_cuisine_image)
         } else {
             menu_subcategory.visibility = View.GONE
@@ -387,7 +386,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
 
         if (menu.menu.branch != null && menu.menu.restaurant != null) {
 
-            Picasso.get().load(menu.menu.restaurant.logoURL()).fit().into(menu_restaurant_image)
+            Picasso.get().load(menu.menu.restaurant.logoURL()).into(menu_restaurant_image)
             menu_restaurant_name.text = "${menu.menu.restaurant.name}, ${menu.menu.branch.name}"
 
             menu_restaurant_name.isClickable = true
@@ -421,7 +420,7 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
                     }
                 }
 
-                Timer().scheduleAtFixedRate(object : TimerTask() {
+                statusWorkTimer.scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
                         runOnUiThread {
 
@@ -879,21 +878,29 @@ class RestaurantMenu : AppCompatActivity(), RatingDialogListener {
     override fun onDestroy() {
         super.onDestroy()
         try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
     }
 
     override fun onPause() {
         super.onPause()
         try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onStop() {
         super.onStop()
         try { menuTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    companion object {
+        private const val TIMER_PERIOD = 6000.toLong()
     }
 }

@@ -61,7 +61,7 @@ class MenuPromotion : AppCompatActivity() {
     private var selectedLongitude: Double = 0.0
 
     private lateinit var promotionTimer: Timer
-    private val TIMER_PERIOD = 6000.toLong()
+    private lateinit var statusWorkTimer: Timer
 
     @SuppressLint("PrivateResource", "DefaultLocale")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +79,7 @@ class MenuPromotion : AppCompatActivity() {
 
         localData = LocalData(this@MenuPromotion)
         promotionTimer = Timer()
+        statusWorkTimer = Timer()
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -196,9 +197,9 @@ class MenuPromotion : AppCompatActivity() {
             args.putInt("cy", cy)
             args.putDouble("lat", selectedLatitude)
             args.putDouble("lng", selectedLongitude)
-            args.putString("resto", Gson().toJson(promotion.branch))
 
             mapFragment.arguments = args
+            mapFragment.setRestaurant(Gson().toJson(promotion.branch))
             mapFragment.show(supportFragmentManager, mapFragment.tag)
         }
 
@@ -292,7 +293,7 @@ class MenuPromotion : AppCompatActivity() {
             startActivity(intent)
         }
 
-        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").fit().into(promotion_poster_image)
+        Picasso.get().load("${Routes.HOST_END_POINT}${promotion.posterImage}").into(promotion_poster_image)
         promotion_title.text = promotion.occasionEvent
         promotion_menu_type_on_text.text = "Promotion On ${promotion.promotionItem.type.name}"
         promotion_time.text = promotion.period
@@ -370,7 +371,7 @@ class MenuPromotion : AppCompatActivity() {
             4 -> {
                 val index = (0 until promotion.promotionItem.menu?.menu?.images?.count!! - 1).random()
                 val image = promotion.promotionItem.menu.menu.images.images[index]
-                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").fit().into(promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${image.image}").into(promotion_menu_on_image)
                 promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.menu.menu.name}"
 
                 val menus = mutableListOf<RestaurantMenu>()
@@ -391,7 +392,7 @@ class MenuPromotion : AppCompatActivity() {
                 } else { promotion_menus_view.visibility = View.GONE }
 
                 promotion_menu_on_text.text = "Promotion On ${promotion.promotionItem.category?.name}"
-                Picasso.get().load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}").fit().into(promotion_menu_on_image)
+                Picasso.get().load("${Routes.HOST_END_POINT}${promotion.promotionItem.category?.image}").into(promotion_menu_on_image)
             }
             else -> {
                 promotion_menus_view.visibility = View.GONE
@@ -405,7 +406,7 @@ class MenuPromotion : AppCompatActivity() {
 
         if (promotion.branch != null && promotion.restaurant != null) {
 
-            Picasso.get().load(promotion.restaurant.logoURL()).fit().into(menu_restaurant_image)
+            Picasso.get().load(promotion.restaurant.logoURL()).into(menu_restaurant_image)
             promotion_restaurant_name.text = "${promotion.restaurant.name}, ${promotion.branch.name}"
 
             promotion_restaurant_name.isClickable = true
@@ -439,7 +440,7 @@ class MenuPromotion : AppCompatActivity() {
                     }
                 }
 
-                Timer().scheduleAtFixedRate(object : TimerTask() {
+                statusWorkTimer.scheduleAtFixedRate(object : TimerTask() {
                     override fun run() {
                         runOnUiThread {
 
@@ -447,9 +448,9 @@ class MenuPromotion : AppCompatActivity() {
                                 promotion.restaurant.opening,
                                 promotion.restaurant.closing
                             )
-                            promotion_restaurant_time.text = statusTimer?.get("msg")
+                            promotion_restaurant_time.text = statusTimer["msg"]
 
-                            when (statusTimer?.get("clr")) {
+                            when (statusTimer["clr"]) {
                                 "green" -> {
                                     promotion_restaurant_work_status.background =
                                         resources.getDrawable(R.drawable.background_time_green)
@@ -659,21 +660,29 @@ class MenuPromotion : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
         Bridge.clear(this)
     }
 
     override fun onPause() {
         super.onPause()
         try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
     }
 
     override fun onStop() {
         super.onStop()
         try { promotionTimer.cancel() } catch (e: java.lang.Exception) {}
+        try { statusWorkTimer.cancel() } catch (e: java.lang.Exception) {}
+    }
+
+    companion object {
+        private const val TIMER_PERIOD = 6000.toLong()
     }
 }

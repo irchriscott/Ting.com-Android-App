@@ -120,6 +120,7 @@ dependencies {
     implementation project(path: ':imageprocessor')
     api 'com.otaliastudios:cameraview:2.6.2'
     api 'frankiesardo:icepick:3.2.0'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
     compileOnly 'frankiesardo:icepick-processor:3.2.0'
     annotationProcessor 'frankiesardo:icepick-processor:3.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
