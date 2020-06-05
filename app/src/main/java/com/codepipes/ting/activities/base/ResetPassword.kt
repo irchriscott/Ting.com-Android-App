@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.codepipes.ting.R
+import com.codepipes.ting.R.drawable.abc_ic_ab_back_material
 import com.codepipes.ting.dialogs.messages.*
 import com.codepipes.ting.interfaces.SuccessDialogCloseListener
 import com.codepipes.ting.models.ServerResponse
@@ -25,16 +26,16 @@ import okhttp3.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class ResetPassword : AppCompatActivity() {
 
-    lateinit var mAppNameText: TextView
+    private lateinit var mAppNameText: TextView
     lateinit var mAnimation: Animation
 
     private lateinit var mResetPasswordEmailInput: EditText
-    lateinit var mResetPasswordBtn: Button
+    private lateinit var mResetPasswordBtn: Button
 
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     @SuppressLint("PrivateResource")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class ResetPassword : AppCompatActivity() {
 
         try {
             val upArrow = ContextCompat.getDrawable(this@ResetPassword,
-                R.drawable.abc_ic_ab_back_material
+                abc_ic_ab_back_material
             )
             upArrow!!.setColorFilter(ContextCompat.getColor(this@ResetPassword,
                 R.color.colorPrimary
@@ -62,6 +63,8 @@ class ResetPassword : AppCompatActivity() {
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimaryDark)), 0, 4, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimary)), 4, spanText.length, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
         mAppNameText.text = spanText
+
+        mProgressOverlay = ProgressOverlay()
 
         mResetPasswordEmailInput = findViewById<EditText>(R.id.resetPwdEmailInput) as EditText
         mResetPasswordBtn = findViewById<Button>(R.id.submitResetPasswordBtn) as Button

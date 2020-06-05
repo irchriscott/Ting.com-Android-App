@@ -55,9 +55,7 @@ class CaptureMoment : AppCompatActivity() {
     private lateinit var cameraKitView: CameraKitView
 
     private var isUsingCameraKit = false
-
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +63,8 @@ class CaptureMoment : AppCompatActivity() {
 
         Bridge.restoreInstanceState(this, savedInstanceState)
         savedInstanceState?.clear()
+
+        mProgressOverlay = ProgressOverlay()
 
         if(isUsingCameraKit) { initializeCameraViewKit() }
         else { initializeCameraView() }

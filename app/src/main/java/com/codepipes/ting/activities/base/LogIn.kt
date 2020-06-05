@@ -53,8 +53,7 @@ class LogIn : AppCompatActivity() {
     private lateinit var geocoder: Geocoder
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     private lateinit var userAuthentication: UserAuthentication
     private lateinit var mUtilFunctions: UtilsFunctions
@@ -86,6 +85,8 @@ class LogIn : AppCompatActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
+
+        mProgressOverlay = ProgressOverlay()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this@LogIn, gso)
         geocoder = Geocoder(this@LogIn, Locale.getDefault())

@@ -40,8 +40,7 @@ class SignUpAddressFragment : Fragment() {
     lateinit var mSignUpAddressTypeInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
     private val routes: Routes = Routes()
     private val constants: Constants = Constants()
 
@@ -78,6 +77,7 @@ class SignUpAddressFragment : Fragment() {
         mSignUpAddressInput = view.findViewById<EditText>(R.id.signUpAddressInput) as EditText
         mSignUpAddressTypeInput = view.findViewById<EditText>(R.id.signUpAddressTypeInput) as EditText
 
+        mProgressOverlay = ProgressOverlay()
         mUtilFunctions = UtilsFunctions(activity!!)
 
         settings = Settings(activity!!)

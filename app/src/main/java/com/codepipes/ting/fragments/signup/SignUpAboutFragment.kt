@@ -39,8 +39,7 @@ class SignUpAboutFragment : Fragment() {
     lateinit var mSignUpDobInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
     private val routes: Routes = Routes()
     private val constants: Constants = Constants()
 
@@ -64,6 +63,8 @@ class SignUpAboutFragment : Fragment() {
 
         mViewPager = activity!!.findViewById(R.id.pager) as LockableViewPager
         mUtilFunctions = UtilsFunctions(activity!!)
+
+        mProgressOverlay = ProgressOverlay()
 
         mAppNameText = view.findViewById<TextView>(R.id.appNameText) as TextView
         mNextSignUpBtn = view.findViewById<Button>(R.id.nextSignUpBtn) as Button

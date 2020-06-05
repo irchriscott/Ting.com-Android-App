@@ -42,8 +42,7 @@ class SignUpPasswordFragment : Fragment() {
     lateinit var mSignUpConfirmPasswordInput: EditText
 
     lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -74,6 +73,7 @@ class SignUpPasswordFragment : Fragment() {
         userAuthentication = UserAuthentication(activity!!)
         localData = LocalData(activity!!)
 
+        mProgressOverlay = ProgressOverlay()
         settings = Settings(activity!!)
         gson = Gson()
 
@@ -81,9 +81,7 @@ class SignUpPasswordFragment : Fragment() {
 
         signUpUserData = if(!userDataString.isNullOrEmpty()){
             gson.fromJson(userDataString, object : TypeToken<MutableMap<String, String>>() {}.type)
-        } else {
-            mutableMapOf()
-        }
+        } else { mutableMapOf() }
 
         val spanText = SpannableString("Ting.com")
         spanText.setSpan(ForegroundColorSpan(resources.getColor(R.color.colorPrimaryDark)), 0, 4, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)

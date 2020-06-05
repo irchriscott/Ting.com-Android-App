@@ -42,8 +42,7 @@ class SignUpIdentityFragment : Fragment() {
     private lateinit var mSignUpEmailInput: EditText
 
     private lateinit var mViewPager: LockableViewPager
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     private lateinit var settings: Settings
     private lateinit var signUpUserData: MutableMap<String, String>
@@ -74,6 +73,7 @@ class SignUpIdentityFragment : Fragment() {
         mSignUpUsernameInput = view.findViewById<EditText>(R.id.signUpUsernameInput) as EditText
         mSignUpEmailInput = view.findViewById<EditText>(R.id.signUpEmailInput) as EditText
 
+        mProgressOverlay = ProgressOverlay()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         mUtilFunctions = UtilsFunctions(activity!!)
 
