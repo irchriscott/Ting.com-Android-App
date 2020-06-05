@@ -63,8 +63,7 @@ class EditUserProfile : AppCompatActivity() {
     private lateinit var user: User
     private lateinit var userAuthentication: UserAuthentication
 
-    private val mProgressOverlay: ProgressOverlay =
-        ProgressOverlay()
+    private lateinit var mProgressOverlay: ProgressOverlay
 
     private lateinit var utilsFunctions: UtilsFunctions
 
@@ -78,7 +77,6 @@ class EditUserProfile : AppCompatActivity() {
 
         userAuthentication = UserAuthentication(this@EditUserProfile)
         user = userAuthentication.get()!!
-
 
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
@@ -95,6 +93,7 @@ class EditUserProfile : AppCompatActivity() {
             supportActionBar!!.setHomeAsUpIndicator(upArrow)
         } catch (e: java.lang.Exception) {}
 
+        mProgressOverlay = ProgressOverlay()
         utilsFunctions = UtilsFunctions(this@EditUserProfile)
 
         Picasso.get().load(user.imageURL()).into(edit_user_image_view)
@@ -403,6 +402,7 @@ class EditUserProfile : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        Bridge.clear(this)
         super.onBackPressed()
     }
 

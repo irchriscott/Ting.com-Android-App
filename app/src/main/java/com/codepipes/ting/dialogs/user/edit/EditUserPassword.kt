@@ -40,8 +40,6 @@ class EditUserPassword : DialogFragment() {
     private lateinit var user: User
     private lateinit var userAuthentication: UserAuthentication
 
-    private val mProgressOverlay = ProgressOverlay()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         this.isCancelable = true
         super.onCreate(savedInstanceState)
@@ -88,6 +86,8 @@ class EditUserPassword : DialogFragment() {
         val tz = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             TimeZone.getDefault().displayName
         } else { "UTC" }
+
+        val mProgressOverlay = ProgressOverlay()
 
         val requestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart("old_password", mPasswordOldInput.text.toString())
