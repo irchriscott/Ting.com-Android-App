@@ -64,7 +64,6 @@ class EditUserProfile : AppCompatActivity() {
     private lateinit var userAuthentication: UserAuthentication
 
     private lateinit var mProgressOverlay: ProgressOverlay
-
     private lateinit var utilsFunctions: UtilsFunctions
 
     @SuppressLint("PrivateResource", "SetTextI18n", "DefaultLocale")

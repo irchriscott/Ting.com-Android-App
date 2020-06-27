@@ -46,8 +46,8 @@
             
                 <com.codepipes.ting.custom.RoundedCornerImageView
                         android:id="@+id/restaurant_image"
-                        android:layout_width="95dp"
-                        android:layout_height="95dp"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
                         android:src="@drawable/default_restaurant"
                         wheel:layout_constraintStart_toStartOf="parent"
                         wheel:layout_constraintTop_toTopOf="parent"/>
@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:paddingEnd="94dp"
                             android:textColor="@color/colorGray"
                             app:layout_constraintTop_toTopOf="parent"
@@ -104,7 +104,7 @@
                             android:layout_marginStart="2dp"
                             android:text="Nana Hostel, Kampala, Uganda"
                             android:fontFamily="@font/poppins_regular"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:paddingEnd="114dp"
                             android:textColor="@color/colorGray"
                             app:layout_constraintTop_toBottomOf="@id/restaurant_rating"

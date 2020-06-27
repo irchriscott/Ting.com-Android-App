@@ -108,7 +108,7 @@ class RestaurantLikes : AppCompatActivity() {
         ), resources.getColor(R.color.colorPrimaryDark), resources.getColor(R.color.colorAccentMain))
         refresh_likes.setOnRefreshListener {
             refresh_likes.isRefreshing = true
-            this.loadRestaurantLikes(url)
+            this.loadRestaurantLikes("${Routes.HOST_END_POINT}$url")
         }
     }
 

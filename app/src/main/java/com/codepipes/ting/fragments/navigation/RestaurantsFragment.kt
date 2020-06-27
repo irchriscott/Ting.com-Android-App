@@ -87,6 +87,8 @@ class RestaurantsFragment : Fragment() {
     private lateinit var filteredRestaurantTimer: Timer
     private lateinit var statusWorkTimer: Timer
 
+    private lateinit var mProgressOverlay: ProgressOverlay
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Bridge.restoreInstanceState(this, savedInstanceState)
@@ -101,6 +103,7 @@ class RestaurantsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_restaurants, container, false)
 
+        mProgressOverlay = ProgressOverlay()
         restaurants = ArrayList()
 
         activity = context!! as Activity
@@ -224,8 +227,6 @@ class RestaurantsFragment : Fragment() {
         view.filter_specials.setOnClickListener { showFilters(SPECIALS_KEY, query, view) }
         view.filter_types.setOnClickListener { showFilters(TYPES_KEY, query, view) }
         view.filter_ratings.setOnClickListener { showFilters(RATINGS_KEY, query, view) }
-
-        val mProgressOverlay: ProgressOverlay = ProgressOverlay()
 
         view.filter_restaurant_button.setOnClickListener {
             searchFilterRestaurants(gson.toJson(mLocalData.getParametersFilters()), query, view)
@@ -608,7 +609,6 @@ class RestaurantsFragment : Fragment() {
     }
 
     private fun showFilters(filter: String, query: String, view: View) {
-        val mProgressOverlay: ProgressOverlay = ProgressOverlay()
         val restaurantsFiltersFragment = RestaurantFiltersFragment()
         val bundle = Bundle()
         bundle.putString(FILTER_KEY, filter)
@@ -661,8 +661,6 @@ class RestaurantsFragment : Fragment() {
             .url(url)
             .post(form)
             .build()
-
-        val mProgressOverlay: ProgressOverlay = ProgressOverlay()
 
         client.newCall(request).enqueue(object : Callback {
 

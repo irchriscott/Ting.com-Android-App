@@ -144,7 +144,9 @@ class TingDotCom : AppCompatActivity() {
         super.onPause()
     }
 	
-	override fun onBackPressed() {}
+	override fun onBackPressed() {
+		this.moveTaskToBack(true)
+	}
 
     override fun onDestroy() {
         super.onDestroy()
