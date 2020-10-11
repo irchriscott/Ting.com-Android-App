@@ -130,16 +130,18 @@ class CurrentRestaurant : AppCompatActivity() {
                                         Toast.LENGTH_LONG)
                                 }
                                 Constants.SOCKET_RESPONSE_TABLE_WAITER -> {
-                                    val waiter = response.get("data").asJsonObject.get("waiter").asJsonObject
-                                    val infoDialog = InfoDialog()
+                                    if (response.has("waiter")) {
+                                        val waiter = response.get("waiter").asJsonObject
+                                        val infoDialog = InfoDialog()
 
-                                    val bundle = Bundle()
-                                    bundle.putString("title", waiter.get("name").asString)
-                                    bundle.putString("image", waiter.get("image").asString)
-                                    bundle.putString("message", "This is the waiter who will be serving you today. Enjoy !")
+                                        val bundle = Bundle()
+                                        bundle.putString("title", waiter.get("name").asString)
+                                        bundle.putString("image", waiter.get("image").asString)
+                                        bundle.putString("message", "This is the waiter who will be serving you today. Enjoy !")
 
-                                    infoDialog.arguments = bundle
-                                    infoDialog.show(supportFragmentManager, infoDialog.tag)
+                                        infoDialog.arguments = bundle
+                                        infoDialog.show(supportFragmentManager, infoDialog.tag)
+                                    }
 
                                     getPlacement(userPlacement.getToken()!!)
                                 }
@@ -244,7 +246,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                 val receiver = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
                                 val args = mapOf<String, String?>("table" to placement.table.id.toString(), "token" to userPlacement.getTempToken())
                                 val responseData = mapOf<String, String>("table" to placement.table.number)
-                                val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, 200, null, args, responseData)
+                                val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_ASSIGN_WAITER, userAuthentication.socketUser(), receiver, null,200, null, args, responseData)
                                 pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(message))
                                     .async { _, status ->
                                         if (status.isError || status.statusCode != 200) {

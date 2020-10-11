@@ -5,6 +5,7 @@ class SocketResponseMessage (
     var type: String,
     var sender: SocketUser?,
     var receiver: SocketUser?,
+    var waiter: SocketUser?,
     var status: Int,
     var message: String?,
     var args: Map<String, String?>?,

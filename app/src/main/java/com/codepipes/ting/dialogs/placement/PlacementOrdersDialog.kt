@@ -185,7 +185,7 @@ class PlacementOrdersDialog : DialogFragment() {
                     val data = mapOf<String, String>("table" to placement.table.number)
 
                     val receiverBranch = SocketUser(placement.table.branch?.id, 1, "${placement.table.branch?.restaurant?.name}, ${placement.table.branch?.name}", placement.table.branch?.email, placement.table.branch?.restaurant?.logo, placement.table.branch?.channel)
-                    val messageBranch = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_NOTIFY_ORDER, userAuthentication.socketUser(), receiverBranch, 200, null, args, data)
+                    val messageBranch = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_NOTIFY_ORDER, userAuthentication.socketUser(), receiverBranch, null, 200, null, args, data)
 
                     pubnub.publish().channel(placement.table.branch?.channel).message(Gson().toJson(messageBranch))
                         .async { _, status ->
@@ -195,7 +195,7 @@ class PlacementOrdersDialog : DialogFragment() {
                         }
 
                     val receiverWaiter = SocketUser(placement.waiter?.id, 1, "${placement.waiter?.name}", placement.waiter?.email, placement.waiter?.image, placement.waiter?.channel)
-                    val messageWaiter = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_W_NOTIFY_ORDER, userAuthentication.socketUser(), receiverWaiter, 200, null, args, data)
+                    val messageWaiter = SocketResponseMessage(pubnubConfiguration.uuid, Constants.SOCKET_REQUEST_W_NOTIFY_ORDER, userAuthentication.socketUser(), receiverWaiter, null, 200, null, args, data)
 
                     pubnub.publish().channel(placement.waiter?.channel).message(Gson().toJson(messageWaiter))
                         .async { _, status ->

@@ -1,6 +1,7 @@
 package com.codepipes.ting.activities.placement
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -241,6 +242,7 @@ class RestaurantScanner : AppCompatActivity() {
                 }
             }
 
+            @SuppressLint("MissingPermission")
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body!!.string()
                 val gson = Gson()
@@ -285,7 +287,7 @@ class RestaurantScanner : AppCompatActivity() {
                                                         val receiver = SocketUser(table.branch.id, 1, "${table.branch.restaurant.name}, ${table.branch.name}", table.branch.email, table.branch.restaurant.logo, table.branch.channel)
                                                         val args = mapOf<String, String?>("table" to table.id.toString(), "token" to userPlacement.getTempToken())
                                                         val data = mapOf<String, String>("table" to table.number)
-                                                        val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, 200, null, args, data)
+                                                        val message = SocketResponseMessage(pubnubConfig.uuid, Constants.SOCKET_REQUEST_RESTO_TABLE, userAuthentication.socketUser(), receiver, null, 200, null, args, data)
                                                         pubnub.publish().channel(table.branch.channel).message(Gson().toJson(message))
                                                             .async { _, status ->
                                                                 if (status.isError || status.statusCode != 200) {
