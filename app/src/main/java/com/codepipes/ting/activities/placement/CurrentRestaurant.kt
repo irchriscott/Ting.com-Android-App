@@ -130,7 +130,7 @@ class CurrentRestaurant : AppCompatActivity() {
                                         Toast.LENGTH_LONG)
                                 }
                                 Constants.SOCKET_RESPONSE_TABLE_WAITER -> {
-                                    if (response.has("waiter")) {
+                                    if (response.has("waiter") && !response.get("waiter").isJsonNull) {
                                         val waiter = response.get("waiter").asJsonObject
                                         val infoDialog = InfoDialog()
 
