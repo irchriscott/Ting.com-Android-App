@@ -472,6 +472,21 @@ class CurrentRestaurant : AppCompatActivity() {
                         userPlacement.setToken(placement.token)
                         userPlacement.set(dataString)
                         loadPlacement(placement)
+                        if (placement.isDone) {
+                            val successOverlay = SuccessOverlay()
+                            val args = Bundle()
+                            args.putString("message", "Placement Terminated")
+                            args.putString("type", "info")
+                            successOverlay.arguments = args
+                            successOverlay.show(supportFragmentManager, successOverlay.tag)
+                            successOverlay.dismissListener(object : SuccessDialogCloseListener {
+                                override fun handleDialogClose(dialog: DialogInterface?) {
+                                    userPlacement.placeOut()
+                                    successOverlay.dismiss()
+                                    startActivity(Intent(this@CurrentRestaurant, TingDotCom::class.java))
+                                }
+                            })
+                        }
                     } catch (e: Exception) {
                         try {
                             val serverResponse = Gson().fromJson(dataString, ServerResponse::class.java)
